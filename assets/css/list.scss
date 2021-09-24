@@ -83,6 +83,7 @@ $list-item-height: $taskbar-height;
             .actions {
                 
                 position: relative;
+                right: -1px;
                 display: inline-block;
 
                 padding: 0;
@@ -111,8 +112,6 @@ $list-item-height: $taskbar-height;
                         
                         i {
                             position: absolute;
-                            height: $list-item-height;
-                            width: $list-item-height;
                             padding: 23px;
                         }
                     }
