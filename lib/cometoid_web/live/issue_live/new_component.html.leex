@@ -1,0 +1,14 @@
+<h2>Create "<%= @selected_issue_type %>"</h2>
+
+<%= f = form_for @changeset, "#",
+  id: "new-issue-form",
+  class: Enum.join(['theme-', CometoidWeb.theme, '-white-input-text-color']),
+  phx_target: @myself,
+  phx_submit: "save" %>
+
+  <%= text_input f, :title %>
+
+  <br>
+  <br>
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

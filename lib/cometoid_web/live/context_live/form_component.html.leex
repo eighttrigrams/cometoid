@@ -1,0 +1,22 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "context-form",
+  phx_change: "validate",
+  class: Enum.join(['theme-', CometoidWeb.theme, '-white-input-text-color']),
+  phx_target: @myself,
+  phx_submit: "save" %>
+
+  <%= text_input f, :title, style: "width: 100%" %>
+
+  <br>
+  <br>
+
+  <%= checkbox f, :important, value: @context.important %>
+  <%= label f, :important %>
+
+  <br>
+  <br>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

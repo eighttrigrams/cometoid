@@ -1,0 +1,54 @@
+<tr id="context-<%= @context.id %>" class="list-item <%= if @selected_context.id == @context.id do Enum.join(['theme-', CometoidWeb.theme, '-selected-item-color']) end %>">
+    <td class="left" phx-click="select_context" phx-value-context="<%= @context.title %>" phx-value-no_update="true">
+        <div class="type <%= if @context.important do Enum.join(['theme-', CometoidWeb.theme, '-important-color']) else Enum.join(['theme-', CometoidWeb.theme, '-regular-color']) end %>"><span class="text text-left">
+            <b><%= String.upcase(@context.context_type) %>-<%=
+                    case @context.context_type do
+                        "Person" -> @context.person.id
+                        _ -> @context.id
+                    end
+                %>
+                <%= if CometoidWeb.IssueLive.ContextsListItemComponent.show_issues_badge @context do %>
+                    <i class="bi bi-envelope-open"></i>
+                <% end %>
+                <%= if CometoidWeb.IssueLive.ContextsListItemComponent.show_archived_issues_badge @context do %>
+                    <i class="bi bi-archive"></i>
+                <% end %>
+            </b>
+        </div>
+    </td>
+
+    <td class="right <%= Enum.join(['theme-', CometoidWeb.theme, '-border-background-color']) %>">
+        <table><tr>
+            <td class="heading" phx-click="select_context" phx-value-context="<%= @context.title %>" phx-value-no_update="true">
+                <%= @context.title %>
+            </td>
+            <td class="actions">
+                <span class="btn">
+                    <a phx-click="toggle_context_important" phx-value-target="<%= @context.id %>">
+                        <i class="bi bi-exclamation-circle"></i>
+                    </a>
+                </span>
+                <span class="btn">
+                    <a phx-click="select_context" phx-value-context="<%= @context.title %>">
+                        <i class="bi bi-arrow-up"></i>
+                    </a>
+                </span>
+                <span class="btn">
+                    <%= link to: "#", phx_click: "delete_context", phx_value_id: @context.id, data: [confirm: "Are you sure?"] do %>
+                        <i class="bi bi-trash"></i>
+                    <% end %>
+                </span>
+                <span class="btn">
+                    <a phx-click="open_context_in_editor" phx-value-target="<%= @context.id %>">
+                        <i class="bi bi-card-text"></i>
+                    </a>
+                </span>
+                <span class="btn">
+                    <a phx-click="edit_context" phx-value-target="<%= @context.id %>">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </span>
+            </td>
+        </tr></table>
+    </td>
+</tr>

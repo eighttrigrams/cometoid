@@ -1,0 +1,69 @@
+<tr id="issue-<%= @issue.id %>" class="list-item <%= if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do Enum.join(['theme-', CometoidWeb.theme, '-selected-item-color']) end %>">
+    <td class="left" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
+        <div class="<%= if @issue.important do Enum.join(['theme-', CometoidWeb.theme, '-important-color']) else Enum.join(['theme-', CometoidWeb.theme, '-regular-color']) end %> type"><span class="text text-left">
+            <b><%= String.upcase(@issue.issue_type) %>-<%= @issue.id %>
+            </b>
+            <%= if @issue.has_markdown do  %>
+                <i class="bi bi-card-text" style="position: relative; top: 2px"></i>
+            <% end %>
+        </div>
+    </td>
+
+    <td class="right <%= Enum.join(['theme-', CometoidWeb.theme, '-border-background-color']) %>">
+        <table><tr>
+            <td class="heading" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
+                <%= @issue.title %>
+            </td>
+
+            <td class="actions">
+
+                <%= unless @state.list_issues_done_instead_open do %>
+                    <span class="btn">
+                        <a phx-click="toggle_issue_important" phx-value-target="<%= @issue.id %>">
+                            <i class="bi bi-exclamation-circle"></i>
+                        </a>
+                    </span>
+                <% end %>
+
+                <span class="btn">
+                    <a phx-click="up" phx-value-target="<%= @issue.id %>">
+                        <i class="bi bi-arrow-up"></i>
+                    </a>
+                </span>
+
+                <%= if @state.list_issues_done_instead_open do %>
+                    <span class="btn">
+                        <a phx-click="unarchive" phx-value-target="<%= @issue.id %>">
+                            <i class="bi bi-envelope-open"></i>
+                        </a>
+                    </span>
+                <% else %>
+                    <span class="btn">
+                        <a phx-click="archive" phx-value-target="<%= @issue.id %>">
+                            <i class="bi bi-archive"></i>
+                        </a>
+                    </span>
+                <% end %>
+
+                <span class="btn">
+                    <%= link to: "#", phx_click: "delete_issue", phx_value_id: @issue.id, data: [confirm: "Are you sure?"] do %>
+                        <i class="bi bi-trash"></i>
+                    <% end %>
+                </span>
+
+                <span class="btn">
+                    <a phx-click="open_issue_in_editor" phx-value-target="<%= @issue.id %>">
+                        <i class="bi bi-card-text"></i>
+                    </a>
+                </span>
+
+                <span class="btn">
+                    <a phx-click="edit_issue" phx-value-target="<%= @issue.id %>">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </span>
+            </td>
+
+        </tr></table>
+    </td>
+</tr>

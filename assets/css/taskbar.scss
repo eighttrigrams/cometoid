@@ -1,0 +1,54 @@
+#taskbar {
+    // position: absolute;
+    left: 0;
+    width: 100%;
+
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+
+    top: 0;
+    height: $taskbar-height;
+
+    
+
+    .form-block-1 {
+        top: 22px;
+        left: 274px;
+    }
+
+    .form-block-2 {
+        top: 25px;
+        right: 216px;
+    }
+}
+
+.taskbar {
+    .form-block {
+        top: 10px;
+        position: absolute;
+    }
+    .form-block.button {
+        height: $taskbar-height;
+        position: relative;
+        float: left;
+        width: $taskbar-height;
+        top: 0;
+        font-size: 1.4rem;
+        a {
+            position: absolute;
+            padding-top: 19px;
+            height: $taskbar-height;
+            width: $taskbar-height;
+            text-align: center;
+            i::before {
+                text-align: center;
+            }
+        }
+    }
+    .form-block.button.left {
+        float: left;
+    }
+    .form-block.button.right {
+        float: right;
+    }
+}

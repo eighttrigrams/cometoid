@@ -1,0 +1,131 @@
+<div id="page-content">
+  <div id="left-column">
+    <div id="taskbar" class="taskbar">
+      <div class="form-block button right enabled">
+        <a phx-click="create_new_event"><i class="bi bi-plus-lg">
+        </i></a>
+      </div>
+      <div class="form-block button right enabled">
+        <a phx-click="toggle_show_archived">
+          <%= if @show_archived do %>
+            <i class="bi bi-check-circle">
+          <% else %>
+            <i class="bi bi-circle">
+          <% end %>
+        </i></a>
+      </div>
+    </div>
+
+    <div id="list-container">
+      <div class="list">
+        <table class="list-table">
+          <%= for event <- @events do %>
+            <tr id="event-<%= event.id %>" class="list-item <%= if not is_nil(assigns[:selected_event]) and @selected_event.id == event.id do 'selected' end %>"">
+
+              <td class="left" phx-click="select_event" phx-value-target="<%= event.id %>">
+                <div class="type"><span class="text text-left"><b><%= event.date %></b><span></div>
+              </td>
+
+              <td class="right">
+                <table><tr>
+                  <td class="heading" phx-click="select_event" phx-value-target="<%= event.id %>">
+                    <%=
+                        if event.issue do
+                          event.issue.title
+                        else
+                          if not is_nil(event.person) do
+                            event.person.name <> "'s Geburtstag"
+                          else
+                            event.title
+                          end
+                        end %>
+                  </td>
+
+                  <td class="actions">
+
+                    <%= if is_nil(event.person) do %>
+                      <span class="btn">
+                        <a phx-click="open_event_in_editor" phx-value-target="<%= event.id %>">
+                          <i class="bi bi-card-text"></i>
+                        </a>
+                      </span>
+
+                      <%= if @show_archived do %>
+                          <span class="btn">
+                              <a phx-click="unarchive" phx-value-target="<%= event.id %>">
+                                  <i class="bi bi-envelope-open"></i>
+                              </a>
+                          </span>
+                      <% else %>
+                          <span class="btn">
+                              <a phx-click="archive" phx-value-target="<%= event.id %>">
+                                  <i class="bi bi-archive"></i>
+                              </a>
+                          </span>
+                      <% end %>
+
+                      <%= if is_nil(event.issue) do %>
+                        <span class="btn">
+                          <%= link to: "#", phx_click: "delete", phx_value_id: event.id, data: [confirm: "Are you sure?"] do %>
+                            <i class="bi bi-trash"></i>
+                          <% end %>
+                        </span>
+                      <% end %>
+                    <% else %>
+                      <div style="min-width: 1px;"/>
+                    <% end %>
+
+                    <span class="btn">
+                      <a phx-click="edit_event" phx-value-target="<%= event.id %>">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+                    </span>
+                  </td>
+
+                </tr></table>
+              </td>
+
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="right-column">
+    <%= if assigns[:selected_event] do %>
+      <%= if is_nil(@selected_event.issue) do %>
+        <%= @selected_event; live_component EventLive.SidebarComponent, event: @selected_event %>
+      <% else %>
+        <%= @selected_event; live_component IssueLive.SidebarComponent, issue: Tracker.get_issue!(@selected_event.issue.id) %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= if @live_action in [:new, :edit] do %>
+    <%= if @live_action == :new or is_nil(@edit_event.issue) do %>
+      <div id="event-modal-content" class="modal-content">
+        <%= live_modal @socket, EventLive.FormComponent,
+          id: @edit_event.id || :new,
+          title: @page_title,
+          action: @live_action,
+          is_standalone: (if is_nil(@edit_event.issue_id) and is_nil(@edit_event.person_id) do true else false end),
+          event: @edit_event,
+          return_to: nil %>
+      </div>
+    <% else %>
+      <div id="issue-modal-content" class="modal-content">
+        <%= live_modal @socket, IssueLive.FormComponent,
+          id: @edit_event.id,
+          title: @page_title,
+          action: @live_action,
+          issue: Tracker.get_issue!(@edit_event.issue.id),
+          is_important: Tracker.get_issue!(@edit_event.issue.id).important,
+          has_event: true,
+          event_archived: false,
+          contexts: nil,
+          return_to: nil %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

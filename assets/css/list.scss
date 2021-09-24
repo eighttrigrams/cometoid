@@ -1,0 +1,152 @@
+$list-item-height: $taskbar-height;
+
+#list-container {
+    height: calc(100% - #{$taskbar-height});
+}
+
+.list::-webkit-scrollbar {
+    display: none;
+}
+.list {
+    height: 100%;
+
+    overflow: auto;
+    scrollbar-width: none;
+
+    width: 100%;
+
+    table {
+        border-spacing: 0;
+        td {
+            padding: 0;
+        }
+    }
+
+    .list-table {
+        
+        height: unset;
+        width: 100%;
+        position: relative;
+
+        .list-item {
+            font-weight: bold; // perhaps ?
+            
+            .left {
+
+                text-align: right;
+                padding-left: 20px;
+                padding-right: 20px;
+                white-space: nowrap;
+                height: $list-item-height;
+                
+                .type {
+                    position: relative;
+
+                    .text-left {
+                        left: 16px;
+                    }
+                }
+            }
+            .right {
+                border-left-style: solid;
+                border-left-width: 2px;
+
+                padding-left: 20px;
+                right: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                width: 100%;
+                text-align: left;
+            }
+            
+            border-bottom-width: 1px;
+            border-bottom-style: dotted;
+            border-bottom-color: lighten(black, 30%);
+
+            &:hover {
+                background-color: lighten(black, 20%);
+            }
+            table {
+                right: 0;
+                white-space: nowrap;
+                height: $list-item-height;
+            }
+            .heading {
+                width: 100%;
+                max-width: 1px;
+                padding-right: 6px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                height: $list-item-height;
+                font-family: sans-serif;
+            }
+            .actions {
+                
+                position: relative;
+                display: inline-block;
+
+                padding: 0;
+                visibility: hidden;
+
+                height: $list-item-height;
+
+                span.btn {
+                    cursor: pointer;
+                }
+
+                span.btn:hover {
+                    background-color: lighten(black, 40%);
+                }
+
+                .btn {
+                    width: 0;
+                    height: $list-item-height;
+                    position: relative;
+                    top: 0;
+                    
+                    display: inline-block;
+
+                    a {
+                        font-size: 1.2rem;
+                        
+                        i {
+                            position: absolute;
+                            height: $list-item-height;
+                            width: $list-item-height;
+                            padding: 23px;
+                        }
+                    }
+                }
+            }
+            &:hover .heading {
+                padding-right: 20px;
+            }
+            &:hover .actions {
+                visibility: visible;
+                .btn {
+                    width: $list-item-height;
+                }
+            }
+        }
+    }
+}
+
+#contexts-list {
+    height: 56%;
+    border-bottom-style: dashed;
+    border-bottom-width: 2px;
+
+    &.only-contexts {
+        height: 100%;
+        border-bottom-style: unset;
+    }
+}
+
+#issues-list {
+    bottom: 0;
+
+    height: 44%;
+    &.only-issues {
+        height: 100%;
+    }
+}

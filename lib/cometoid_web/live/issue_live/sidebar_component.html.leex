@@ -1,0 +1,40 @@
+<div class="upper">
+  <b><%= String.upcase(@issue.issue_type) %>-<%= @issue.id %></b>
+  <div><b>Changed at:</b> <%= @issue.updated_at %></div>
+  <b>Contexts:</b>
+  <%= for context <- @issue.contexts do %>
+    <div>- <%= context.title %></div>
+  <% end %>
+
+  <br>
+  <%= unless is_nil(@issue.event) do %>
+    <b>Date:</b>
+    <%= @issue.event.date.day %>.<%= @issue.event.date.month %>.<%= @issue.event.date.year %>
+  <% end %>
+
+  <div class="smaller-text">
+    <br>
+    <h1 style="font-family: serif"><%= @issue.title %></h1>
+    <hr style="height: 1px; border-bottom-width: 0px;" class="theme-<%= CometoidWeb.theme %>-border-color">
+  </div>
+</div>
+<div class="inner smaller-text">
+  <div>
+    <%= unless is_nil(@issue.description) or @issue.description == "" do %>
+      <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@issue.description)) %>
+    <% end %>
+    <%= unless is_nil(@issue.markdown) or @issue.markdown == "" do %>
+
+      <%= unless is_nil(@issue.description) do %>
+        <hr style="height: 1px; border-bottom-width: 0px;" class="theme-<%= CometoidWeb.theme %>-border-color">
+      <% end %>
+
+      <div style="width: 100%; text-align: center;">
+        <span style="color: white">
+          <i class="bi bi-card-text"></i>
+        </span>
+      </div>
+      <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@issue.markdown)) %>
+    <% end %>
+  </div>
+</div>

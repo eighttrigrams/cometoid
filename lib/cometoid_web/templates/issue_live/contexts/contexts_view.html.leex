@@ -1,0 +1,106 @@
+<div id="page-content" phx-window-keydown="keydown">
+  <div id="issue-content">
+    <%= if assigns[:contexts] do %>
+      <div id="left-column">
+
+        <div id="taskbar" class="taskbar theme-<%= CometoidWeb.theme %>-background-color theme-<%= CometoidWeb.theme %>-border-color">
+          <%= live_component CometoidWeb.IssueLive.TaskbarComponent,
+            contexts: @contexts,
+            issue_types: @issue_types,
+            selected_context: @selected_context,
+            selected_issue_type: @selected_issue_type,
+            list_issues_done_instead_open: @list_issues_done_instead_open,
+            alternative_view: true,
+            context_types: @context_types,
+            selected_context_type: @selected_context_type
+            %>
+        </div>
+        <div id="list-container">
+          <div id="contexts-list" class="list <%= unless CometoidWeb.IssueLive.Index.should_show_issues_list_in_contexts_view(@selected_context, @list_issues_done_instead_open) do 'only-contexts' end %> theme-<%= CometoidWeb.theme %>-contexts-background-color theme-<%= CometoidWeb.theme %>-border-color">
+              <%= live_component CometoidWeb.IssueLive.ContextsListComponent,
+                  contexts: @contexts,
+                  selected_context: @selected_context,
+                  list_issues_done_instead_open: @list_issues_done_instead_open
+              %>
+          </div>
+          <%= if CometoidWeb.IssueLive.Index.should_show_issues_list_in_contexts_view(@selected_context, @list_issues_done_instead_open) do %>
+            <div id="issues-list" class="list <%= if not @contexts_view or @selected_context.issues == [] do 'only-issues' end %>">
+              <%= live_component CometoidWeb.IssueLive.ListComponent,
+                state: %{
+                  issues: @issues,
+                  contexts: @contexts,
+                  selected_issue: assigns[:selected_issue],
+                  issue_types: @issue_types,
+                  selected_context: @selected_context,
+                  selected_issue_type: @selected_issue_type,
+                  list_issues_done_instead_open: @list_issues_done_instead_open
+                }
+              %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="right-column theme-<%= CometoidWeb.theme %>-border-left-color">
+        <%= if assigns[:selected_issue]do %>
+          <%= live_component CometoidWeb.IssueLive.SidebarComponent, issue: @selected_issue %>
+        <% else %>
+          <%= unless is_nil(@selected_context) do %>
+            <%= if @selected_context.context_type == "Person" do %>
+              <%= live_component CometoidWeb.PersonLive.SidebarComponent, context: @selected_context %>
+            <% else %>
+              <%= live_component CometoidWeb.ContextLive.SidebarComponent, context: @selected_context %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div id="issue-modal-content" class="modal-content">
+  <%= if @live_action in [:edit] do %>
+    <%= live_modal @socket, CometoidWeb.IssueLive.FormComponent,
+      id: @issue.id || :new,
+      action: @live_action,
+      issue: @issue,
+      return_to: nil, # review
+      has_event: @issue.event != nil,
+      event_archived: @issue.event != nil and @issue.event.archived == true,
+      is_important: @issue.important,
+      issue_types: @issue_types,
+      contexts: @contexts %>
+  <% end %>
+
+  <%= if @live_action in [:new] do %>
+    <%= live_modal @socket, CometoidWeb.IssueLive.NewComponent,
+      id: :new,
+      action: @live_action,
+      issue: @issue,
+      return_to: nil,
+      selected_context: @selected_context,
+      issue_types: @issue_types,
+      contexts: @contexts,
+      selected_issue_type: @selected_issue_type %>
+  <% end %>
+</div>
+
+<div id="context-modal-content" class="modal-content">
+  <%= if @live_action in [:new_context, :edit_context] do %>
+    <%= case @edit_selected_context_type do
+      "Person" -> live_modal @socket, CometoidWeb.PersonLive.FormComponent,
+          id: @edit_entity.id || :new,
+          title: (if @live_action == :new_context do "New " else "Edit " end) <> "Person",
+          action: @live_action,
+          selected_context_type: "Person",
+          return_to: nil, # review
+          person: @edit_entity
+      _ -> live_modal @socket, CometoidWeb.ContextLive.FormComponent,
+          id: @edit_entity.id || :new,
+          title: (if @live_action == :new_context do "New " else "Edit " end) <> "Context",
+          action: @live_action,
+          selected_context_type: @edit_selected_context_type,
+          return_to: nil, # review
+          context: @edit_entity
+    end %>
+  <% end %>
+</div>

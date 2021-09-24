@@ -1,0 +1,23 @@
+<h2><%= @title %>HI</h2>
+
+<%= f = form_for @changeset, "#",
+  id: "person-form",
+  phx_target: @myself,
+  phx_submit: "save" %>
+
+  <%= label f, :name %>
+  <%= text_input f, :name %>
+  <%= error_tag f, :name %>
+
+  <%= label f, :description %>
+  <%= error_tag f, :description %>
+  <%= textarea f, :description %>
+
+  <%= inputs_for f, :birthday, fn b -> %>
+    <%= label b, :date %>
+    <%= date_select b, :date %>
+    <%= error_tag b, :date %>
+  <% end %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

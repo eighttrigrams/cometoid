@@ -1,0 +1,5 @@
+<table class="list-table">
+    <%= for issue <- elem(@state.issues, 0) ++ elem(@state.issues, 1) do %>
+        <%= live_component ListItemComponent, issue: issue, state: @state %>
+    <% end %>
+</table>

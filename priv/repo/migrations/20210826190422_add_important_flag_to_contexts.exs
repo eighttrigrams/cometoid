@@ -1,0 +1,9 @@
+defmodule Cometoid.Repo.Migrations.AddImportantFlagToContexts do
+  use Ecto.Migration
+
+  def change do
+    alter table(:contexts) do
+      add :important, :boolean, default: false
+    end
+  end
+end

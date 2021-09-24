@@ -1,0 +1,24 @@
+<main role="main" class="container">
+  <p class="alert alert-info" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+
+  <p class="alert alert-danger" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+
+  <div id="navbar-content" class="theme-<%= CometoidWeb.theme %>-background-color theme-<%= CometoidWeb.theme %>-border-color">
+    <a><%= live_patch "Events", to: Routes.event_index_path(@socket, :index) %></a>
+    <a><%= live_patch "People", to: Routes.issue_index_path(@socket, :index, context_types: "Person", alternative_view: "true") %></a>
+    <span class="<%= Enum.join(['theme-', CometoidWeb.theme, '-color-border-color']) %>">
+      &nbsp;|&nbsp;
+    </span<
+    <%= for %{ name: name, context_types: context_types } <- Application.fetch_env!(:cometoid, :context_types) do %>
+      <a><%= live_patch name, to:
+           Routes.issue_index_path(@socket, :index, context_types: context_types) %>
+      </a>
+    <% end %>
+  </div>
+
+  <%= @inner_content %>
+</main>

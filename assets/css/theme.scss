@@ -1,0 +1,100 @@
+// theme-1
+$background-color: black;
+$border-color: lighten(black, 50%);
+.theme-1-background-color {
+    background-color: $background-color;
+}
+.theme-1-contexts-background-color {
+    background-color: lighten(black, 7%);
+}
+.theme-1-border-color {
+    border-color: $border-color;
+}
+.theme-1-border-left-color { // TODO remove
+    border-left-color: $border-color;
+}
+.theme-1-border-background-color {
+    border-color: $background-color;
+}
+.theme-1-color-border-color {
+    color: $border-color;
+}
+.theme-1-regular-color {
+    color: lighten(black, 30%);
+}
+.theme-1-important-color {
+    color: green;
+}
+.theme-1-selected-issue-color {
+    color: lighten(black, 95%);
+}
+.theme-1-deselected-issue-color {
+    color: lighten(black, 45%);
+}
+.theme-1-enabled-button-color {
+    &:hover {
+        background-color: lighten(black, 40%);
+    }
+}
+.theme-1-disabled-button-color {
+    a i { color: lighten(black, 10%); }
+}
+.theme-1-selected-item-color {
+    background-color: lighten(black, 15%);
+}
+.theme-1-white-input-text-color {
+    input {
+        color: darkolivegreen;
+    }
+}
+
+
+// theme-2
+$background-color: gray;
+$border-color: lighten(black, 10%);
+.theme-2-background-color {
+    background-color: $background-color
+}
+.theme-2-contexts-background-color {
+    background-color: darken($background-color, 4%);
+}
+.theme-2-border-color {
+    border-color: $border-color;
+}
+.theme-2-border-left-color { // remove ? 
+    border-left-color: $border-color;
+}
+.theme-2-border-background-color {
+    border-color: $background-color;
+}
+.theme-2-color-border-color {
+    color: $border-color;
+}
+.theme-2-regular-color {
+    color: #4D4D10;
+}
+.theme-2-important-color {
+    color: yellow;
+}
+.theme-2-selected-issue-color {
+    color: lighten(black, 95%);
+}
+.theme-2-deselected-issue-color {
+    color: darkgray;
+}
+.theme-2-enabled-button-color {
+    &:hover {
+        background-color: lighten(black, 40%);
+    }
+}
+.theme-2-disabled-button-color {
+    a i { color: darken(gray, 3%); }
+}
+.theme-2-selected-item-color {
+    background-color: darken(gray, 10%);
+}
+.theme-2-white-input-text-color {
+    input {
+        color: darkolivegreen;
+    }
+}
