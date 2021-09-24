@@ -16,7 +16,7 @@
             %>
         </div>
         <div id="list-container">
-          <div id="contexts-list" class="list <%= unless CometoidWeb.IssueLive.Index.should_show_issues_list_in_contexts_view(@selected_context, @list_issues_done_instead_open) do 'only-contexts' end %> theme-<%= CometoidWeb.theme %>-contexts-background-color theme-<%= CometoidWeb.theme %>-border-color">
+          <div id="contexts-list" class="list <%= unless CometoidWeb.IssueLive.Index.should_show_issues_list_in_contexts_view(@selected_context, @list_issues_done_instead_open) do 'only-contexts' end %> theme-<%= CometoidWeb.theme %>-contexts-background-color">
               <%= live_component CometoidWeb.IssueLive.ContextsListComponent,
                   contexts: @contexts,
                   selected_context: @selected_context,
