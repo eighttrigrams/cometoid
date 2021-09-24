@@ -13,6 +13,7 @@ An issue management system, based on a very simple data model which makes it ver
 
     $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ vim config/dev.secret.exs # Edit settings
+    $ mkdir data                # or use an existing dir, see data_path in config
     $ mix deps.get
     $ npm i --prefix ./assets
     $ mix ecto.setup
@@ -23,6 +24,7 @@ An issue management system, based on a very simple data model which makes it ver
 
     $ cp config/prod.secret.template.exs config/prod.secret.exs
     $ vim config/prod.secret.exs # Edit settings
+    $ mkdir data                 # or use an existing dir, see data_path in config
     $ mix deps.get
     $ npm i --prefix ./assets
     $ npm run deploy --prefix ./assets && mix phx.digest
