@@ -6,9 +6,6 @@ $border-color: lighten(black, 50%);
 .theme-1-contexts-background-color {
     background-color: lighten(black, 7%);
 }
-.theme-1-border-color {
-    border-color: $border-color;
-}
 .theme-1-border-left-color { // TODO remove
     border-left-color: $border-color;
 }
@@ -44,6 +41,12 @@ $border-color: lighten(black, 50%);
 .theme-1-default-colors {
     color: $text-color;
     background-color: $background-color;
+    #navbar-content {
+        border-color: $border-color;
+    }
+    #taskbar {
+        border-color: $border-color;
+    }
     input {
         color: $text-color;
         background-color: $background-color;
@@ -68,9 +71,6 @@ $border-color: lighten(black, 10%);
 
 .theme-2-contexts-background-color {
     background-color: darken($background-color, 4%);
-}
-.theme-2-border-color {
-    border-color: $border-color;
 }
 .theme-2-border-left-color { // remove ? 
     border-left-color: $border-color;
@@ -107,6 +107,12 @@ $border-color: lighten(black, 10%);
 .theme-2-default-colors {
     color: $text-color;
     background-color: $background-color;
+    #navbar-content {
+        border-color: $border-color;
+    }
+    #taskbar {
+        border-color: $border-color;
+    }
     input {
         color: $text-color;
         background-color: $background-color;

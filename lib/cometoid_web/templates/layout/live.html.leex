@@ -7,7 +7,7 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
-  <div id="navbar-content" class="theme-<%= CometoidWeb.theme %>-background-color theme-<%= CometoidWeb.theme %>-border-color">
+  <div id="navbar-content" class="theme-<%= CometoidWeb.theme %>-background-color">
     <a><%= live_patch "Events", to: Routes.event_index_path(@socket, :index) %></a>
     <a><%= live_patch "People", to: Routes.issue_index_path(@socket, :index, context_types: "Person", alternative_view: "true") %></a>
     <span class="<%= Enum.join(['theme-', CometoidWeb.theme, '-color-border-color']) %>">
