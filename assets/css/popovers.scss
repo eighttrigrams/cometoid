@@ -1,17 +1,13 @@
 .phx-modal-content {
-    color: $text-color;
-
     input {
         height: 30px;
-        color: $text-color;
     }
     input:focus {
         outline: none;
     }
-    button {
-        background-color: $bg-color;
-        color: $text-color;   
-    }
+    // button {
+        // background-color: $bg-color; TODO
+    // }
 }
 
 #issue-modal-content {
@@ -55,7 +51,6 @@
             height: 600px;
             padding: 10px;
             border-width: 2px;
-            color: $text-color;
         }
         textarea:focus {
             outline: none;    

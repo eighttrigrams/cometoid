@@ -1,6 +1,8 @@
 // theme-1
+$text-color: lighten(black, 80%);
 $background-color: black;
 $border-color: lighten(black, 50%);
+
 .theme-1-background-color {
     background-color: $background-color;
 }
@@ -42,16 +44,28 @@ $border-color: lighten(black, 50%);
 .theme-1-selected-item-color {
     background-color: lighten(black, 15%);
 }
-.theme-1-white-input-text-color {
+.theme-1-text-color {
+    color: $text-color;
+}
+.theme-1-default-inputs {
+    input {
+        color: $text-color;
+        background-color: $background-color;
+    }
+}
+.theme-1-alternatives {
     input {
         color: darkolivegreen;
+        background-color: $background-color;
     }
 }
 
 
 // theme-2
+$text-color: lighten(black, 80%);
 $background-color: gray;
 $border-color: lighten(black, 10%);
+
 .theme-2-background-color {
     background-color: $background-color
 }
@@ -93,8 +107,17 @@ $border-color: lighten(black, 10%);
 .theme-2-selected-item-color {
     background-color: darken(gray, 10%);
 }
-.theme-2-white-input-text-color {
+.theme-2-text-color {
+    color: $text-color;
+}
+.theme-2-default-inputs {
     input {
+        background-color: $background-color;
+    }
+}
+.theme-2-alternative-inputs {
+    input {
+        background-color: white;
         color: darkolivegreen;
     }
 }

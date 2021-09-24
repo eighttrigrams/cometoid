@@ -107,7 +107,6 @@
       <div id="event-modal-content" class="modal-content">
         <%= live_modal @socket, EventLive.FormComponent,
           id: @edit_event.id || :new,
-          title: @page_title,
           action: @live_action,
           is_standalone: (if is_nil(@edit_event.issue_id) and is_nil(@edit_event.person_id) do true else false end),
           event: @edit_event,
@@ -117,7 +116,6 @@
       <div id="issue-modal-content" class="modal-content">
         <%= live_modal @socket, IssueLive.FormComponent,
           id: @edit_event.id,
-          title: @page_title,
           action: @live_action,
           issue: Tracker.get_issue!(@edit_event.issue.id),
           is_important: Tracker.get_issue!(@edit_event.issue.id).important,
