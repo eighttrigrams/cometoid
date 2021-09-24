@@ -52,6 +52,10 @@ $border-color: lighten(black, 50%);
         color: $text-color;
         background-color: $background-color;
     }
+    textarea {
+        color: $text-color;
+        background-color: $background-color;
+    }
 }
 .theme-1-alternatives {
     input {
@@ -112,6 +116,11 @@ $border-color: lighten(black, 10%);
 }
 .theme-2-default-inputs {
     input {
+        color: $text-color;
+        background-color: $background-color;
+    }
+    textarea {
+        color: $text-color;
         background-color: $background-color;
     }
 }
