@@ -22,6 +22,7 @@ An issue management system, based on a very simple data model which makes it ver
 
 ### Deploy for Production
 
+    $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ cp config/prod.secret.template.exs config/prod.secret.exs
     $ vim config/prod.secret.exs # Edit settings
     $ mkdir data                 # or use an existing dir, see data_path in config
