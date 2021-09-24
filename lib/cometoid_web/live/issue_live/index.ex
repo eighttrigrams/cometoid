@@ -80,7 +80,6 @@ defmodule CometoidWeb.IssueLive.Index do
 
   defp apply_action(socket, :index, _params) do # ?
     socket
-    # |> assign(:page_title, "Listing Issues")
     |> assign(:issue, nil)
   end
 
@@ -97,7 +96,6 @@ defmodule CometoidWeb.IssueLive.Index do
         else
           socket
           |> assign(:live_action, :new)
-          # |> assign(:page_title, "New Issue")
           |> assign(:issue, %Issue{})
         end
       _ -> socket

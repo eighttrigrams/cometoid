@@ -24,7 +24,6 @@ defmodule CometoidWeb.EventLive.Index do
 
   def handle_event("edit_event", %{ "target" => id }, socket) do
     socket
-    |> assign(:page_title, "Edit Event")
     |> assign(:edit_event, Calendar.get_event!(id))
     |> assign(:live_action, :edit)
     |> return_noreply
@@ -72,7 +71,6 @@ defmodule CometoidWeb.EventLive.Index do
 
   def handle_event("create_new_event", params, socket) do
     socket
-    |> assign(:page_title, "New Event")
     |> assign(:edit_event, %Event{})
     |> assign(:live_action, :new)
     |> return_noreply
@@ -87,7 +85,6 @@ defmodule CometoidWeb.EventLive.Index do
 
   defp apply_action(socket, :index, _params) do # ?
     socket
-    |> assign(:page_title, "Listing Events")
     |> assign(:edit_event, nil)
   end
 
