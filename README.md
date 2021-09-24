@@ -31,5 +31,5 @@ An issue management system, based on a very simple data model which makes it ver
     $ npm run deploy --prefix ./assets && mix phx.digest
     $ export SECRET_KEY_BASE=SOMESECRETKEYBASE
     $ MIX_ENV=prod mix ecto.setup # or ecto.migrate
-    $ MIX_ENV=PROD mix phx.server
+    $ MIX_ENV=prod mix phx.server
     Visit http://localhost:4001
