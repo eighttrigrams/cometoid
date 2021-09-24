@@ -14,6 +14,7 @@ config :cometoid,
     %{ name: "View-2", context_types: "Todolist_Context type 2" }
   ],
   issue_types: %{
+    "Person" => ["Info"], # at least one issue type for Person is required
     "List" => ["Item"],
     "Todolist" => ["Todo"],
     "Context type 2" => ["Issue type A", "Issue Type B"],
