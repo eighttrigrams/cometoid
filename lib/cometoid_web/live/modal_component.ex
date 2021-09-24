@@ -11,7 +11,7 @@ defmodule CometoidWeb.ModalComponent do
       phx-target="#<%= @id %>"
       phx-page-loading>
 
-      <div class="phx-modal-content theme-<%= Application.fetch_env!(:cometoid, :theme) %>-background-color">
+      <div class="phx-modal-content theme-<%= Application.fetch_env!(:cometoid, :theme) %>-default-colors">
         <%= live_component @socket, @component, @opts %>
       </div>
     </div>

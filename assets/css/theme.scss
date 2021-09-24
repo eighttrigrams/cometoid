@@ -3,9 +3,6 @@ $text-color: lighten(black, 80%);
 $background-color: black;
 $border-color: lighten(black, 50%);
 
-.theme-1-background-color {
-    background-color: $background-color;
-}
 .theme-1-contexts-background-color {
     background-color: lighten(black, 7%);
 }
@@ -44,10 +41,9 @@ $border-color: lighten(black, 50%);
 .theme-1-selected-item-color {
     background-color: lighten(black, 15%);
 }
-.theme-1-text-color {
+.theme-1-default-colors {
     color: $text-color;
-}
-.theme-1-default-inputs {
+    background-color: $background-color;
     input {
         color: $text-color;
         background-color: $background-color;
@@ -70,9 +66,6 @@ $text-color: lighten(black, 80%);
 $background-color: gray;
 $border-color: lighten(black, 10%);
 
-.theme-2-background-color {
-    background-color: $background-color
-}
 .theme-2-contexts-background-color {
     background-color: darken($background-color, 4%);
 }
@@ -111,10 +104,9 @@ $border-color: lighten(black, 10%);
 .theme-2-selected-item-color {
     background-color: darken(gray, 10%);
 }
-.theme-2-text-color {
+.theme-2-default-colors {
     color: $text-color;
-}
-.theme-2-default-inputs {
+    background-color: $background-color;
     input {
         color: $text-color;
         background-color: $background-color;
