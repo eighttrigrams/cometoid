@@ -7,13 +7,13 @@ $border-color: lighten(black, 50%);
     color: $text-color;
     background-color: $background-color;
     .background-color { background-color: $background-color; }
-    .contexts-background-color {
-        background-color: lighten(black, 7%);
-    }
     .border-color { border-color: $border-color; }
     .color-border-color { color: $border-color; }
     .border-background-color { border-color: $background-color; }
-    #contexts-list { border-color: $border-color } // TODO review use of id
+    #contexts-list { 
+        border-color: $border-color;
+        background-color: lighten(black, 7%); 
+    }
     input {
         color: $text-color;
         background-color: $background-color;
@@ -51,13 +51,13 @@ $border-color: lighten(black, 10%);
     color: $text-color;
     background-color: $background-color;
     .background-color { background-color: $background-color; }
-    .contexts-background-color {
-        background-color: darken($background-color, 4%);
-    }
     .border-color { border-color: $border-color; }
     .color-border-color { color: $border-color; }
     .border-background-color { border-color: $background-color; }
-    #contexts-list { border-color: $border-color } // TODO review use of id
+    #contexts-list { 
+        border-color: $border-color;
+        background-color: darken($background-color, 4%);
+    }
     input {
         color: $text-color;
         background-color: $background-color;
