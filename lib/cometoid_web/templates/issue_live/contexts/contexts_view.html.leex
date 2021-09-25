@@ -3,7 +3,7 @@
     <%= if assigns[:contexts] do %>
       <div id="left-column">
 
-        <div id="taskbar" class="taskbar theme-<%= CometoidWeb.theme %>-background-color">
+        <div id="taskbar" class="taskbar border-color">
           <%= live_component CometoidWeb.IssueLive.TaskbarComponent,
             contexts: @contexts,
             issue_types: @issue_types,

@@ -41,9 +41,9 @@ $border-color: lighten(black, 50%);
 .theme-1-default-colors {
     color: $text-color;
     background-color: $background-color;
-    #navbar-content { border-color: $border-color; }
-    #taskbar { border-color: $border-color; }
-    #contexts-list { border-color: $border-color; }
+    .border-color {
+        border-color: $border-color;
+    }
     input {
         color: $text-color;
         background-color: $background-color;
@@ -104,9 +104,9 @@ $border-color: lighten(black, 10%);
 .theme-2-default-colors {
     color: $text-color;
     background-color: $background-color;
-    #navbar-content { border-color: $border-color; }
-    #taskbar { border-color: $border-color; }
-    #contexts-list { border-color: $border-color; }
+    .border-color {
+        border-color: $border-color;
+    }
     input {
         color: $text-color;
         background-color: $background-color;
