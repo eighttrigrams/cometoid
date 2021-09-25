@@ -89,7 +89,7 @@
 </div>
 <div class="form-block button right
             <%= if assigns[:selected_issue_type] == nil or length(@issue_types) == 1 do 'disabled-button-color' else 'enabled-button-color' end %>">
-    <%= if assigns[:selected_issue_type] do %>
+    <%= if not is_nil(assigns[:selected_issue_type]) and length(@issue_types) > 1 do %>
         <a phx-click="unselect_issue_type"><i class="bi bi-x-lg">
         </i></a>
     <% else %>
