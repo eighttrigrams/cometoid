@@ -87,16 +87,15 @@
         </i></a>
     <% end %>
 </div>
-<div class="form-block button right
-            <%= if assigns[:selected_issue_type] == nil or length(@issue_types) == 1 do 'disabled-button-color' else 'enabled-button-color' end %>">
-    <%= if not is_nil(assigns[:selected_issue_type]) and length(@issue_types) > 1 do %>
-        <a phx-click="unselect_issue_type"><i class="bi bi-x-lg">
-        </i></a>
-    <% else %>
-        <a><i class="bi bi-x-lg">
-        </i></a>
-    <% end %>
-</div>
+<%= if not is_nil(assigns[:selected_issue_type]) and length(@issue_types) > 1 do %>
+    <div class="form-block button right enabled-button-color">
+        <a phx-click="unselect_issue_type"><i class="bi bi-x-lg"></i></a>
+    </div>
+<% else %>
+    <div class="form-block button right disabled-button-color">
+        <a><i class="bi bi-x-lg"></i></a>
+    </div>
+<% end %>
 <div class="form-block button right enabled-button-color">
     <%= if assigns[:list_issues_done_instead_open] do %>
         <a phx-click="show_open_issues"><i class="bi bi-check-circle">
