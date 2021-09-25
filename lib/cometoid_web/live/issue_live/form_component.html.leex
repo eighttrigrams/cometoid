@@ -14,7 +14,11 @@
 
     <br>
     <br>
-    <%= label f, :has_event %>
+
+    <b>Event:</b>
+    <br>
+    <br>
+
     <%= checkbox f, :has_event, value: @has_event %>
 
     <%= if @has_event  do %>
@@ -28,7 +32,7 @@
         <br>
         <br>
         <br>
-        <%= label e, :archived %>
+        Event archived?
         <%= checkbox e, :archived, value: @event_archived %>
 
       <% end %>
@@ -36,18 +40,24 @@
 
     <hr>
 
+    <b>Contexts:</b>
+    <br>
+    <br>
+
     <%= if assigns[:contexts] do %>
-      <%= label f, :contexts %>
       <%= multiple_select f, :contexts, Enum.map(elem(@contexts, 0) ++ elem(@contexts, 1), fn c -> c.title end),
         selected: Enum.map(@issue.contexts, fn c -> c.title end) %>
       <%= error_tag f, :contexts %>
     <% end %>
 
+    <br>
+    <br>
+    (Original selection:
     <%= for context <- @issue.contexts do %>
       <span>
         "<%= context.title %>"
       </span>
-    <% end %>
+    <% end %>)
   </div>
   <div id="right">
     <%= textarea f, :description %>

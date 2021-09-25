@@ -9,6 +9,13 @@
 
 @import "./cometoid.scss";
 
+select {
+  background-color: gray;
+  option {
+      background-color: gray
+  }
+}
+
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
 .phx-no-feedback .invalid-feedback {
