@@ -10,14 +10,20 @@ defmodule CometoidWeb.IssueLive.Index do
   alias Cometoid.Model.Tracker.Issue
   alias Cometoid.Model.Tracker.Context
   alias Cometoid.Editor
+  alias CometoidWeb.Theme
   alias CometoidWeb.IssueLive.IssuesMachine
 
   @impl true
   def mount(_params, _session, socket) do
-    [selected_theme|themes] = Application.fetch_env! :cometoid, :themes
-    theme_info = %{ theme: selected_theme, themes: themes ++ [selected_theme] }
-
+    theme_info = Theme.get
     {:ok, socket |> assign(theme_info)}
+  end
+
+  def handle_event "switch-theme", %{ "name" => name }, socket do
+    Theme.toggle
+    socket
+    |> assign(Theme.get)
+    |> return_noreply
   end
 
   def render(assigns) do
@@ -84,14 +90,6 @@ defmodule CometoidWeb.IssueLive.Index do
   defp apply_action(socket, :index, _params) do # ?
     socket
     |> assign(:issue, nil)
-  end
-
-  def handle_event "switch-theme", %{ "name" => name }, socket do
-    [selected_theme|themes] = socket.assigns.themes
-    theme_info = %{ theme: selected_theme, themes: themes ++ [selected_theme] }
-    socket
-    |> assign(theme_info)
-    |> return_noreply
   end
 
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index, issue_types: issue_types }} = socket do

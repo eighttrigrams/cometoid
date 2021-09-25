@@ -23,6 +23,7 @@ defmodule Cometoid.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Cometoid.Supervisor]
     Supervisor.start_link(children, opts)
+    CometoidWeb.Theme.start_link()
   end
 
   # Tell Phoenix to update the endpoint configuration
