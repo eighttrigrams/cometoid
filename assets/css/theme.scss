@@ -8,7 +8,8 @@ $border-color: lighten(black, 50%);
     background-color: $background-color;
     .background-color { background-color: $background-color; }
     .border-color { border-color: $border-color; }
-    .color-border-color { color: $border-color; }
+    .color-border-color { color: $text-color; }
+    .border-text-color { background-color: $text-color; }
     .border-background-color { border-color: $background-color; }
     #contexts-list { 
         border-color: $border-color;
@@ -48,7 +49,8 @@ $border-color: lighten(black, 10%);
     background-color: $background-color;
     .background-color { background-color: $background-color; }
     .border-color { border-color: $border-color; }
-    .color-border-color { color: $border-color; }
+    .color-border-color { color: $text-color; }
+    .border-text-color { background-color: $text-color; }
     .border-background-color { border-color: $background-color; }
     #contexts-list { 
         border-color: $border-color;
