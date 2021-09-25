@@ -28,11 +28,7 @@ $border-color: lighten(black, 50%);
             background-color: $background-color;
         }
     }
-    .enabled-button-color {
-        &:hover {
-            background-color: lighten(black, 40%);
-        }
-    }
+    .enabled-button-color { &:hover { background-color: lighten(black, 40%); } }
     .disabled-button-color { a i { color: lighten(black, 10%); } }
     .regular-color { color: lighten(black, 30%); }
     .important-color { color: green; }
@@ -72,11 +68,7 @@ $border-color: lighten(black, 10%);
             color: darkolivegreen;
         }
     }
-    .enabled-button-color {
-        &:hover {
-            background-color: lighten(black, 40%);
-        }
-    }
+    .enabled-button-color { &:hover { background-color: lighten(black, 40%); } }
     .disabled-button-color { a i { color: darken(gray, 3%); } }
     .regular-color { color: #4D4D10; }
     .important-color { color: yellow; }
