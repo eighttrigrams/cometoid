@@ -1,6 +1,6 @@
 <div id="page-content">
   <div id="left-column">
-    <div id="taskbar" class="taskbar">
+    <div id="taskbar" class="taskbar border-color">
       <div class="form-block button right enabled">
         <a phx-click="create_new_event"><i class="bi bi-plus-lg">
         </i></a>
@@ -20,13 +20,13 @@
       <div class="list">
         <table class="list-table">
           <%= for event <- @events do %>
-            <tr id="event-<%= event.id %>" class="list-item <%= if not is_nil(assigns[:selected_event]) and @selected_event.id == event.id do 'selected' end %>"">
+            <tr id="event-<%= event.id %>" class="list-item <%= if not is_nil(assigns[:selected_event]) and @selected_event.id == event.id do 'selected-item-color' end %>"">
 
               <td class="left" phx-click="select_event" phx-value-target="<%= event.id %>">
                 <div class="type"><span class="text text-left"><b><%= event.date %></b><span></div>
               </td>
 
-              <td class="right">
+              <td class="right border-background-color">
                 <table><tr>
                   <td class="heading" phx-click="select_event" phx-value-target="<%= event.id %>">
                     <%=
@@ -91,7 +91,7 @@
       </div>
     </div>
   </div>
-  <div class="right-column">
+  <div class="right-column border-color">
     <%= if assigns[:selected_event] do %>
       <%= if is_nil(@selected_event.issue) do %>
         <%= @selected_event; live_component EventLive.SidebarComponent, event: @selected_event %>
