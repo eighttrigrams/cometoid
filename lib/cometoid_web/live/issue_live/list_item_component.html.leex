@@ -1,6 +1,6 @@
-<tr id="issue-<%= @issue.id %>" class="list-item <%= if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do Enum.join(['theme-', CometoidWeb.theme, '-selected-item-color']) end %>">
+<tr id="issue-<%= @issue.id %>" class="list-item <%= if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end %>">
     <td class="left" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
-        <div class="<%= if @issue.important do Enum.join(['theme-', CometoidWeb.theme, '-important-color']) else Enum.join(['theme-', CometoidWeb.theme, '-regular-color']) end %> type"><span class="text text-left">
+        <div class="<%= if @issue.important do 'important-color' else 'regular-color' end %> type"><span class="text text-left">
             <b><%= String.upcase(@issue.issue_type) %>-<%= @issue.id %>
             </b>
             <%= if @issue.has_markdown do  %>
@@ -9,7 +9,7 @@
         </div>
     </td>
 
-    <td class="right <%= Enum.join(['theme-', CometoidWeb.theme, '-border-background-color']) %>">
+    <td class="right border-background-color">
         <table><tr>
             <td class="heading" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
                 <%= @issue.title %>

@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <div class="right-column theme-<%= CometoidWeb.theme %>-border-left-color">
+      <div class="right-column border-color">
         <%= if assigns[:selected_issue]do %>
           <%= live_component CometoidWeb.IssueLive.SidebarComponent, issue: @selected_issue %>
         <% else %>

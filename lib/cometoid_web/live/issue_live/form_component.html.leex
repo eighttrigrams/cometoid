@@ -4,7 +4,7 @@
   phx_change: "changes",
   phx_submit: "save" %>
 
-  <%= text_input f, :title, class: "theme-" <> CometoidWeb.theme <> "-background-color" %>
+  <%= text_input f, :title, class: 'background-color' %>
   <%= error_tag f, :title %>
 
   <%= submit "Save", phx_disable_with: "Saving..." %>

@@ -15,7 +15,7 @@
   <div class="smaller-text">
     <br>
     <h1 style="font-family: serif"><%= @issue.title %></h1>
-    <hr style="height: 1px; border-bottom-width: 0px;" class="theme-<%= CometoidWeb.theme %>-border-color">
+    <hr style="height: 1px; border-bottom-width: 0px;" class="border-color">
   </div>
 </div>
 <div class="inner smaller-text">
@@ -26,7 +26,7 @@
     <%= unless is_nil(@issue.markdown) or @issue.markdown == "" do %>
 
       <%= unless is_nil(@issue.description) do %>
-        <hr style="height: 1px; border-bottom-width: 0px;" class="theme-<%= CometoidWeb.theme %>-border-color">
+        <hr style="height: 1px; border-bottom-width: 0px;" class="border-color">
       <% end %>
 
       <div style="width: 100%; text-align: center;">

@@ -1,17 +1,18 @@
-<body class="theme-<%= CometoidWeb.theme %>-default-colors">
-  <main role="main" class="container">
-    <p class="alert alert-info" role="alert"
-      phx-click="lv:clear-flash"
-      phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+<main role="main" class="container">
+  <p class="alert alert-info" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="info"><%= live_flash(@flash, :info) %></p>
 
-    <p class="alert alert-danger" role="alert"
-      phx-click="lv:clear-flash"
-      phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+  <p class="alert alert-danger" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+
+  <div id="contents" class="theme-<%= @theme %>-default-colors">
 
     <div id="navbar-content" class="border-color">
       <a><%= live_patch "Events", to: Routes.event_index_path(@socket, :index) %></a>
       <a><%= live_patch "People", to: Routes.issue_index_path(@socket, :index, context_types: "Person", alternative_view: "true") %></a>
-      <span class="<%= Enum.join(['theme-', CometoidWeb.theme, '-color-border-color']) %>">
+      <span class="color-border-color">
         &nbsp;|&nbsp;
       </span<
       <%= for %{ name: name, context_types: context_types } <- Application.fetch_env!(:cometoid, :context_types) do %>
@@ -19,8 +20,12 @@
             Routes.issue_index_path(@socket, :index, context_types: context_types) %>
         </a>
       <% end %>
+
+      <span style="float: right; padding-right: 10px;" phx-click="switch-theme" phx-value-name="1">
+        Theme
+      </span>
     </div>
 
     <%= @inner_content %>
-  </main>
-</body>
+  </div>
+</main>

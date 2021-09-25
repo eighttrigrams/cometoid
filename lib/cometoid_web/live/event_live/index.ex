@@ -11,7 +11,12 @@ defmodule CometoidWeb.EventLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    # TODO depuplicate (issues_live)
+    [selected_theme|themes] = Application.fetch_env! :cometoid, :themes
+    theme_info = %{ theme: selected_theme, themes: themes ++ [selected_theme] }
+
     socket
+    |> assign(theme_info)
     |> assign(:show_archived, false)
     |> do_query
     |> return_ok
@@ -50,6 +55,15 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign(:live_action, nil)
     |> do_query
     |> assign(:selected_event, selected_event)
+    |> return_noreply
+  end
+
+  # TODO deduplicate (issues_live)
+  def handle_event "switch-theme", %{ "name" => name }, socket do
+    [selected_theme|themes] = socket.assigns.themes
+    theme_info = %{ theme: selected_theme, themes: themes ++ [selected_theme] }
+    socket
+    |> assign(theme_info)
     |> return_noreply
   end
 

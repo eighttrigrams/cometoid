@@ -9,6 +9,10 @@ context_2 = Repo.insert! %Tracker.Context {
   title: "Todolist 2",
   context_type: "Todolist"
 }
+Repo.insert! %Tracker.Context {
+  title: "Todolist 2",
+  context_type: "Context type 2"
+}
 Enum.each(1..10,
   fn x ->
     Repo.insert! %Tracker.Issue {
