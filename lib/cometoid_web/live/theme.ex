@@ -1,7 +1,7 @@
 defmodule CometoidWeb.Theme do
   def start_link do
     Agent.start_link(fn ->
-      Application.fetch_env! :cometoid, :themes
+      ["2", "1"]
     end, name: __MODULE__)
   end
 

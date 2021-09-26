@@ -5,8 +5,6 @@
 use Mix.Config
 
 config :cometoid,
-  themes: ["2", "1"],
-
   data_path: "./data/",
 
   context_types: [
