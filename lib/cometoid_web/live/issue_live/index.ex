@@ -15,8 +15,11 @@ defmodule CometoidWeb.IssueLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    theme_info = Theme.get
-    {:ok, socket |> assign(theme_info)}
+    {
+      :ok,
+      socket
+      |> assign(Theme.get)
+    }
   end
 
   def handle_event "switch-theme", %{ "name" => name }, socket do
@@ -55,8 +58,9 @@ defmodule CometoidWeb.IssueLive.Index do
 
     state = IssuesMachine.set_issue_properties state
     socket = socket
-    |> assign(state)
-    |> do_query(true)
+      |> assign(state)
+      |> assign(:view, params["view"])
+      |> do_query(true)
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 

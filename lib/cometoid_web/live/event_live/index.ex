@@ -15,6 +15,7 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign(Theme.get)
     |> assign(:show_archived, false)
+    |> assign(:view, "Events")
     |> do_query
     |> return_ok
   end
