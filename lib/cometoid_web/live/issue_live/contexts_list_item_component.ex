@@ -3,6 +3,7 @@ defmodule CometoidWeb.IssueLive.ContextsListItemComponent do
   # the line below would be:
   use CometoidWeb, :live_component
   # use Phoenix.LiveComponent
+  alias Cometoid.Model.Tracker.Context
 
   def show_issues_badge context do
     length(Enum.filter(context.issues, fn issue -> not issue.done end)) > 0

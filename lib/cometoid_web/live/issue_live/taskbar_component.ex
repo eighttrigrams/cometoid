@@ -3,4 +3,6 @@ defmodule CometoidWeb.IssueLive.TaskbarComponent do
   # the line below would be:
   use CometoidWeb, :live_component
   # use Phoenix.LiveComponent
+
+  alias Cometoid.Model.Tracker.Context
 end
