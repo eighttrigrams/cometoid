@@ -23,7 +23,9 @@
             <tr id="event-<%= event.id %>" class="list-item <%= if not is_nil(assigns[:selected_event]) and @selected_event.id == event.id do 'selected-item-color' end %>"">
 
               <td class="left" phx-click="select_event" phx-value-target="<%= event.id %>">
-                <div class="type"><span class="text text-left"><b><%= event.date %></b><span></div>
+                <div class="type"><span class="text text-left"><b>
+                  <%= event.date.day %>.<%= event.date.month %>.<%= event.date.year %>
+                </b><span></div>
               </td>
 
               <td class="right border-background-color">
