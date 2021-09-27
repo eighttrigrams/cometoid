@@ -9,7 +9,7 @@ config :cometoid,
 
   context_types: [
     %{ name: "View-1", context_types: "List" },
-    %{ name: "View-2", context_types: "Todolist_Context type 2" }
+    %{ name: "View-2", context_types: "Todolist_Context type 2" } # use alternative_view: true to open view in contexts mode
   ],
   issue_types: %{
     "Person" => ["Info"], # at least one issue type for Person is required

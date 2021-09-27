@@ -39,7 +39,8 @@ defmodule CometoidWeb.IssueLive.Index do
 
   @impl true
   def handle_params params, url, socket do
-    contexts_view = !is_nil(params["alternative_view"]) && params["alternative_view"] == "true"
+    contexts_view = should_show_contexts_view params
+
     context_types = get_context_types params
     state = %{
       context_types: context_types,
@@ -381,6 +382,12 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def should_show_issues_list_in_contexts_view nil, _ do
     false
+  end
+
+  defp should_show_contexts_view params do
+    view = Enum.find(Application.fetch_env!(:cometoid, :context_types), fn ct -> ct.name == params["view"] end)
+    ((!is_nil(params["alternative_view"]) && params["alternative_view"] == "true")
+      or (!is_nil(view[:alternative_view] && view.alternative_view == true)))
   end
 
   # TODO only used in contexts view, so should be placed there
