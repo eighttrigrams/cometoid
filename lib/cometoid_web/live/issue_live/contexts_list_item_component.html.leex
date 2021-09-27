@@ -1,7 +1,7 @@
 <tr id="context-<%= @context.id %>" class="list-item <%= if @selected_context.id == @context.id do 'selected-item-color' end %>">
     <td class="left" phx-click="select_context" phx-value-context="<%= @context.title %>" phx-value-no_update="true">
         <div class="type <%= if @context.important do 'important-color' else 'regular-color' end %>"><span class="text text-left">
-            <b><%= String.upcase(@context.context_type) %>-<%=
+            <b><%= String.upcase(@context.context_type) %>-C<%=
                     case @context.context_type do
                         "Person" -> @context.person.id
                         _ -> @context.id
