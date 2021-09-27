@@ -9,9 +9,11 @@
                 %>
                 <%= if CometoidWeb.IssueLive.ContextsListItemComponent.show_issues_badge @context do %>
                     <i class="bi bi-envelope-open"></i>
+                    (<%= CometoidWeb.IssueLive.Index.calc_open_issues @context %>)
                 <% end %>
                 <%= if CometoidWeb.IssueLive.ContextsListItemComponent.show_archived_issues_badge @context do %>
                     <i class="bi bi-archive"></i>
+                    (<%= CometoidWeb.IssueLive.Index.calc_issues_done @context %>)
                 <% end %>
             </b>
         </div>

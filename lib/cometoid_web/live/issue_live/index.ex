@@ -393,6 +393,14 @@ defmodule CometoidWeb.IssueLive.Index do
     length(issues) > 0
   end
 
+  def calc_open_issues context do
+    length(Enum.filter(context.issues, fn issue -> issue.done != true end))
+  end
+
+  def calc_issues_done context do
+    length(Enum.filter(context.issues, fn issue -> issue.done == true end))
+  end
+
   defp to_state(socket), do: socket.assigns |> Map.delete(:flash)
 
   defp return_noreply(socket, flash_type, flash_value), do: {:noreply, socket |> put_flash(flash_type, flash_value)}
