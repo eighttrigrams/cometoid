@@ -25,7 +25,7 @@
                         <option value="<%= context.title %>" <%= if @selected_context.title == context.title do %>
                                                     selected
                                                     <% end %>>
-                        <%= context.title %> (<%= CometoidWeb.IssueLive.Index.calc_open_issues context %>)
+                        <%= context.title %> <%= if CometoidWeb.IssueLive.Index.calc_open_issues(context) > 0 do "(#{CometoidWeb.IssueLive.Index.calc_open_issues(context)})" end %>
                     </option>
                     <% end %>
                     <option disabled style="color: white">──────────</option>
@@ -34,7 +34,7 @@
                         <option value="<%= context.title %>" <%= if @selected_context.title == context.title do %>
                                                     selected
                                                     <% end %>>
-                        <%= context.title %> (<%= CometoidWeb.IssueLive.Index.calc_open_issues context %>)
+                        <%= context.title %> <%= if CometoidWeb.IssueLive.Index.calc_open_issues(context) > 0 do "(#{CometoidWeb.IssueLive.Index.calc_open_issues(context)})" end %>
                     </option>
                 <% end %>
             </select>
