@@ -28,7 +28,7 @@
                         <%= context.title %>
                     </option>
                     <% end %>
-                    <option disabled>──────────</option>
+                    <option disabled style="color: white">──────────</option>
                 <% end %>
                 <%= for context <- elem(@contexts, 1) do %>
                         <option value="<%= context.title %>" <%= if @selected_context.title == context.title do %>
