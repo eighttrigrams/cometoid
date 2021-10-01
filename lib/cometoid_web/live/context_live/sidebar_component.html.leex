@@ -4,6 +4,15 @@
   <div><b>Changed at:</b> <%= @context.updated_at %></div>
 
   <div class="smaller-text">
-    <h1><%= @context.title %></1>
+    <br>
+    <h1 style="font-family: serif"><%= @context.title %></h1>
+    <hr style="height: 0px; border-bottom-width: 0px;" class="border-text-color">
+  </div>
+</div>
+<div class="inner smaller-text">
+  <div>
+    <%= unless is_nil(@context.description) or @context.description == "" do %>
+      <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@context.description)) %>
+    <% end %>
   </div>
 </div>

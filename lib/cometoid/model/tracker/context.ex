@@ -18,6 +18,7 @@ defmodule Cometoid.Model.Tracker.Context do
     field :title, :string
     field :context_type, :string
     field :important, :boolean, default: false
+    field :description, :string
 
     many_to_many(
       :issues,
@@ -38,7 +39,7 @@ defmodule Cometoid.Model.Tracker.Context do
   @doc false
   def changeset context, attrs do
     context
-    |> cast(attrs, [:title, :context_type, :important])
+    |> cast(attrs, [:title, :context_type, :important, :description])
     |> put_assoc_person(attrs)
     |> put_assoc_text(attrs)
     |> validate_required([:title, :context_type])

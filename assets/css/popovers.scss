@@ -15,10 +15,20 @@
         height: unset;
     }
 }
+#context-modal-content {
+    .phx-modal-content {
+        height: unset;
+    }
+}
 
 #context-form {
     input {
         padding-left: 10px;
+    }
+    height: 700px;
+    textarea {
+        height: 600px;
+        width: 600px;
     }
 }
 
