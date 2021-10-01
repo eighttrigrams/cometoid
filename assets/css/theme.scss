@@ -3,7 +3,7 @@ $text-color: lighten(black, 80%);
 // theme-1
 $text-color-1: lighten(black, 80%);
 $background-color-1: black;
-$contexts-background-color-1: lighten(black, 15%); 
+$contexts-background-color-1: lighten(black, 10%); 
 $border-color-1: lighten(black, 50%);
 
 .theme-1-default-colors {
@@ -16,7 +16,7 @@ $border-color-1: lighten(black, 50%);
     .border-background-color { border-color: $background-color-1; }
     #contexts-list { 
         border-color: $border-color-1;
-        background-color: lighten(black, 7%); 
+        background-color: $contexts-background-color-1; 
         .selected-item-color { background-color: $background-color-1 }
     }
     input {
@@ -46,7 +46,7 @@ $border-color-1: lighten(black, 50%);
 // theme-2
 $text-color-2: lighten(black, 80%);
 $background-color-2: gray;
-$contexts-background-color-2: darken($background-color-2, 15%);
+$contexts-background-color-2: darken($background-color-2, 10%);
 $border-color-2: lighten(black, 10%);
 
 .theme-2-default-colors {
