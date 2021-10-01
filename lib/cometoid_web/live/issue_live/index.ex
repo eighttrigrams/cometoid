@@ -84,11 +84,13 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_info {:after_edit_form_save, issue}, socket do
 
-    state = IssuesMachine.set_context_properties socket.assigns
-    state = IssuesMachine.set_issue_properties state, issue
+    state =
+      IssuesMachine.set_context_properties socket.assigns
+      |> Map.delete(:flash)
 
     socket
     |> assign(state)
+    |> assign(:selected_issue, issue)
     |> do_query
   end
 
