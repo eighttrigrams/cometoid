@@ -1,6 +1,7 @@
 <%= f = form_for @changeset, "#",
   id: "issue-form",
   phx_target: @myself,
+  phx_hook: "IssueHook",
   phx_change: "changes",
   phx_submit: "save" %>
 

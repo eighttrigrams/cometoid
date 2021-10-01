@@ -17,8 +17,29 @@ import {Socket} from "phoenix"
 import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
 
+let hooks = {};
+hooks.IssueHook = {
+  teStored: '',
+  inpStored: '',
+  mounted (){
+      const te = this.el.getElementsByTagName("textarea")[0];
+      const inp = document.getElementById("issue-form_title");
+      this.teStored = te.value;
+      this.inpStored = inp.value;
+      te.addEventListener("input", e => { this.teStored = te.value; });
+      inp.addEventListener("input", e => { this.inpStored = inp.value; });
+  },
+  updated() {
+      const te = this.el.getElementsByTagName("textarea")[0];
+      const inp = document.getElementById("issue-form_title");
+      te.value = this.teStored;
+      inp.value = this.inpStored;
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
+    hooks: hooks,
     params: {
         _csrf_token: csrfToken
     }
