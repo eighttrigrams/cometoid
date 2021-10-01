@@ -3,7 +3,9 @@ $text-color: lighten(black, 80%);
 // theme-1
 $text-color-1: lighten(black, 80%);
 $background-color-1: black;
+$selected-item-color-1: lighten($background-color-1, 15%);
 $contexts-background-color-1: lighten(black, 10%); 
+$contexts-selected-item-color-1: lighten($contexts-background-color-1, 5%);
 $border-color-1: lighten(black, 50%);
 
 .theme-1-default-colors {
@@ -17,8 +19,9 @@ $border-color-1: lighten(black, 50%);
     #contexts-list { 
         border-color: $border-color-1;
         background-color: $contexts-background-color-1; 
-        .selected-item-color { background-color: $background-color-1 }
+        .contexts-selected-item-color { background-color: $contexts-selected-item-color-1; }
     }
+    .selected-item-color { background-color: $selected-item-color-1; }
     input {
         color: $text-color-1;
         background-color: $background-color-1;
@@ -37,7 +40,6 @@ $border-color-1: lighten(black, 50%);
     .disabled-button-color { a i { color: lighten(black, 10%); } }
     .regular-color { color: lighten(black, 30%); }
     .important-color { color: green; }
-    .selected-item-color { background-color: $contexts-background-color-1; }
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: lighten(black, 45%); }
 }
@@ -46,7 +48,9 @@ $border-color-1: lighten(black, 50%);
 // theme-2
 $text-color-2: lighten(black, 80%);
 $background-color-2: gray;
-$contexts-background-color-2: darken($background-color-2, 10%);
+$selected-item-color-2: darken($background-color-2, 9%);
+$contexts-background-color-2: darken($background-color-2, 4%);
+$contexts-selected-item-color-2: darken($contexts-background-color-2, 7%);
 $border-color-2: lighten(black, 10%);
 
 .theme-2-default-colors {
@@ -61,8 +65,9 @@ $border-color-2: lighten(black, 10%);
     #contexts-list { 
         border-color: $border-color-2;
         background-color: $contexts-background-color-2;
-        .selected-item-color { background-color: $background-color-2 }
+        .contexts-selected-item-color { background-color: $contexts-selected-item-color-2; }
     }
+    .selected-item-color { background-color: $selected-item-color-2; }
     input {
         color: $text-color-2;
         background-color: $background-color-2;
@@ -81,7 +86,6 @@ $border-color-2: lighten(black, 10%);
     .disabled-button-color { a i { color: darken(gray, 3%); } }
     .regular-color { color: #4D4D10; }
     .important-color { color: yellow; }
-    .selected-item-color { background-color: $contexts-background-color-2; }
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: darkgray; }
 }
