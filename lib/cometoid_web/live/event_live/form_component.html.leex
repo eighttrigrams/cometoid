@@ -13,7 +13,7 @@
   <%= end %>
 
   <%= label f, :date %>
-  <%= date_select f, :date %>
+  <%= date_select f, :date, [default: :calendar.local_time()] %>
   <%= error_tag f, :date %>
 
   <%= submit "Save", phx_disable_with: "Saving..." %>

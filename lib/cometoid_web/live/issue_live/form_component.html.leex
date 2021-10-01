@@ -27,7 +27,7 @@
 
         <br>
         <%= label e, :date %>
-        <%= date_select e, :date %>
+        <%= date_select e, :date, [default: :calendar.local_time()] %>
         <%= error_tag e, :date %>
 
         <br>
