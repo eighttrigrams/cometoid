@@ -113,6 +113,17 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     }
   end
 
+  def archive state, id do
+    issue = Tracker.get_issue! id
+    Tracker.update_issue2(issue, %{ "done" => true, "important" => false })
+
+    selected_issue = state.selected_issue
+    selected_issue = if not is_nil(selected_issue)
+      and Integer.to_string(selected_issue.id) != id do selected_issue end
+
+    Map.merge(set_context_properties(state), %{ selected_issue: selected_issue })
+  end
+
   def do_query(%{ selected_context: selected_context } = state) when is_nil(selected_context) do
     Map.merge state, %{
       issues: [[], []]

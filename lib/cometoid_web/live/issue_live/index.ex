@@ -347,15 +347,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "archive", %{ "target" => id }, socket do
-    issue = Tracker.get_issue! id
-    Tracker.update_issue2(issue, %{ "done" => true, "important" => false })
-
-    selected_issue = socket.assigns.selected_issue
-    selected_issue = if not is_nil(selected_issue)
-      and Integer.to_string(selected_issue.id) != id do selected_issue end
     socket
-    |> assign(IssuesMachine.set_context_properties(to_state(socket)))
-    |> assign(:selected_issue, selected_issue)
+    |> assign(IssuesMachine.archive(to_state(socket), id))
     |> do_query
   end
 
