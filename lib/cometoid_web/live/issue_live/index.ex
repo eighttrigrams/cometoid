@@ -342,6 +342,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(IssuesMachine.set_context_properties(to_state(socket)))
+    |> assign(:list_issues_done_instead_open, false)
     |> do_query
   end
 
@@ -349,8 +350,12 @@ defmodule CometoidWeb.IssueLive.Index do
     issue = Tracker.get_issue! id
     Tracker.update_issue2(issue, %{ "done" => true, "important" => false })
 
+    selected_issue = socket.assigns.selected_issue
+    selected_issue = if not is_nil(selected_issue)
+      and Integer.to_string(selected_issue.id) != id do selected_issue end
     socket
     |> assign(IssuesMachine.set_context_properties(to_state(socket)))
+    |> assign(:selected_issue, selected_issue)
     |> do_query
   end
 
