@@ -2,7 +2,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   import Cometoid.Utils
   alias Cometoid.Repo.Tracker
-
+  alias Cometoid.Editor
 
   def set_issue_properties(
       %{ selected_context: selected_context } = state,
@@ -113,15 +113,25 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     }
   end
 
-  def archive state, id do
+  def archive_issue state, id do
     issue = Tracker.get_issue! id
     Tracker.update_issue2(issue, %{ "done" => true, "important" => false })
 
-    selected_issue = state.selected_issue
-    selected_issue = if not is_nil(selected_issue)
-      and Integer.to_string(selected_issue.id) != id do selected_issue end
-
+    selected_issue = determine_selected_issue state, id
     Map.merge(set_context_properties(state), %{ selected_issue: selected_issue })
+  end
+
+  def delete_issue state, id do
+    issue = Tracker.get_issue! id
+    {:ok, _} = Tracker.delete_issue issue
+    Editor.delete_issue issue
+
+    selected_context = Tracker.get_context! state.selected_context.id # fetch latest issues
+    selected_issue = determine_selected_issue state, id
+    Map.merge state, %{
+      selected_context: selected_context,
+      selected_issue: selected_issue
+    }
   end
 
   def do_query(%{ selected_context: selected_context } = state) when is_nil(selected_context) do
@@ -144,6 +154,12 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     Map.merge state, %{
       issues: issues
     }
+  end
+
+  defp determine_selected_issue state, id do
+    selected_issue = state.selected_issue
+    if not is_nil(selected_issue)
+      and Integer.to_string(selected_issue.id) != id do selected_issue end
   end
 
   defp get_selected_issue_type issue_types do

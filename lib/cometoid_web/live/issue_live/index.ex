@@ -130,14 +130,9 @@ defmodule CometoidWeb.IssueLive.Index do
 
   @impl true
   def handle_event "delete_issue", %{ "id" => id }, socket do
-    issue = Tracker.get_issue! id
-    {:ok, _} = Tracker.delete_issue issue
-    Editor.delete_issue issue
-
-    selected_context = Tracker.get_context! socket.assigns.selected_context.id # fetch latest issues
-
+    state = IssuesMachine.delete_issue to_state(socket), id
     socket
-    |> assign(:selected_context, selected_context)
+    |> assign(state)
     |> do_query
   end
 
@@ -348,7 +343,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "archive", %{ "target" => id }, socket do
     socket
-    |> assign(IssuesMachine.archive(to_state(socket), id))
+    |> assign(IssuesMachine.archive_issue(to_state(socket), id))
     |> do_query
   end
 
