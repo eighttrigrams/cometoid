@@ -1,10 +1,10 @@
 <tr id="context-<%= @context.id %>" class="list-item <%= if @selected_context.id == @context.id do 'contexts-selected-item-color' end %>">
     <td class="left" phx-click="select_context" phx-value-context="<%= @context.title %>" phx-value-no_update="true">
         <div class="type <%= if @context.important do 'important-color' else 'regular-color' end %>"><span class="text text-left">
-            <b><%= String.upcase(@context.context_type) %>-C<%=
+            <b><%= String.upcase(@context.context_type) %>-<%=
                     case @context.context_type do
-                        "Person" -> @context.person.id
-                        _ -> @context.id
+                        "Person" -> "P#{@context.person.id}"
+                        _ -> "C #{@context.id}"
                     end
                 %>
                 <%= if CometoidWeb.IssueLive.ContextsListItemComponent.show_issues_badge @context do %>
