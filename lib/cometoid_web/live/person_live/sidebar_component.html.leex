@@ -1,8 +1,6 @@
 <div class="upper">
   <div><b>Context Id:</b> <%= @context.id %></div>
-  <div><b>Changed at:</b> <%= @context.updated_at %></div>
-  <div><b>Person Id:</b> <%= @context.person.id %></div>
-  <div><b>Changed at:</b> <%= @context.updated_at %></div>
+  <div><b>Changed at:</b> <%= @context.person.updated_at.day %>.<%= @context.person.updated_at.month %>.<%= @context.person.updated_at.year %></div>
   <br>
   <div><b>Birthday:</b> <%= @context.person.birthday.date.day %>.<%= @context.person.birthday.date.month %>.<%= @context.person.birthday.date.year %></div>
 
