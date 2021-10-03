@@ -1,6 +1,6 @@
 <table class="list-table">
   <%= for context <- elem(@contexts, 0) ++ elem(@contexts, 1) do %>
-      <%= live_component ContextsListItemComponent,
+      <%= live_component ListItemComponent,
         context: context,
         selected_context: @selected_context,
         list_issues_done_instead_open: @list_issues_done_instead_open

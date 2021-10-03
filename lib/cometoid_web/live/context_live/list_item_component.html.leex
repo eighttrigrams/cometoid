@@ -7,11 +7,11 @@
                         _ -> "C #{@context.id}"
                     end
                 %>
-                <%= if CometoidWeb.IssueLive.ContextsListItemComponent.show_issues_badge @context do %>
+                <%= if CometoidWeb.ContextLive.ListItemComponent.show_issues_badge @context do %>
                     <i class="bi bi-envelope-open"></i>
                     (<%= Context.calc_open_issues @context %>)
                 <% end %>
-                <%= if CometoidWeb.IssueLive.ContextsListItemComponent.show_archived_issues_badge @context do %>
+                <%= if CometoidWeb.ContextLive.ListItemComponent.show_archived_issues_badge @context do %>
                     <i class="bi bi-archive"></i>
                     (<%= Context.calc_issues_done @context %>)
                 <% end %>
