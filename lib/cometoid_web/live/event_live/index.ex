@@ -3,9 +3,11 @@ defmodule CometoidWeb.EventLive.Index do
 
   alias CometoidWeb.IssueLive
   alias CometoidWeb.EventLive
+  alias CometoidWeb.PersonLive
   alias CometoidWeb.Theme
 
   alias Cometoid.Repo.Tracker
+  alias Cometoid.Repo.People
   alias Cometoid.Repo.Calendar
   alias Cometoid.Model.Calendar.Event
   alias Cometoid.Editor

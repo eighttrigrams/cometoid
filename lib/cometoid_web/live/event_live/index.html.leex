@@ -95,11 +95,13 @@
   </div>
   <div class="right-column border-color">
     <%= if assigns[:selected_event] do %>
-      <%= if is_nil(@selected_event.issue) do %>
-        <%= @selected_event; live_component EventLive.SidebarComponent, event: @selected_event %>
-      <% else %>
-        <%= @selected_event; live_component IssueLive.SidebarComponent, issue: Tracker.get_issue!(@selected_event.issue.id) %>
-      <% end %>
+      <%= cond do
+        not is_nil(@selected_event.issue) ->
+          live_component IssueLive.SidebarComponent, issue: Tracker.get_issue!(@selected_event.issue.id)
+        not is_nil(@selected_event.person) ->
+          live_component PersonLive.SidebarComponent, context: Tracker.get_context!((People.get_person!(@selected_event.person.id)).context.id)
+        true -> live_component EventLive.SidebarComponent, event: @selected_event
+          end %>
     <% end %>
   </div>
 </div>
