@@ -80,12 +80,33 @@ $list-item-height: $taskbar-height;
                 height: $list-item-height;
                 font-family: sans-serif;
             }
-            .actions {
-                
+            .contexts {
+
                 position: relative;
                 right: -1px;
                 display: inline-block;
+                padding: 0;
+                visibility: visible;
+                margin-left: 20px;
+                margin-right: 10px;
 
+                span {
+                    font-weight: normal;
+                    background-color: darkblue;
+                    color: rgb(255, 217, 0);
+                    padding: 4px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    margin-left: 6px;
+                    border-radius: 6px;
+                }
+            }
+            .actions {
+                
+                width: 1px;
+                position: relative;
+                right: -1px;
+                display: inline-block;
                 padding: 0;
                 visibility: hidden;
 
@@ -121,10 +142,15 @@ $list-item-height: $taskbar-height;
                 padding-right: 20px;
             }
             &:hover .actions {
+                width: unset;
                 visibility: visible;
                 .btn {
                     width: $list-item-height;
                 }
+            }
+            &:hover .contexts {
+                visibility: hidden;
+                width: 1px;
             }
         }
     }

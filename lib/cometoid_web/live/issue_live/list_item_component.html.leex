@@ -15,6 +15,14 @@
                 <%= @issue.title %>
             </td>
 
+            <td class="contexts">
+                <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.title != @state.selected_context.title end) do %>
+                    <span>
+                        <%= context.title %>
+                    </span>
+                <% end %>
+            </td>
+
             <td class="actions">
 
                 <%= unless @state.list_issues_done_instead_open do %>
