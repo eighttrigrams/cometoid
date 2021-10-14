@@ -1,10 +1,6 @@
 <div class="upper">
   <b><%= String.upcase(@issue.issue_type) %>-<%= @issue.id %></b>
   <div><b>Changed at:</b> <%= @issue.updated_at.day %>.<%= @issue.updated_at.month %>.<%= @issue.updated_at.year %></div>
-  <b>Contexts:</b>
-  <%= for context <- @issue.contexts do %>
-    <div>- <%= context.title %></div>
-  <% end %>
 
   <br>
   <%= unless is_nil(@issue.event) do %>
