@@ -44,6 +44,7 @@ defmodule CometoidWeb.IssueLive.Index do
     all_issue_types = Application.fetch_env!(:cometoid, :issue_types) |> Map.take(context_types)
 
     state = %{
+      control_pressed: false,
       all_issue_types: all_issue_types,
       context_types: context_types,
       contexts_view: contexts_view,
@@ -116,7 +117,22 @@ defmodule CometoidWeb.IssueLive.Index do
           |> assign(:live_action, :new)
           |> assign(:issue, %Issue{})
         end
-      _ -> socket
+      "Control" ->
+        socket
+          |> assign(:control_pressed, true)
+      _ ->
+        socket
+    end
+    |> return_noreply
+  end
+
+  def handle_event "keyup", %{ "key" => key }, socket do
+    case key do
+      "Control" ->
+        socket
+          |> assign(:control_pressed, false)
+      _ ->
+        socket
     end
     |> return_noreply
   end
@@ -179,10 +195,14 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "edit_issue_description", %{ "target" => id }, socket do
-    socket
-    |> assign(:issue, Tracker.get_issue!(id))
-    |> assign(:live_action, :describe)
-    |> return_noreply
+    if socket.assigns.control_pressed do
+      return_noreply(socket)
+    else
+      socket
+      |> assign(:issue, Tracker.get_issue!(id))
+      |> assign(:live_action, :describe)
+      |> return_noreply
+    end
   end
 
   def handle_event "create_new_issue", params, socket do
