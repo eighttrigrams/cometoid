@@ -1,0 +1,27 @@
+<%= f = form_for :abc, "#",
+  id: "link-form",
+  phx_target: @myself,
+  phx_submit: "save"
+  %>
+
+  <table>
+    <%= for {k, v} <- @all_issue_types do %>
+      <tr>
+        <td>
+          <%= k %>
+        </td>
+        <td>
+          <%= for ctx <- CometoidWeb.IssueLive.LinkFormComponent.list_contexts(k) do %>
+            <div>
+              <%= checkbox f, "ctx/#{ctx}", value: CometoidWeb.IssueLive.LinkFormComponent.is_checked(@issue, ctx) %>
+              <%= label f, ctx %>
+              <hr>
+            </div>
+          <% end  %>
+        </td>
+      </tr>
+    <% end %>
+  <table>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

@@ -92,6 +92,7 @@
           title: (if @live_action == :new_context do "New " else "Edit " end) <> "Person",
           action: @live_action,
           selected_context_type: "Person",
+          all_issue_types: @all_issue_types,
           return_to: nil, # review
           person: @edit_entity
       _ -> live_modal @socket, CometoidWeb.ContextLive.FormComponent,
@@ -99,6 +100,7 @@
           title: (if @live_action == :new_context do "New " else "Edit " end) <> "Context",
           action: @live_action,
           selected_context_type: @edit_selected_context_type,
+          all_issue_types: @all_issue_types,
           return_to: nil, # review
           context: @edit_entity
     end %>

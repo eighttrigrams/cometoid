@@ -40,9 +40,11 @@ defmodule CometoidWeb.IssueLive.Index do
   @impl true
   def handle_params params, url, socket do
     contexts_view = should_show_contexts_view params
-
     context_types = get_context_types params
+    all_issue_types = Application.fetch_env!(:cometoid, :issue_types) |> Map.take(context_types)
+
     state = %{
+      all_issue_types: all_issue_types,
       context_types: context_types,
       contexts_view: contexts_view,
       list_issues_done_instead_open: false,
@@ -166,6 +168,13 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(:issue, Tracker.get_issue!(id))
     |> assign(:live_action, :edit)
+    |> return_noreply
+  end
+
+  def handle_event "link_issue", %{ "target" => id }, socket do
+    socket
+    |> assign(:issue, Tracker.get_issue!(id))
+    |> assign(:live_action, :link)
     |> return_noreply
   end
 

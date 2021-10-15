@@ -20,6 +20,11 @@
         height: unset;
     }
 }
+#link-modal-content {
+    .phx-modal-content {
+        height: unset;
+    }
+}
 
 #context-form {
     input {
