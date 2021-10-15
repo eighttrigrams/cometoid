@@ -21,25 +21,19 @@ let hooks = {};
 hooks.IssueHook = {
   teStored: '',
   inpStored: '',
-  contValue: [],
   mounted (){
       const te = this.el.getElementsByTagName("textarea")[0];
       const inp = document.getElementById("issue-form_title");
-      const cont = document.getElementById("issue-form_contexts");
       this.teStored = te.value;
       this.inpStored = inp.value;
-      this.contStored = Array.from(cont.selectedOptions).map(o => o.value);
       te.addEventListener("input", e => { this.teStored = te.value; });
       te.addEventListener("input", e => { this.teStored = te.value; });
-      cont.addEventListener("input", e => { this.contStored = Array.from(cont.selectedOptions).map(o => o.value); });
   },
   updated() {
       const te = this.el.getElementsByTagName("textarea")[0];
       const inp = document.getElementById("issue-form_title");
-      const cont = document.getElementById("issue-form_contexts");
       te.value = this.teStored;
       inp.value = this.inpStored;
-      for (const o of cont.options) o.selected = this.contStored.includes(o.value);
   }
 }
 

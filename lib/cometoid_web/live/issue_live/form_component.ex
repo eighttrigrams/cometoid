@@ -24,11 +24,7 @@ defmodule CometoidWeb.IssueLive.FormComponent do
 
   defp save_issue(socket, :edit, issue_params) do
 
-    contexts = if socket.assigns.contexts do
-      elem(socket.assigns.contexts, 0) ++ elem(socket.assigns.contexts, 1)
-    end
-
-    case Tracker.update_issue(socket.assigns.issue, issue_params, contexts) do
+    case Tracker.update_issue(socket.assigns.issue, issue_params, []) do
       {:ok, issue} ->
         send self(), {:after_edit_form_save, issue}
         {:noreply,

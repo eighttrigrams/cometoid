@@ -38,27 +38,6 @@
 
       <% end %>
     <% end %>
-
-    <hr>
-
-    <b>Contexts:</b>
-    <br>
-    <br>
-
-    <%= if assigns[:contexts] do %>
-      <%= multiple_select f, :contexts, Enum.map(elem(@contexts, 0) ++ elem(@contexts, 1), fn c -> c.title end),
-        selected: Enum.map(@issue.contexts, fn c -> c.title end) %>
-      <%= error_tag f, :contexts %>
-    <% end %>
-
-    <br>
-    <br>
-    (Original selection:
-    <%= for context <- @issue.contexts do %>
-      <span>
-        "<%= context.title %>"
-      </span>
-    <% end %>)
   </div>
   <div id="right">
     <%= textarea f, :description %>
