@@ -9,7 +9,7 @@
 
   <%= text_input f, :title, style: "width: 100%" %>
 
-  <br>
+  <%= submit "Save", phx_disable_with: "Saving..." %>
   <br>
 
   <%= checkbox f, :important, value: @context.important %>
@@ -20,6 +20,4 @@
 
   <%= textarea f, :description %>
   <%= error_tag f, :description %>
-
-  <%= submit "Save", phx_disable_with: "Saving..." %>
 </form>

@@ -81,6 +81,9 @@
 #context-modal-content {
     .phx-modal-content {
         height: unset;
+        width: unset;
+        width: 600px;
+        left: calc(50% - 300px);
         #context-form {
             input {
                 padding-left: 10px;
