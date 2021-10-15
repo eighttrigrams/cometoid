@@ -14,9 +14,7 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
 
     issue_params = %{ "contexts" => selected_contexts }
 
-    contexts = if socket.assigns.contexts do
-      elem(socket.assigns.contexts, 0) ++ elem(socket.assigns.contexts, 1)
-    end
+    contexts = Tracker.list_contexts
 
     if length(selected_contexts) == 0 do
       {:noreply, socket}
@@ -35,7 +33,7 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
 
   def list_contexts context_type do
 
-    results = Cometoid.Repo.Tracker.list_contexts context_type
+    results = Tracker.list_contexts context_type
     Enum.map results, fn r -> r.title end
   end
 

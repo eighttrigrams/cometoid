@@ -56,8 +56,8 @@
       has_event: @issue.event != nil,
       event_archived: @issue.event != nil and @issue.event.archived == true,
       is_important: @issue.important,
-      issue_types: @issue_types,
-      contexts: @contexts %>
+      issue_types: @issue_types
+    %>
   <% end %>
 </div>
 
