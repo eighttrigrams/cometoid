@@ -15,6 +15,7 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
     issue_params = %{ "contexts" => selected_contexts }
 
     contexts = Tracker.list_contexts
+    contexts = Enum.filter(contexts, fn ctx -> ctx.context_type in socket.assigns.context_types end)
 
     if length(selected_contexts) == 0 do
       {:noreply, socket}

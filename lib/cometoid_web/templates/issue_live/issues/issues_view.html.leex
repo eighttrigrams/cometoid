@@ -51,6 +51,7 @@
       id: @issue.id || :new,
       action: @live_action,
       issue: @issue,
+      context_types: @context_types,
       all_issue_types: @all_issue_types,
       return_to: nil, # review
       has_event: @issue.event != nil,
