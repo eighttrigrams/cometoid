@@ -178,6 +178,13 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
+  def handle_event "plan_issue", %{ "target" => id }, socket do
+    socket
+    |> assign(:issue, Tracker.get_issue!(id))
+    |> assign(:live_action, :plan)
+    |> return_noreply
+  end
+
   def handle_event "create_new_issue", params, socket do
 
     if socket.assigns.selected_issue_type do

@@ -66,6 +66,12 @@
                 </span>
 
                 <span class="btn">
+                    <a phx-click="plan_issue" phx-value-target="<%= @issue.id %>">
+                        <i class="bi bi-calendar"></i>
+                    </a>
+                </span>
+
+                <span class="btn">
                     <a phx-click="link_issue" phx-value-target="<%= @issue.id %>">
                         <i class="bi bi-link"></i>
                     </a>

@@ -1,7 +1,6 @@
 <%= f = form_for @changeset, "#",
   id: "issue-form",
   phx_target: @myself,
-  phx_hook: "IssueHook",
   phx_change: "changes",
   phx_submit: "save" %>
 
@@ -10,35 +9,6 @@
 
   <%= submit "Save", phx_disable_with: "Saving..." %>
 
-  <div id="left">
-    <br>
-
-    <br>
-    <br>
-
-    <b>Event:</b>
-    <br>
-    <br>
-
-    <%= checkbox f, :has_event, value: @has_event %>
-
-    <%= if @has_event  do %>
-      <%= inputs_for f, :event, fn e -> %>
-
-        <br>
-        <%= label e, :date %>
-        <%= date_select e, :date, [default: :calendar.local_time()] %>
-        <%= error_tag e, :date %>
-
-        <br>
-        <br>
-        <br>
-        Event archived?
-        <%= checkbox e, :archived, value: @event_archived %>
-
-      <% end %>
-    <% end %>
-  </div>
   <div id="right">
     <%= textarea f, :description %>
     <%= error_tag f, :description %>

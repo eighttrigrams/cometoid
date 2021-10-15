@@ -4,6 +4,8 @@
   phx_submit: "save"
   %>
 
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+
   <table>
     <%= for {k, v} <- @all_issue_types do %>
       <tr>
@@ -22,6 +24,4 @@
       </tr>
     <% end %>
   <table>
-
-  <%= submit "Save", phx_disable_with: "Saving..." %>
 </form>

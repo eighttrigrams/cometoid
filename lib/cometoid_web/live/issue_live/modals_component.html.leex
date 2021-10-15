@@ -16,6 +16,19 @@
 </div>
 
 <div id="issue-modal-content" class="modal-content">
+  <%= if @state.live_action in [:plan] do %>
+    <%= live_modal @socket, CometoidWeb.IssueLive.EventFormComponent,
+      id: @state.issue.id || :new,
+      action: @state.live_action,
+      issue: @state.issue,
+      all_issue_types: @state.all_issue_types,
+      return_to: nil, # review
+      has_event: @state.issue.event != nil,
+      event_archived: @state.issue.event != nil and @state.issue.event.archived == true,
+      is_important: @state.issue.important,
+      issue_types: @state.issue_types %>
+  <% end %>
+
   <%= if @state.live_action in [:edit] do %>
     <%= live_modal @socket, CometoidWeb.IssueLive.FormComponent,
       id: @state.issue.id || :new,
