@@ -18,21 +18,15 @@ import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {};
-hooks.IssueHook = {
-  teStored: '',
+hooks.IssueEventHook = {
   inpStored: '',
   mounted (){
-      const te = this.el.getElementsByTagName("textarea")[0];
-      const inp = document.getElementById("issue-form_title");
-      this.teStored = te.value;
+      const inp = document.getElementById("issue-event-form_title");
       this.inpStored = inp.value;
-      te.addEventListener("input", e => { this.teStored = te.value; });
-      te.addEventListener("input", e => { this.teStored = te.value; });
+      inp.addEventListener("input", e => { this.inpStored = inp.value; });
   },
   updated() {
-      const te = this.el.getElementsByTagName("textarea")[0];
-      const inp = document.getElementById("issue-form_title");
-      te.value = this.teStored;
+      const inp = document.getElementById("issue-event-form_title");
       inp.value = this.inpStored;
   }
 }

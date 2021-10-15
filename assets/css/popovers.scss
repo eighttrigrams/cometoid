@@ -15,6 +15,11 @@
         height: unset;
     }
 }
+#issue-event-modal-content {
+    .phx-modal-content {
+        height: unset;
+    }
+}
 #context-modal-content {
     .phx-modal-content {
         height: unset;
@@ -45,6 +50,34 @@
 }
 
 #issue-form {
+    input {
+        width: 90%;
+        padding-left: 10px;
+    }
+    
+    height: 700px;
+    #left {
+        float: left;
+        width: 600px;
+    }
+    #right {
+        padding: 40px;
+        float: left;
+        width: 600px;
+
+        // TODO deduplicate, see #quote-form
+        textarea {
+            width: calc(100% - 20px);
+            height: 600px;
+            padding: 10px;
+            border-width: 2px;
+        }
+        textarea:focus {
+            outline: none;    
+        }
+    }
+}
+#issue-event-form {
     input {
         width: 90%;
         padding-left: 10px;

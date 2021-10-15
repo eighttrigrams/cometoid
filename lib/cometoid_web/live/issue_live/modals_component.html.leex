@@ -15,7 +15,8 @@
   <% end %>
 </div>
 
-<div id="issue-modal-content" class="modal-content">
+
+<div id="issue-event-modal-content" class="modal-content">
   <%= if @state.live_action in [:plan] do %>
     <%= live_modal @socket, CometoidWeb.IssueLive.EventFormComponent,
       id: @state.issue.id || :new,
@@ -28,7 +29,9 @@
       is_important: @state.issue.important,
       issue_types: @state.issue_types %>
   <% end %>
+</div>
 
+<div id="issue-modal-content" class="modal-content">
   <%= if @state.live_action in [:edit] do %>
     <%= live_modal @socket, CometoidWeb.IssueLive.FormComponent,
       id: @state.issue.id || :new,
