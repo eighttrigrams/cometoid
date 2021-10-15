@@ -21,12 +21,12 @@ let hooks = {};
 hooks.IssueEventHook = {
   inpStored: '',
   mounted (){
-      const inp = document.getElementById("issue-event-form_title");
+      const inp = document.getElementById("issue-form_title");
       this.inpStored = inp.value;
       inp.addEventListener("input", e => { this.inpStored = inp.value; });
   },
   updated() {
-      const inp = document.getElementById("issue-event-form_title");
+      const inp = document.getElementById("issue-form_title");
       inp.value = this.inpStored;
   }
 }

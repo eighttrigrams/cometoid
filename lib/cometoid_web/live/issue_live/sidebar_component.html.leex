@@ -6,10 +6,19 @@
   <%= unless is_nil(@issue.event) do %>
     <b>Date:</b>
     <%= @issue.event.date.day %>.<%= @issue.event.date.month %>.<%= @issue.event.date.year %>
+    <br>
+    <br>
   <% end %>
 
+
+  <br>
+  <span class="btn">
+    <a phx-click="edit_issue_description" phx-value-target="<%= @issue.id %>">
+      <i class="bi bi-pencil"></i>
+    </a>
+  </span>
+
   <div class="smaller-text">
-    <br>
     <h1 style="font-family: serif"><%= @issue.title %></h1>
     <hr style="height: 0px; border-bottom-width: 0px;" class="border-text-color">
   </div>

@@ -10,12 +10,12 @@
     // }
 }
 
-#issue-modal-content {
+#issue-description-modal-content {
     .phx-modal-content {
         height: unset;
         width: unset;
         left: calc(50% - 250px);
-        #issue-form {
+        #issue-description-form {
             input {
                 width: 90%;
                 padding-left: 10px;
@@ -57,12 +57,12 @@
     }
 }
 
-#issue-event-modal-content {
+#issue-modal-content {
     .phx-modal-content {
         height: unset;
         width: 600px;
         left: calc(50% - 300px);
-        #issue-event-form {
+        #issue-form {
             input {
                 width: 90%;
                 padding-left: 10px;

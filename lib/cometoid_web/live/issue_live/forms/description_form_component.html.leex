@@ -1,0 +1,13 @@
+<%= f = form_for @changeset, "#",
+  id: "issue-description-form",
+  phx_target: @myself,
+  phx_change: "changes",
+  phx_submit: "save" %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+
+  <div id="content">
+    <%= textarea f, :description %>
+    <%= error_tag f, :description %>
+  </div>
+</form>

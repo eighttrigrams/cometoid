@@ -1,4 +1,4 @@
-defmodule CometoidWeb.IssueLive.EventFormComponent do
+defmodule CometoidWeb.IssueLive.DescriptionFormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker
@@ -22,7 +22,7 @@ defmodule CometoidWeb.IssueLive.EventFormComponent do
     save_issue(socket, socket.assigns.action, issue_params)
   end
 
-  defp save_issue(socket, :plan, issue_params) do
+  defp save_issue(socket, :describe, issue_params) do
 
     case Tracker.update_issue(socket.assigns.issue, issue_params, []) do
       {:ok, issue} ->
