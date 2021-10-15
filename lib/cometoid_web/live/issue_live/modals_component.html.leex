@@ -44,7 +44,9 @@
       is_important: @state.issue.important,
       issue_types: @state.issue_types %>
   <% end %>
+</div>
 
+<div id="new-issue-modal-content" class="modal-content">
   <%= if @state.live_action in [:new] do %>
     <%= live_modal @socket, CometoidWeb.IssueLive.NewComponent,
       id: :new,
