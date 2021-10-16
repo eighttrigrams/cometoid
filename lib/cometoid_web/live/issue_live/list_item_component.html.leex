@@ -1,11 +1,8 @@
 <tr id="issue-<%= @issue.id %>" class="list-item <%= if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end %>">
     <td class="left" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
         <div class="<%= if @issue.important do 'important-color' else 'regular-color' end %> type"><span class="text text-left">
-            <b><%= String.upcase(@issue.issue_type) %>-<%= @issue.id %>
+            <b><%= @issue.id %>
             </b>
-            <%= if @issue.has_markdown do  %>
-                <i class="bi bi-card-text" style="position: relative; top: 2px"></i>
-            <% end %>
         </div>
     </td>
 
@@ -16,6 +13,17 @@
             </td>
 
             <td class="contexts">
+
+                <span>
+                    <%= @issue.issue_type %>
+                </span>
+
+                <%= if @issue.has_markdown do %>
+                    <span>
+                        <i class="bi bi-card-text" style="position: relative; top: 2px"></i>
+                    </span>
+                <% end %>
+
                 <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.title != @state.selected_context.title end) do %>
                     <span>
                         <%= context.title %>
