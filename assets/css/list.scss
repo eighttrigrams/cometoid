@@ -143,6 +143,9 @@ $list-item-height: $taskbar-height;
                 margin-right: 10px;
 
                 span {
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: white;
                     font-family: monospace;
                     font-weight: normal;
                     background-color: darkblue;
