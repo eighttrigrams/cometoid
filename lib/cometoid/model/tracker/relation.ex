@@ -4,6 +4,8 @@ defmodule Cometoid.Model.Tracker.Relation do
   alias Cometoid.Model.Tracker
 
   schema "context_issue" do
+    field :issue_type, :string
+
     belongs_to :context, Tracker.Context
     belongs_to :issue, Tracker.Issue
   end

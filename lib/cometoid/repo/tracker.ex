@@ -126,7 +126,7 @@ defmodule Cometoid.Repo.Tracker do
   def create_issue(title, context, issue_type) do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
-      contexts: [%{ context: context }],
+      contexts: [%{ context: context, issue_type: issue_type }],
       issue_type: issue_type
     })
     {:ok, Repo.preload(issue, :event)}
