@@ -139,13 +139,6 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event("keydown", _params, socket), do: {:noreply, socket}
 
-  def handle_event "show_context", _params, socket  do
-    socket
-    |> assign(:selected_issue, nil)
-    |> put_flash(:info, nil)
-    |> return_noreply
-  end
-
   @impl true
   def handle_event "delete_issue", %{ "id" => id }, socket do
     state = IssuesMachine.delete_issue to_state(socket), id

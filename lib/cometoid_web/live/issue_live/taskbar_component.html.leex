@@ -15,31 +15,6 @@
             </form>
         </div>
     <% end %>
-<% else %>
-    <div class="form-block form-block-1">
-        <form phx-change="select_context" class="form-1">
-            <select name="context"
-                    id="select_context">
-                <%= unless elem(@contexts, 0) == [] do %>
-                    <%= for context <- elem(@contexts, 0) do %>
-                        <option value="<%= context.title %>" <%= if @selected_context.title == context.title do %>
-                                                    selected
-                                                    <% end %>>
-                        <%= context.title %> <%= if Context.calc_open_issues(context) > 0 do "(#{Context.calc_open_issues(context)})" end %>
-                    </option>
-                    <% end %>
-                    <option disabled style="color: white">──────────</option>
-                <% end %>
-                <%= for context <- elem(@contexts, 1) do %>
-                        <option value="<%= context.title %>" <%= if @selected_context.title == context.title do %>
-                                                    selected
-                                                    <% end %>>
-                        <%= context.title %> <%= if Context.calc_open_issues(context) > 0 do "(#{Context.calc_open_issues(context)})" end %>
-                    </option>
-                <% end %>
-            </select>
-        </form>
-    </div>
 <%= end %>
 
 <%= unless @issue_types == [] or length(@issue_types) == 1 do %>
@@ -59,10 +34,6 @@
     </i></a>
 </div>
 <%= unless @alternative_view == true do %>
-    <div class="form-block button left enabled-button-color %>">
-        <a phx-click="show_context"><i class="bi bi-arrow-right">
-        </i></a>
-    </div>
     <div class="form-block button left enabled-button-color %>">
         <a phx-click="open_context_in_editor"><i class="bi bi-card-text">
         </i></a>

@@ -16,7 +16,7 @@ $border-color-1: lighten(black, 50%);
     .color-border-color { color: $text-color-1; }
     .border-text-color { background-color: $text-color-1; }
     .border-background-color { border-color: $background-color-1; }
-    #contexts-list { 
+    .contexts-list { 
         border-color: $border-color-1;
         background-color: $contexts-background-color-1; 
         .contexts-selected-item-color { background-color: $contexts-selected-item-color-1; }
@@ -62,7 +62,7 @@ $border-color-2: lighten(black, 10%);
     .color-border-color { color: $text-color-2; }
     .border-text-color { background-color: $text-color-2; }
     .border-background-color { border-color: $background-color-2; }
-    #contexts-list { 
+    .contexts-list { 
         border-color: $border-color-2;
         background-color: $contexts-background-color-2;
         .contexts-selected-item-color { background-color: $contexts-selected-item-color-2; }
