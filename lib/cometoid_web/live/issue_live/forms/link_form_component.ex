@@ -14,16 +14,13 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
 
     issue_params = %{ "contexts" => selected_contexts }
 
-    relations = Tracker.list_relations
-    relations = Enum.filter(relations, fn rel -> rel.context.context_type in (socket.assigns.context_types ++ ["Person"]) end)
-
     contexts = Tracker.list_contexts
     contexts = Enum.filter(contexts, fn context -> context.context_type in (socket.assigns.context_types ++ ["Person"]) end)
 
     if length(selected_contexts) == 0 do
       {:noreply, socket}
     else
-      case Tracker.update_issue_relations(issue, issue_params, relations, contexts) do
+      case Tracker.update_issue_relations(issue, issue_params, contexts) do
         {:ok, issue} ->
           send self(), {:after_edit_form_save, issue}
           {:noreply,

@@ -27,11 +27,6 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:text)
   end
 
-  def list_relations do
-    Repo.all(from r in Relation)
-    |> Repo.preload(:context)
-  end
-
   # |> Repo.preload(context_type: :issue_types)
 
   def get_context!(id) do
@@ -131,21 +126,15 @@ defmodule Cometoid.Repo.Tracker do
     {:ok, Repo.preload(issue, :event)}
   end
 
-  def update_issue_relations issue, orig_attrs, relations, contexts do
+  def update_issue_relations issue, orig_attrs, contexts do
 
-    relation_from =  fn title -> Enum.find relations, &(&1.context.title == title) end
-    attrs = put_in(orig_attrs["contexts"], Enum.map(orig_attrs["contexts"], relation_from))
-    attrs = put_in(attrs["contexts"], Enum.reject(attrs["contexts"], fn v -> is_nil(v) end))
-
-    existing = Enum.map(attrs["contexts"], &(&1.context.title))
-    issue_type = List.first(attrs["contexts"]).issue_type
-    non_existing = orig_attrs["contexts"] -- existing
+    issue_type = List.first(issue.contexts).issue_type
 
     context_from =  fn title -> Enum.find contexts, &(&1.title == title) end
-    ctxs = Enum.map(non_existing, context_from)
+    ctxs = Enum.map(orig_attrs["contexts"], context_from)
       |> Enum.map(fn ctx -> %{ context: ctx, issue_type: issue_type } end)
 
-    attrs = put_in(attrs["contexts"], attrs["contexts"] ++ ctxs)
+    attrs = put_in(orig_attrs["contexts"], ctxs)
 
     Issue.relations_changeset(issue, attrs)
     |> Repo.update
