@@ -41,7 +41,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_params params, url, socket do
     contexts_view = should_show_contexts_view params
     context_types = get_context_types params
-    all_issue_types = Application.fetch_env!(:cometoid, :issue_types) |> Map.take(context_types)
+    all_issue_types = Application.fetch_env!(:cometoid, :issue_types) |> Map.take(context_types ++ ["Person"])
 
     state = %{
       control_pressed: false,
