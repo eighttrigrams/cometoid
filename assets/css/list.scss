@@ -143,28 +143,25 @@ $list-item-height: $taskbar-height;
                 margin-right: 10px;
 
                 span {
-                    border-style: solid;
-                    border-width: 1px;
-                    border-color: white;
                     font-family: monospace;
                     font-weight: normal;
-                    background-color: darkblue;
-                    color: rgb(255, 217, 0);
-                    padding: 4px;
-                    padding-bottom: 16px;
-                    padding-left: 8px;
-                    padding-right: 8px;
+                    padding: 3px;
+                    padding-bottom: 18px;
+                    padding-left: 12px;
+                    padding-right: 12px;
                     margin-left: 6px;
-                    border-radius: 6px;
+                    border-radius: 2px;
 
+                    top: -10px;
                     position: relative;
 
                     div {
                         position: absolute;
-                        color: darken(rgb(255, 217, 0), 25%);
-                        top: 16px; 
-                        font-size: 0.7rem; 
-                        left: 8px;
+                        top: 20px; 
+                        font-size: 0.6rem; 
+                        left: 12px;
+                        font-weight: bold;
+                        text-transform: uppercase;
                     }
                 }
             }

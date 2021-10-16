@@ -4,7 +4,7 @@ $text-color: lighten(black, 80%);
 $text-color-1: lighten(black, 80%);
 $background-color-1: black;
 $selected-item-color-1: lighten($background-color-1, 15%);
-$contexts-background-color-1: lighten(black, 4%); 
+$contexts-background-color-1: lighten(black, 10%); 
 $contexts-selected-item-color-1: lighten($contexts-background-color-1, 11%);
 $border-color-1: lighten(black, 50%);
 
@@ -12,6 +12,7 @@ $border-color-1: lighten(black, 50%);
     color: $text-color-1;
     background-color: $background-color-1;
     .background-color { background-color: $background-color-1; }
+    .contexts-background-color { background-color: $contexts-background-color-1; }
     .border-color { border-color: $border-color-1; }
     .color-border-color { color: $text-color-1; }
     .border-text-color { background-color: $text-color-1; }
@@ -38,7 +39,7 @@ $border-color-1: lighten(black, 50%);
     }
     .enabled-button-color { &:hover { background-color: lighten(black, 40%); } }
     .disabled-button-color { a i { color: lighten(black, 10%); } }
-    .regular-color { color: lighten(black, 50%); }
+    .regular-color { color: lighten(black, 70%); }
     .important-color { color: green; }
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: lighten(black, 45%); }
@@ -58,6 +59,7 @@ $border-color-2: lighten(black, 10%);
     color: $text-color-2;
     background-color: $background-color-2;
     .background-color { background-color: $background-color-2; }
+    .contexts-background-color { background-color: $contexts-background-color-2; }
     .border-color { border-color: $border-color-2; }
     .color-border-color { color: $text-color-2; }
     .border-text-color { background-color: $text-color-2; }
@@ -84,7 +86,7 @@ $border-color-2: lighten(black, 10%);
     }
     .enabled-button-color { &:hover { background-color: lighten(black, 40%); } }
     .disabled-button-color { a i { color: darken(gray, 3%); } }
-    .regular-color { color: #4D4D10; }
+    .regular-color { color: lighten(#c2c2c2, 50%) }
     .important-color { color: yellow; }
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: darkgray; }

@@ -15,21 +15,21 @@
             <td class="contexts">
 
                 <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.context.title == @state.selected_context.title end) do %>
-                    <span>
+                    <span class="contexts-background-color regular-color">
                         <%= context.issue_type %>
                     </span>
                 <% end %>
 
                 <%= if @issue.has_markdown do %>
-                    <span>
+                    <span class="contexts-background-color">
                         <i class="bi bi-card-text" style="position: relative; top: 2px"></i>
                     </span>
                 <% end %>
 
                 <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.context.title != @state.selected_context.title end) do %>
-                    <span>
+                    <span class="contexts-background-color regular-color">
                         <%= context.context.title %>
-                        <div>
+                        <div class="regular-color">
                             <%= context.issue_type %>
                         </div>
                     </span>
