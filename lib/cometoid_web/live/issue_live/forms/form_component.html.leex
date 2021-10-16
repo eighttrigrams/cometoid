@@ -5,6 +5,18 @@
   phx_change: "changes",
   phx_submit: "save" %>
 
+  <b><%= String.upcase(@issue.issue_type) %>-<%= @issue.id %></b>
+  <div><b>Last edited at:</b> <%= @issue.updated_at.day %>.<%= @issue.updated_at.month %>.<%= @issue.updated_at.year %></div>
+
+  <br>
+
+  <%= unless is_nil(@issue.event) do %>
+    <b>Date:</b>
+    <%= @issue.event.date.day %>.<%= @issue.event.date.month %>.<%= @issue.event.date.year %>
+    <br>
+    <br>
+  <% end %>
+
   <%= text_input f, :title, class: 'background-color' %>
   <%= error_tag f, :title %>
 

@@ -1,15 +1,4 @@
-<div class="upper">
-  <b><%= String.upcase(@issue.issue_type) %>-<%= @issue.id %></b>
-  <div><b>Changed at:</b> <%= @issue.updated_at.day %>.<%= @issue.updated_at.month %>.<%= @issue.updated_at.year %></div>
-
-  <br>
-  <%= unless is_nil(@issue.event) do %>
-    <b>Date:</b>
-    <%= @issue.event.date.day %>.<%= @issue.event.date.month %>.<%= @issue.event.date.year %>
-    <br>
-    <br>
-  <% end %>
-
+<div class="upper" style="padding-top: 0px;">
   <div class="smaller-text">
     <h1 style="font-family: serif"><%= @issue.title %></h1>
     <hr style="height: 0px; border-bottom-width: 0px;" class="border-text-color">
