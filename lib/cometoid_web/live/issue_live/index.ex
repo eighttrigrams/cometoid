@@ -257,14 +257,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def handle_event("edit_context", _params, socket) do
-    socket
-    |> assign(:edit_entity, socket.assigns.selected_context)
-    |> assign(:edit_selected_context_type, socket.assigns.selected_context.context_type)
-    |> assign(:live_action, :edit_context)
-    |> return_noreply
-  end
-
   def handle_event "select_context_type", %{ "context_type" => context_type }, socket do
 
     state = socket.assigns
@@ -322,13 +314,6 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "open_context_in_editor", %{ "target" => id }, socket do
     selected_context = Tracker.get_context! id
     Editor.open_context selected_context
-    socket
-    |> assign(:selected_issue, nil)
-    |> return_noreply
-  end
-
-  def handle_event "open_context_in_editor", _params, socket do
-    Editor.open_context socket.assigns.selected_context
     socket
     |> assign(:selected_issue, nil)
     |> return_noreply

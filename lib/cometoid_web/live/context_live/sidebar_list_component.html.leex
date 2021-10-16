@@ -9,7 +9,7 @@
       [<%= context.context_type %>-<%=
           case context.context_type do
               "Person" -> "P#{context.person.id}"
-              _ -> "C #{context.id}"
+              _ -> "C#{context.id}"
           end
       %>]
       <br>

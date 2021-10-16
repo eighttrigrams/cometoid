@@ -33,16 +33,7 @@
     <a phx-click="toggle_mode"><i class="bi bi-arrow-down-up">
     </i></a>
 </div>
-<%= unless @alternative_view == true do %>
-    <div class="form-block button left enabled-button-color %>">
-        <a phx-click="open_context_in_editor"><i class="bi bi-card-text">
-        </i></a>
-    </div>
-    <div class="form-block button left enabled-button-color %>">
-        <a phx-click="edit_context"><i class="bi bi-pencil">
-        </i></a>
-    </div>
-<% else %>
+<%= if @alternative_view == true do %>
     <div class="form-block button left enabled-button-color %>">
         <a phx-click="create_new_context" phx-value-context_type="<%= @selected_context_type %>"><i class="bi bi-plus-lg">
         </i></a>
