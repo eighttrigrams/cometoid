@@ -404,9 +404,9 @@ defmodule CometoidWeb.IssueLive.Index do
   # TODO only used in contexts view, so should be placed there
   def should_show_issues_list_in_contexts_view selected_context, list_issues_done_instead_open do
     issues = if list_issues_done_instead_open do
-      Enum.filter selected_context.issues, &(&1.done)
+      Enum.filter selected_context.issues, &(&1.issue.done)
     else
-      Enum.filter selected_context.issues, &(!&1.done)
+      Enum.filter selected_context.issues, &(!&1.issue.done)
     end
     length(issues) > 0
   end

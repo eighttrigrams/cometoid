@@ -7,11 +7,11 @@ defmodule Cometoid.Model.Tracker.Context do
   alias Cometoid.Model.Writing
 
   def calc_open_issues context do
-    length(Enum.filter(context.issues, fn issue -> issue.done != true end))
+    length(Enum.filter(context.issues, fn issue -> issue.issue.done != true end))
   end
 
   def calc_issues_done context do
-    length(Enum.filter(context.issues, fn issue -> issue.done == true end))
+    length(Enum.filter(context.issues, fn issue -> issue.issue.done == true end))
   end
 
   schema "contexts" do
@@ -20,10 +20,9 @@ defmodule Cometoid.Model.Tracker.Context do
     field :important, :boolean, default: false
     field :description, :string
 
-    many_to_many(
+    has_many(
       :issues,
-      Tracker.Issue,
-      join_through: "context_issue",
+      Tracker.Relation,
       on_replace: :delete,
       on_delete: :delete_all
     )

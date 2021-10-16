@@ -2,7 +2,7 @@ defmodule Cometoid.Model.Tracker.Issue do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Cometoid.Model.Tracker.Context
+  alias Cometoid.Model.Tracker.Relation
   alias Cometoid.Model.Calendar
 
   schema "issues" do
@@ -14,10 +14,9 @@ defmodule Cometoid.Model.Tracker.Issue do
     field :markdown, :string
     field :has_markdown, :boolean, default: false
 
-    many_to_many(
+    has_many(
       :contexts,
-      Context,
-      join_through: "context_issue",
+      Relation,
       on_replace: :delete,
       on_delete: :delete_all
     )
@@ -31,9 +30,14 @@ defmodule Cometoid.Model.Tracker.Issue do
   def changeset(issue, attrs) do
     issue
     |> cast(attrs, [:title, :description, :done, :issue_type, :important, :has_markdown, :markdown])
-    |> put_assoc_contexts(attrs)
     |> cast_assoc_event(attrs)
     |> validate_required([:title, :done])
+  end
+
+  def relations_changeset(issue, attrs) do
+    issue
+    |> cast(attrs, [])
+    |> put_assoc_contexts(attrs)
   end
 
   def delete_event_changeset(issue, attrs) do

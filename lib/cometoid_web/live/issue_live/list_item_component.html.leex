@@ -24,9 +24,9 @@
                     </span>
                 <% end %>
 
-                <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.title != @state.selected_context.title end) do %>
+                <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.context.title != @state.selected_context.title end) do %>
                     <span>
-                        <%= context.title %>
+                        <%= context.context.title %>
                     </span>
                 <% end %>
             </td>

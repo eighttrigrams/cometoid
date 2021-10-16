@@ -5,6 +5,7 @@ defmodule Cometoid.Repo.Tracker do
 
   import Ecto.Query, warn: false
   alias Cometoid.Repo
+  alias Cometoid.Model.Tracker.Relation
   alias Cometoid.Model.Tracker.Context
   alias Cometoid.Model.Calendar
   alias Cometoid.Model.Tracker.Issue
@@ -19,10 +20,16 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   def list_contexts do
-    Repo.all(from c in Context, order_by: [desc: :important, desc: :updated_at])
+    Repo.all(from c in Context,
+      order_by: [desc: :important, desc: :updated_at])
+    |> Repo.preload(issues: :issue)
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
-    |> Repo.preload(:issues)
+  end
+
+  def list_relations do
+    Repo.all(from r in Relation)
+    |> Repo.preload(:context)
   end
 
   # |> Repo.preload(context_type: :issue_types)
@@ -31,7 +38,7 @@ defmodule Cometoid.Repo.Tracker do
     Repo.get!(Context, id)
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
-    |> Repo.preload(:issues)
+    |> Repo.preload(issues: :issue)
   end
 
   def create_context(attrs, selected_context_type) do
@@ -80,11 +87,12 @@ defmodule Cometoid.Repo.Tracker do
     query =
       Issue
       |> join(:left, [i], c in assoc(i, :contexts))
+      |> join(:left, [i, c], cc in assoc(c, :context))
       |> where_type(query)
-      |> order_by([i, _c, _it], [{:desc, i.important}, {:desc, i.updated_at}])
+      |> order_by([i, _c, _cc, _it], [{:desc, i.important}, {:desc, i.updated_at}])
 
       Repo.all(query)
-      |> Repo.preload(:contexts)
+      |> Repo.preload(contexts: :context)
       |> Repo.preload(:event)
   end
 
@@ -95,16 +103,16 @@ defmodule Cometoid.Repo.Tracker do
     }) do
     if selected_issue_type == nil do
       query
-      |> where([i, c], c.id == ^selected_context.id and i.done == ^list_issues_done_instead_open)
+      |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open)
     else
       query
-      |> where([i, c], c.id == ^selected_context.id and i.done == ^list_issues_done_instead_open and i.issue_type == ^selected_issue_type)
+      |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open and i.issue_type == ^selected_issue_type)
     end
   end
 
   def get_issue!(id) do
     Repo.get!(Issue, id)
-    |> Repo.preload(:contexts)
+    |> Repo.preload(contexts: :context)
     |> Repo.preload(:event)
   end
 
@@ -118,10 +126,29 @@ defmodule Cometoid.Repo.Tracker do
   def create_issue(title, context, issue_type) do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
-      contexts: [context],
+      contexts: [%{ context: context }],
       issue_type: issue_type
     })
     {:ok, Repo.preload(issue, :event)}
+  end
+
+  def update_issue_relations issue, orig_attrs, relations, contexts do
+
+    relation_from =  fn title -> Enum.find relations, &(&1.context.title == title) end
+    attrs = put_in(orig_attrs["contexts"], Enum.map(orig_attrs["contexts"], relation_from))
+    attrs = put_in(attrs["contexts"], Enum.reject(attrs["contexts"], fn v -> is_nil(v) end))
+
+    existing = Enum.map(attrs["contexts"], &(&1.context.title))
+    non_existing = orig_attrs["contexts"] -- existing
+
+    context_from =  fn title -> Enum.find contexts, &(&1.title == title) end
+    ctxs = Enum.map(non_existing, context_from)
+      |> Enum.map(fn ctx -> %{ context: ctx} end)
+
+    attrs = put_in(attrs["contexts"], attrs["contexts"] ++ ctxs)
+
+    Issue.relations_changeset(issue, attrs)
+    |> Repo.update
   end
 
   def update_issue %Issue{} = issue, attrs, contexts do
