@@ -279,7 +279,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "select_context", %{ "context" => context } = params, socket do
 
-    state = if is_nil(params["no_update"]) and params["no_update"] != "true" do
+    state = if (is_nil(params["no_update"]) and params["no_update"] != "true") and socket.assigns.control_pressed do
       IssuesMachine.select_context! socket.assigns, context
     else
       IssuesMachine.select_context socket.assigns, context
@@ -304,10 +304,19 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "select_issue", %{ "target" => id }, socket do
-    selected_issue = Tracker.get_issue! id
-    socket
-    |> assign(:selected_issue, selected_issue)
-    |> return_noreply
+    if socket.assigns.control_pressed do
+      Tracker.get_issue!(id)
+      |> Tracker.update_issue_updated_at
+      selected_issue = Tracker.get_issue! id
+      socket
+      |> assign(:selected_issue, selected_issue)
+      |> do_query
+    else
+      selected_issue = Tracker.get_issue! id
+      socket
+      |> assign(:selected_issue, selected_issue)
+      |> return_noreply
+    end
   end
 
   def handle_event "open_context_in_editor", %{ "target" => id }, socket do
@@ -373,13 +382,6 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "archive", %{ "target" => id }, socket do
     socket
     |> assign(IssuesMachine.archive_issue(to_state(socket), id))
-    |> do_query
-  end
-
-  def handle_event("up", %{ "target" => id }, socket) do
-    Tracker.get_issue!(id)
-    |> Tracker.update_issue_updated_at
-    socket
     |> do_query
   end
 

@@ -41,12 +41,6 @@
                     </span>
                 <% end %>
 
-                <span class="btn">
-                    <a phx-click="up" phx-value-target="<%= @issue.id %>">
-                        <i class="bi bi-arrow-up"></i>
-                    </a>
-                </span>
-
                 <%= if @state.list_issues_done_instead_open do %>
                     <span class="btn">
                         <a phx-click="unarchive" phx-value-target="<%= @issue.id %>">
@@ -65,12 +59,6 @@
                     <%= link to: "#", phx_click: "delete_issue", phx_value_id: @issue.id, data: [confirm: "Are you sure?"] do %>
                         <i class="bi bi-trash"></i>
                     <% end %>
-                </span>
-
-                <span class="btn">
-                    <a phx-click="open_issue_in_editor" phx-value-target="<%= @issue.id %>">
-                        <i class="bi bi-card-text"></i>
-                    </a>
                 </span>
 
                 <span class="btn">
