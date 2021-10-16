@@ -39,7 +39,7 @@ $border-color-1: lighten(black, 50%);
     }
     .enabled-button-color { &:hover { background-color: lighten(black, 40%); } }
     .disabled-button-color { a i { color: lighten(black, 10%); } }
-    .regular-color { color: lighten(black, 70%); }
+    .regular-color { color: lighten(black, 60%); }
     .important-color { color: green; }
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: lighten(black, 45%); }
@@ -86,7 +86,7 @@ $border-color-2: lighten(black, 10%);
     }
     .enabled-button-color { &:hover { background-color: lighten(black, 40%); } }
     .disabled-button-color { a i { color: darken(gray, 3%); } }
-    .regular-color { color: lighten(#c2c2c2, 50%) }
+    .regular-color { color: #b9b39f }
     .important-color { color: yellow; }
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: darkgray; }
