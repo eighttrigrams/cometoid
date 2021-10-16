@@ -9,7 +9,6 @@ defmodule Cometoid.Model.Tracker.Issue do
     field :description, :string
     field :done, :boolean, default: false
     field :title, :string
-    field :issue_type, :string
     field :important, :boolean, default: false
     field :markdown, :string
     field :has_markdown, :boolean, default: false
@@ -29,7 +28,7 @@ defmodule Cometoid.Model.Tracker.Issue do
   @doc false
   def changeset(issue, attrs) do
     issue
-    |> cast(attrs, [:title, :description, :done, :issue_type, :important, :has_markdown, :markdown])
+    |> cast(attrs, [:title, :description, :done, :important, :has_markdown, :markdown])
     |> cast_assoc_event(attrs)
     |> validate_required([:title, :done])
   end
@@ -42,7 +41,7 @@ defmodule Cometoid.Model.Tracker.Issue do
 
   def delete_event_changeset(issue, attrs) do
     issue
-    |> cast(attrs, [:title, :description, :done, :issue_type, :important, :has_markdown, :markdown])
+    |> cast(attrs, [:title, :description, :done, :important, :has_markdown, :markdown])
     |> put_assoc_contexts(attrs)
     |> put_assoc(:event,
       %{ Calendar.Event.date_changeset(issue.event, %{}) | action: :delete })

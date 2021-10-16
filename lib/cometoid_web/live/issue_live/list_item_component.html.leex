@@ -14,9 +14,7 @@
 
             <td class="contexts">
 
-                <span>
-                    <%= @issue.issue_type %>
-                </span>
+
 
                 <%= if @issue.has_markdown do %>
                     <span>
@@ -27,6 +25,9 @@
                 <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.context.title != @state.selected_context.title end) do %>
                     <span>
                         <%= context.context.title %>
+                        <div>
+                            <%= context.issue_type %>
+                        </div>
                     </span>
                 <% end %>
             </td>

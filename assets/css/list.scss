@@ -148,10 +148,21 @@ $list-item-height: $taskbar-height;
                     background-color: darkblue;
                     color: rgb(255, 217, 0);
                     padding: 4px;
+                    padding-bottom: 16px;
                     padding-left: 8px;
                     padding-right: 8px;
                     margin-left: 6px;
                     border-radius: 6px;
+
+                    position: relative;
+
+                    div {
+                        position: absolute;
+                        color: darken(rgb(255, 217, 0), 25%);
+                        top: 16px; 
+                        font-size: 0.7rem; 
+                        left: 8px;
+                    }
                 }
             }
             .actions {

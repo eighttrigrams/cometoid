@@ -106,7 +106,7 @@ defmodule Cometoid.Repo.Tracker do
       |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open)
     else
       query
-      |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open and i.issue_type == ^selected_issue_type)
+      |> where([i, c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open and c.issue_type == ^selected_issue_type)
     end
   end
 
@@ -126,8 +126,7 @@ defmodule Cometoid.Repo.Tracker do
   def create_issue(title, context, issue_type) do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
-      contexts: [%{ context: context, issue_type: issue_type }],
-      issue_type: issue_type
+      contexts: [%{ context: context, issue_type: issue_type }]
     })
     {:ok, Repo.preload(issue, :event)}
   end
@@ -139,11 +138,12 @@ defmodule Cometoid.Repo.Tracker do
     attrs = put_in(attrs["contexts"], Enum.reject(attrs["contexts"], fn v -> is_nil(v) end))
 
     existing = Enum.map(attrs["contexts"], &(&1.context.title))
+    issue_type = List.first(attrs["contexts"]).issue_type
     non_existing = orig_attrs["contexts"] -- existing
 
     context_from =  fn title -> Enum.find contexts, &(&1.title == title) end
     ctxs = Enum.map(non_existing, context_from)
-      |> Enum.map(fn ctx -> %{ context: ctx} end)
+      |> Enum.map(fn ctx -> %{ context: ctx, issue_type: issue_type } end)
 
     attrs = put_in(attrs["contexts"], attrs["contexts"] ++ ctxs)
 
