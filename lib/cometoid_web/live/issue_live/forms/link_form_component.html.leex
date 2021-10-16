@@ -13,6 +13,9 @@
           <%= k %>
         </td>
         <td>
+          <%= select f, "its/#{k}", v, selected: CometoidWeb.IssueLive.LinkFormComponent.get_selected(k, v, @issue) %>
+        </td>
+        <td>
           <%= for ctx <- CometoidWeb.IssueLive.LinkFormComponent.list_contexts(k) do %>
             <div>
               <%= checkbox f, "ctx/#{ctx}", value: CometoidWeb.IssueLive.LinkFormComponent.is_checked(@issue, ctx) %>
