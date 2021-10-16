@@ -8,6 +8,8 @@ $list-item-height: $taskbar-height;
         height: 100%;
         width: 33%;
         float: left;
+        border-right-style: dotted;
+        border-right-width: 1px;
     }
     
     #list-container {

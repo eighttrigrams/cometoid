@@ -15,7 +15,7 @@
         </div>
 
         <div class="issues-view-list-arrangement">
-          <div id="contexts-container">
+          <div id="contexts-container" class="border-color">
             <div id="contexts-sidebar-list" class="sidebar-list contexts-list">
               <%= live_component CometoidWeb.ContextLive.SidebarListComponent,
                 contexts: elem(@contexts, 0) ++ elem(@contexts, 1),
