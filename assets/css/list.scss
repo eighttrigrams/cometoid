@@ -6,7 +6,7 @@ $list-item-height: $taskbar-height;
 
     #contexts-container {
         height: 100%;
-        width: 33%;
+        width: calc(33% - 1px);
         float: left;
         border-right-style: dotted;
         border-right-width: 1px;
