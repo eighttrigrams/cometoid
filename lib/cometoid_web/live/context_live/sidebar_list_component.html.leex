@@ -1,10 +1,11 @@
 <div class="list-base">
   <%= for context <- @contexts do %>
-    <div class="list-item <%= if @selected_context.id == context.id do 'selected-item-color' end %>" phx-click="select_context" phx-value-context="<%= context.title %>">
+    <div class="list-item regular-color <%= if @selected_context.id == context.id do 'selected-item-color' end %>" phx-click="select_context" phx-value-context="<%= context.title %>">
       <div class="type <%= if context.important do 'important-color' else 'regular-color' end %>">
         <b><%= context.title %></b>
       </div>
       <br>
+
       [<%= context.context_type %>-<%=
           case context.context_type do
               "Person" -> "P#{context.person.id}"
@@ -20,6 +21,7 @@
           <i class="bi bi-archive"></i>
           (<%= Context.calc_issues_done context %>)
       <% end %>
+
     </div>
   <% end %>
 </div>
