@@ -126,17 +126,16 @@ defmodule Cometoid.Repo.Tracker do
     {:ok, Repo.preload(issue, :event)}
   end
 
-  def update_issue_relations issue, orig_attrs, contexts, issue_types do
+  def update_issue_relations issue, selected_contexts, contexts, issue_types do
 
     issue_type = List.first(issue.contexts).issue_type
 
     context_from =  fn title -> Enum.find contexts, &(&1.title == title) end
-    ctxs = Enum.map(orig_attrs["contexts"], context_from)
+    ctxs = Enum.map(selected_contexts, context_from)
       |> Enum.map(fn ctx -> %{ context: ctx, issue_type: issue_types[ctx.context_type] } end)
 
-    attrs = put_in(orig_attrs["contexts"], ctxs)
-
-    Issue.relations_changeset(issue, attrs)
+    issue
+    |> Issue.relations_changeset(%{ "contexts" => ctxs })
     |> Repo.update
   end
 

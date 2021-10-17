@@ -3,20 +3,11 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
 
   alias Cometoid.Repo.Tracker
 
-  def handle_event("save", %{"abc" => abc }, socket) do
+  def handle_event("save", %{"links" => params }, socket) do
 
-    issue_types =
-      abc
-      |> Enum.filter(&filter_its/1)
-      |> Enum.map(&to_key2/1)
-      |> Enum.into(%{})
-    selected_contexts =
-      abc
-      |> Enum.filter(&filter_true/1)
-      |> Enum.map(&to_key/1)
+    {issue_types, selected_contexts} = extract_from params
 
     issue = socket.assigns.issue
-    issue_params = %{ "contexts" => selected_contexts }
 
     contexts = Tracker.list_contexts
     contexts = Enum.filter(contexts, fn context -> context.context_type in (socket.assigns.context_types ++ ["Person"]) end)
@@ -24,7 +15,7 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
     if length(selected_contexts) == 0 do
       {:noreply, socket}
     else
-      case Tracker.update_issue_relations(issue, issue_params, contexts, issue_types) do
+      case Tracker.update_issue_relations(issue, selected_contexts, contexts, issue_types) do
         {:ok, issue} ->
           send self(), {:after_edit_form_save, issue}
           {:noreply,
@@ -52,11 +43,24 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
     not is_nil Enum.find context_titles, &(&1 == context_title)
   end
 
+  defp extract_from params do
+    issue_types =
+      params
+      |> Enum.filter(&filter_its/1)
+      |> Enum.map(&strip_prefixes/1)
+      |> Enum.into(%{})
+    selected_contexts =
+      params
+      |> Enum.filter(&filter_true/1)
+      |> Enum.map(&to_key/1)
+    {issue_types, selected_contexts}
+  end
+
   defp filter_its({k, _v}), do: String.starts_with?(k, "its/")
 
   defp filter_true({k, v}), do: v == "true"
 
   defp to_key({k, v}), do: String.replace(k, "ctx/", "")
 
-  defp to_key2({k, v}), do: {k |> String.replace("ctx/", "") |> String.replace("its/", ""), v}
+  defp strip_prefixes({k, v}), do: {k |> String.replace("ctx/", "") |> String.replace("its/", ""), v}
 end
