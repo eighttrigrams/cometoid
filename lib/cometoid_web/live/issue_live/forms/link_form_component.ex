@@ -11,10 +11,11 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
       {:noreply, socket}
     else
       issue = socket.assigns.issue
+      context_types = socket.assigns.context_types ++ ["Person"]
 
-      contexts = Tracker.list_contexts
-      contexts = Enum.filter(contexts,
-        fn context -> context.context_type in (socket.assigns.context_types ++ ["Person"]) end)
+      contexts =
+        Tracker.list_contexts
+        |> Enum.filter(&(&1.context_type in context_types))
 
       case Tracker.update_issue_relations(issue, selected_contexts, contexts, issue_types) do
         {:ok, issue} ->
