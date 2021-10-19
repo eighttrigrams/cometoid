@@ -17,8 +17,7 @@ Enum.each(1..10,
   fn x ->
     Repo.insert! %Tracker.Issue {
       title: "Todo #{x}",
-      issue_type: "Todo",
-      contexts: [context_1]
+      contexts: [%{ context: context_1, issue_type: "Todo", }]
     }
   end
 )
@@ -26,8 +25,7 @@ Enum.each(11..20,
   fn x ->
     Repo.insert! %Tracker.Issue {
       title: "Todo #{x}",
-      issue_type: "Todo",
-      contexts: [context_2]
+      contexts: [%{ context: context_2, issue_type: "Todo", }]
     }
   end
 )
