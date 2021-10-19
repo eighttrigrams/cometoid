@@ -8,11 +8,15 @@
         <a phx-click="open_issue_in_editor" phx-value-target="<%= @issue.id %>">
           <i class="bi bi-card-text"></i>
         </a>
+        &nbsp;&nbsp;
+        <a phx-click="edit_issue_description" phx-value-target="<%= @issue.id %>">
+          <i class="bi bi-pencil"></i>
+        </a>
       </span>
     </h1>
   </div>
 </div>
-<div class="inner smaller-text" phx-click="edit_issue_description" phx-value-target="<%= @issue.id %>">
+<div class="inner smaller-text">
   <div>
     <%= unless is_nil(@issue.description) or @issue.description == "" do %>
       <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@issue.description)) %>

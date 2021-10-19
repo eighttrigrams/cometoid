@@ -188,14 +188,10 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "edit_issue_description", %{ "target" => id }, socket do
-    if socket.assigns.control_pressed do
-      return_noreply(socket)
-    else
-      socket
-      |> assign(:issue, Tracker.get_issue!(id))
-      |> assign(:live_action, :describe)
-      |> return_noreply
-    end
+    socket
+    |> assign(:issue, Tracker.get_issue!(id))
+    |> assign(:live_action, :describe)
+    |> return_noreply
   end
 
   def handle_event "create_new_issue", params, socket do
