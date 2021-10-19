@@ -1,12 +1,15 @@
-<div class="upper" style="padding-top: 0px;">
+<div class="upper border-color" style="padding-top: 0px;">
   <div class="smaller-text">
     <h1 style="font-family: serif">
-      <%= @issue.title %>
-      <a phx-click="open_issue_in_editor" phx-value-target="<%= @issue.id %>">
-        <i class="bi bi-card-text"></i>
-      </a>
+      <span style="float: left;">
+        <%= @issue.title %>
+      </span>
+      <span style="float: right;">
+        <a phx-click="open_issue_in_editor" phx-value-target="<%= @issue.id %>">
+          <i class="bi bi-card-text"></i>
+        </a>
+      </span>
     </h1>
-    <hr style="height: 0px; border-bottom-width: 0px;" class="border-text-color">
   </div>
 </div>
 <div class="inner smaller-text" phx-click="edit_issue_description" phx-value-target="<%= @issue.id %>">

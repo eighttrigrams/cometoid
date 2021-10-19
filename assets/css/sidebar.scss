@@ -7,6 +7,10 @@ $pad: 20px;
 
     .upper {
         padding: $pad $pad 0 $pad;
+        border-bottom-width: 1px;
+        border-bottom-style: dotted;
+        min-height: calc(#{$list-item-height} - 10px);
+        padding-bottom: 10px;
     }
 
     .smaller-text {

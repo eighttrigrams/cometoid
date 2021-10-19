@@ -83,6 +83,7 @@ $list-item-height: $taskbar-height;
 }
 .sidebar-list {
     overflow: scroll;
+    overflow-x: hidden;
     scrollbar-width: none;
 
     width: 100%;
@@ -143,6 +144,7 @@ $list-item-height: $taskbar-height;
     height: 100%;
 
     overflow: auto;
+    overflow-x: hidden;
     scrollbar-width: none;
 
     width: 100%;
