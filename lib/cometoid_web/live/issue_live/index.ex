@@ -49,7 +49,7 @@ defmodule CometoidWeb.IssueLive.Index do
       context_types: context_types,
       contexts_view: contexts_view,
       list_issues_done_instead_open: false,
-      selected_context_type: unless is_nil(context_types) do List.first(context_types) end
+      selected_context_type: nil
     }
     state = Map.merge socket.assigns, state # TODO swap params and use |>
     state = IssuesMachine.set_context_properties state, true
@@ -259,8 +259,10 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "select_context_type", %{ "context_type" => context_type }, socket do
 
+    selected_context_type = if context_type != "none", do: context_type
+
     state = socket.assigns
-      |> Map.merge(%{ selected_context_type: context_type })
+      |> Map.merge(%{ selected_context_type: selected_context_type })
       |> IssuesMachine.set_context_properties(true)
       |> IssuesMachine.set_issue_properties
 

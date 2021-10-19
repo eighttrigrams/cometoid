@@ -170,10 +170,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     Application.fetch_env!(:cometoid, :issue_types)[selected_context.context_type]
   end
 
-  defp reload_contexts %{ context_types: context_types, selected_context_type: selected_context_type, contexts_view: dont_select_from_all_context_types } = state do
+  defp reload_contexts %{ context_types: context_types, selected_context_type: selected_context_type } = state do
     contexts = unless is_nil(state.context_types) do
       Tracker.list_contexts()
-      |> Enum.filter(fn context -> unless dont_select_from_all_context_types do context.context_type in context_types else context.context_type == selected_context_type end end)
+      |> Enum.filter(fn context -> if is_nil(selected_context_type) do context.context_type in context_types else context.context_type == selected_context_type end end)
     else
       Tracker.list_contexts()
     end
