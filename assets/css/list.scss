@@ -38,6 +38,46 @@ $list-item-height: $taskbar-height;
     }
 }
 
+
+.actions {
+                
+    width: 1px;
+    position: relative;
+    right: -1px;
+    display: inline-block;
+    padding: 0;
+    visibility: hidden;
+
+    height: $list-item-height;
+
+    span.btn {
+        cursor: pointer;
+    }
+
+    span.btn:hover {
+        background-color: lighten(black, 40%);
+    }
+
+    .btn {
+        width: 0;
+        height: $list-item-height;
+        position: relative;
+        top: 0;
+        
+        display: inline-block;
+
+        a {
+            font-size: 1.2rem;
+            
+            i {
+                position: absolute;
+                padding: 23px;
+            }
+        }
+    }
+}
+
+
 .sidebar-list::-webkit-scrollbar {
     display: none;
 }
@@ -49,9 +89,47 @@ $list-item-height: $taskbar-height;
     height: 100%;
 
     .list-item {
-        padding: 20px;
-        height: 60px;
+        padding: unset;
+        height: calc(50px + $list-item-height);
         width: 100%;
+        .top {
+            height: 30px;
+            padding-top: 10px;   
+            padding-bottom: 10px;   
+            padding-left: 20px;
+            width: 100%; 
+        }
+        .bottom {
+            height: $list-item-height;
+            width: 100%;
+            .text {
+                padding-left: 20px;
+                height: 1px;
+                top: -1px;
+            }
+            .right {
+                float: right;
+                .actions {
+                    position: relative;
+                    top: -1px;
+                    width: 100%;
+                    height: $list-item-height;
+                    visibility: visible;
+                }
+            }
+        }
+
+        &:hover .text {
+            visibility: hidden;
+            height: 1px;
+        }
+        &:hover .actions {
+            height: $list-item-height;
+            visibility: visible;
+            .btn {
+                width: $list-item-height;
+            }
+        }
     }
 }
 
@@ -162,43 +240,6 @@ $list-item-height: $taskbar-height;
                         left: 12px;
                         font-weight: bold;
                         text-transform: uppercase;
-                    }
-                }
-            }
-            .actions {
-                
-                width: 1px;
-                position: relative;
-                right: -1px;
-                display: inline-block;
-                padding: 0;
-                visibility: hidden;
-
-                height: $list-item-height;
-
-                span.btn {
-                    cursor: pointer;
-                }
-
-                span.btn:hover {
-                    background-color: lighten(black, 40%);
-                }
-
-                .btn {
-                    width: 0;
-                    height: $list-item-height;
-                    position: relative;
-                    top: 0;
-                    
-                    display: inline-block;
-
-                    a {
-                        font-size: 1.2rem;
-                        
-                        i {
-                            position: absolute;
-                            padding: 23px;
-                        }
                     }
                 }
             }

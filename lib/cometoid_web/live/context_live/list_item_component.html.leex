@@ -31,11 +31,6 @@
                     </a>
                 </span>
                 <span class="btn">
-                    <a phx-click="select_context" phx-value-context="<%= @context.title %>">
-                        <i class="bi bi-arrow-up"></i>
-                    </a>
-                </span>
-                <span class="btn">
                     <%= link to: "#", phx_click: "delete_context", phx_value_id: @context.id, data: [confirm: "Are you sure?"] do %>
                         <i class="bi bi-trash"></i>
                     <% end %>
