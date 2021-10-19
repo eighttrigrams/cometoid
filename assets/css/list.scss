@@ -106,9 +106,8 @@ $list-item-height: $taskbar-height;
             .text {
                 position: absolute;
                 height: 1px;
-                top: -1px;
+                top: 15px;
                 right: 10px;
-                font-size: large;
             }
             .right {
                 float: right;
