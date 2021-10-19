@@ -5,20 +5,19 @@
       <div class="top">
         <div class="type <%= if context.important do 'important-color' else 'regular-color' end %>">
           <b><%= context.title %></b>
-        </div>
-        <br>
-
-
-      </div>
-
-      <div class="bottom">
-        <div class="text">
-            [<%= context.context_type %>-<%=
+          <br>
+          [<%= context.context_type %>-<%=
               case context.context_type do
                   "Person" -> "P#{context.person.id}"
                   _ -> "C#{context.id}"
               end
           %>]
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="text">
+
           <br>
           <%= if CometoidWeb.ContextLive.ListItemComponent.show_issues_badge context do %>
               <i class="bi bi-envelope-open"></i>
