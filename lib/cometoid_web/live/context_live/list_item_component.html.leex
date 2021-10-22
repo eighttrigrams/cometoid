@@ -1,4 +1,4 @@
-<tr id="context-<%= @context.id %>" class="list-item <%= if @selected_context.id == @context.id do 'contexts-selected-item-color' end %>">
+<tr phx-hook="ContextItemHook" id="context-<%= @context.id %>" class="list-item <%= if @selected_context.id == @context.id do 'contexts-selected-item-color' end %>">
     <td class="left" phx-click="select_context" phx-value-context="<%= @context.title %>" phx-value-no_update="true">
         <div class="type <%= if @context.important do 'important-color' else 'regular-color' end %>"><span class="text text-left">
             <b><%= String.upcase(@context.context_type) %>-<%=
@@ -34,11 +34,6 @@
                     <%= link to: "#", phx_click: "delete_context", phx_value_id: @context.id, data: [confirm: "Are you sure?"] do %>
                         <i class="bi bi-trash"></i>
                     <% end %>
-                </span>
-                <span class="btn">
-                    <a phx-click="edit_context" phx-value-target="<%= @context.id %>">
-                        <i class="bi bi-pencil"></i>
-                    </a>
                 </span>
             </td>
         </tr></table>

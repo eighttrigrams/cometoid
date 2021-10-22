@@ -30,6 +30,20 @@ hooks.IssueEventHook = {
       inp.value = this.inpStored;
   }
 }
+hooks.ContextItemHook = {
+    id: '',
+    mounted () {
+        this.id = this.el.id.replace("context-", "");
+        document.addEventListener('mousedown', function (event) {
+            if (event.detail > 1) {
+            event.preventDefault();
+          }
+        }, false);
+         this.el.addEventListener('dblclick', e => {
+             this.pushEvent("edit_context", this.id);
+         }, false);  
+    }
+}
 hooks.IssueItemHook = {
     id: '',
     mounted () {
@@ -37,9 +51,6 @@ hooks.IssueItemHook = {
         document.addEventListener('mousedown', function (event) {
             if (event.detail > 1) {
             event.preventDefault();
-            // of course, you still do not know what you prevent here...
-            // You could also check event.ctrlKey/event.shiftKey/event.altKey
-            // to not prevent something useful.
           }
         }, false);
          this.el.addEventListener('dblclick', e => {
