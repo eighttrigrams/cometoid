@@ -151,8 +151,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       |> Tracker.list_issues
       |> separate(&(&1.important == true))
 
-    IO.inspect issues
-
     Map.merge state, %{
       issues: issues
     }
