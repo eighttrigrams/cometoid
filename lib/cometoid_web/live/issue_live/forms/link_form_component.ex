@@ -3,15 +3,43 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
 
   alias Cometoid.Repo.Tracker
 
-  def handle_event("save", %{"links" => params }, socket) do
+  def handle_event "select_context_type", %{ "target" => context_type }, socket do
+    {:noreply, socket |> assign(:link_form_selected_context_type, context_type )}
+  end
 
-    {issue_types, selected_contexts} = extract_from params
+  def update assigns, socket do
+    its = Enum.map(assigns.state.all_issue_types, fn {k,v} -> {"its/#{k}",
+      get_selected(k, v, assigns.state.issue)} end) |> Enum.into(%{})
+
+    ctxs = Enum.flat_map(assigns.state.all_issue_types,
+      fn {k, vs} ->
+        ctxs = list_contexts(k)
+        Enum.map(ctxs, fn ctx -> {"ctx/#{ctx}", is_checked(assigns.state.issue, ctx)} end)
+      end)
+      |> Enum.into(%{})
+
+    links = Map.merge its, ctxs
+    {:ok, socket |> assign(:links, links) |> assign(:state, assigns.state)}
+  end
+
+  def handle_event "change", %{ "links" => links }, socket do
+
+    IO.inspect socket.assigns.links
+
+    {:noreply, socket |> assign(:links, Map.merge(socket.assigns.links, links))}
+  end
+
+  def handle_event "save", _, socket do
+
+    IO.inspect socket.assigns.links
+    {issue_types, selected_contexts} = extract_from socket.assigns.links
+    IO.inspect selected_contexts
 
     if length(selected_contexts) == 0 do
       {:noreply, socket}
     else
-      issue = socket.assigns.issue
-      context_types = socket.assigns.context_types ++ ["Person"]
+      issue = socket.assigns.state.issue
+      context_types = socket.assigns.state.context_types ++ ["Person"]
 
       contexts =
         Tracker.list_contexts
@@ -42,7 +70,14 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
 
   def is_checked issue, context_title do
     context_titles = Enum.map issue.contexts, &(&1.context.title)
-    not is_nil Enum.find context_titles, &(&1 == context_title)
+    if not (is_nil Enum.find context_titles, &(&1 == context_title)) do "true" else "false" end
+  end
+
+  def get_selected_issue_type context_title, links do
+    elem(links
+    |> Enum.filter(&filter_its/1)
+    |> Enum.map(&strip_prefixes/1)
+    |> Enum.find(fn {k, _} -> k == context_title end),1)
   end
 
   defp extract_from params do

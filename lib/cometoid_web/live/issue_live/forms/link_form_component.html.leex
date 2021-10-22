@@ -1,30 +1,46 @@
+<h1>Link "<%= @state.issue.title %>"</h1>
+
+<div>
+  <%= for {k, v} <- @state.all_issue_types do %>
+    <span
+      phx-click="select_context_type"
+      phx-value-target="<%= k%>"
+      phx-target="<%= @myself %>"
+      ><%= k %></span>
+  <% end %>
+</div>
+
 <%= f = form_for :links, "#",
   id: "link-form",
   phx_target: @myself,
+  phx_change: "change",
   phx_submit: "save"
   %>
 
+  <br>
   <%= submit "Save", phx_disable_with: "Saving..." %>
 
   <table>
-    <%= for {k, v} <- @all_issue_types do %>
-      <tr>
-        <td>
-          <%= k %>
-        </td>
-        <td>
-          <%= select f, "its/#{k}", v, selected: CometoidWeb.IssueLive.LinkFormComponent.get_selected(k, v, @issue) %>
-        </td>
-        <td>
-          <%= for ctx <- CometoidWeb.IssueLive.LinkFormComponent.list_contexts(k) do %>
-            <div>
-              <%= checkbox f, "ctx/#{ctx}", value: CometoidWeb.IssueLive.LinkFormComponent.is_checked(@issue, ctx) %>
-              <%= label f, ctx %>
-              <hr>
-            </div>
-          <% end  %>
-        </td>
-      </tr>
+    <%= for {k, v} <- @state.all_issue_types do %>
+      <%= if k == assigns[:link_form_selected_context_type] do %>
+        <tr>
+          <td>
+            <%= k %>
+          </td>
+          <td>
+            <%= select f, "its/#{k}", v, selected: CometoidWeb.IssueLive.LinkFormComponent.get_selected_issue_type(k, @links) %>
+          </td>
+          <td>
+            <%= for ctx <- CometoidWeb.IssueLive.LinkFormComponent.list_contexts(k) do %>
+              <div>
+                <%= checkbox f, "ctx/#{ctx}", value: @links["ctx/#{ctx}"] %>
+                <%= label f, ctx %>
+                <hr>
+              </div>
+            <% end  %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   <table>
 </form>

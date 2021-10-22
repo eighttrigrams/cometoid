@@ -2,15 +2,8 @@
   <%= if @state.live_action in [:link] do %>
     <%= live_modal @socket, CometoidWeb.IssueLive.LinkFormComponent,
       id: @state.issue.id || :new,
-      action: @state.live_action,
-      issue: @state.issue,
-      context_types: @state.context_types,
-      all_issue_types: @state.all_issue_types,
-      return_to: nil, # review
-      has_event: @state.issue.event != nil,
-      event_archived: @state.issue.event != nil and @state.issue.event.archived == true,
-      is_important: @state.issue.important,
-      issue_types: @state.issue_types
+      state: @state,
+      return_to: nil
     %>
   <% end %>
 </div>

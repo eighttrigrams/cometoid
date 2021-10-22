@@ -14,7 +14,7 @@ defmodule CometoidWeb.IssueLive.Index do
   alias CometoidWeb.IssueLive.IssuesMachine
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount _params, _session, socket do
     {
       :ok,
       socket
