@@ -30,11 +30,28 @@ hooks.IssueEventHook = {
       inp.value = this.inpStored;
   }
 }
+function clearSelection() {
+    if(document.selection && document.selection.empty) {
+        document.selection.empty();
+    } else if(window.getSelection) {
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+    }
+}
 hooks.IssueDescriptionHook = {
    mounted() {
+      // https://stackoverflow.com/a/43321596
+      document.addEventListener('mousedown', function (event) {
+        if (event.detail > 1) {
+          event.preventDefault();
+          // of course, you still do not know what you prevent here...
+          // You could also check event.ctrlKey/event.shiftKey/event.altKey
+          // to not prevent something useful.
+        }
+      }, false);
        this.el.addEventListener('dblclick', e => {
            this.pushEvent("edit_issue_description");
-       });
+       }, false);
    } 
 }
 
