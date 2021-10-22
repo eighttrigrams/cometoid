@@ -255,6 +255,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "select_context_type", %{ "context_type" => context_type }, socket do
 
+    context_type = if context_type == "nil" do nil else context_type end
     selected_context_type = if context_type != "none", do: context_type
 
     state = socket.assigns

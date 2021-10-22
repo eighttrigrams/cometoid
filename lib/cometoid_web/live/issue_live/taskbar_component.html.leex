@@ -1,20 +1,11 @@
 
 <%= if length(@context_types) > 1 do %>
-    <div class="form-block form-block-1">
-        <form phx-change="select_context_type" class="form-1">
-            <select name="context_type"
-                    id="select_context_type">
-
-                <option value="none" <%= if is_nil(@selected_context_type) do 'selected' end %>>
-                <%= for context_type <- @context_types do %>
-                    <option value="<%= context_type %>" <%= if @selected_context_type == context_type do %>
-                                                            selected
-                                                        <% end %>>
-                        <%= context_type %>
-                    </option>
-                <% end %>
-            </select>
-        </form>
+    <div class="form-block form-block-1 context-type-grid">
+        <div phx-click="select_context_type" phx-value-context_type="nil" class="<%= if assigns[:selected_context_type] == nil do 'selected-issue-color' else 'deselected-issue-color' end %>">All</div>
+        <%= for context_type <- @context_types do %>
+            <div phx-click="select_context_type" phx-value-context_type="<%= context_type %>"
+                 class="<%= if assigns[:selected_context_type] != nil and assigns.selected_context_type == context_type do 'selected-issue-color' else 'deselected-issue-color' end %>"><%= if String.contains?(context_type, ":") do Enum.at(String.split(context_type,":"),1) else context_type end %></div>
+        <% end %>
     </div>
 <% end %>
 
