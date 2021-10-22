@@ -23,17 +23,12 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
   end
 
   def handle_event "change", %{ "links" => links }, socket do
-
-    IO.inspect socket.assigns.links
-
     {:noreply, socket |> assign(:links, Map.merge(socket.assigns.links, links))}
   end
 
   def handle_event "save", _, socket do
 
-    IO.inspect socket.assigns.links
     {issue_types, selected_contexts} = extract_from socket.assigns.links
-    IO.inspect selected_contexts
 
     if length(selected_contexts) == 0 do
       {:noreply, socket}
