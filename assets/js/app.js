@@ -20,7 +20,7 @@ import {LiveSocket} from "phoenix_live_view"
 let hooks = {};
 hooks.IssueEventHook = {
   inpStored: '',
-  mounted (){
+  mounted () {
       const inp = document.getElementById("issue-form_title");
       this.inpStored = inp.value;
       inp.addEventListener("input", e => { this.inpStored = inp.value; });
@@ -29,6 +29,13 @@ hooks.IssueEventHook = {
       const inp = document.getElementById("issue-form_title");
       inp.value = this.inpStored;
   }
+}
+hooks.IssueDescriptionHook = {
+   mounted() {
+       this.el.addEventListener('dblclick', e => {
+           this.pushEvent("edit_issue_description");
+       });
+   } 
 }
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
