@@ -173,7 +173,10 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "edit_issue", %{ "target" => id }, socket do
+  def handle_event "edit_issue", id, socket do
+
+    {id, ""} = Integer.parse id
+
     socket
     |> assign(:issue, Tracker.get_issue!(id))
     |> assign(:live_action, :edit)

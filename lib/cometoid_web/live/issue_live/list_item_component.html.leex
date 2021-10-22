@@ -1,4 +1,4 @@
-<tr id="issue-<%= @issue.id %>" class="list-item <%= if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end %>">
+<tr id="issue-<%= @issue.id %>" phx-hook="IssueItemHook" class="list-item <%= if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end %>">
     <td class="left" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
         <div class="<%= if @issue.important do 'important-color' else 'regular-color' end %> type"><span class="text text-left">
             <b><%= @issue.id %>
@@ -69,12 +69,6 @@
                 <span class="btn">
                     <a phx-click="link_issue" phx-value-target="<%= @issue.id %>">
                         <i class="bi bi-link"></i>
-                    </a>
-                </span>
-
-                <span class="btn">
-                    <a phx-click="edit_issue" phx-value-target="<%= @issue.id %>">
-                        <i class="bi bi-pencil"></i>
                     </a>
                 </span>
             </td>
