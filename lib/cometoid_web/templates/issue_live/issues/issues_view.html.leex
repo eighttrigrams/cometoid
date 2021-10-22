@@ -46,10 +46,12 @@
         <%= if assigns[:selected_issue]do %>
           <%= live_component CometoidWeb.IssueLive.SidebarComponent, issue: @selected_issue %>
         <% else %>
-          <%= if @selected_context.context_type == "Person" do %>
-            <%= live_component CometoidWeb.PersonLive.SidebarComponent, context: @selected_context %>
-          <% else %>
-            <%= live_component CometoidWeb.ContextLive.SidebarComponent, context: @selected_context %>
+          <%= unless is_nil(@selected_context) do %>
+            <%= if @selected_context.context_type == "Person" do %>
+              <%= live_component CometoidWeb.PersonLive.SidebarComponent, context: @selected_context %>
+            <% else %>
+              <%= live_component CometoidWeb.ContextLive.SidebarComponent, context: @selected_context %>
+            <% end %>
           <% end %>
         <% end %>
       </div>

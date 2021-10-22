@@ -136,7 +136,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   def do_query(%{ selected_context: selected_context } = state) when is_nil(selected_context) do
     Map.merge state, %{
-      issues: [[], []]
+      issues: {[], []}
     }
   end
 
@@ -150,6 +150,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       query
       |> Tracker.list_issues
       |> separate(&(&1.important == true))
+
+    IO.inspect issues
 
     Map.merge state, %{
       issues: issues
