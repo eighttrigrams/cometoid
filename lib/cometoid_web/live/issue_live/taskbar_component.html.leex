@@ -1,7 +1,6 @@
 
 <%= if length(@context_types) > 1 do %>
     <div class="form-block form-block-1 context-type-grid">
-        <div phx-click="select_context_type" phx-value-context_type="nil" class="<%= if assigns[:selected_context_type] == nil do 'selected-issue-color' else 'deselected-issue-color' end %>">All</div>
         <%= for context_type <- @context_types do %>
             <div phx-click="select_context_type" phx-value-context_type="<%= context_type %>"
                  class="<%= if assigns[:selected_context_type] != nil and assigns.selected_context_type == context_type do 'selected-issue-color' else 'deselected-issue-color' end %>"><%= if String.contains?(context_type, ":") do Enum.at(String.split(context_type,":"),1) else context_type end %></div>
@@ -26,6 +25,15 @@
     <a phx-click="toggle_mode"><i class="bi bi-columns">
     </i></a>
 </div>
+<%= if not is_nil(assigns[:selected_context_type]) do %>
+    <div class="form-block button left enabled-button-color">
+        <a phx-click="select_context_type" phx-value-context_type="nil"><i class="bi bi-x-lg"></i></a>
+    </div>
+<% else %>
+    <div class="form-block button left disabled-button-color">
+        <a><i class="bi bi-x-lg"></i></a>
+    </div>
+<% end %>
 <%= unless is_nil(@selected_context_type) do %>
     <div class="form-block button left enabled-button-color %>">
         <a phx-click="create_new_context" phx-value-context_type="<%= @selected_context_type %>"><i class="bi bi-plus-lg">
