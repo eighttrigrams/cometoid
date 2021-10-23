@@ -49,7 +49,7 @@ defmodule CometoidWeb.IssueLive.Index do
       context_types: context_types,
       contexts_view: contexts_view,
       list_issues_done_instead_open: false,
-      selected_context_type: nil
+      selected_context_type: if length(context_types) == 1 do List.first(context_types) end
     }
     state = Map.merge socket.assigns, state # TODO swap params and use |>
     state = IssuesMachine.set_context_properties state, true
