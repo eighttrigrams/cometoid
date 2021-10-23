@@ -18,7 +18,7 @@
 
         <div class="contexts-view-list-arrangement">
           <div id="list-container">
-            <div id="contexts-list" class="list contexts-list <%= if @selected_context.issues == [] do 'only-contexts' end %>">
+            <div id="contexts-list" class="list contexts-list <%= if is_nil(@selected_context) or @selected_context.issues == [] do 'only-contexts' end %>">
                 <%= live_component CometoidWeb.ContextLive.ListComponent,
                     contexts: @contexts,
                     selected_context: @selected_context,
