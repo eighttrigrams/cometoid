@@ -242,6 +242,12 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
+  def handle_event "mouse_leave", _, socket do
+    socket
+    |> assign(:control_pressed, false)
+    |> return_noreply
+  end
+
   def handle_event "edit_context", id, socket do
 
     {id, ""} = Integer.parse id

@@ -22,6 +22,11 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_ok
   end
 
+  def handle_event "mouse_leave", _, socket do
+    socket
+    |> return_noreply
+  end
+
   def handle_event "switch-theme", %{ "name" => name }, socket do
     Theme.toggle
     socket

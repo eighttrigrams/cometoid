@@ -18,6 +18,13 @@ import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {};
+hooks.ContentsHook = {
+    mounted () {
+        this.el.addEventListener("mouseleave", e => { 
+            this.pushEvent("mouse_leave");
+        });
+    },  
+}
 hooks.IssueEventHook = {
   inpStored: '',
   mounted () {

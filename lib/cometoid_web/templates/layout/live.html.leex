@@ -7,7 +7,7 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
-  <div id="contents" class="theme-<%= @theme %>-default-colors">
+  <div id="contents" class="theme-<%= @theme %>-default-colors" phx-hook="ContentsHook">
 
     <div id="navbar-content" class="border-color">
       <a><%= live_patch "Events", to: Routes.event_index_path(@socket, :index), class: (if @view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end) %></a>
