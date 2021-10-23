@@ -18,6 +18,22 @@ import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {};
+hooks.TextAreaHook = {
+    mounted() {
+        // https://stackoverflow.com/a/6637396
+        this.el.addEventListener('keydown', function(e) {
+            if (e.key == 'Tab') {
+              e.preventDefault();
+              var start = this.selectionStart;
+              var end = this.selectionEnd;
+              this.value = this.value.substring(0, start) +
+                "    " + this.value.substring(end);
+              this.selectionStart =
+                this.selectionEnd = start + 4;
+            }
+          });
+    }
+}
 hooks.ContentsHook = {
     mounted () {
         this.el.addEventListener("mouseleave", e => { 
@@ -27,7 +43,7 @@ hooks.ContentsHook = {
 }
 hooks.IssueEventHook = {
   inpStored: '',
-  mounted () {
+  mounted() {
       const inp = document.getElementById("issue-form_title");
       this.inpStored = inp.value;
       inp.addEventListener("input", e => { this.inpStored = inp.value; });
@@ -39,7 +55,7 @@ hooks.IssueEventHook = {
 }
 hooks.ContextItemHook = {
     id: '',
-    mounted () {
+    mounted() {
         this.id = this.el.id.replace("context-", "");
         document.addEventListener('mousedown', function (event) {
             if (event.detail > 1) {
@@ -53,7 +69,7 @@ hooks.ContextItemHook = {
 }
 hooks.IssueItemHook = {
     id: '',
-    mounted () {
+    mounted() {
         this.id = this.el.id.replace("issue-", "");
         document.addEventListener('mousedown', function (event) {
             if (event.detail > 1) {
@@ -83,9 +99,6 @@ hooks.ContextDescriptionHook = {
        document.addEventListener('mousedown', function (event) {
          if (event.detail > 1) {
            event.preventDefault();
-           // of course, you still do not know what you prevent here...
-           // You could also check event.ctrlKey/event.shiftKey/event.altKey
-           // to not prevent something useful.
          }
        }, false);
         this.el.addEventListener('dblclick', e => {

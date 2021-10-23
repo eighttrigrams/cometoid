@@ -7,7 +7,7 @@
   <%= submit "Save", phx_disable_with: "Saving..." %>
 
   <div id="content">
-    <%= textarea f, :description %>
+    <%= textarea f, :description, id: "text-area", phx_hook: "TextAreaHook" %>
     <%= error_tag f, :description %>
   </div>
 </form>
