@@ -106,28 +106,4 @@
   </div>
 </div>
 
-<%= if @live_action in [:new, :edit] do %>
-    <%= if @live_action == :new or is_nil(@edit_event.issue) do %>
-      <div id="event-modal-content" class="modal-content">
-        <%= live_modal @socket, EventLive.FormComponent,
-          id: @edit_event.id || :new,
-          action: @live_action,
-          is_standalone: (if is_nil(@edit_event.issue_id) and is_nil(@edit_event.person_id) do true else false end),
-          event: @edit_event,
-          return_to: nil %>
-      </div>
-    <% else %>
-      <div id="issue-modal-content" class="modal-content">
-        <%= live_modal @socket, IssueLive.FormComponent,
-          id: @edit_event.id,
-          action: @live_action,
-          issue: Tracker.get_issue!(@edit_event.issue.id),
-          is_important: Tracker.get_issue!(@edit_event.issue.id).important,
-          has_event: true,
-          event_archived: false,
-          contexts: nil,
-          return_to: nil %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+<%= live_component CometoidWeb.IssueLive.ModalsComponent, state: assigns %>

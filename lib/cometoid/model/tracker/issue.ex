@@ -33,6 +33,11 @@ defmodule Cometoid.Model.Tracker.Issue do
     |> validate_required([:title, :done])
   end
 
+  def description_changeset(issue, attrs) do
+    issue
+    |> cast(attrs, [:description])
+  end
+
   def relations_changeset(issue, attrs) do
     issue
     |> cast(attrs, [])

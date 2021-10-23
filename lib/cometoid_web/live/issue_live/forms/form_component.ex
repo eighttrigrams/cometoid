@@ -27,8 +27,7 @@ defmodule CometoidWeb.IssueLive.FormComponent do
     case Tracker.update_issue(socket.assigns.issue, issue_params, []) do
       {:ok, issue} ->
         send self(), {:after_edit_form_save, issue}
-        {:noreply,
-         socket |> put_flash(:info, "Issue updated successfully")
+        {:noreply, socket |> put_flash(:info, "Issue updated successfully")
         }
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

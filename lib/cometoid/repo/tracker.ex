@@ -156,6 +156,12 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.update
   end
 
+  def update_issue_description issue, attrs do
+    issue
+    |> Issue.description_changeset(attrs)
+    |> Repo.update
+  end
+
   def update_issue2(issue, attrs) do
     changeset = Issue.changeset(issue, attrs)
     |> Repo.update

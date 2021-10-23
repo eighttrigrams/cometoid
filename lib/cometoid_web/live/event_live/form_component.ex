@@ -25,7 +25,7 @@ defmodule CometoidWeb.EventLive.FormComponent do
     save_event(socket, socket.assigns.action, event_params)
   end
 
-  defp save_event(socket, :edit, event_params) do
+  defp save_event(socket, :edit_event, event_params) do
     case Calendar.update_event(socket.assigns.event, event_params) do
       {:ok, event} ->
         send self(), {:after_edit_form_save, %{ event: event }}
@@ -35,7 +35,7 @@ defmodule CometoidWeb.EventLive.FormComponent do
     end
   end
 
-  defp save_event(socket, :new, event_params) do
+  defp save_event(socket, :new_event, event_params) do
     case Calendar.create_event(event_params) do
       {:ok, event} ->
         send self(), {:after_edit_form_save, %{ event: event }}

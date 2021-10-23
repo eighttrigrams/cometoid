@@ -42,7 +42,14 @@ defmodule CometoidWeb.EventLive.Index do
   def handle_event("edit_event", %{ "target" => id }, socket) do
     socket
     |> assign(:edit_event, Calendar.get_event!(id))
-    |> assign(:live_action, :edit)
+    |> assign(:live_action, :edit_event)
+    |> return_noreply
+  end
+
+  def handle_event "edit_issue_description", _, socket do
+    socket
+    |> assign(:issue, Tracker.get_issue!(socket.assigns.selected_event.issue.id))
+    |> assign(:live_action, :describe)
     |> return_noreply
   end
 
@@ -52,21 +59,14 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
-  def handle_info({:after_edit_form_save, %{ event: event }}, socket) do
+  def handle_info {:after_edit_form_save, %{ event: event }}, socket do
+
     selected_event = Calendar.get_event! event.id
     socket
-    |> assign(:live_action, nil)
-    |> do_query
     |> assign(:selected_event, selected_event)
-    |> return_noreply
-  end
-
-  def handle_info({:after_edit_form_save, issue}, socket) do
-    selected_event = Calendar.get_event!(issue.event.id)
-    socket
-    |> assign(:live_action, nil)
     |> do_query
-    |> assign(:selected_event, selected_event)
+    |> assign(:live_action, nil)
+    |> assign(:edit_event, nil)
     |> return_noreply
   end
 
@@ -89,7 +89,7 @@ defmodule CometoidWeb.EventLive.Index do
   def handle_event("create_new_event", params, socket) do
     socket
     |> assign(:edit_event, %Event{})
-    |> assign(:live_action, :new)
+    |> assign(:live_action, :new_event)
     |> return_noreply
   end
 
