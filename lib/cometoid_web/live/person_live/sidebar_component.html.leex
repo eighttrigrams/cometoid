@@ -10,7 +10,7 @@
     <hr style="height: 0px; border-bottom-width: 0px;" class="border-text-color">
   </div>
 </div>
-<div class="inner smaller-text">
+<div class="inner smaller-text" id="context-description" phx-hook="ContextDescriptionHook">
   <div>
     <%= unless is_nil(@context.person.description) or @context.person.description == "" do %>
       <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@context.person.description)) %>

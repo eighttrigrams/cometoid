@@ -57,6 +57,21 @@ defmodule Cometoid.Repo.People do
     }
   end
 
+  def update_person_description(%Person{} = person, attrs) do
+    {
+      :ok,
+      person
+      |> Person.update_description_changeset(attrs)
+      |> Repo.update!
+      |> Repo.preload(:context)
+      |> Repo.preload(:birthday)
+    }
+  end
+
+  def change_person_description(%Person{} = person, attrs \\ %{}) do
+    Person.update_description_changeset(person, attrs)
+  end
+
   def change_person(%Person{} = person, attrs \\ %{}) do
     Person.changeset(person, attrs)
   end

@@ -9,10 +9,6 @@
   <%= text_input f, :name %>
   <%= error_tag f, :name %>
 
-  <%= label f, :description %>
-  <%= error_tag f, :description %>
-  <%= textarea f, :description %>
-
   <%= inputs_for f, :birthday, fn b -> %>
     <%= label b, :date %>
     <%= date_select b, :date %>

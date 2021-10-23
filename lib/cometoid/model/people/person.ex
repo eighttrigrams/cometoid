@@ -32,6 +32,16 @@ defmodule Cometoid.Model.People.Person do
     |> validate_required([:name])
   end
 
+  def update_description_changeset(person, attrs) do
+    person
+    |> cast(attrs, [:description])
+  end
+
+  def update_description_changeset(person, attrs) do
+    person
+    |> cast(attrs, [:description])
+  end
+
   defp put_assoc_birthday(person, %{ "birthday" => birthday }), do: put_assoc(person, :birthday, birthday)
   defp put_assoc_birthday(person, _), do: person
 

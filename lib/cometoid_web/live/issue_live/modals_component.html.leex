@@ -28,7 +28,7 @@
     <%= live_modal @socket, CometoidWeb.ContextLive.DescriptionFormComponent,
       id: @state.selected_context.id || :new,
       action: @state.live_action,
-      context: @state.selected_context,
+      context: @state.edit_entity,
       return_to: nil # review
       %>
   <% end %>

@@ -1,5 +1,5 @@
 
-<%= if length(@context_types) > 1 do %>
+<%= if length(@context_types) > 0 do %>
     <div class="form-block form-block-1 context-type-grid">
         <%= for context_type <- @context_types do %>
             <div phx-click="select_context_type" phx-value-context_type="<%= context_type %>"
@@ -19,7 +19,6 @@
         <% end %>
     </div>
 <% end %>
-
 
 <div class="form-block button left enabled-button-color %>">
     <a phx-click="toggle_mode"><i class="bi bi-columns">
