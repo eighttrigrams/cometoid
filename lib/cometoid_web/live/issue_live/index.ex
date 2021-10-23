@@ -282,6 +282,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "select_context", %{ "context" => context } = params, socket do
 
+    # TODO remove no_update
     state = if (is_nil(params["no_update"]) and params["no_update"] != "true") and socket.assigns.control_pressed do
       IssuesMachine.select_context! socket.assigns, context
     else
