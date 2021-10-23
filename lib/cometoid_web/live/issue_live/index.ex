@@ -370,11 +370,12 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "toggle_issue_important", %{ "target" => id }, socket do
 
-    issue = Tracker.get_issue! id
-    Tracker.update_issue2(issue, %{ "important" => !issue.important })
+    selected_issue = Tracker.get_issue! id
+    Tracker.update_issue2(selected_issue, %{ "important" => !selected_issue.important })
 
     socket
     |> assign(IssuesMachine.set_context_properties(to_state(socket)))
+    |> assign(:selected_issue, selected_issue)
     |> do_query
   end
 
