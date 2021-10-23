@@ -26,7 +26,7 @@
                 %>
             </div>
             <%= if CometoidWeb.IssueLive.Index.should_show_issues_list_in_contexts_view(@selected_context, @list_issues_done_instead_open) do %>
-              <div id="issues-list" class="list <%= if not @contexts_view or @selected_context.issues == [] do 'only-issues' end %>">
+              <div id="issues-list" class="list">
                 <%= live_component CometoidWeb.IssueLive.ListComponent,
                   state: %{
                     issues: @issues,

@@ -30,6 +30,25 @@ $list-item-height: $taskbar-height;
     }
 }
 
+
+#contexts-list {
+    height: 56%;
+    border-bottom-style: dashed;
+    border-bottom-width: 2px;
+
+    &.only-contexts {
+        height: 100%;
+        border-bottom-style: unset;
+    }
+}
+
+
+#issues-list {
+    bottom: 0;
+    height: 44%;
+}
+
+
 .list-base {
     .list-item {
         &:hover {
@@ -262,25 +281,5 @@ $list-item-height: $taskbar-height;
                 width: 1px;
             }
         }
-    }
-}
-
-#contexts-list {
-    height: 56%;
-    border-bottom-style: dashed;
-    border-bottom-width: 2px;
-
-    &.only-contexts {
-        height: 100%;
-        border-bottom-style: unset;
-    }
-}
-
-#issues-list {
-    bottom: 0;
-
-    height: 44%;
-    &.only-issues {
-        height: 100%;
     }
 }
