@@ -1,7 +1,7 @@
 <div id="link-modal-content" class="modal-content">
   <%= if @state.live_action in [:link] do %>
     <%= live_modal @socket, CometoidWeb.IssueLive.LinkFormComponent,
-      id: @state.issue.id || :new,
+      id: @state.selected_issue.id,
       state: @state,
       return_to: nil
     %>

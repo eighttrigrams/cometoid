@@ -9,12 +9,12 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
 
   def update assigns, socket do
     its = Enum.map(assigns.state.all_issue_types, fn {k,v} -> {"its/#{k}",
-      get_selected(k, v, assigns.state.issue)} end) |> Enum.into(%{})
+      get_selected(k, v, assigns.state.selected_issue)} end) |> Enum.into(%{})
 
     ctxs = Enum.flat_map(assigns.state.all_issue_types,
       fn {k, vs} ->
         ctxs = list_contexts(k)
-        Enum.map(ctxs, fn ctx -> {"ctx/#{ctx}", is_checked(assigns.state.issue, ctx)} end)
+        Enum.map(ctxs, fn ctx -> {"ctx/#{ctx}", is_checked(assigns.state.selected_issue, ctx)} end)
       end)
       |> Enum.into(%{})
 
@@ -33,7 +33,7 @@ defmodule CometoidWeb.IssueLive.LinkFormComponent do
     if length(selected_contexts) == 0 do
       {:noreply, socket}
     else
-      issue = socket.assigns.state.issue
+      issue = socket.assigns.state.selected_issue
       context_types = socket.assigns.state.context_types ++ ["Person"]
 
       contexts =
