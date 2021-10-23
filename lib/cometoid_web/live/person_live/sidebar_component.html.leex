@@ -1,4 +1,4 @@
-<div class="upper">
+<div class="upper border-color">
   <b>PERSON-P<%= @context.person.id %></b>
   <div><b>Changed at:</b> <%= @context.person.updated_at.day %>.<%= @context.person.updated_at.month %>.<%= @context.person.updated_at.year %></div>
   <br>
@@ -7,7 +7,6 @@
   <div class="smaller-text">
     <br>
     <h1 style="font-family: serif"><%= @context.person.name %></h1>
-    <hr style="height: 0px; border-bottom-width: 0px;" class="border-text-color">
   </div>
 </div>
 <div class="inner smaller-text" id="context-description" phx-hook="ContextDescriptionHook">
