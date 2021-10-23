@@ -17,7 +17,7 @@
     </h1>
   </div>
 </div>
-<div class="inner smaller-text">
+<div class="inner smaller-text" id="context-description" phx-hook="ContextDescriptionHook">
   <div>
     <%= unless is_nil(@context.description) or @context.description == "" do %>
       <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@context.description)) %>

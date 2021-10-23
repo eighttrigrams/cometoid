@@ -8,7 +8,6 @@
   <% end %>
 </div>
 
-
 <div id="issue-modal-content" class="modal-content">
   <%= if @state.live_action in [:edit] do %>
     <%= live_modal @socket, CometoidWeb.IssueLive.FormComponent,
@@ -21,6 +20,17 @@
       event_archived: @state.issue.event != nil and @state.issue.event.archived == true,
       is_important: @state.issue.important,
       issue_types: @state.issue_types %>
+  <% end %>
+</div>
+
+<div id="context-description-modal-content" class="modal-content">
+  <%= if @state.live_action in [:describe_context] do %>
+    <%= live_modal @socket, CometoidWeb.ContextLive.DescriptionFormComponent,
+      id: @state.selected_context.id || :new,
+      action: @state.live_action,
+      context: @state.selected_context,
+      return_to: nil # review
+      %>
   <% end %>
 </div>
 
