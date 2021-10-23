@@ -46,6 +46,10 @@ $list-item-height: $taskbar-height;
 #issues-list {
     bottom: 0;
     height: 44%;
+
+    &.only-issues {
+        height: 100%;
+    }
 }
 
 
