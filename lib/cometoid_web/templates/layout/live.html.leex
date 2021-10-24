@@ -10,14 +10,22 @@
   <div id="contents" class="theme-<%= @theme %>-default-colors" phx-hook="ContentsHook">
 
     <div id="navbar-content" class="border-color">
-      <a><%= live_patch "Events", to: Routes.event_index_path(@socket, :index), class: (if @view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end) %></a>
-      <a><%= live_patch "People", to: Routes.issue_index_path(@socket, :index, context_types: "Person", alternative_view: "true", view: "People"), class: (if @view == "People" do 'selected-issue-color' else 'deselected-issue-color' end) %></a>
+      <a><%= live_patch "Events",
+          to: Routes.event_index_path(@socket, :index),
+          class: (if @view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end),
+          tabindex: -1 %></a>
+      <a><%= live_patch "People",
+          to: Routes.issue_index_path(@socket, :index, context_types: "Person", alternative_view: "true", view: "People"),
+          class: (if @view == "People" do 'selected-issue-color' else 'deselected-issue-color' end),
+          tabindex: -1 %></a>
       <span class="color-border-color">
         &nbsp;|&nbsp;
       </span<
       <%= for %{ name: name, context_types: context_types } <- Application.fetch_env!(:cometoid, :context_types) do %>
-        <a><%= live_patch name, to:
-            Routes.issue_index_path(@socket, :index, context_types: context_types, view: name),  class: (if @view == name do 'selected-issue-color' else 'deselected-issue-color' end) %>
+        <a><%= live_patch name,
+            to: Routes.issue_index_path(@socket, :index, context_types: context_types, view: name),
+            class: (if @view == name do 'selected-issue-color' else 'deselected-issue-color' end),
+            tabindex: -1 %>
         </a>
       <% end %>
 

@@ -61,7 +61,11 @@
                 <% end %>
 
                 <span class="btn">
-                    <%= link to: "#", phx_click: "delete_issue", phx_value_id: @issue.id, data: [confirm: "Are you sure?"] do %>
+                    <%= link to: "#",
+                        phx_click: "delete_issue",
+                        phx_value_id: @issue.id, data: [confirm: "Are you sure?"],
+                        tabindex: -1
+                        do %>
                         <i class="bi bi-trash"></i>
                     <% end %>
                 </span>

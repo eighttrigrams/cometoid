@@ -42,7 +42,10 @@
                 </a>
             </span>
             <span class="btn">
-                <%= link to: "#", phx_click: "delete_context", phx_value_id: context.id, data: [confirm: "Are you sure?"] do %>
+                <%= link to: "#",
+                    phx_click: "delete_context",
+                    phx_value_id: context.id, data: [confirm: "Are you sure?"],
+                    tabindex: -1 do %>
                     <i class="bi bi-trash"></i>
                 <% end %>
             </span>
