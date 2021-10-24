@@ -12,7 +12,7 @@
     </h1>
   </div>
 </div>
-<div class="inner smaller-text" id="issue-description" phx-hook="IssueDescriptionHook" tabindex="-1">
+<div class="inner smaller-text" id="issue-description" phx-hook="IssueDescriptionHook">
   <div>
     <%= unless is_nil(@issue.description) or @issue.description == "" do %>
       <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@issue.description)) %>
