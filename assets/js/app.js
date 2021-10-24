@@ -85,6 +85,7 @@ hooks.IssueDescriptionHook = {
    mounted() {
       const elements = this.el.getElementsByTagName('a');
       for (const element of elements) {
+        element.tabindex = -1;
         element.tabIndex = -1;
       }
       document.addEventListener('mousedown', function (event) {
@@ -101,7 +102,8 @@ hooks.ContextDescriptionHook = {
     mounted() {
       const elements = this.el.getElementsByTagName('a');
       for (const element of elements) {
-        element.tabIndex = -1; // tabIndex works, tabindex doesn't
+        element.tabindex = -1; // tabindex works in chromium
+        element.tabIndex = -1; // tabIndex works in opera
       }
        // https://stackoverflow.com/a/43321596
        document.addEventListener('mousedown', function (event) {
