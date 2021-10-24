@@ -83,9 +83,9 @@ hooks.IssueItemHook = {
 }
 hooks.IssueDescriptionHook = {
    mounted() {
-      const elements = this.el.getElementsByTagName('a')
+      const elements = this.el.getElementsByTagName('a');
       for (const element of elements) {
-        element.setAttribute('tabindex', -1);
+        element.tabIndex = -1;
       }
       document.addEventListener('mousedown', function (event) {
         if (event.detail > 1) {
@@ -99,9 +99,9 @@ hooks.IssueDescriptionHook = {
 }
 hooks.ContextDescriptionHook = {
     mounted() {
-      const elements = this.el.getElementsByTagName('a')
+      const elements = this.el.getElementsByTagName('a');
       for (const element of elements) {
-        element.setAttribute('tabindex', -1);
+        element.tabIndex = -1; // tabIndex works, tabindex doesn't
       }
        // https://stackoverflow.com/a/43321596
        document.addEventListener('mousedown', function (event) {
