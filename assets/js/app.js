@@ -83,11 +83,6 @@ hooks.IssueItemHook = {
 }
 hooks.IssueDescriptionHook = {
    mounted() {
-      const elements = this.el.getElementsByTagName('a');
-      for (const element of elements) {
-        element.tabindex = -1;
-        element.tabIndex = -1;
-      }
       document.addEventListener('mousedown', function (event) {
         if (event.detail > 1) {
           event.preventDefault();
@@ -96,15 +91,10 @@ hooks.IssueDescriptionHook = {
        this.el.addEventListener('dblclick', e => {
            this.pushEvent("edit_issue_description");
        }, false);
-   } 
+   }
 }
 hooks.ContextDescriptionHook = {
     mounted() {
-      const elements = this.el.getElementsByTagName('a');
-      for (const element of elements) {
-        element.tabindex = -1; // tabindex works in chromium
-        element.tabIndex = -1; // tabIndex works in opera
-      }
        // https://stackoverflow.com/a/43321596
        document.addEventListener('mousedown', function (event) {
          if (event.detail > 1) {
@@ -114,9 +104,23 @@ hooks.ContextDescriptionHook = {
         this.el.addEventListener('dblclick', e => {
             this.pushEvent("edit_context_description");
         }, false);
-    } 
+    },
+    
  }
-
+hooks.DescHook = {
+  mounted() {
+    const elements = this.el.getElementsByTagName('a');
+    for (const element of elements) {
+      element.tabIndex = -1;
+    }
+  },
+  updated() {
+    const elements = this.el.getElementsByTagName('a');
+    for (const element of elements) {
+      element.tabIndex = -1;
+    }
+  }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
