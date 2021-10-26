@@ -70,15 +70,18 @@ hooks.ContextItemHook = {
 hooks.IssueItemHook = {
     id: '',
     mounted() {
+        this.handleEvent("item-reprioritized", ({ id: id }) => {
+            if (this.id === id) this.el.scrollIntoView()
+        })
         this.id = this.el.id.replace("issue-", "");
         document.addEventListener('mousedown', function (event) {
             if (event.detail > 1) {
-            event.preventDefault();
+            event.preventDefault()
           }
-        }, false);
-         this.el.addEventListener('dblclick', e => {
-             this.pushEvent("edit_issue", this.id);
-         }, false);  
+        }, false)
+        this.el.addEventListener('dblclick', e => {
+            this.pushEvent("edit_issue", this.id)
+        }, false)  
     }
 }
 hooks.IssueDescriptionHook = {
