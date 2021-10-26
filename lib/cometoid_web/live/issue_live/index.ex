@@ -311,6 +311,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(state)
+    |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
     |> do_query
   end
 
@@ -338,7 +339,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> Tracker.update_issue_updated_at
     selected_issue = Tracker.get_issue! id
     socket
-    |> push_event(:item_reprioritized, %{ id: id })
+    |> push_event(:issue_reprioritized, %{ id: id })
     |> assign(:selected_issue, selected_issue)
     |> do_query
   end
@@ -373,6 +374,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(IssuesMachine.set_context_properties(to_state(socket)))
+    |> push_event(:context_reprioritized, %{ id: id })
     |> do_query
   end
 
@@ -384,7 +386,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(IssuesMachine.set_context_properties(to_state(socket)))
     |> assign(:selected_issue, selected_issue)
-    |> push_event(:item_reprioritized, %{ id: id })
+    |> push_event(:issue_reprioritized, %{ id: id })
     |> do_query
   end
 

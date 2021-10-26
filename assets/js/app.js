@@ -56,6 +56,9 @@ hooks.IssueEventHook = {
 hooks.ContextItemHook = {
     id: '',
     mounted() {
+        this.handleEvent("context_reprioritized", ({ id: id }) => {
+          if (this.id == id) this.el.scrollIntoView(false)
+        })
         this.id = this.el.id.replace("context-", "");
         document.addEventListener('mousedown', function (event) {
             if (event.detail > 1) {
@@ -70,8 +73,8 @@ hooks.ContextItemHook = {
 hooks.IssueItemHook = {
     id: '',
     mounted() {
-        this.handleEvent("item_reprioritized", ({ id: id }) => {
-            if (this.id === id) this.el.scrollIntoView(false)
+        this.handleEvent("issue_reprioritized", ({ id: id }) => {
+            if (this.id == id) this.el.scrollIntoView(false)
         })
         this.id = this.el.id.replace("issue-", "");
         document.addEventListener('mousedown', function (event) {
