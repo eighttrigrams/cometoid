@@ -30,7 +30,6 @@ defmodule CometoidWeb.ContextLive.DescriptionFormComponent do
   defp save_context(socket, :describe_context, context_params) do
 
     unless Map.has_key?(socket.assigns.context, :context_type) do
-      IO.inspect context_params
       case People.update_person_description(socket.assigns.context, context_params) do
         {:ok, context} ->
           send self(), {:after_edit_form_save, %{ context_id: context.id }}

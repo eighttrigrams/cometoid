@@ -26,9 +26,6 @@ defmodule CometoidWeb.IssueLive.DescriptionFormComponent do
 
     case Tracker.update_issue_description(socket.assigns.issue, issue_params) do
       {:ok, issue} ->
-
-        IO.inspect issue
-
         send self(), {:after_edit_form_save, issue}
         {:noreply,
          socket |> put_flash(:info, "Issue updated successfully")
