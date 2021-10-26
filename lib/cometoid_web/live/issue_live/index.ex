@@ -320,19 +320,19 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "select_issue", %{ "target" => id }, socket do
-    if socket.assigns.control_pressed do
-      Tracker.get_issue!(id)
-      |> Tracker.update_issue_updated_at
-      selected_issue = Tracker.get_issue! id
-      socket
-      |> assign(:selected_issue, selected_issue)
-      |> do_query
-    else
-      selected_issue = Tracker.get_issue! id
-      socket
-      |> assign(:selected_issue, selected_issue)
-      |> return_noreply
-    end
+    selected_issue = Tracker.get_issue! id
+    socket
+    |> assign(:selected_issue, selected_issue)
+    |> return_noreply
+  end
+
+  def handle_event "reprioritize_issue", %{ "id" => id }, socket do
+    Tracker.get_issue!(id)
+    |> Tracker.update_issue_updated_at
+    selected_issue = Tracker.get_issue! id
+    socket
+    |> assign(:selected_issue, selected_issue)
+    |> do_query
   end
 
   def handle_event "open_context_in_editor", %{ "target" => id }, socket do

@@ -46,6 +46,12 @@
                     </span>
                 <% end %>
 
+                <span class="btn">
+                    <a phx-click="reprioritize_issue" phx-value-id="<%= @issue.id %>">
+                        <i class="bi bi-arrow-up"></i>
+                    </a>
+                </span>
+
                 <%= if @state.list_issues_done_instead_open do %>
                     <span class="btn">
                         <a phx-click="unarchive" phx-value-target="<%= @issue.id %>">
