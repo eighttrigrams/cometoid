@@ -4,10 +4,8 @@
   phx_change: "changes",
   phx_submit: "save" %>
 
-  <%= submit "Save", phx_disable_with: "Saving..." %>
+  <%= submit "Save", phx_disable_with: "Saving...", class: "color background-color" %>
 
-  <div id="content">
-    <%= textarea f, :description, id: "text-area", phx_hook: "TextAreaHook" %>
-    <%= error_tag f, :description %>
-  </div>
+  <%= textarea f, :description, id: "text-area", phx_hook: "TextAreaHook" %>
+  <%= error_tag f, :description %>
 </form>

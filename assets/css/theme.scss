@@ -11,6 +11,7 @@ $border-color-1: lighten(black, 50%);
 .theme-1-default-colors {
     color: $text-color-1;
     background-color: $background-color-1;
+    .color { color: $text-color-1 };
     .background-color { background-color: $background-color-1; }
     .contexts-background-color { background-color: $contexts-background-color-1; }
     .border-color { border-color: $border-color-1; }
@@ -58,6 +59,7 @@ $border-color-2: lighten(black, 10%);
     
     color: $text-color-2;
     background-color: $background-color-2;
+    .color { color: $text-color-2 };
     .background-color { background-color: $background-color-2; }
     .contexts-background-color { background-color: $contexts-background-color-2; }
     .border-color { border-color: $border-color-2; }
