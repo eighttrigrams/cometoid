@@ -292,15 +292,22 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "select_context", %{ "context" => context } = params, socket do
+  def handle_event "select_context", %{ "context" => context } = _params, socket do
+    state =
+      socket.assigns
+      |> IssuesMachine.select_context(context)
+      |> IssuesMachine.set_issue_properties
 
-    # TODO remove no_update
-    state = if (is_nil(params["no_update"]) and params["no_update"] != "true") and socket.assigns.control_pressed do
-      IssuesMachine.select_context! socket.assigns, context
-    else
-      IssuesMachine.select_context socket.assigns, context
-    end
-    |> IssuesMachine.set_issue_properties
+    socket
+    |> assign(state)
+    |> do_query
+  end
+
+  def handle_event "reprioritize_context", %{ "title" => title }, socket do
+    state =
+      socket.assigns
+      |> IssuesMachine.select_context!(title)
+      |> IssuesMachine.set_issue_properties
 
     socket
     |> assign(state)
