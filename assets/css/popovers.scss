@@ -21,6 +21,7 @@
             button {
                 position: fixed;
                 top: 20px;
+                left: calc(50% + 30px);
                 z-index: 2;
                 border-width: 0;
             }
@@ -31,7 +32,7 @@
             }
             
             width: 600px;
-            height: 500px;
+            height: 100%;
                 
             // TODO deduplicate, see #quote-form
             textarea::-webkit-scrollbar {
@@ -42,7 +43,7 @@
                 overflow-x: hidden;
                 scrollbar-width: none;
                 width: calc(100% - 40px);
-                height: 500px;
+                height: calc(100vh - 200px);
                 border-width: 0;
             }
             textarea:focus {
@@ -63,6 +64,7 @@
             button {
                 position: fixed;
                 top: 20px;
+                left: calc(50% + 30px);
                 z-index: 2;
                 border-width: 0;
             }
@@ -73,7 +75,7 @@
             }
             
             width: 600px;
-            height: 500px;
+            height: 100%;
                 
             textarea::-webkit-scrollbar {
                 display: none;
@@ -83,7 +85,7 @@
                 overflow-x: hidden;
                 scrollbar-width: none;
                 width: calc(100% - 40px);
-                height: 500px;
+                height: calc(100vh - 200px);
                 border-width: 0;
             }
             textarea:focus {
