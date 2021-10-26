@@ -14,7 +14,6 @@
     .phx-modal-content {
         height: unset;
         width: unset;
-        padding: unset;
 
         left: calc(50% - 250px);
         #issue-description-form {
@@ -42,9 +41,8 @@
                 overflow: auto;
                 overflow-x: hidden;
                 scrollbar-width: none;
-                width: calc(100% - 20px);
+                width: calc(100% - 40px);
                 height: 500px;
-                padding: 10px;
                 border-width: 0;
             }
             textarea:focus {
@@ -58,7 +56,6 @@
     .phx-modal-content {
         height: unset;
         width: unset;
-        padding: unset;
         
         left: calc(50% - 250px);
         #context-description-form {
@@ -85,9 +82,8 @@
                 overflow: auto;
                 overflow-x: hidden;
                 scrollbar-width: none;
-                width: calc(100% - 20px);
+                width: calc(100% - 40px);
                 height: 500px;
-                padding: 10px;
                 border-width: 0;
             }
             textarea:focus {
