@@ -70,8 +70,8 @@ hooks.ContextItemHook = {
 hooks.IssueItemHook = {
     id: '',
     mounted() {
-        this.handleEvent("item-reprioritized", ({ id: id }) => {
-            if (this.id === id) this.el.scrollIntoView()
+        this.handleEvent("item_reprioritized", ({ id: id }) => {
+            if (this.id === id) this.el.scrollIntoView(false)
         })
         this.id = this.el.id.replace("issue-", "");
         document.addEventListener('mousedown', function (event) {
