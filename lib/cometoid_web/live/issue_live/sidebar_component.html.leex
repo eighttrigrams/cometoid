@@ -14,20 +14,5 @@
         <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@issue.description)) %>
       </div>
     <% end %>
-    <%= unless is_nil(@issue.markdown) or @issue.markdown == "" do %>
-      <%= unless is_nil(@issue.description) do %>
-        <hr style="height: 0px; border-bottom-width: 0px;" class="border-text-color">
-      <% end %>
-
-      <div style="width: 100%; text-align: center;">
-        <span>
-          <i class="bi bi-card-text"></i>
-        </span>
-      </div>
-      <div id="desc2" phx-hook="DescHook">
-        <%= "cool" %>
-        <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@issue.markdown)) %>
-      </div>
-    <% end %>
   </div>
 </div>
