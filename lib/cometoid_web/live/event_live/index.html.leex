@@ -46,12 +46,6 @@
                   <td class="actions">
 
                     <%= if is_nil(event.person) do %>
-                      <span class="btn">
-                        <a phx-click="open_event_in_editor" phx-value-target="<%= event.id %>">
-                          <i class="bi bi-card-text"></i>
-                        </a>
-                      </span>
-
                       <%= if @show_archived do %>
                           <span class="btn">
                               <a phx-click="unarchive" phx-value-target="<%= event.id %>">

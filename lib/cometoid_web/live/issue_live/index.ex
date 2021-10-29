@@ -9,7 +9,6 @@ defmodule CometoidWeb.IssueLive.Index do
   alias Cometoid.Model.People.Person
   alias Cometoid.Model.Tracker.Issue
   alias Cometoid.Model.Tracker.Context
-  alias Cometoid.Editor
   alias CometoidWeb.Theme
   alias CometoidWeb.IssueLive.IssuesMachine
 
@@ -230,8 +229,6 @@ defmodule CometoidWeb.IssueLive.Index do
     context = Tracker.get_context!(id)
     {:ok, _} = Tracker.delete_context(context)
 
-    # Editor.delete_context context
-    # {:noreply, assign(socket, :contexts, list_contexts())}
     state =
       socket.assigns
       |> IssuesMachine.set_context_properties(true)
@@ -340,29 +337,6 @@ defmodule CometoidWeb.IssueLive.Index do
     selected_issue = Tracker.get_issue! id
     socket
     |> push_event(:issue_reprioritized, %{ id: id })
-    |> assign(:selected_issue, selected_issue)
-    |> do_query
-  end
-
-  def handle_event "open_context_in_editor", %{ "target" => id }, socket do
-    selected_context = Tracker.get_context! id
-    Editor.open_context selected_context
-    socket
-    |> assign(:selected_issue, nil)
-    |> return_noreply
-  end
-
-  def handle_event "open_issue_in_editor", %{ "target" => id }, socket do
-    selected_issue = Tracker.get_issue! id
-    Tracker.update_issue2(selected_issue, %{ "has_markdown" => true })
-    selected_issue = Tracker.get_issue! id
-    contents = Editor.open_issue selected_issue
-    if String.length(contents) > 0 do
-      Tracker.update_issue2(selected_issue, %{ "markdown" => contents })
-    end
-    selected_issue = Tracker.get_issue! id
-
-    socket
     |> assign(:selected_issue, selected_issue)
     |> do_query
   end

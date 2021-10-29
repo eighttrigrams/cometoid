@@ -10,7 +10,6 @@ defmodule CometoidWeb.EventLive.Index do
   alias Cometoid.Repo.People
   alias Cometoid.Repo.Calendar
   alias Cometoid.Model.Calendar.Event
-  alias Cometoid.Editor
 
   @impl true
   def mount(_params, _session, socket) do
@@ -117,17 +116,8 @@ defmodule CometoidWeb.EventLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     event = Calendar.get_event!(id)
     {:ok, _} = Calendar.delete_event(event)
-    Editor.delete_event event
     socket
     |> do_query
-    |> return_noreply
-  end
-
-  def handle_event("open_event_in_editor", %{ "target" => id }, socket) do
-    selected_event = Calendar.get_event!(id)
-    Editor.open_event selected_event
-    socket
-    |> assign(:selected_event, selected_event)
     |> return_noreply
   end
 
