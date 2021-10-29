@@ -27,8 +27,6 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:text)
   end
 
-  # |> Repo.preload(context_type: :issue_types)
-
   def get_context!(id) do
     Repo.get!(Context, id)
     |> Repo.preload(person: :birthday)
@@ -73,8 +71,7 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   defmodule Query do
-    defstruct selected_issue_type: nil,
-      selected_context: nil, # required
+    defstruct selected_context: nil, # required
       list_issues_done_instead_open: false
   end
 
@@ -92,17 +89,11 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   defp where_type(query, %{
-      selected_issue_type: selected_issue_type,
       selected_context: selected_context,
       list_issues_done_instead_open: list_issues_done_instead_open
     }) do
-    if selected_issue_type == nil do
-      query
-      |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open)
-    else
-      query
-      |> where([i, c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open and c.issue_type == ^selected_issue_type)
-    end
+    query
+    |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open)
   end
 
   def get_issue!(id) do
@@ -111,28 +102,19 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:event)
   end
 
-  # TODO remove
-  # def create_issue(attrs) do
-    # %Issue{}
-    # |> Issue.changeset(attrs)
-    # |> Repo.insert()
-  # end
-
-  def create_issue(title, context, issue_type) do
+  def create_issue(title, context) do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
-      contexts: [%{ context: context, issue_type: issue_type }]
+      contexts: [%{ context: context }]
     })
     {:ok, Repo.preload(issue, :event)}
   end
 
-  def update_issue_relations issue, selected_contexts, contexts, issue_types do
-
-    issue_type = List.first(issue.contexts).issue_type
+  def update_issue_relations issue, selected_contexts, contexts do
 
     context_from =  fn title -> Enum.find contexts, &(&1.title == title) end
     ctxs = Enum.map(selected_contexts, context_from)
-      |> Enum.map(fn ctx -> %{ context: ctx, issue_type: issue_types[ctx.context_type] } end)
+      |> Enum.map(fn ctx -> %{ context: ctx } end)
 
     issue
     |> Issue.relations_changeset(%{ "contexts" => ctxs })

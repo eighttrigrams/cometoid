@@ -1,7 +1,7 @@
 <h1>Link "<%= @state.selected_issue.title %>"</h1>
 
 <div>
-  <%= for {k, v} <- @state.all_issue_types do %>
+  <%= for k <- @state.context_types do %>
     <span
       phx-click="select_context_type"
       phx-value-target="<%= k%>"
@@ -21,14 +21,11 @@
   <%= submit "Save", phx_disable_with: "Saving..." %>
 
   <table>
-    <%= for {k, v} <- @state.all_issue_types do %>
+    <%= for k <- @state.context_types do %>
       <%= if k == assigns[:link_form_selected_context_type] do %>
         <tr>
           <td>
             <%= k %>
-          </td>
-          <td>
-            <%= select f, "its/#{k}", v, selected: CometoidWeb.IssueLive.LinkFormComponent.get_selected_issue_type(k, @links) %>
           </td>
           <td>
             <%= for ctx <- CometoidWeb.IssueLive.LinkFormComponent.list_contexts(k) do %>

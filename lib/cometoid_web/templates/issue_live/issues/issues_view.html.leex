@@ -6,11 +6,9 @@
         <div id="taskbar" class="taskbar border-color">
           <%= live_component CometoidWeb.IssueLive.TaskbarComponent,
             contexts: @contexts,
-            issue_types: @issue_types,
             context_types: @context_types,
             selected_context: @selected_context,
             selected_context_type: @selected_context_type,
-            selected_issue_type: @selected_issue_type,
             list_issues_done_instead_open: @list_issues_done_instead_open,
             alternative_view: false
             %>
@@ -32,9 +30,7 @@
                   issues: @issues,
                   contexts: @contexts,
                   selected_issue: assigns[:selected_issue],
-                  issue_types: @issue_types,
                   selected_context: @selected_context,
-                  selected_issue_type: @selected_issue_type,
                   list_issues_done_instead_open: @list_issues_done_instead_open
                 }
               %>

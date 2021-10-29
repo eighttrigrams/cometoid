@@ -30,7 +30,6 @@ defmodule CometoidWeb.IssueLive.NewComponent do
   defp create_new_issue(socket, title) do
     Tracker.create_issue(
         title,
-        socket.assigns.selected_context,
-        socket.assigns.selected_issue_type)
+        socket.assigns.selected_context)
   end
 end

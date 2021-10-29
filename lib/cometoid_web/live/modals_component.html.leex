@@ -15,12 +15,10 @@
         id: @state.issue.id || :new,
         action: @state.live_action,
         issue: @state.issue,
-        all_issue_types: @state.all_issue_types,
         return_to: nil, # review
         has_event: @state.issue.event != nil,
         event_archived: @state.issue.event != nil and @state.issue.event.archived == true,
-        is_important: @state.issue.important,
-        issue_types: @state.issue_types %>
+        is_important: @state.issue.important %>
     <% end %>
   </div>
 
@@ -53,11 +51,8 @@
         action: @state.live_action,
         issue: @state.issue,
         return_to: nil,
-        all_issue_types: @state.all_issue_types,
         selected_context: @state.selected_context,
-        issue_types: @state.issue_types,
-        contexts: @state.contexts,
-        selected_issue_type: @state.selected_issue_type %>
+        contexts: @state.contexts %>
     <% end %>
   </div>
 
@@ -69,7 +64,6 @@
             title: (if @state.live_action == :new_context do "New " else "Edit " end) <> "Person",
             action: @state.live_action,
             selected_context_type: "Person",
-            all_issue_types: @state.all_issue_types,
             return_to: nil, # review
             person: @state.edit_entity
         _ -> live_modal @socket, CometoidWeb.ContextLive.FormComponent,
@@ -77,7 +71,6 @@
             title: (if @state.live_action == :new_context do "New " else "Edit " end) <> "Context",
             action: @state.live_action,
             selected_context_type: @state.edit_selected_context_type,
-            all_issue_types: @state.all_issue_types,
             return_to: nil, # review
             context: @state.edit_entity
       end %>

@@ -13,19 +13,9 @@
             </td>
 
             <td class="contexts">
-
-                <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.context.title == @state.selected_context.title end) do %>
-                    <span class="contexts-background-color regular-color">
-                        <%= context.issue_type %>
-                    </span>
-                <% end %>
-
                 <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.context.title != @state.selected_context.title end) do %>
                     <span class="contexts-background-color regular-color">
                         <%= context.context.title %>
-                        <div class="regular-color">
-                            <%= context.issue_type %>
-                        </div>
                     </span>
                 <% end %>
             </td>

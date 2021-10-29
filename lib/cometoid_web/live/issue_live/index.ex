@@ -40,11 +40,9 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_params params, url, socket do
     contexts_view = should_show_contexts_view params
     context_types = get_context_types params
-    all_issue_types = Application.fetch_env!(:cometoid, :issue_types) |> Map.take(context_types ++ ["Person"])
 
     state = %{
       control_pressed: false,
-      all_issue_types: all_issue_types,
       context_types: context_types,
       contexts_view: contexts_view,
       list_issues_done_instead_open: false,
@@ -101,21 +99,12 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign(:issue, nil)
   end
 
-  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index, issue_types: issue_types }} = socket do
+  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index } } = socket do
     case key do
-      "Escape" ->
-        if length(issue_types) == 1, do: socket, else:
-          socket
-          |> assign(:selected_issue_type, nil)
-          |> do_query(true)
       "n" ->
-        if is_nil(socket.assigns[:selected_issue_type]) do
-          socket
-        else
-          socket
-          |> assign(:live_action, :new)
-          |> assign(:issue, %Issue{})
-        end
+        socket
+        |> assign(:live_action, :new)
+        |> assign(:issue, %Issue{})
       "Control" ->
         socket
           |> assign(:control_pressed, true)
@@ -158,20 +147,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "select_issue_type", %{ "target" => issue_type }, socket do
-    socket
-    |> assign(:selected_issue_type, issue_type)
-    |> put_flash(:info, nil)
-    |> do_query
-  end
-
-  def handle_event "unselect_issue_type", _params, socket do
-    socket
-    |> assign(:selected_issue_type, nil)
-    |> put_flash(:info, nil)
-    |> do_query
-  end
-
   def handle_event "edit_issue", id, socket do
 
     {id, ""} = Integer.parse id
@@ -197,17 +172,10 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "create_new_issue", params, socket do
-
-    if socket.assigns.selected_issue_type do
-      socket
-      # |> assign(:page_title, "New Issue")
-      |> assign(:issue, %Issue{})
-      |> assign(:live_action, :new)
-      |> return_noreply
-    else
-      socket
-      |> return_noreply(:error, "No issue type selected")
-    end
+    socket
+    |> assign(:issue, %Issue{})
+    |> assign(:live_action, :new)
+    |> return_noreply
   end
 
   def handle_event "create_new_context", %{ "context_type" => context_type }, socket do

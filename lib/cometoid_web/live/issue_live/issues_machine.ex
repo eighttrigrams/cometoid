@@ -7,12 +7,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       %{ selected_context: selected_context } = state,
       selected_issue \\ nil) when not is_nil(selected_context) do
 
-    issue_types = get_issue_types selected_context
-    selected_issue_type = get_selected_issue_type issue_types
-
     issue_properties = %{
-      issue_types: issue_types,
-      selected_issue_type: selected_issue_type,
       selected_issue: selected_issue
     }
 
@@ -26,8 +21,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       _) do
 
     issue_properties = %{
-      issue_types: [],
-      selected_issue_type: nil,
       selected_issue: nil
     }
 
@@ -141,7 +134,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   def do_query state  do
     query = %Tracker.Query{
       list_issues_done_instead_open: state.list_issues_done_instead_open,
-      selected_issue_type: state.selected_issue_type,
       selected_context: state.selected_context
     }
     issues =
@@ -158,14 +150,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     selected_issue = state.selected_issue
     if not is_nil(selected_issue)
       and Integer.to_string(selected_issue.id) != id do selected_issue end
-  end
-
-  defp get_selected_issue_type issue_types do
-    if length(issue_types) == 1, do: List.first issue_types
-  end
-
-  defp get_issue_types selected_context do
-    Application.fetch_env!(:cometoid, :issue_types)[selected_context.context_type]
   end
 
   defp reload_contexts %{ context_types: context_types, selected_context_type: selected_context_type } = state do
