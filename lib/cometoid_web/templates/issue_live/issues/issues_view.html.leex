@@ -24,7 +24,11 @@
           </div>
 
           <div id="list-container">
-            <div id="issues-list" class="list only-issues">
+
+            <div id="contexts-filter-taskbar" class="contexts-background-color border-color">
+            </div>
+
+            <div id="issues-list" class="list border-color">
               <%= live_component CometoidWeb.IssueLive.ListComponent,
                 state: %{
                   issues: @issues,

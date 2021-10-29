@@ -27,7 +27,7 @@
 
     .form-block-1 {
         top: 11px;
-        left: 212px;
+        left: 163px;
         select {
             padding: 3px;
             min-width: 200px;
@@ -69,4 +69,11 @@
     .form-block.button.right {
         float: right;
     }
+}
+
+#contexts-filter-taskbar {
+    height: calc(#{$taskbar-height} + 50px);
+    width: 100%;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
 }

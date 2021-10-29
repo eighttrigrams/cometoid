@@ -7,11 +7,6 @@
         <% end %>
     </div>
 <% end %>
-
-<div class="form-block button left enabled-button-color %>">
-    <a phx-click="toggle_mode"><i class="bi bi-columns">
-    </i></a>
-</div>
 <%= if not is_nil(assigns[:selected_context_type]) and length(@context_types) != 1 do %>
     <div class="form-block button left enabled-button-color">
         <a phx-click="select_context_type" phx-value-context_type="nil"><i class="bi bi-x-lg"></i></a>

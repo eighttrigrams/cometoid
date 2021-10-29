@@ -123,18 +123,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "toggle_mode", _params, socket do
-    state = socket.assigns
-    state =
-      state
-      |> Map.merge(%{ contexts_view: !state.contexts_view })
-      |> IssuesMachine.set_context_properties(true)
-      |> IssuesMachine.set_issue_properties
-    socket
-    |> assign(state)
-    |> do_query
-  end
-
   def handle_event "edit_issue", id, socket do
 
     {id, ""} = Integer.parse id
