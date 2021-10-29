@@ -72,8 +72,9 @@
 }
 
 #contexts-filter-taskbar {
-    height: calc(#{$taskbar-height} + 50px);
-    width: 100%;
+    height: calc(#{$taskbar-height} + 10px);
+    width: calc(100% - 40px);
+    padding: 20px;
     border-bottom-width: 1px;
     border-bottom-style: dotted;
 }
