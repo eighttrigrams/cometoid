@@ -29,33 +29,21 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def render(assigns) do
-    if (is_nil(assigns[:contexts_view]) or assigns.contexts_view == false) do
-      Phoenix.View.render(CometoidWeb.IssueLive.IssuesView, "issues_view.html", assigns)
-    else
-      Phoenix.View.render(CometoidWeb.IssueLive.ContextsView, "contexts_view.html", assigns)
-    end
+    Phoenix.View.render(CometoidWeb.IssueLive.IssuesView, "issues_view.html", assigns)
   end
 
   @impl true
   def handle_params params, url, socket do
-    contexts_view = should_show_contexts_view params
     context_types = get_context_types params
 
     state = %{
       control_pressed: false,
       context_types: context_types,
-      contexts_view: contexts_view,
       list_issues_done_instead_open: false,
       selected_context_type: if length(context_types) == 1 do List.first(context_types) end
     }
     state = Map.merge socket.assigns, state # TODO swap params and use |>
     state = IssuesMachine.set_context_properties state, true
-
-    state = if not contexts_view and is_nil(state.selected_context) do
-      state = Map.merge state, %{ contexts_view: true }
-    else
-      state
-    end
 
     state = IssuesMachine.set_issue_properties state
     socket = socket
