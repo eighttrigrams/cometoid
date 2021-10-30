@@ -19,7 +19,7 @@ defmodule CometoidWeb.IssueLive.ListComponent do
     unless length(selected_secondary_contexts) > 0 do
       true
     else
-      issues_contexts = Enum.map issue.contexts, &(&1.context.title)
+      issues_contexts = Enum.map issue.contexts, &(&1.context.id)
       diff = selected_secondary_contexts -- issues_contexts
       length(diff) == 0
     end

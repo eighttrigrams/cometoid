@@ -1,9 +1,9 @@
-<%= for context <- ContextSelectComponent.get_contexts(@state) do %>
+<%= for context = {id, title} <- ContextSelectComponent.get_contexts(@state) do %>
     <div phx-click="toggle_context"
-         phx-value-title="<%= context %>"
+         phx-value-id="<%= id %>"
          phx-target="<%= @myself %>"
-         class="<%= if ContextSelectComponent.is_selected?(@state, context) do 'selected-issue-color' else 'deselected-issue-color' end %>"
+         class="<%= if ContextSelectComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end %>"
          >
-        <%= context %>
+        <%= title %>
     </div>
 <% end %>
