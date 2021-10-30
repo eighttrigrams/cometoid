@@ -39,7 +39,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.FormComponent do
   end
 
   defp save_context(socket, :new_context, context_params) do
-    case Tracker.create_context(context_params, socket.assigns.selected_context_type) do
+    case Tracker.create_context(context_params) do
       {:ok, context} ->
         send self(), {:after_edit_form_save, %{ context_id: context.id }}
         {:noreply, socket}

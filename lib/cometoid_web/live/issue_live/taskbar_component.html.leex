@@ -1,32 +1,22 @@
 
-<%= if length(@context_types) > 1 do %>
+<%= if length(@state.context_types) > 1 do %>
     <div class="form-block form-block-1 context-type-grid">
-        <%= for context_type <- @context_types do %>
-            <div phx-click="select_context_type" phx-value-context_type="<%= context_type %>"
-                 class="<%= if assigns[:selected_context_type] != nil and assigns.selected_context_type == context_type do 'selected-issue-color' else 'deselected-issue-color' end %>"><%= if String.contains?(context_type, ":") do Enum.at(String.split(context_type,":"),1) else context_type end %></div>
+
+        <%= for context = {id, title} <- TaskbarComponent.get_contexts(@state) do %>
+            <div phx-click="toggle_context"
+                phx-value-id="<%= id %>"
+                phx-target="<%= @myself %>"
+                class="<%= if TaskbarComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end %>"
+                >
+                <%= title %>
+            </div>
         <% end %>
     </div>
 <% end %>
-<%= if not is_nil(assigns[:selected_context_type]) and length(@context_types) != 1 do %>
-    <div class="form-block button left enabled-button-color">
-        <a phx-click="select_context_type" phx-value-context_type="nil"><i class="bi bi-x-lg"></i></a>
-    </div>
-<% else %>
-    <div class="form-block button left disabled-button-color">
-        <a><i class="bi bi-x-lg"></i></a>
-    </div>
-<% end %>
-<%= unless is_nil(@selected_context_type) do %>
-    <div class="form-block button left enabled-button-color %>">
-        <a phx-click="create_new_context" phx-value-context_type="<%= @selected_context_type %>"><i class="bi bi-plus-lg">
-        </i></a>
-    </div>
-<% else %>
-    <div class="form-block button left disabled-button-color">
-        <a><i class="bi bi-plus-lg">
-        </i></a>
-    </div>
-<% end %>
+<div class="form-block button left enabled-button-color %>">
+    <a phx-click="create_new_context" phx-value-context_type="<%= @state.selected_context_type %>"><i class="bi bi-plus-lg">
+    </i></a>
+</div>
 
 <div class="form-block button right <%= if assigns[:list_issues_done_instead_open] do 'disabled-button-color' else 'enabled-button-color' end %>">
     <%= if !assigns[:list_issues_done_instead_open] do %>

@@ -15,4 +15,8 @@
   <%= checkbox f, :important, value: @context.important %>
   <%= label f, :important %>
 
+  <%= if @id == :new do %>
+    <%= select f, :context_type, @context_types %>
+  <% end %>
+
 </form>

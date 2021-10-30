@@ -228,21 +228,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def handle_event "select_context_type", %{ "context_type" => context_type }, socket do
-
-    context_type = if context_type == "nil" do nil else context_type end
-    selected_context_type = if context_type != "none", do: context_type
-
-    state = socket.assigns
-      |> Map.merge(%{ selected_context_type: selected_context_type })
-      |> IssuesMachine.set_context_properties(true)
-      |> IssuesMachine.set_issue_properties
-
-    socket
-    |> assign(state)
-    |> do_query
-  end
-
   def handle_event "select_context", %{ "context" => context }, socket do
     state =
       socket.assigns

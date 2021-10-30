@@ -43,10 +43,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:children)
   end
 
-  def create_context(attrs, selected_context_type) do
-
-    attrs = put_in(attrs["context_type"], selected_context_type)
-
+  def create_context(attrs) do
     %Context{}
     |> Context.changeset(attrs)
     |> Repo.insert()

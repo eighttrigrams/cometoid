@@ -1,9 +1,9 @@
 .context-type-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1px;
-    width: 400px;
-    grid-auto-rows: 100px;
+    width: calc(100% - 5 * #{$taskbar-height});
+    grid-auto-rows: 200px;
     height: 50px;
     grid-auto-rows: minmax(20px, auto);
     div {
@@ -26,7 +26,7 @@
 
     .form-block-1 {
         top: 11px;
-        left: 163px;
+        left: 74px;
         select {
             padding: 3px;
             min-width: 200px;
@@ -40,7 +40,7 @@
 
     .context-type-grid {
         div {
-            max-width: 100px;
+            max-width: 90%;
         }
     }
 }
@@ -74,12 +74,4 @@
     .form-block.button.right {
         float: right;
     }
-}
-
-#contexts-filter-taskbar {
-    height: calc(#{$taskbar-height} + 10px);
-    width: calc(100% - 40px);
-    padding: 20px;
-    border-bottom-width: 1px;
-    border-bottom-style: dotted;
 }
