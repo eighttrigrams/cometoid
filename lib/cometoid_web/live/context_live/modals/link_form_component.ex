@@ -18,7 +18,6 @@ defmodule CometoidWeb.ContextLive.Modals.LinkFormComponent do
 
     case Tracker.update_context(selected_context, %{ "children" => children }) do
       {:ok, context} ->
-        IO.inspect "yo"
         send self(), {:after_edit_form_save, %{ context_id: context.id }}
         {:noreply, socket}
       {:error, %Ecto.Changeset{} = changeset} ->
