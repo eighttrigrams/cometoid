@@ -7,7 +7,6 @@
     height: 50px;
     grid-auto-rows: minmax(20px, auto);
     div {
-        max-width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -37,6 +36,12 @@
     .form-block-2 {
         top: 25px;
         right: 216px;
+    }
+
+    .context-type-grid {
+        div {
+            max-width: 100px;
+        }
     }
 }
 
