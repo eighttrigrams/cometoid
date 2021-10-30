@@ -35,16 +35,7 @@
             </div>
 
             <div id="issues-list" class="list">
-              <%= live_component CometoidWeb.IssueLive.ListComponent,
-                state: %{
-                  issues: @issues,
-                  contexts: @contexts,
-                  selected_issue: assigns[:selected_issue],
-                  selected_context: @selected_context,
-                  selected_secondary_contexts: @selected_secondary_contexts,
-                  list_issues_done_instead_open: @list_issues_done_instead_open
-                }
-              %>
+              <%= live_component CometoidWeb.IssueLive.ListComponent, state: assigns %>
             </div>
           </div>
         </div>

@@ -26,5 +26,6 @@ defmodule CometoidWeb.IssueLive.ContextSelectComponent do
     all_children
     |> Enum.map(fn ctx -> ctx.title end)
     |> Enum.filter(fn title -> title != state.selected_context.title end)
+    |> Enum.sort
   end
 end

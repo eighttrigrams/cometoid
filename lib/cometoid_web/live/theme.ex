@@ -9,7 +9,7 @@ defmodule CometoidWeb.Theme do
     %{ theme: List.first(Agent.get(__MODULE__, & &1)) }
   end
 
-  def toggle do
+  def toggle! do
     Agent.update(__MODULE__, fn old_val ->
       [selected_theme|themes] = old_val
       themes = themes ++ [selected_theme]
