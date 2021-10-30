@@ -10,6 +10,11 @@ defmodule Cometoid.Repo.Tracker do
   alias Cometoid.Model.Calendar
   alias Cometoid.Model.Tracker.Issue
 
+  def get_all_children id do
+    context = get_context! id
+    [context] ++ Enum.flat_map(context.children, fn child -> get_all_children(child.id) end)
+  end
+
   def get_contexts_by_titles titles do
     Context
     |> where([c], c.title in ^titles)
