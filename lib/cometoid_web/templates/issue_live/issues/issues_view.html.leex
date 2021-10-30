@@ -23,7 +23,7 @@
             </div>
           </div>
 
-          <div id="list-container">
+          <div id="list-container" class="border-color">
 
             <div id="contexts-filter-taskbar" class="contexts-background-color border-color context-type-grid">
               <div>
@@ -34,7 +34,7 @@
               </div>
             </div>
 
-            <div id="issues-list" class="list border-color">
+            <div id="issues-list" class="list">
               <%= live_component CometoidWeb.IssueLive.ListComponent,
                 state: %{
                   issues: @issues,
