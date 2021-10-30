@@ -8,7 +8,7 @@ defmodule CometoidWeb.IssueLive.ListComponent do
   alias CometoidWeb.IssueLive.ListItemComponent
 
   def get_issues state do
-    all_issues = elem(state.issues, 0) ++ elem(state.issues, 1)
+    all_issues = state.issues
     Enum.filter all_issues, &(should_show?(state, &1))
   end
 

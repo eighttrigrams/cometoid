@@ -45,8 +45,8 @@ defmodule CometoidWeb.IssueLive.Index do
     }
     state = Map.merge socket.assigns, state # TODO swap params and use |>
     state = IssuesMachine.set_context_properties state, true
-
     state = IssuesMachine.set_issue_properties state
+
     socket = socket
       |> assign(state)
       |> assign(:view, params["view"])
@@ -264,6 +264,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "reprioritize_context", %{ "title" => title }, socket do
+
     state =
       socket.assigns
       |> IssuesMachine.select_context!(title)

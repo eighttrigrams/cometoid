@@ -37,15 +37,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   """
   def set_context_properties state, select_from_first_group do
-    {important, others} = contexts = reload_contexts state
-
-    selected_context = List.first(
-      if select_from_first_group and (length(important) > 0) do
-        important
-      else
-        others
-      end
-    )
+    contexts = reload_contexts state
+    selected_context = List.first contexts
 
     Map.merge state, %{
       selected_context: selected_context,
@@ -54,10 +47,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   def set_context_properties state do
-    {important, others} = contexts = reload_contexts state
-
-    selected_context = Tracker.get_context!(state.selected_context.id)
-
+    contexts = reload_contexts state
+    selected_context = Tracker.get_context! state.selected_context.id
     Map.merge state, %{
       selected_context: selected_context,
       contexts: contexts
@@ -78,9 +69,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   """
   def select_context! state, context do
 
-    selected_context =
-      elem(state.contexts, 0) ++ elem(state.contexts, 1)
-      |> Enum.find(&(&1.title == context))
+    selected_context = Enum.find(state.contexts, &(&1.title == context))
 
     Tracker.update_context_updated_at selected_context
     set_context_properties state, selected_context.important
@@ -96,9 +85,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   """
   def select_context state, context do
 
-    selected_context =
-      elem(state.contexts, 0) ++ elem(state.contexts, 1)
-      |> Enum.find(&(&1.title == context))
+    selected_context = state.contexts |> Enum.find(&(&1.title == context))
 
     Map.merge state, %{
       selected_context: selected_context
@@ -126,9 +113,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   def do_query(%{ selected_context: selected_context } = state) when is_nil(selected_context) do
-    Map.merge state, %{
-      issues: {[], []}
-    }
+    Map.merge state, %{ issues: [] }
   end
 
   def do_query state  do
@@ -136,14 +121,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context
     }
-    issues =
-      query
-      |> Tracker.list_issues
-      |> separate(&(&1.important == true))
-
-    Map.merge state, %{
-      issues: issues
-    }
+    issues = Tracker.list_issues query
+    Map.merge state, %{ issues: issues }
   end
 
   defp determine_selected_issue state, id do
@@ -159,6 +138,5 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     else
       Tracker.list_contexts()
     end
-    |> separate(&(&1.important == true))
   end
 end

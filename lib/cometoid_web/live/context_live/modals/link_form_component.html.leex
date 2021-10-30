@@ -8,7 +8,7 @@
 
     <%= multiple_select f,
         :children,
-        Enum.map(elem(@state.contexts,0) ++ elem(@state.contexts,1), fn ctx -> ctx.title end),
+        Enum.map(@state.contexts, fn ctx -> ctx.title end),
         selected:
         Enum.map(@state.selected_context.children, fn ctx -> ctx.title end)
     %>
