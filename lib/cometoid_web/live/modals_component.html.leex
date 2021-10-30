@@ -56,7 +56,7 @@
 
   <div id="new-issue-modal-content" class="modal-content">
     <%= if @state.live_action in [:new] do %>
-      <%= live_modal @socket, CometoidWeb.IssueLive.Modals.NewComponent,
+      <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.NewComponent,
         id: :new,
         action: @state.live_action,
         issue: @state.issue,
