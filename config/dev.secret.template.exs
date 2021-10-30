@@ -5,14 +5,9 @@ config :cometoid,
 
   context_types: [
     %{ name: "View-1", context_types: "List" },
-    %{ name: "View-2", context_types: "Todolist_Context type 2" }
-  ],
-  issue_types: %{
-    "Person" => ["Info"], # at least one issue type for Person is required
-    "List" => ["Item"],
-    "Todolist" => ["Todo"],
-    "Context type 2" => ["Issue type A", "Issue Type B"],
-  }
+    %{ name: "View-1a", context_types: "A:List_B:List2_B:List3_B:List4_B:List5_B:List6" },
+    %{ name: "View-2", context_types: "Project_Component_Version_IssueType" }
+  ]
 
 config :cometoid, Cometoid.Repo,
   username: "USERNAME",
