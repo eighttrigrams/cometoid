@@ -27,7 +27,7 @@ defmodule CometoidWeb.EventLive.Index do
   end
 
   def handle_event "switch-theme", %{ "name" => name }, socket do
-    Theme.toggle
+    Theme.toggle!
     socket
     |> assign(Theme.get)
     |> return_noreply
