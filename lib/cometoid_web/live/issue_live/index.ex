@@ -233,7 +233,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "select_context", %{ "context" => context } = _params, socket do
+  def handle_event "select_context", %{ "context" => context }, socket do
     state =
       socket.assigns
       |> IssuesMachine.select_context(context)
@@ -242,6 +242,18 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(state)
     |> do_query
+  end
+
+  def handle_event "link_context", %{ "title" => title }, socket do
+    state =
+      socket.assigns
+      |> IssuesMachine.select_context(title)
+      |> IssuesMachine.set_issue_properties
+
+    socket
+    |> assign(state)
+    |> assign(:live_action, :link_context)
+    |> return_noreply
   end
 
   def handle_event "reprioritize_context", %{ "title" => title }, socket do

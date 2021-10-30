@@ -10,6 +10,12 @@ defmodule Cometoid.Repo.Tracker do
   alias Cometoid.Model.Calendar
   alias Cometoid.Model.Tracker.Issue
 
+  def get_contexts_by_titles titles do
+    Context
+    |> where([c], c.title in ^titles)
+    |> Repo.all
+  end
+
   def list_contexts(context_type_title) do
     Context
     |> where([c], c.context_type == ^context_type_title)
@@ -17,6 +23,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.all
     |> Repo.preload(:person)
     |> Repo.preload(:text)
+    |> Repo.preload(:children)
   end
 
   def list_contexts do
@@ -25,6 +32,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(issues: :issue)
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
+    |> Repo.preload(:children)
   end
 
   def get_context!(id) do
@@ -32,6 +40,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
     |> Repo.preload(issues: :issue)
+    |> Repo.preload(:children)
   end
 
   def create_context(attrs, selected_context_type) do

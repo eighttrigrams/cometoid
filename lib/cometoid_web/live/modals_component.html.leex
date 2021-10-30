@@ -22,6 +22,16 @@
     <% end %>
   </div>
 
+  <div id="context-link-modal-content" class="modal-content">
+    <%= if @state.live_action == :link_context do %>
+      <%= live_modal @socket, CometoidWeb.ContextLive.Modals.LinkFormComponent,
+        id: @state.selected_context.id,
+        state: @state,
+        return_to: nil # review
+        %>
+    <% end %>
+  </div>
+
   <div id="context-description-modal-content" class="modal-content">
     <%= if @state.live_action in [:describe_context] do %>
       <%= live_modal @socket, CometoidWeb.ContextLive.Modals.DescriptionFormComponent,

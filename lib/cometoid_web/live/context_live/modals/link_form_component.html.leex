@@ -1,0 +1,15 @@
+<%= f = form_for :links, "#",
+  id: "link-form",
+  phx_target: @myself,
+  phx_submit: "save"
+  %>
+
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+
+    <%= multiple_select f,
+        :children,
+        Enum.map(elem(@state.contexts,0) ++ elem(@state.contexts,1), fn ctx -> ctx.title end),
+        selected:
+        Enum.map(@state.selected_context.children, fn ctx -> ctx.title end)
+    %>
+</form>
