@@ -26,11 +26,15 @@ defmodule CometoidWeb.IssueLive.TaskbarComponent do
   end
 
   def get_contexts state do
-    all_children = state.selected_context.children
-    contexts =
-    all_children
-    |> Enum.map(fn ctx -> {ctx.id, ctx.title} end)
-    |> Enum.filter(fn {_id, title} -> title != state.selected_context.title end)
-    |> Enum.sort_by(fn {id, _} -> id end)
+    if state.selected_context do
+      all_children = state.selected_context.children
+      contexts =
+      all_children
+      |> Enum.map(fn ctx -> {ctx.id, ctx.title} end)
+      |> Enum.filter(fn {_id, title} -> title != state.selected_context.title end)
+      |> Enum.sort_by(fn {id, _} -> id end)
+    else
+      []
+    end
   end
 end

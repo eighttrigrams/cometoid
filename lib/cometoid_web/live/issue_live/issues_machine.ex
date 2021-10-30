@@ -29,17 +29,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     |> Map.delete(:flash)
   end
 
-  @doc """
-
-  ## Params
-
-  context_types: can be nil # TODO really, why?
-
-  """
-  def set_context_properties state, select_from_first_group do
+  # TODO review _reset
+  def set_context_properties state, _reset do
     contexts = reload_contexts state
     selected_context = List.first contexts
-
     Map.merge state, %{
       selected_context: selected_context,
       contexts: contexts
@@ -68,11 +61,13 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   """
   def select_context! state, context do
-
     selected_context = Enum.find(state.contexts, &(&1.title == context))
-
     Tracker.update_context_updated_at selected_context
-    set_context_properties state, selected_context.important
+    contexts = reload_contexts state # TODO review duplication with set_context_properties
+    Map.merge state, %{
+      selected_context: selected_context,
+      contexts: contexts
+    }
   end
 
   @doc """

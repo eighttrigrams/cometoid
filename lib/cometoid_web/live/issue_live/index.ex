@@ -296,6 +296,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "toggle_context_important", %{ "target" => id }, socket do
 
     context = Tracker.get_context! id
+    socket = socket |> assign(:selected_context, context)
     Tracker.update_context(context, %{ "important" => !context.important })
 
     socket
