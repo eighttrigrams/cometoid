@@ -1,7 +1,7 @@
 <%= unless is_nil(@state.live_action) do %>
   <div id="link-modal-content" class="modal-content">
     <%= if @state.live_action in [:link] do %>
-      <%= live_modal @socket, CometoidWeb.IssueLive.LinkFormComponent,
+      <%= live_modal @socket, CometoidWeb.IssueLive.Forms.LinkFormComponent,
         id: @state.selected_issue.id,
         state: @state,
         return_to: nil
@@ -11,7 +11,7 @@
 
   <div id="issue-modal-content" class="modal-content">
     <%= if @state.live_action in [:edit] do %>
-      <%= live_modal @socket, CometoidWeb.IssueLive.FormComponent,
+      <%= live_modal @socket, CometoidWeb.IssueLive.Forms.FormComponent,
         id: @state.issue.id || :new,
         action: @state.live_action,
         issue: @state.issue,
@@ -24,7 +24,7 @@
 
   <div id="context-description-modal-content" class="modal-content">
     <%= if @state.live_action in [:describe_context] do %>
-      <%= live_modal @socket, CometoidWeb.ContextLive.DescriptionFormComponent,
+      <%= live_modal @socket, CometoidWeb.ContextLive.Forms.DescriptionFormComponent,
         id: @state.selected_context.id || :new,
         action: @state.live_action,
         context: @state.edit_entity,
@@ -35,7 +35,7 @@
 
   <div id="issue-description-modal-content" class="modal-content">
     <%= if @state.live_action in [:describe] do %>
-      <%= live_modal @socket, CometoidWeb.IssueLive.DescriptionFormComponent,
+      <%= live_modal @socket, CometoidWeb.IssueLive.Forms.DescriptionFormComponent,
         id: @state.issue.id || :new,
         action: @state.live_action,
         issue: @state.issue,
@@ -46,7 +46,7 @@
 
   <div id="new-issue-modal-content" class="modal-content">
     <%= if @state.live_action in [:new] do %>
-      <%= live_modal @socket, CometoidWeb.IssueLive.NewComponent,
+      <%= live_modal @socket, CometoidWeb.IssueLive.Forms.NewComponent,
         id: :new,
         action: @state.live_action,
         issue: @state.issue,
@@ -59,14 +59,14 @@
   <div id="context-modal-content" class="modal-content">
     <%= if @state.live_action in [:new_context, :edit_context] do %>
       <%= case @state.edit_selected_context_type do
-        "Person" -> live_modal @socket, CometoidWeb.PersonLive.FormComponent,
+        "Person" -> live_modal @socket, CometoidWeb.PersonLive.Forms.FormComponent,
             id: @state.edit_entity.id || :new,
             title: (if @state.live_action == :new_context do "New " else "Edit " end) <> "Person",
             action: @state.live_action,
             selected_context_type: "Person",
             return_to: nil, # review
             person: @state.edit_entity
-        _ -> live_modal @socket, CometoidWeb.ContextLive.FormComponent,
+        _ -> live_modal @socket, CometoidWeb.ContextLive.Forms.FormComponent,
             id: @state.edit_entity.id || :new,
             title: (if @state.live_action == :new_context do "New " else "Edit " end) <> "Context",
             action: @state.live_action,
@@ -80,7 +80,7 @@
   <%= if @state.live_action in [:new_event, :edit_event] do %>
       <%= if @state.live_action == :new_event or is_nil(@state.edit_event.issue) do %>
         <div id="event-modal-content" class="modal-content">
-          <%= live_modal @socket, CometoidWeb.EventLive.FormComponent,
+          <%= live_modal @socket, CometoidWeb.EventLive.Forms.FormComponent,
             id: @state.edit_event.id || :new_event,
             action: @state.live_action,
             is_standalone: (if is_nil(@state.edit_event.issue_id) and is_nil(@state.edit_event.person_id) do true else false end),

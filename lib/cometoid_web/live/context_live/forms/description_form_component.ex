@@ -1,4 +1,4 @@
-defmodule CometoidWeb.ContextLive.DescriptionFormComponent do
+defmodule CometoidWeb.ContextLive.Forms.DescriptionFormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker
