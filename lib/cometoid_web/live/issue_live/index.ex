@@ -40,6 +40,7 @@ defmodule CometoidWeb.IssueLive.Index do
       control_pressed: false,
       context_types: context_types,
       list_issues_done_instead_open: false,
+      selected_secondary_contexts: [],
       selected_context_type: if length(context_types) == 1 do List.first(context_types) end
     }
     state = Map.merge socket.assigns, state # TODO swap params and use |>
@@ -56,6 +57,12 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_info {:modal_closed}, socket do
     socket
     |> assign(:live_action, :index)
+    |> return_noreply
+  end
+
+  def handle_info {:select_secondary_contexts, selected_secondary_contexts}, socket do
+    socket
+    |> assign(:selected_secondary_contexts, selected_secondary_contexts)
     |> return_noreply
   end
 

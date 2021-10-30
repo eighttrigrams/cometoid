@@ -27,18 +27,10 @@
 
             <div id="contexts-filter-taskbar" class="contexts-background-color border-color context-type-grid">
               <%= if assigns[:selected_context] do %>
-                <%=
-                  all_children = Cometoid.Repo.Tracker.get_all_children(@selected_context.id)
-                  contexts =
-                    all_children
-                    |> Enum.map(fn ctx -> ctx.title end)
-                    |> Enum.filter(fn title -> title != @selected_context.title end)
-
-                  for context <- contexts do %>
-                  <div>
-                    <%= context %>
-                  </div>
-                <% end %>
+                <%= live_component CometoidWeb.IssueLive.ContextSelectComponent,
+                  id: "context_select_component",
+                  state: assigns
+              %>
               <% end %>
             </div>
 
