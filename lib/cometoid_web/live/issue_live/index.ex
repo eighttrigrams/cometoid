@@ -96,6 +96,9 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index } } = socket do
     case key do
+      "Escape" ->
+        socket
+        |> assign(:selected_secondary_contexts, [])
       "n" ->
         socket
         |> assign(:live_action, :new)
