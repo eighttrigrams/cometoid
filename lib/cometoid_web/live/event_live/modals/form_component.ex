@@ -1,4 +1,4 @@
-defmodule CometoidWeb.EventLive.Forms.FormComponent do
+defmodule CometoidWeb.EventLive.Modals.FormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Calendar
