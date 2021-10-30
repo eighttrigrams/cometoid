@@ -28,7 +28,7 @@
             <%= k %>
           </td>
           <td>
-            <%= for ctx <- CometoidWeb.IssueLive.Modals.LinkFormComponent.list_contexts(k) do %>
+            <%= for ctx <- CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent.list_contexts(k) do %>
               <div>
                 <%= checkbox f, "ctx/#{ctx}", value: @links["ctx/#{ctx}"] %>
                 <%= label f, ctx %>
