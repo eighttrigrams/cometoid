@@ -111,10 +111,10 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:event)
   end
 
-  def create_issue(title, context) do
+  def create_issue(title, contexts) do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
-      contexts: [%{ context: context }]
+      contexts: Enum.map(contexts, &(%{ context: &1 }))
     })
     {:ok, Repo.preload(issue, :event)}
   end

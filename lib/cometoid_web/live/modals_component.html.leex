@@ -59,10 +59,9 @@
       <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.NewComponent,
         id: :new,
         action: @state.live_action,
-        issue: @state.issue,
-        return_to: nil,
-        selected_context: @state.selected_context,
-        contexts: @state.contexts %>
+        state: @state,
+        return_to: nil
+        %>
     <% end %>
   </div>
 

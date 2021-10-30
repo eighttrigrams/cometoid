@@ -4,8 +4,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
   alias Cometoid.Repo.Tracker
 
   @impl true
-  def update(%{issue: issue} = assigns, socket) do
-    changeset = Tracker.change_issue(issue)
+  def update(%{state: state} = assigns, socket) do
+    changeset = Tracker.change_issue(state.issue)
     {:ok,
      socket
      |> assign(assigns)
@@ -28,8 +28,10 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
   end
 
   defp create_new_issue(socket, title) do
-    Tracker.create_issue(
-        title,
-        socket.assigns.selected_context)
+    secondary_contexts =
+      Enum.map socket.assigns.state.selected_secondary_contexts,
+      &(Tracker.get_context!(&1))
+    contexts = [socket.assigns.state.selected_context|secondary_contexts]
+    Tracker.create_issue title, contexts
   end
 end
