@@ -21,7 +21,7 @@ defmodule CometoidWeb.IssueLive.ContextSelectComponent do
   end
 
   def get_contexts state do
-    all_children = Cometoid.Repo.Tracker.get_all_children(state.selected_context.id)
+    all_children = state.selected_context.children
     contexts =
     all_children
     |> Enum.map(fn ctx -> ctx.title end)
