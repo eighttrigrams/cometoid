@@ -36,7 +36,7 @@ $list-item-height: $taskbar-height;
 
 #issues-list {
     bottom: 0;
-    height: calc(100% - #{$taskbar-height} - 50px);
+    height: 100%;
 }
 
 
