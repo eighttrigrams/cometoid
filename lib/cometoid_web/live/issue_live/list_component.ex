@@ -19,14 +19,9 @@ defmodule CometoidWeb.IssueLive.ListComponent do
     unless length(selected_secondary_contexts) > 0 do
       true
     else
-      selected_secondary_contexts = MapSet.new selected_secondary_contexts
-      issues_contexts = MapSet.new Enum.map issue.contexts, &(&1.context.title)
-
-      # https://elixirforum.com/t/intersection-of-two-mapsets-without-using-mapset-intersection/22827
-      intersection =
-        Enum.filter selected_secondary_contexts, &(MapSet.member?(issues_contexts, &1))
-
-      length(intersection) > 0
+      issues_contexts = Enum.map issue.contexts, &(&1.context.title)
+      diff = selected_secondary_contexts -- issues_contexts
+      length(diff) == 0
     end
   end
 end
