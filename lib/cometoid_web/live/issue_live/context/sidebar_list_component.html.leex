@@ -25,11 +25,11 @@
         <div class="text">
 
           <br>
-          <%= if CometoidWeb.ContextLive.ListItemComponent.show_issues_badge context do %>
+          <%= if CometoidWeb.IssueLive.Context.ListItemComponent.show_issues_badge context do %>
               <i class="bi bi-envelope-open"></i>
               <%= Context.calc_open_issues context %>
           <% end %>
-          <%= if CometoidWeb.ContextLive.ListItemComponent.show_archived_issues_badge context do %>
+          <%= if CometoidWeb.IssueLive.Context.ListItemComponent.show_archived_issues_badge context do %>
               <i class="bi bi-archive"></i>
               <%= Context.calc_issues_done context %>
           <% end %>

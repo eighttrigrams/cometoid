@@ -1,4 +1,4 @@
-defmodule CometoidWeb.ContextLive.Modals.LinkFormComponent do
+defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker

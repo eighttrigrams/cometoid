@@ -1,4 +1,4 @@
-defmodule CometoidWeb.ContextLive.ListItemComponent do
+defmodule CometoidWeb.IssueLive.Context.ListItemComponent do
   # If you generated an app with mix phx.new --live,
   # the line below would be:
   use CometoidWeb, :live_component

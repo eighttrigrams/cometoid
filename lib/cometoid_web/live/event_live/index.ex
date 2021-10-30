@@ -1,9 +1,9 @@
 defmodule CometoidWeb.EventLive.Index do
   use CometoidWeb, :live_view
 
-  alias CometoidWeb.IssueLive
+  alias CometoidWeb.IssueLive.Issue
+  alias CometoidWeb.IssueLive.Person
   alias CometoidWeb.EventLive
-  alias CometoidWeb.PersonLive
   alias CometoidWeb.Theme
 
   alias Cometoid.Repo.Tracker

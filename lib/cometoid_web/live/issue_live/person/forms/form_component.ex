@@ -1,4 +1,4 @@
-defmodule CometoidWeb.PersonLive.Modals.FormComponent do
+defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker

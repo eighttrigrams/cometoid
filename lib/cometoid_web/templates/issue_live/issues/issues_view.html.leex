@@ -17,7 +17,7 @@
         <div class="issues-view-list-arrangement">
           <div id="contexts-container" class="border-color">
             <div id="contexts-sidebar-list" class="sidebar-list contexts-list">
-              <%= live_component CometoidWeb.ContextLive.SidebarListComponent,
+              <%= live_component CometoidWeb.IssueLive.Context.SidebarListComponent,
                 contexts: @contexts,
                 selected_context: @selected_context %>
             </div>
@@ -46,9 +46,9 @@
         <% else %>
           <%= unless is_nil(@selected_context) do %>
             <%= if @selected_context.context_type == "Person" do %>
-              <%= live_component CometoidWeb.PersonLive.SidebarComponent, context: @selected_context %>
+              <%= live_component CometoidWeb.IssueLive.Person.SidebarComponent, context: @selected_context %>
             <% else %>
-              <%= live_component CometoidWeb.ContextLive.SidebarComponent, context: @selected_context %>
+              <%= live_component CometoidWeb.IssueLive.Context.SidebarComponent, context: @selected_context %>
             <% end %>
           <% end %>
         <% end %>
