@@ -29,7 +29,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     |> Map.delete(:flash)
   end
 
-  # TODO review _reset
+  # TODO review _reset; maybe remove function
   def set_context_properties state, _reset do
     contexts = reload_contexts state
     selected_context = List.first contexts
@@ -39,7 +39,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     }
   end
 
-  def set_context_properties state do
+  def set_context_properties_and_keep_selected_context state do
     contexts = reload_contexts state
     selected_context = Tracker.get_context! state.selected_context.id
     Map.merge state, %{
@@ -92,7 +92,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     Tracker.update_issue2(issue, %{ "done" => true, "important" => false })
 
     selected_issue = determine_selected_issue state, id
-    Map.merge(set_context_properties(state), %{ selected_issue: selected_issue })
+    Map.merge(set_context_properties_and_keep_selected_context(state), %{ selected_issue: selected_issue })
   end
 
   def delete_issue state, id do

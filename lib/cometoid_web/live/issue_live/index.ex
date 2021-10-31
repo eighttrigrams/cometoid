@@ -69,7 +69,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_info {:after_edit_form_save, %{ context_id: context_id }}, socket do
 
     selected_context = Tracker.get_context! context_id # fetch latest important flag
-    state = IssuesMachine.set_context_properties socket.assigns, selected_context.important
+    state = IssuesMachine.set_context_properties_and_keep_selected_context socket.assigns
     state = IssuesMachine.set_issue_properties state
 
     socket
@@ -80,7 +80,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_info {:after_edit_form_save, issue}, socket do
 
     state =
-      IssuesMachine.set_context_properties socket.assigns
+      IssuesMachine.set_context_properties_and_keep_selected_context socket.assigns
       |> Map.delete(:flash)
 
     socket
