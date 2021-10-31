@@ -236,6 +236,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(state)
+    |> assign(:selected_secondary_contexts, [])
     |> do_query
   end
 
