@@ -29,13 +29,11 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
   end
 
   def get_contexts state do
-
-    contexts = state.contexts ++ if Enum.member? state.context_types, "Person" do
+    contexts = state.contexts ++ if state.selected_context_type == "People" do
       []
     else
       Tracker.list_contexts "Person"
     end
-
     contexts
     |> Enum.filter(fn ctx -> ctx.id != state.selected_context.id end)
     |> Enum.map(fn ctx -> {ctx.title, ctx.id} end)

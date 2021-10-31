@@ -16,7 +16,6 @@
   <%= label f, :important %>
 
   <%= if @id == :new do %>
-    <%= select f, :context_type, @context_types %>
+    <%= hidden_input f, :context_type, value: @selected_context_type %>
   <% end %>
-
 </form>

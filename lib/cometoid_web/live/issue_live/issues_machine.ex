@@ -125,12 +125,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       and Integer.to_string(selected_issue.id) != id do selected_issue end
   end
 
-  defp reload_contexts %{ context_types: context_types, selected_context_type: selected_context_type } = state do
-    contexts = unless is_nil(state.context_types) do
-      Tracker.list_contexts()
-      |> Enum.filter(fn context -> if is_nil(selected_context_type) do context.context_type in context_types else context.context_type == selected_context_type end end)
-    else
-      Tracker.list_contexts()
-    end
+  defp reload_contexts %{ selected_context_type: selected_context_type } = state do
+    Tracker.list_contexts()
+    |> Enum.filter(fn context -> context.context_type == selected_context_type end)
   end
 end

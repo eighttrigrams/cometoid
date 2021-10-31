@@ -5,11 +5,7 @@
 use Mix.Config
 
 config :cometoid,
-  data_path: "./data/",
-
-  context_types: [
-    %{ name: "Software", context_types: "Software:Project_Software:Component_Software:Version_Software:IssueType_Software:Epic" }
-  ]
+  views: ["Software"]
 
 config :cometoid, Cometoid.Repo,
   # ssl: true,

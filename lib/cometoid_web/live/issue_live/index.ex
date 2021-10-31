@@ -34,14 +34,13 @@ defmodule CometoidWeb.IssueLive.Index do
 
   @impl true
   def handle_params params, url, socket do
-    context_types = get_context_types params
+    selected_view = get_selected_view params
 
     state = %{
       control_pressed: false,
-      context_types: context_types,
       list_issues_done_instead_open: false,
       selected_secondary_contexts: [],
-      selected_context_type: if length(context_types) == 1 do List.first(context_types) end
+      selected_context_type: selected_view
     }
     state = Map.merge socket.assigns, state
     state = IssuesMachine.set_context_properties state
@@ -349,9 +348,9 @@ defmodule CometoidWeb.IssueLive.Index do
     end
   end
 
-  defp get_context_types params do
-    if Map.has_key?(params, "context_types") do
-      String.split(params["context_types"], "_")
+  defp get_selected_view params do
+    if Map.has_key?(params, "view") do
+      params["view"]
     end
   end
 
@@ -360,7 +359,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp should_show_contexts_view params do
-    view = Enum.find(Application.fetch_env!(:cometoid, :context_types), fn ct -> ct.name == params["view"] end)
+    view = Enum.find(Application.fetch_env!(:cometoid, :views), fn ct -> ct.name == params["view"] end)
     ((!is_nil(params["alternative_view"]) && params["alternative_view"] == "true")
       or (!is_nil(view[:alternative_view] && view.alternative_view == true)))
   end
