@@ -118,7 +118,7 @@ defmodule Cometoid.Repo.Tracker do
 
   def update_issue_relations issue, selected_contexts, contexts do
 
-    context_from =  fn title -> Enum.find contexts, &(&1.title == title) end
+    context_from =  fn id -> Enum.find contexts, &(&1.id == id) end # TODO use get_context! instead
     ctxs = Enum.map(selected_contexts, context_from)
       |> Enum.map(fn ctx -> %{ context: ctx } end)
 

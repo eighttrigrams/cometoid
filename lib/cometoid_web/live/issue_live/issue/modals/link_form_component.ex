@@ -9,9 +9,10 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
 
   def update assigns, socket do
     ctxs = Enum.flat_map(assigns.state.context_types,
-      fn k ->
-        ctxs = list_contexts(k)
-        Enum.map(ctxs, fn ctx -> {"ctx/#{ctx}", is_checked(assigns.state.selected_issue, ctx)} end)
+      fn context_type ->
+        ctxs = list_contexts context_type
+        Enum.map(ctxs, fn {_title, id} ->
+          {id, is_checked(assigns.state.selected_issue, id)} end)
       end)
       |> Enum.into(%{})
 
@@ -26,6 +27,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   def handle_event "save", _, socket do
 
     selected_contexts = extract_from socket.assigns.links
+    selected_contexts = Enum.map selected_contexts,
+      fn c -> {id, ""} = Integer.parse(c); id end
 
     if length(selected_contexts) == 0 do
       {:noreply, socket}
@@ -51,12 +54,13 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
 
   def list_contexts context_type do
     results = Tracker.list_contexts context_type
-    Enum.map results, fn r -> r.title end
+    Enum.map results, fn r -> {r.title, Integer.to_string(r.id)} end
   end
 
-  def is_checked issue, context_title do
-    context_titles = Enum.map issue.contexts, &(&1.context.title)
-    if not (is_nil Enum.find context_titles, &(&1 == context_title)) do "true" else "false" end
+  def is_checked issue, context_id do
+    {context_id, ""} = Integer.parse context_id
+    context_ids = Enum.map issue.contexts, &(&1.context.id)
+    if not (is_nil Enum.find context_ids, &(&1 == context_id)) do "true" else "false" end
   end
 
   defp extract_from params do
@@ -67,7 +71,5 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
 
   defp filter_true({k, v}), do: v == "true"
 
-  defp to_key({k, v}), do: String.replace(k, "ctx/", "")
-
-  defp strip_prefixes({k, v}), do: {k |> String.replace("ctx/", ""), v}
+  defp to_key({k, _v}), do: k
 end
