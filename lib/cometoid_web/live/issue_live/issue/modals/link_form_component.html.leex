@@ -28,7 +28,7 @@
             <%= k %>
           </td>
           <td>
-            <%= for {title, id} <- LinkFormComponent.list_contexts(k) do %>
+            <%= for {title, id} <- LinkFormComponent.list_contexts_excluding_current(@state, k) do %>
               <div>
                 <%= checkbox f, id, value: @links[id] %>
                 <%= label f, title %>

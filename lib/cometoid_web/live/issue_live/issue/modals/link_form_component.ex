@@ -9,16 +9,13 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def update assigns, socket do
-    ctxs = Enum.flat_map(get_context_types(assigns.state),
-      fn context_type ->
-        ctxs = list_contexts context_type
-        Enum.map(ctxs, fn {_title, id} ->
-          {id, is_checked(assigns.state.selected_issue, id)} end)
-      end)
-      |> Enum.into(%{})
-
-    links = ctxs
-    {:ok, socket |> assign(:links, links) |> assign(:state, assigns.state)}
+    state = assigns.state
+    links = prepare_links state
+    {:ok,
+      socket
+      |> assign(:links, links)
+      |> assign(:state, state)
+    }
   end
 
   def handle_event "change", %{ "links" => links }, socket do
@@ -27,9 +24,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
 
   def handle_event "save", _, socket do
 
-    selected_contexts = extract_from socket.assigns.links
-    selected_contexts = Enum.map selected_contexts,
-      fn c -> {id, ""} = Integer.parse(c); id end
+    selected_contexts = get_selected_contexts socket
 
     if length(selected_contexts) == 0 do
       {:noreply, socket}
@@ -57,6 +52,12 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
     Enum.uniq ["Person"|state.context_types]
   end
 
+  def list_contexts_excluding_current state, context_type do
+    contexts = list_contexts context_type
+    current_context_id = Integer.to_string(state.selected_context.id)
+    Enum.filter contexts, fn {_title, id} -> id != current_context_id end
+  end
+
   def list_contexts context_type do
     results = Tracker.list_contexts context_type
     Enum.map results, fn r -> {r.title, Integer.to_string(r.id)} end
@@ -66,6 +67,22 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
     {context_id, ""} = Integer.parse context_id
     context_ids = Enum.map issue.contexts, &(&1.context.id)
     if not (is_nil Enum.find context_ids, &(&1 == context_id)) do "true" else "false" end
+  end
+
+  defp prepare_links state do
+    Enum.flat_map(get_context_types(state),
+    fn context_type ->
+      ctxs = list_contexts context_type
+      Enum.map(ctxs, fn {_title, id} ->
+        {id, is_checked(state.selected_issue, id)} end)
+    end)
+    |> Enum.into(%{})
+  end
+
+  defp get_selected_contexts socket do
+    selected_contexts = extract_from socket.assigns.links
+    Enum.map selected_contexts,
+      fn c -> {id, ""} = Integer.parse(c); id end
   end
 
   defp extract_from params do
