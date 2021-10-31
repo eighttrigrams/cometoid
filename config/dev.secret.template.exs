@@ -4,9 +4,7 @@ config :cometoid,
   data_path: "./data/",
 
   context_types: [
-    %{ name: "View-1", context_types: "List" },
-    %{ name: "View-1a", context_types: "A:List_B:List2_B:List3_B:List4_B:List5_B:List6" },
-    %{ name: "View-2", context_types: "Project_Component_Version_IssueType" }
+    %{ name: "Software", context_types: "Software:Project_Software:Component_Software:Version_Software:IssueType_Software:Epic" }
   ]
 
 config :cometoid, Cometoid.Repo,

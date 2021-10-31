@@ -8,8 +8,7 @@ config :cometoid,
   data_path: "./data/",
 
   context_types: [
-    %{ name: "View-1", context_types: "List" },
-    %{ name: "View-2", context_types: "Todolist_Context type 2" } # use alternative_view: true to open view in contexts mode
+    %{ name: "Software", context_types: "Software:Project_Software:Component_Software:Version_Software:IssueType_Software:Epic" }
   ]
 
 config :cometoid, Cometoid.Repo,
