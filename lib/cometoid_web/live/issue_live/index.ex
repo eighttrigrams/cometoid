@@ -40,7 +40,7 @@ defmodule CometoidWeb.IssueLive.Index do
       control_pressed: false,
       list_issues_done_instead_open: false,
       selected_secondary_contexts: [],
-      selected_context_type: selected_view
+      selected_view: selected_view
     }
     state = Map.merge socket.assigns, state
     state = IssuesMachine.set_context_properties state
@@ -174,7 +174,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(:edit_entity, entity)
     |> assign(:live_action, :new_context)
-    |> assign(:edit_selected_context_type, context_type)
+    |> assign(:edit_selected_view, context_type)
     |> return_noreply
   end
 
@@ -222,7 +222,7 @@ defmodule CometoidWeb.IssueLive.Index do
     end
 
     socket
-    |> assign(:edit_selected_context_type, context.view)
+    |> assign(:edit_selected_view, context.view)
     |> assign(:edit_entity, entity)
     |> assign(:live_action, :edit_context)
     |> return_noreply

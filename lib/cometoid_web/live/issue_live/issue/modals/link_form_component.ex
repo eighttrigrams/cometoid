@@ -45,7 +45,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def get_context_types state do
-    Enum.uniq ["People", state.selected_context_type]
+    Enum.uniq ["People", state.selected_view]
   end
 
   def list_selectable_contexts state do

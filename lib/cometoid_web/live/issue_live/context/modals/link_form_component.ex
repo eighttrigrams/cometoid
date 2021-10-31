@@ -29,7 +29,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
   end
 
   def get_contexts state do
-    contexts = state.contexts ++ if state.selected_context_type == "People" do
+    contexts = state.contexts ++ if state.selected_view == "People" do
       []
     else
       Tracker.list_contexts "People"
