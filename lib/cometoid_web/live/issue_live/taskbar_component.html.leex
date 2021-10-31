@@ -18,14 +18,14 @@
     </i></a>
 </div>
 
-<div class="form-block button right <%= if assigns[:list_issues_done_instead_open] do 'disabled-button-color' else 'enabled-button-color' end %>">
-    <%= if !assigns[:list_issues_done_instead_open] do %>
+<div class="form-block button right <%= if @state[:list_issues_done_instead_open] do 'disabled-button-color' else 'enabled-button-color' end %>">
+    <%= if !@state[:list_issues_done_instead_open] do %>
         <a phx-click="create_new_issue"><i class="bi bi-plus-lg">
         </i></a>
     <% end %>
 </div>
 <div class="form-block button right enabled-button-color">
-    <%= if assigns[:list_issues_done_instead_open] do %>
+    <%= if @state[:list_issues_done_instead_open] do %>
         <a phx-click="show_open_issues"><i class="bi bi-check-circle">
         </i></a>
     <% else %>
