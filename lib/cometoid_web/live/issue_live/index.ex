@@ -164,9 +164,9 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def handle_event "create_new_context", %{ "context_type" => context_type }, socket do
+  def handle_event "create_new_context", %{ "view" => view }, socket do
 
-    entity = case context_type do
+    entity = case view do
       "People" -> %Person{}
       _ -> %Context{}
     end
@@ -174,7 +174,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(:edit_entity, entity)
     |> assign(:live_action, :new_context)
-    |> assign(:edit_selected_view, context_type)
+    |> assign(:edit_selected_view, view)
     |> return_noreply
   end
 

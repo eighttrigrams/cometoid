@@ -7,7 +7,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.DescriptionFormComponent do
   @impl true
   def update(%{context: context} = assigns, socket) do
 
-    changeset = unless Map.has_key?(context, :context_type) do
+    changeset = unless Map.has_key?(context, :view) do
       People.change_person_description(context)
     else
       Tracker.change_context(context)
@@ -29,7 +29,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.DescriptionFormComponent do
 
   defp save_context(socket, :describe_context, context_params) do
 
-    unless Map.has_key?(socket.assigns.context, :context_type) do
+    unless Map.has_key?(socket.assigns.context, :view) do
       case People.update_person_description(socket.assigns.context, context_params) do
         {:ok, context} ->
           send self(), {:after_edit_form_save, %{ context_id: context.id }}

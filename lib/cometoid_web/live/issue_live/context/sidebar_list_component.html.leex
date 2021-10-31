@@ -8,11 +8,11 @@
           <br>
 
           <%
-          context_type = context.view
-          context_type = if String.contains?(context_type, ":") do Enum.at(String.split(context_type,":"),1) else context_type end
+          view = context.view
+          view = if String.contains?(view, ":") do Enum.at(String.split(view,":"),1) else view end
           %>
 
-          [<%= context_type %>-<%=
+          [<%= view %>-<%=
               case context.view do
                   "People" -> "P#{context.person.id}"
                   _ -> "C#{context.id}"

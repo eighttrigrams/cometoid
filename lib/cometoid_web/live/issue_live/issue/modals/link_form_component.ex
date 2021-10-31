@@ -26,11 +26,11 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
       {:noreply, socket}
     else
       issue = socket.assigns.state.selected_issue
-      context_types = get_context_types socket.assigns.state
+      views = get_views socket.assigns.state
 
       contexts =
         Tracker.list_contexts
-        |> Enum.filter(&(&1.context_type in context_types))
+        |> Enum.filter(&(&1.view in views))
 
       case Tracker.update_issue_relations(issue, selected_contexts, contexts) do
         {:ok, issue} ->
@@ -44,7 +44,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
     end
   end
 
-  def get_context_types state do
+  def get_views state do
     Enum.uniq ["People", state.selected_view]
   end
 
@@ -53,8 +53,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
     Enum.map children, fn context -> {context.title, Integer.to_string(context.id)} end
   end
 
-  def list_contexts context_type do
-    results = Tracker.list_contexts context_type
+  def list_contexts view do
+    results = Tracker.list_views view
     Enum.map results, fn r -> {r.title, Integer.to_string(r.id)} end
   end
 
@@ -65,9 +65,9 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   defp prepare_links state do
-    Enum.flat_map(get_context_types(state),
-    fn context_type ->
-      ctxs = list_contexts context_type
+    Enum.flat_map(get_views(state),
+    fn view ->
+      ctxs = list_contexts view
       Enum.map(ctxs, fn {_title, id} ->
         {id, is_checked(state.selected_issue, id)} end)
     end)

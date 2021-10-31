@@ -1,8 +1,8 @@
 <tr phx-hook="ContextItemHook" id="context-<%= @context.id %>" class="list-item <%= if @selected_context.id == @context.id do 'contexts-selected-item-color' end %>">
     <td class="left" phx-click="select_context" phx-value-context="<%= @context.title %>">
         <div class="type <%= if @context.important do 'important-color' else 'regular-color' end %>"><span class="text text-left">
-            <b><%= String.upcase(@context.context_type) %>-<%=
-                    case @context.context_type do
+            <b><%= String.upcase(@context.view) %>-<%=
+                    case @context.view do
                         "People" -> "P#{@context.person.id}"
                         _ -> "C #{@context.id}"
                     end
