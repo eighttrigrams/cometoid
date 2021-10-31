@@ -201,7 +201,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "edit_context_description", _, socket do
     context = Tracker.get_context! socket.assigns.selected_context.id
-    entity = case context.context_type do
+    entity = case context.view do
       "People" -> People.get_person! context.person.id
       _ -> context
     end
@@ -216,13 +216,13 @@ defmodule CometoidWeb.IssueLive.Index do
     {id, ""} = Integer.parse id
 
     context = Tracker.get_context! id
-    entity = case context.context_type do
+    entity = case context.view do
       "People" -> People.get_person! context.person.id
       _ -> context
     end
 
     socket
-    |> assign(:edit_selected_context_type, context.context_type)
+    |> assign(:edit_selected_context_type, context.view)
     |> assign(:edit_entity, entity)
     |> assign(:live_action, :edit_context)
     |> return_noreply
