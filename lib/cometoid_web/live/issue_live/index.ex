@@ -43,8 +43,8 @@ defmodule CometoidWeb.IssueLive.Index do
       selected_secondary_contexts: [],
       selected_context_type: if length(context_types) == 1 do List.first(context_types) end
     }
-    state = Map.merge socket.assigns, state # TODO swap params and use |>
-    state = IssuesMachine.set_context_properties state, true
+    state = Map.merge socket.assigns, state
+    state = IssuesMachine.set_context_properties state
     state = IssuesMachine.set_issue_properties state
 
     socket = socket

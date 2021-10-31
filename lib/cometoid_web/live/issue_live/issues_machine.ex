@@ -29,8 +29,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     |> Map.delete(:flash)
   end
 
-  # TODO review _reset; maybe remove function
-  def set_context_properties state, _reset do
+  def set_context_properties state do
     contexts = reload_contexts state
     selected_context = List.first contexts
     Map.merge state, %{
