@@ -8,7 +8,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def update assigns, socket do
-    ctxs = Enum.flat_map(assigns.state.context_types,
+    ctxs = Enum.flat_map(assigns.state.context_types ++ ["Person"],
       fn context_type ->
         ctxs = list_contexts context_type
         Enum.map(ctxs, fn {_title, id} ->

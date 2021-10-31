@@ -1,7 +1,7 @@
 <h1>Link "<%= @state.selected_issue.title %>"</h1>
 
 <div>
-  <%= for k <- @state.context_types do %>
+  <%= for k <- @state.context_types ++ ["Person"] do %>
     <span
       phx-click="select_context_type"
       phx-value-target="<%= k%>"
@@ -21,7 +21,7 @@
   <%= submit "Save", phx_disable_with: "Saving..." %>
 
   <table>
-    <%= for k <- @state.context_types do %>
+    <%= for k <- @state.context_types ++ ["Person"] do %>
       <%= if k == assigns[:link_form_selected_context_type] do %>
         <tr>
           <td>
