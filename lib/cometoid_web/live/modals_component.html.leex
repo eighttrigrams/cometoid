@@ -99,7 +99,7 @@
         </div>
       <% else %>
         <div id="issue-modal-content" class="modal-content">
-          <%= live_modal @socket, CometoidWeb.IssueLive.Issue.FormComponent,
+          <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.FormComponent,
             id: @state.edit_event.id,
             action: :edit,
             issue: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id),

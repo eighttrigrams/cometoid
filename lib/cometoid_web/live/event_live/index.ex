@@ -69,6 +69,11 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
+  def handle_event "edit_context_description", _, socket do
+    socket
+    |> return_noreply
+  end
+
   def handle_event "unarchive", %{ "target" => id }, socket do
     event = Calendar.get_event! id
     Calendar.update_event(event, %{ "archived" => false })
