@@ -8,9 +8,7 @@
 
     <%= multiple_select f,
         :children,
-        @state.contexts
-        |> Enum.filter(fn ctx -> ctx.id != @state.selected_context.id end)
-        |> Enum.map(fn ctx -> {ctx.title, ctx.id} end),
+        LinkFormComponent.get_contexts(@state),
         selected:
         Enum.map(@state.selected_context.children, fn ctx -> ctx.id end)
     %>
