@@ -16,7 +16,7 @@ defmodule Cometoid.Model.Tracker.Context do
 
   schema "contexts" do
     field :title, :string
-    field :context_type, :string
+    field :view, :string
     field :important, :boolean, default: false
     field :description, :string
 
@@ -44,11 +44,11 @@ defmodule Cometoid.Model.Tracker.Context do
   @doc false
   def changeset context, attrs do
     context
-    |> cast(attrs, [:title, :context_type, :important, :description])
+    |> cast(attrs, [:title, :view, :important, :description])
     |> put_assoc_children(attrs)
     |> put_assoc_person(attrs)
     |> put_assoc_text(attrs)
-    |> validate_required([:title, :context_type])
+    |> validate_required([:title, :view])
   end
 
   defp put_assoc_children(context, %{ "children" => children }), do: put_assoc(context, :children, children)

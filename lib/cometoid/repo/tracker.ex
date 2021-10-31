@@ -16,9 +16,9 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.all
   end
 
-  def list_contexts(context_type_title) do
+  def list_contexts(view) do
     Context
-    |> where([c], c.context_type == ^context_type_title)
+    |> where([c], c.view == ^view)
     |> order_by([c], [{:desc, c.important}, {:desc, c.updated_at}])
     |> Repo.all
     |> Repo.preload(:person)
