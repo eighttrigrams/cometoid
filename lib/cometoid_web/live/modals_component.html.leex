@@ -68,11 +68,11 @@
   <div id="context-modal-content" class="modal-content">
     <%= if @state.live_action in [:new_context, :edit_context] do %>
       <%= case @state.edit_selected_context_type do
-        "Person" -> live_modal @socket, CometoidWeb.IssueLive.Person.Modals.FormComponent,
+        "People" -> live_modal @socket, CometoidWeb.IssueLive.Person.Modals.FormComponent,
             id: @state.edit_entity.id || :new,
             title: (if @state.live_action == :new_context do "New " else "Edit " end) <> "Person",
             action: @state.live_action,
-            selected_context_type: "Person",
+            selected_context_type: "People",
             return_to: nil, # review
             person: @state.edit_entity
         _ -> live_modal @socket, CometoidWeb.IssueLive.Context.Modals.FormComponent,

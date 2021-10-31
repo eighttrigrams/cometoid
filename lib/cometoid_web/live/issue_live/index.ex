@@ -68,7 +68,8 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_info {:after_edit_form_save, %{ context_id: context_id }}, socket do
 
     selected_context = Tracker.get_context! context_id # fetch latest important flag
-    state = IssuesMachine.set_context_properties_and_keep_selected_context socket.assigns
+    state = Map.merge socket.assigns, %{ selected_context: selected_context }
+    state = IssuesMachine.set_context_properties_and_keep_selected_context state
     state = IssuesMachine.set_issue_properties state
 
     socket
@@ -166,7 +167,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "create_new_context", %{ "context_type" => context_type }, socket do
 
     entity = case context_type do
-      "Person" -> %Person{}
+      "People" -> %Person{}
       _ -> %Context{}
     end
 
@@ -201,7 +202,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "edit_context_description", _, socket do
     context = Tracker.get_context! socket.assigns.selected_context.id
     entity = case context.context_type do
-      "Person" -> People.get_person! context.person.id
+      "People" -> People.get_person! context.person.id
       _ -> context
     end
     socket
@@ -216,7 +217,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     context = Tracker.get_context! id
     entity = case context.context_type do
-      "Person" -> People.get_person! context.person.id
+      "People" -> People.get_person! context.person.id
       _ -> context
     end
 

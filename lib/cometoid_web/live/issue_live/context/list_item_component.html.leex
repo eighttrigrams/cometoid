@@ -3,7 +3,7 @@
         <div class="type <%= if @context.important do 'important-color' else 'regular-color' end %>"><span class="text text-left">
             <b><%= String.upcase(@context.context_type) %>-<%=
                     case @context.context_type do
-                        "Person" -> "P#{@context.person.id}"
+                        "People" -> "P#{@context.person.id}"
                         _ -> "C #{@context.id}"
                     end
                 %>

@@ -27,7 +27,7 @@ defmodule Cometoid.Repo.People do
       |> Calendar.Event.date_changeset(attrs["birthday"])
 
     context_changeset = %Tracker.Context{}
-      |> Tracker.Context.changeset(%{ "context_type" => "Person", "title" => attrs["name"] })
+      |> Tracker.Context.changeset(%{ "context_type" => "People", "title" => attrs["name"] })
 
     attrs = put_in(attrs["birthday"], birthday_changeset)
     attrs = put_in(attrs["context"], context_changeset)

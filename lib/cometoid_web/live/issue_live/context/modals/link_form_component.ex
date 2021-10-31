@@ -32,7 +32,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
     contexts = state.contexts ++ if state.selected_context_type == "People" do
       []
     else
-      Tracker.list_contexts "Person"
+      Tracker.list_contexts "People"
     end
     contexts
     |> Enum.filter(fn ctx -> ctx.id != state.selected_context.id end)
