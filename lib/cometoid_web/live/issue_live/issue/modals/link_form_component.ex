@@ -54,7 +54,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def get_context_types state do
-    Enum.uniq state.context_types ++ ["Person"]
+    Enum.uniq ["Person"|state.context_types]
   end
 
   def list_contexts context_type do
