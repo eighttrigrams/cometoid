@@ -4,10 +4,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   alias Cometoid.Repo.Tracker
   alias CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent
 
-  def handle_event "select_context_type", %{ "target" => context_type }, socket do
-    {:noreply, socket |> assign(:link_form_selected_context_type, context_type )}
-  end
-
   def update assigns, socket do
     state = assigns.state
     links = prepare_links state
@@ -52,10 +48,9 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
     Enum.uniq ["Person"|state.context_types]
   end
 
-  def list_contexts_excluding_current state, context_type do
-    contexts = list_contexts context_type
-    current_context_id = Integer.to_string(state.selected_context.id)
-    Enum.filter contexts, fn {_title, id} -> id != current_context_id end
+  def list_selectable_contexts state do
+    children = state.selected_context.children
+    Enum.map children, fn context -> {context.title, Integer.to_string(context.id)} end
   end
 
   def list_contexts context_type do
