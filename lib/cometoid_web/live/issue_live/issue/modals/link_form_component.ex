@@ -2,13 +2,14 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker
+  alias CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent
 
   def handle_event "select_context_type", %{ "target" => context_type }, socket do
     {:noreply, socket |> assign(:link_form_selected_context_type, context_type )}
   end
 
   def update assigns, socket do
-    ctxs = Enum.flat_map(assigns.state.context_types ++ ["Person"],
+    ctxs = Enum.flat_map(get_context_types(assigns.state),
       fn context_type ->
         ctxs = list_contexts context_type
         Enum.map(ctxs, fn {_title, id} ->
@@ -34,7 +35,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
       {:noreply, socket}
     else
       issue = socket.assigns.state.selected_issue
-      context_types = socket.assigns.state.context_types ++ ["Person"]
+      context_types = get_context_types socket.assigns.state
 
       contexts =
         Tracker.list_contexts
@@ -50,6 +51,10 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
           {:noreply, assign(socket, :changeset, changeset)}
       end
     end
+  end
+
+  def get_context_types state do
+    Enum.uniq state.context_types ++ ["Person"]
   end
 
   def list_contexts context_type do
