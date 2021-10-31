@@ -8,8 +8,10 @@
 
     <%= multiple_select f,
         :children,
-        @state.contexts |> Enum.filter(fn ctx -> ctx.id != @state.selected_context.id end) |> Enum.map(fn ctx -> ctx.title end),
+        @state.contexts
+        |> Enum.filter(fn ctx -> ctx.id != @state.selected_context.id end)
+        |> Enum.map(fn ctx -> {ctx.title, ctx.id} end),
         selected:
-        Enum.map(@state.selected_context.children, fn ctx -> ctx.title end)
+        Enum.map(@state.selected_context.children, fn ctx -> ctx.id end)
     %>
 </form>

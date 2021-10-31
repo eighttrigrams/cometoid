@@ -10,9 +10,9 @@ defmodule Cometoid.Repo.Tracker do
   alias Cometoid.Model.Calendar
   alias Cometoid.Model.Tracker.Issue
 
-  def get_contexts_by_titles titles do
+  def get_contexts_by_ids ids do
     Context
-    |> where([c], c.title in ^titles)
+    |> where([c], c.id in ^ids)
     |> Repo.all
   end
 

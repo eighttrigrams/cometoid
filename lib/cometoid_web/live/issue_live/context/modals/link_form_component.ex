@@ -9,8 +9,8 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
 
   def handle_event "save", params , socket do
     children = case params do
-      %{ "links" => %{ "children" => titles }} ->
-        Tracker.get_contexts_by_titles titles
+      %{ "links" => %{ "children" => ids }} ->
+        Tracker.get_contexts_by_ids ids
       _ -> []
     end
 
