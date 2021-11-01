@@ -359,12 +359,6 @@ defmodule CometoidWeb.IssueLive.Index do
     false
   end
 
-  defp should_show_contexts_view params do
-    view = Enum.find(Application.fetch_env!(:cometoid, :views), fn ct -> ct.name == params["view"] end)
-    ((!is_nil(params["alternative_view"]) && params["alternative_view"] == "true")
-      or (!is_nil(view[:alternative_view] && view.alternative_view == true)))
-  end
-
   # TODO only used in contexts view, so should be placed there
   def should_show_issues_list_in_contexts_view selected_context, list_issues_done_instead_open do
     issues = if list_issues_done_instead_open do
