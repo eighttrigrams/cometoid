@@ -28,10 +28,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def render(assigns) do
-    Phoenix.View.render(CometoidWeb.IssueLive.IssuesView, "issues_view.html", assigns)
-  end
-
   @impl true
   def handle_params params, url, socket do
     selected_view = get_selected_view params
