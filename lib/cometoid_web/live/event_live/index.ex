@@ -52,13 +52,20 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
+  def handle_event "edit_context_description", _, socket do
+    socket
+    |> assign(:edit_entity, socket.assigns.selected_event.person)
+    |> assign(:live_action, :describe_context)
+    |> return_noreply
+  end
+
   def handle_info({:modal_closed}, socket) do
     socket
     |> assign(:live_action, nil)
     |> return_noreply
   end
 
-  def handle_info {:after_edit_form_save, %{ event: event }}, socket do
+  def handle_info {:after_edit_form_save, %{ event: event }} = _issue, socket do
 
     selected_event = Calendar.get_event! event.id
     socket
@@ -69,8 +76,16 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
-  def handle_event "edit_context_description", _, socket do
+  def handle_info {:after_edit_form_save, %{ context_id: id }}, socket do
+
+    context = Tracker.get_context! id
+    person = People.get_person! context.id
+    selected_event = Calendar.get_event! person.birthday.id
     socket
+    |> assign(:selected_event, selected_event)
+    |> do_query
+    |> assign(:live_action, nil)
+    |> assign(:edit_event, nil)
     |> return_noreply
   end
 

@@ -35,7 +35,9 @@
   <div id="context-description-modal-content" class="modal-content">
     <%= if @state.live_action in [:describe_context] do %>
       <%= live_modal @socket, CometoidWeb.IssueLive.Context.Modals.DescriptionFormComponent,
-        id: @state.selected_context.id || :new,
+        id: (@state[:selected_context] && @state.selected_context.id)
+            || @state.selected_event.person.id
+            || :new,
         action: @state.live_action,
         context: @state.edit_entity,
         return_to: nil # review
