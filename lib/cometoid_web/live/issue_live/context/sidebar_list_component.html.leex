@@ -4,7 +4,12 @@
 
       <div class="top">
         <div class="type <%= if context.important do 'important-color' else 'regular-color' end %>">
-          <b><%= context.title %></b>
+          <b><%=
+              case context.view do
+                  "People" -> "P#{context.person.id}"
+                  _ -> "C#{context.id}"
+              end
+          %> | <%= context.title %></b>
           <br>
 
           <%
