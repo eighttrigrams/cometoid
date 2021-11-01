@@ -16,7 +16,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.all
   end
 
-  def list_contexts(view) do
+  def list_contexts view do
     Context
     |> where([c], c.view == ^view)
     |> order_by([c], [{:desc, c.important}, {:desc, c.updated_at}])
@@ -35,7 +35,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:secondary_contexts)
   end
 
-  def get_context!(id) do
+  def get_context! id do
     Repo.get!(Context, id)
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
@@ -43,25 +43,25 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:secondary_contexts)
   end
 
-  def create_context(attrs) do
+  def create_context attrs do
     %Context{}
     |> Context.changeset(attrs)
     |> Repo.insert()
   end
 
-  def update_context(%Context{} = context, attrs) do
+  def update_context %Context{} = context, attrs do
     context
     |> Context.changeset(attrs)
     |> Repo.update()
   end
 
-  def update_context_updated_at(context) do
+  def update_context_updated_at context do
     context
     |> Context.changeset(%{})
     |> Repo.update(force: true)
   end
 
-  def delete_context(%Context{} = context) do
+  def delete_context %Context{} = context do
 
     issue_ids = Enum.map(context.issues, &(&1.id))
     Repo.delete(context)
@@ -72,7 +72,7 @@ defmodule Cometoid.Repo.Tracker do
     {:ok, 1}
   end
 
-  def change_context(%Context{} = context, attrs \\ %{}) do
+  def change_context %Context{} = context, attrs \\ %{} do
     Context.changeset(context, attrs)
   end
 
@@ -81,7 +81,7 @@ defmodule Cometoid.Repo.Tracker do
       list_issues_done_instead_open: false
   end
 
-  def list_issues(query) do
+  def list_issues query do
     query =
       Issue
       |> join(:left, [i], c in assoc(i, :contexts))
@@ -102,13 +102,13 @@ defmodule Cometoid.Repo.Tracker do
     |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open)
   end
 
-  def get_issue!(id) do
+  def get_issue! id do
     Repo.get!(Issue, id)
     |> Repo.preload(contexts: :context)
     |> Repo.preload(:event)
   end
 
-  def create_issue(title, contexts) do
+  def create_issue title, contexts do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
       contexts: Enum.map(contexts, &(%{ context: &1 }))

@@ -54,8 +54,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def list_contexts view do
-    results = Tracker.list_views view
-    Enum.map results, fn r -> {r.title, Integer.to_string(r.id)} end
+    contexts = Tracker.list_contexts view
+    Enum.map contexts, fn context -> {context.title, Integer.to_string(context.id)} end
   end
 
   def is_checked issue, context_id do
