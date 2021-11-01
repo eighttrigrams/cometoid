@@ -11,13 +11,6 @@
           view = context.view
           view = if String.contains?(view, ":") do Enum.at(String.split(view,":"),1) else view end
           %>
-
-          [<%= view %>-<%=
-              case context.view do
-                  "People" -> "P#{context.person.id}"
-                  _ -> "C#{context.id}"
-              end
-          %>]
         </div>
       </div>
 
