@@ -38,7 +38,7 @@ defmodule CometoidWeb.EventLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  def handle_event("edit_event", %{ "target" => id }, socket) do
+  def handle_event("edit_event", id, socket) do
     socket
     |> assign(:edit_event, Calendar.get_event!(id))
     |> assign(:live_action, :edit_event)

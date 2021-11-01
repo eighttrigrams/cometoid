@@ -87,6 +87,20 @@ hooks.IssueItemHook = {
         }, false)  
     }
 }
+hooks.EventItemHook = {
+  id: '',
+  mounted() {
+      this.id = this.el.id.replace("event-", "");
+      document.addEventListener('mousedown', function (event) {
+          if (event.detail > 1) {
+          event.preventDefault()
+        }
+      }, false)
+      this.el.addEventListener('dblclick', e => {
+          this.pushEvent("edit_event", this.id)
+      }, false)  
+  }
+}
 hooks.IssueDescriptionHook = {
    mounted() {
       document.addEventListener('mousedown', function (event) {

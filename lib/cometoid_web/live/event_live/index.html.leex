@@ -20,7 +20,7 @@
       <div class="list">
         <table class="list-table">
           <%= for event <- @events do %>
-            <tr id="event-<%= event.id %>" class="list-item <%= if not is_nil(assigns[:selected_event]) and @selected_event.id == event.id do 'selected-item-color' end %>"">
+            <tr id="event-<%= event.id %>" phx-hook="EventItemHook" class="list-item <%= if not is_nil(assigns[:selected_event]) and @selected_event.id == event.id do 'selected-item-color' end %>"">
 
               <td class="left" phx-click="select_event" phx-value-target="<%= event.id %>">
                 <div class="type"><span class="text text-left"><b>
@@ -70,12 +70,6 @@
                     <% else %>
                       <div style="min-width: 1px;"/>
                     <% end %>
-
-                    <span class="btn">
-                      <a phx-click="edit_event" phx-value-target="<%= event.id %>">
-                        <i class="bi bi-pencil"></i>
-                      </a>
-                    </span>
                   </td>
 
                 </tr></table>
