@@ -49,8 +49,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def list_selectable_contexts state do
-    secondary_contexts = state.selected_context.secondary_contexts
-    Enum.map secondary_contexts, fn context -> {context.title, Integer.to_string(context.id)} end
+    contexts = [state.selected_context|state.selected_context.secondary_contexts]
+    Enum.map contexts, fn context -> {context.title, Integer.to_string(context.id)} end
   end
 
   def list_contexts view do
