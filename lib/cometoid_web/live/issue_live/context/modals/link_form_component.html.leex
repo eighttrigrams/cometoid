@@ -7,9 +7,9 @@
     <%= submit "Save", phx_disable_with: "Saving..." %>
 
     <%= multiple_select f,
-        :children,
+        :secondary_contexts,
         LinkFormComponent.get_contexts(@state),
         selected:
-        Enum.map(@state.selected_context.children, fn ctx -> ctx.id end)
+        Enum.map(@state.selected_context.secondary_contexts, fn ctx -> ctx.id end)
     %>
 </form>

@@ -32,7 +32,7 @@ defmodule Cometoid.Model.Tracker.Context do
     # 0 or 1 association
     has_one :text, Writing.Text, on_delete: :delete_all
 
-    many_to_many :children,
+    many_to_many :secondary_contexts,
       Tracker.Context,
       join_through: "context_context",
       join_keys: [parent_id: :id, child_id: :id],
@@ -45,14 +45,14 @@ defmodule Cometoid.Model.Tracker.Context do
   def changeset context, attrs do
     context
     |> cast(attrs, [:title, :view, :important, :description])
-    |> put_assoc_children(attrs)
+    |> put_assoc_secondary_contexts(attrs)
     |> put_assoc_person(attrs)
     |> put_assoc_text(attrs)
     |> validate_required([:title, :view])
   end
 
-  defp put_assoc_children(context, %{ "children" => children }), do: put_assoc(context, :children, children)
-  defp put_assoc_children(context, _), do: context
+  defp put_assoc_secondary_contexts(context, %{ "secondary_contexts" => secondary_contexts }), do: put_assoc(context, :secondary_contexts, secondary_contexts)
+  defp put_assoc_secondary_contexts(context, _), do: context
 
   defp put_assoc_person(context, %{ "person" => person }), do: put_assoc(context, :person, person)
   defp put_assoc_person(context, _), do: context

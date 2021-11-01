@@ -23,7 +23,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.all
     |> Repo.preload(:person)
     |> Repo.preload(:text)
-    |> Repo.preload(:children)
+    |> Repo.preload(:secondary_contexts)
   end
 
   def list_contexts do
@@ -32,7 +32,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(issues: :issue)
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
-    |> Repo.preload(:children)
+    |> Repo.preload(:secondary_contexts)
   end
 
   def get_context!(id) do
@@ -40,7 +40,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
     |> Repo.preload(issues: :issue)
-    |> Repo.preload(:children)
+    |> Repo.preload(:secondary_contexts)
   end
 
   def create_context(attrs) do
