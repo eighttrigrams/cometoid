@@ -101,10 +101,10 @@ $list-item-height: $taskbar-height;
 
     .list-item {
         padding: unset;
-        height: calc(37px + #{$list-item-height});
+        height: calc(34px + #{$list-item-height});
         width: 100%;
         .top {
-            height: 17px;
+            height: 14px;
             padding-top: 10px;   
             padding-bottom: 10px;   
             padding-left: 20px;
