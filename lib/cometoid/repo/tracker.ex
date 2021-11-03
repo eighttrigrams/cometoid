@@ -56,12 +56,47 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   def link_contexts primary_context, secondary_contexts_ids do
+
     secondary_contexts = get_contexts_by_ids secondary_contexts_ids
     result =
       primary_context
       |> Context.link_contexts_changeset(%{ "secondary_contexts" => secondary_contexts})
       |> Repo.update()
 
+    link_secondary_contexts secondary_contexts, primary_context
+
+    ids_of_contexts_where_links_should_be_removed
+      = Enum.map(primary_context.secondary_contexts, &(&1.id))
+      -- secondary_contexts_ids
+
+    unlink_secondary_contexts ids_of_contexts_where_links_should_be_removed, primary_context.id
+
+    result
+  end
+
+  defp unlink_secondary_contexts ids_of_contexts_where_links_should_be_removed, primary_context_id do
+    contexts_where_links_should_be_removed
+      = get_contexts_by_ids ids_of_contexts_where_links_should_be_removed
+
+    Enum.map contexts_where_links_should_be_removed, fn context_where_links_should_be_removed ->
+
+      context_where_links_should_be_removed
+        = Repo.preload context_where_links_should_be_removed, :secondary_contexts
+
+      contexts = Enum.filter context_where_links_should_be_removed.secondary_contexts,
+        &(&1.id != primary_context_id)
+
+      context_where_links_should_be_removed
+        |> Context.link_contexts_changeset(
+          %{ "secondary_contexts" =>
+            contexts
+          }
+        )
+        |> Repo.update()
+    end
+  end
+
+  defp link_secondary_contexts secondary_contexts, primary_context do
     Enum.map secondary_contexts, fn secondary_context ->
       secondary_context = Repo.preload secondary_context, :secondary_contexts
       secondary_contexts_reverse_ids = Enum.map secondary_context.secondary_contexts, &(&1.id)
@@ -75,8 +110,6 @@ defmodule Cometoid.Repo.Tracker do
         |> Repo.update()
       end
     end
-
-    result
   end
 
   defp get_contexts_by_ids ids do
