@@ -33,6 +33,7 @@ defmodule CometoidWeb.IssueLive.TaskbarComponent do
       |> Enum.map(fn ctx -> {ctx.id, ctx.title} end)
       |> Enum.filter(fn {_id, title} -> title != state.selected_context.title end)
       |> Enum.sort_by(fn {id, _} -> id end)
+      |> Enum.take(12)
     else
       []
     end

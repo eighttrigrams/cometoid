@@ -57,9 +57,26 @@ defmodule Cometoid.Repo.Tracker do
 
   def link_contexts primary_context, secondary_contexts_ids do
     secondary_contexts = get_contexts_by_ids secondary_contexts_ids
-    primary_context
-    |> Context.link_contexts_changeset(%{ "secondary_contexts" => secondary_contexts})
-    |> Repo.update()
+    result =
+      primary_context
+      |> Context.link_contexts_changeset(%{ "secondary_contexts" => secondary_contexts})
+      |> Repo.update()
+
+    Enum.map secondary_contexts, fn secondary_context ->
+      secondary_context = Repo.preload secondary_context, :secondary_contexts
+      secondary_contexts_reverse_ids = Enum.map secondary_context.secondary_contexts, &(&1.id)
+      unless primary_context.id in secondary_contexts_reverse_ids do
+        secondary_context
+        |> Context.link_contexts_changeset(
+          %{ "secondary_contexts" =>
+            [primary_context|secondary_context.secondary_contexts]
+          }
+        )
+        |> Repo.update()
+      end
+    end
+
+    result
   end
 
   defp get_contexts_by_ids ids do
