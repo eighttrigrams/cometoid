@@ -174,14 +174,13 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  # TODO check duplication with context_live/index
   def handle_event "delete_context", %{ "id" => id }, socket do
     context = Tracker.get_context!(id)
     {:ok, _} = Tracker.delete_context(context)
 
     state =
       socket.assigns
-      |> IssuesMachine.set_context_properties(true)
+      |> IssuesMachine.set_context_properties
       |> IssuesMachine.set_issue_properties
 
     socket

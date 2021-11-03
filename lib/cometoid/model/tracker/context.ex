@@ -36,7 +36,8 @@ defmodule Cometoid.Model.Tracker.Context do
       Tracker.Context,
       join_through: "context_context",
       join_keys: [parent_id: :id, child_id: :id],
-      on_replace: :delete
+      on_replace: :delete,
+      on_delete: :delete_all
 
     timestamps()
   end

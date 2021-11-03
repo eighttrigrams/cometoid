@@ -74,6 +74,25 @@ defmodule Cometoid.Repo.Tracker do
     result
   end
 
+  def delete_context %Context{} = context do
+
+    issue_ids = Enum.map context.issues, &(&1.issue.id)
+
+    Enum.map issue_ids, fn issue_id ->
+      issue = get_issue! issue_id
+      context_ids = Enum.map issue.contexts, &(&1.context.id)
+      if context_ids == [context.id] do
+        Repo.delete issue
+      end
+    end
+
+    secondary_contexts_ids = Enum.map context.secondary_contexts, &(&1.id)
+    unlink_secondary_contexts secondary_contexts_ids, context.id
+
+    Repo.delete get_context! context.id
+    {:ok, 1}
+  end
+
   defp unlink_secondary_contexts ids_of_contexts_where_links_should_be_removed, primary_context_id do
     contexts_where_links_should_be_removed
       = get_contexts_by_ids ids_of_contexts_where_links_should_be_removed
@@ -116,17 +135,6 @@ defmodule Cometoid.Repo.Tracker do
     Context
     |> where([c], c.id in ^ids)
     |> Repo.all
-  end
-
-  def delete_context %Context{} = context do
-
-    issue_ids = Enum.map(context.issues, &(&1.id))
-    Repo.delete(context)
-    Enum.map(issue_ids, fn issue_id ->
-      issue = get_issue!(issue_id)
-      if issue.contexts == [], do: Repo.delete(issue)
-    end)
-    {:ok, 1}
   end
 
   def change_context %Context{} = context, attrs \\ %{} do
