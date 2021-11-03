@@ -9,22 +9,18 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
   end
 
   def handle_event "save", params , socket do
-    secondary_contexts = case params do
-      %{ "links" => %{ "secondary_contexts" => ids }} ->
-        Tracker.get_contexts_by_ids ids
+    secondary_contexts_ids = case params do
+      %{ "links" => %{ "secondary_contexts" => ids }} -> ids
       _ -> []
     end
-
-    selected_context = socket.assigns.state.selected_context
-
-    case Tracker.update_context(selected_context, %{ "secondary_contexts" => secondary_contexts }) do
+    primary_context = socket.assigns.state.selected_context
+    case Tracker.link_contexts primary_context, secondary_contexts_ids do
       {:ok, context} ->
         send self(), {:after_edit_form_save, %{ context_id: context.id }}
         {:noreply, socket}
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, socket}
     end
-
     {:noreply, socket}
   end
 

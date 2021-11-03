@@ -10,12 +10,6 @@ defmodule Cometoid.Repo.Tracker do
   alias Cometoid.Model.Calendar
   alias Cometoid.Model.Tracker.Issue
 
-  def get_contexts_by_ids ids do
-    Context
-    |> where([c], c.id in ^ids)
-    |> Repo.all
-  end
-
   def list_contexts view do
     Context
     |> where([c], c.view == ^view)
@@ -59,6 +53,19 @@ defmodule Cometoid.Repo.Tracker do
     context
     |> Context.changeset(%{})
     |> Repo.update(force: true)
+  end
+
+  def link_contexts primary_context, secondary_contexts_ids do
+    secondary_contexts = get_contexts_by_ids secondary_contexts_ids
+    primary_context
+    |> Context.link_contexts_changeset(%{ "secondary_contexts" => secondary_contexts})
+    |> Repo.update()
+  end
+
+  defp get_contexts_by_ids ids do
+    Context
+    |> where([c], c.id in ^ids)
+    |> Repo.all
   end
 
   def delete_context %Context{} = context do

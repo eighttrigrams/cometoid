@@ -45,10 +45,15 @@ defmodule Cometoid.Model.Tracker.Context do
   def changeset context, attrs do
     context
     |> cast(attrs, [:title, :view, :important, :description])
-    |> put_assoc_secondary_contexts(attrs)
     |> put_assoc_person(attrs)
     |> put_assoc_text(attrs)
     |> validate_required([:title, :view])
+  end
+
+  def link_contexts_changeset context, attrs do
+    context
+    |> cast(attrs, [])
+    |> put_assoc_secondary_contexts(attrs)
   end
 
   defp put_assoc_secondary_contexts(context, %{ "secondary_contexts" => secondary_contexts }), do: put_assoc(context, :secondary_contexts, secondary_contexts)
