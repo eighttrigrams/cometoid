@@ -3,15 +3,17 @@ defmodule CometoidWeb.ModalComponent do
 
   @impl true
   def render(assigns) do
-    ~L"""
-    <div id="<%= @id %>" class="phx-modal"
+    ~H"""
+    <div
+      id={@id}
+      class="phx-modal"
       phx-window-keydown="close"
       phx-key="escape"
-      phx-target="#<%= @id %>"
+      phx-target={@myself}
       phx-page-loading>
 
       <div class="phx-modal-content background-color">
-        <%= live_component @socket, @component, @opts %>
+        <%= live_component @component, @opts %>
       </div>
     </div>
     """

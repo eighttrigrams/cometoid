@@ -8,6 +8,8 @@
   <div><b>Changed at:</b> <%= @event.updated_at.day %>.<%= @event.updated_at.month %>.<%= @event.updated_at.year %></div>
 
   <div class="smaller-text">
-    <h1 style="font-family: serif"><%= if @event.issue do @event.issue.title else @event.title end %></h1>
+    <h1 style="font-family: serif">
+      <%= if @event.issue do @event.issue.title else @event.title end %>
+    </h1>
   </div>
 </div>

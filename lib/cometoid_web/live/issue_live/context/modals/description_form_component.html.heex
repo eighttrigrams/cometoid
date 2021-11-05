@@ -1,0 +1,14 @@
+<div>
+  <.form
+    for={@changeset}
+    let={f}
+    id="context-description-form"
+    phx-target={@myself}
+    phx-submit="save">
+
+    <%= submit "Save", phx_disable_with: "Saving...", class: "background-color color" %>
+
+    <%= textarea f, :description, id: "text-area", phx_hook: "TextAreaHook" %>
+    <%= error_tag f, :description %>
+  </.form>
+</div>

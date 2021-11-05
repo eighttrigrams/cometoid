@@ -1,0 +1,24 @@
+<div>
+  <h1>Link "<%= @state.selected_issue.title %>"</h1>
+
+  <.form
+    for={:links}
+    let={f}
+    id="link-form"
+    phx-target={@myself}
+    phx-change="change"
+    phx-submit="save">
+
+    <br>
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+
+    <%= for {title, id} <- LinkFormComponent.list_selectable_contexts(@state) do %>
+      <div>
+        <%= checkbox f, id, value: @links[id] %>
+        <%= label f, title %>
+        <hr>
+      </div>
+    <% end  %>
+
+  </.form>
+</div>

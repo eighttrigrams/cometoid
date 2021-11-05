@@ -1,14 +1,15 @@
-<tr id="issue-<%= @issue.id %>" phx-hook="IssueItemHook" class="list-item <%= if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end %>">
-    <td class="left" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
-        <div class="<%= if @issue.important do 'important-color' else 'regular-color' end %> type"><span class="text text-left">
+<tr id={"issue-#{@issue.id}"} phx-hook="IssueItemHook" class={"list-item #{if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end}"}>
+    <td class="left" phx-click="select_issue" phx-value-target={@issue.id}>
+        <div class="{if @issue.important do 'important-color' else 'regular-color' end} type"><span class="text text-left">
             <b><%= @issue.id %>
             </b>
+            </span>
         </div>
     </td>
 
     <td class="right border-background-color">
         <table><tr>
-            <td class="heading" phx-click="select_issue" phx-value-target="<%= @issue.id %>">
+            <td class="heading" phx-click="select_issue" phx-value-target={@issue.id}>
                 <%= @issue.title %>
             </td>
 
@@ -24,27 +25,27 @@
 
                 <%= unless @state.list_issues_done_instead_open do %>
                     <span class="btn">
-                        <a phx-click="toggle_issue_important" phx-value-target="<%= @issue.id %>">
+                        <a phx-click="toggle_issue_important" phx-value-target={@issue.id}>
                             <i class="bi bi-exclamation-circle"></i>
                         </a>
                     </span>
                 <% end %>
 
                 <span class="btn">
-                    <a phx-click="reprioritize_issue" phx-value-id="<%= @issue.id %>">
+                    <a phx-click="reprioritize_issue" phx-value-id={@issue.id}>
                         <i class="bi bi-arrow-up"></i>
                     </a>
                 </span>
 
                 <%= if @state.list_issues_done_instead_open do %>
                     <span class="btn">
-                        <a phx-click="unarchive" phx-value-target="<%= @issue.id %>">
+                        <a phx-click="unarchive" phx-value-target={@issue.id}>
                             <i class="bi bi-envelope-open"></i>
                         </a>
                     </span>
                 <% else %>
                     <span class="btn">
-                        <a phx-click="archive" phx-value-target="<%= @issue.id %>">
+                        <a phx-click="archive" phx-value-target={@issue.id}>
                             <i class="bi bi-archive"></i>
                         </a>
                     </span>
@@ -61,12 +62,11 @@
                 </span>
 
                 <span class="btn">
-                    <a phx-click="link_issue" phx-value-target="<%= @issue.id %>">
+                    <a phx-click="link_issue" phx-value-target={@issue.id}>
                         <i class="bi bi-link"></i>
                     </a>
                 </span>
             </td>
-
         </tr></table>
     </td>
 </tr>

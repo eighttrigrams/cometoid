@@ -1,0 +1,57 @@
+<div>
+  <.form
+    let={f}
+    for={@changeset}
+    phx-target={@myself}
+    phx-submit="save"
+    phx-hook="IssueEventHook"
+    id="issue-form">
+
+    <b>Id:</b> <%= @issue.id %>
+    <div><b>Last edited at:</b> <%= @issue.updated_at.day %>.<%= @issue.updated_at.month %>.<%= @issue.updated_at.year %></div>
+
+    <br>
+
+    <%= unless is_nil(@issue.event) do %>
+      <b>Date:</b>
+      <%= @issue.event.date.day %>.<%= @issue.event.date.month %>.<%= @issue.event.date.year %>
+      <br>
+      <br>
+    <% end %>
+
+    <%= text_input f, :title, class: 'background-color' %>
+    <%= error_tag f, :title %>
+
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+
+    <div id="content">
+      <br>
+
+      <br>
+      <br>
+
+      <b>Event:</b>
+      <br>
+      <br>
+
+      <%= checkbox f, :has_event, value: @has_event %>
+
+      <%= if @has_event  do %>
+        <%= inputs_for f, :event, fn e -> %>
+
+          <br>
+          <%= label e, :date %>
+          <%= date_select e, :date, [default: :calendar.local_time()] %>
+          <%= error_tag e, :date %>
+
+          <br>
+          <br>
+          <br>
+          Event archived?
+          <%= checkbox e, :archived, value: @event_archived %>
+
+        <% end %>
+      <% end %>
+    </div>
+  </.form>
+</div>

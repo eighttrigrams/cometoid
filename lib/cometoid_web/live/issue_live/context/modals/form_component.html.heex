@@ -1,0 +1,25 @@
+<div>
+  <h2><%= @title %></h2>
+
+  <.form
+    let={f}
+    for={@changeset}
+    id="context-form"
+    phx-change="validate"
+    class="alternative-inputs"
+    phx-target={@myself}
+    phx-submit="save">
+
+    <%= text_input f, :title, style: "width: 100%" %>
+
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+    <br>
+
+    <%= checkbox f, :important, value: @context.important %>
+    <%= label f, :important %>
+
+    <%= if @id == :new do %>
+      <%= hidden_input f, :view, value: @selected_view %>
+    <% end %>
+  </.form>
+</div>

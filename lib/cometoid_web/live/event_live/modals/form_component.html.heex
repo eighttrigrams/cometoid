@@ -1,0 +1,24 @@
+<div>
+  <h2>Edit event</h2>
+
+  <.form
+    for={@changeset}
+    let={f}
+    phx-change="validate"
+    phx-submit="save"
+    id="event-form"
+    phx-target={@myself}>
+
+    <%= if @is_standalone == true do %>
+      <%= label f, :title %>
+      <%= text_input f, :title %>
+      <%= error_tag f, :title %>
+    <%= end %>
+
+    <%= label f, :date %>
+    <%= date_select f, :date, [default: :calendar.local_time()] %>
+    <%= error_tag f, :date %>
+
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+  </.form>
+</div>

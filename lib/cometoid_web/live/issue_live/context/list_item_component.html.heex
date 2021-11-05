@@ -1,6 +1,9 @@
-<tr phx-hook="ContextItemHook" id="context-<%= @context.id %>" class="list-item <%= if @selected_context.id == @context.id do 'contexts-selected-item-color' end %>">
-    <td class="left" phx-click="select_context" phx-value-context="<%= @context.title %>">
-        <div class="type <%= if @context.important do 'important-color' else 'regular-color' end %>"><span class="text text-left">
+<tr phx-hook="ContextItemHook" 
+    id="context-{@context.id}" 
+    class="list-item {if @selected_context.id == @context.id do 'contexts-selected-item-color' end}">
+
+    <td class="left" phx-click="select_context" phx-value-context={@context.title}>
+        <div class="type {if @context.important do 'important-color' else 'regular-color' end}"><span class="text text-left">
             <b><%= String.upcase(@context.view) %>-<%=
                     case @context.view do
                         "People" -> "P#{@context.person.id}"
@@ -15,18 +18,18 @@
                     <i class="bi bi-archive"></i>
                     (<%= Context.calc_issues_done @context %>)
                 <% end %>
-            </b>
+            </b></span>
         </div>
     </td>
 
     <td class="right border-background-color">
         <table><tr>
-            <td class="heading" phx-click="select_context" phx-value-context="<%= @context.title %>">
+            <td class="heading" phx-click="select_context" phx-value-context={@context.title}>
                 <%= @context.title %>
             </td>
             <td class="actions">
                 <span class="btn">
-                    <a phx-click="toggle_context_important" phx-value-target="<%= @context.id %>">
+                    <a phx-click="toggle_context_important" phx-value-target={@context.id}>
                         <i class="bi bi-exclamation-circle"></i>
                     </a>
                 </span>

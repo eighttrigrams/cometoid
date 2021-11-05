@@ -1,0 +1,18 @@
+<div>
+  <h2>Create Issue</h2>
+
+  <.form
+    for={@changeset}
+    let={f}
+    id="new-issue-form"
+    class="alternative-inputs"
+    phx-target={@myself}
+    phx-submit="save">
+
+    <%= text_input f, :title %>
+
+    <br>
+    <br>
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+  </.form>
+</div>

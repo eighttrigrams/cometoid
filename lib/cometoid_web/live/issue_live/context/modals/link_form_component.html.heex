@@ -1,8 +1,10 @@
-<%= f = form_for :links, "#",
-  id: "link-form",
-  phx_target: @myself,
-  phx_submit: "save"
-  %>
+<div>
+  <.form
+    let={f}
+    for={:links}
+    phx-target={@myself}
+    phx-submit="save"
+    id="link-form">
 
     <%= submit "Save", phx_disable_with: "Saving..." %>
 
@@ -12,4 +14,5 @@
         selected:
         Enum.map(@state.selected_context.secondary_contexts, fn ctx -> ctx.id end)
     %>
-</form>
+  </.form>
+</div>
