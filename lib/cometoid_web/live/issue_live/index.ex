@@ -187,6 +187,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(state)
+    |> push_event(:issue_reprioritized, %{ id: target_issue_id })
     |> do_query
   end
 
