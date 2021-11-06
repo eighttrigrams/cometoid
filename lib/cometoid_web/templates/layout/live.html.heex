@@ -7,24 +7,24 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
-  <div id="contents" class="theme-<%= @theme %>-default-colors" phx-hook="ContentsHook">
+  <div id="contents" class={"theme-#{@theme}-default-colors"} phx-hook="ContentsHook">
 
     <div id="navbar-content" class="border-color">
       <a><%= live_patch "Events",
           to: Routes.event_index_path(@socket, :index),
-          class: (if @view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end),
+          class: "#{if @view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end}",
           tabindex: -1 %></a>
       <a><%= live_patch "People",
           to: Routes.issue_index_path(@socket, :index, view: "People"),
-          class: (if @view == "People" do 'selected-issue-color' else 'deselected-issue-color' end),
+          class: "#{if @view == "People" do 'selected-issue-color' else 'deselected-issue-color' end}",
           tabindex: -1 %></a>
       <span class="color-border-color">
         &nbsp;|&nbsp;
-      </span<
+      </span>
       <%= for name <- Application.fetch_env!(:cometoid, :views) do %>
         <a><%= live_patch name,
             to: Routes.issue_index_path(@socket, :index, view: name),
-            class: (if @view == name do 'selected-issue-color' else 'deselected-issue-color' end),
+            class: "#{if @view == name do 'selected-issue-color' else 'deselected-issue-color' end}",
             tabindex: -1 %>
         </a>
       <% end %>
