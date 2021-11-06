@@ -29,6 +29,20 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     |> Map.delete(:flash)
   end
 
+  @doc """
+  Call do_query after this, to reload all issues for the current context
+  """
+  def jump_to_context state, target_context_id, target_issue_id do
+    target_issue = Tracker.get_issue! target_issue_id
+    target_context = Tracker.get_context! target_context_id
+    state
+    |> Map.merge(%{
+        selected_context: target_context,
+        selected_issue: target_issue
+      })
+    |> Map.delete(:flash)
+  end
+
   def set_context_properties state do
     contexts = reload_contexts state
     Map.merge state, %{

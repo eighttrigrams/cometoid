@@ -34,3 +34,10 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ MIX_ENV=prod mix ecto.setup # or ecto.migrate
     $ MIX_ENV=prod mix phx.server
     Visit http://localhost:4001
+
+## Usage
+
+### Tips
+
+Hold control to not show action buttons for list items, which allows then for clicking
+secondary context badges in order to jump into the indicated context.

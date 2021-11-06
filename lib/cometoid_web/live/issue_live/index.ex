@@ -172,6 +172,24 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
+  def handle_event "jump_to_context",
+      %{
+        "target_context_id" => target_context_id,
+        "target_issue_id" => target_issue_id
+      },
+      socket do
+
+    {target_context_id, ""} = Integer.parse target_context_id
+    {target_issue_id, ""} = Integer.parse target_issue_id
+
+    state = IssuesMachine.jump_to_context socket.assigns,
+      target_context_id, target_issue_id
+
+    socket
+    |> assign(state)
+    |> do_query
+  end
+
   def handle_event "create_new_context", %{ "view" => view }, socket do
 
     entity = case view do

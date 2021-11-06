@@ -13,17 +13,21 @@
                 <%= @issue.title %>
             </td>
 
-            <td class="contexts">
+            <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
               <%= for context <- Enum.filter(@issue.contexts, fn ctx -> is_nil(@state.selected_context) or ctx.context.title 
                                                               != @state.selected_context.title end) do %>
 
-                <span class="contexts-background-color regular-color">
+                <span class="contexts-background-color regular-color"
+                      phx-click="jump_to_context" 
+                      phx-value-target_context_id={context.context.id}
+                      phx-value-target_issue_id={@issue.id}
+                      >
                   <%= context.context.title %>
                 </span>
               <% end %>
             </td>
 
-            <td class="actions">
+            <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
 
                 <%= unless @state.list_issues_done_instead_open do %>
                     <span class="btn">

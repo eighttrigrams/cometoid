@@ -234,6 +234,7 @@ $list-item-height: $taskbar-height;
                 margin-right: 10px;
 
                 span {
+                    cursor: pointer;
                     font-family: monospace;
                     font-weight: normal;
                     padding: 7px;
@@ -259,14 +260,14 @@ $list-item-height: $taskbar-height;
             &:hover .heading {
                 padding-right: 20px;
             }
-            &:hover .actions {
+            &:hover .actions.control-not-pressed {
                 width: unset;
                 visibility: visible;
                 .btn {
                     width: $list-item-height;
                 }
             }
-            &:hover .contexts {
+            &:hover .contexts.control-not-pressed {
                 visibility: hidden;
                 width: 1px;
             }
