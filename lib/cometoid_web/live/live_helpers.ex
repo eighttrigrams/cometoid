@@ -16,8 +16,7 @@ defmodule CometoidWeb.LiveHelpers do
         return_to: Routes.issue_index_path(@socket, :index) %>
   """
   def live_modal(socket, component, opts) do
-    path = Keyword.fetch!(opts, :return_to)
-    modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
+    modal_opts = [id: :modal, component: component, opts: opts]
     live_component(socket, CometoidWeb.ModalComponent, modal_opts)
   end
 end

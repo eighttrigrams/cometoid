@@ -3,8 +3,7 @@
     <%= if @state.live_action in [:link] do %>
       <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent,
         id: @state.selected_issue.id,
-        state: @state,
-        return_to: nil
+        state: @state
       %>
     <% end %>
   </div>
@@ -15,7 +14,6 @@
         id: @state.issue.id || :new,
         action: @state.live_action,
         issue: @state.issue,
-        return_to: nil, # review
         has_event: @state.issue.event != nil,
         event_archived: @state.issue.event != nil and @state.issue.event.archived == true,
         is_important: @state.issue.important %>
@@ -26,8 +24,7 @@
     <%= if @state.live_action == :link_context do %>
       <%= live_modal @socket, CometoidWeb.IssueLive.Context.Modals.LinkFormComponent,
         id: @state.selected_context.id,
-        state: @state,
-        return_to: nil # review
+        state: @state
         %>
     <% end %>
   </div>
@@ -39,8 +36,7 @@
             || @state.selected_event.person.id
             || :new,
         action: @state.live_action,
-        context: @state.edit_entity,
-        return_to: nil # review
+        context: @state.edit_entity
         %>
     <% end %>
   </div>
@@ -50,8 +46,7 @@
       <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.DescriptionFormComponent,
         id: @state.issue.id || :new,
         action: @state.live_action,
-        issue: @state.issue,
-        return_to: nil # review
+        issue: @state.issue
         %>
     <% end %>
   </div>
@@ -61,8 +56,7 @@
       <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.NewComponent,
         id: :new,
         action: @state.live_action,
-        state: @state,
-        return_to: nil
+        state: @state
         %>
     <% end %>
   </div>
@@ -75,14 +69,12 @@
             title: (if @state.live_action == :new_context do "New " else "Edit " end) <> "Person",
             action: @state.live_action,
             selected_view: "People",
-            return_to: nil, # review
             person: @state.edit_entity
         _ -> live_modal @socket, CometoidWeb.IssueLive.Context.Modals.FormComponent,
             id: @state.edit_entity.id || :new,
             title: (if @state.live_action == :new_context do "New " else "Edit " end) <> "Context",
             action: @state.live_action,
             selected_view: @state.edit_selected_view,
-            return_to: nil, # review
             context: @state.edit_entity
       end %>
     <% end %>
@@ -95,8 +87,7 @@
           id: @state.edit_event.id || :new_event,
           action: @state.live_action,
           is_standalone: (if is_nil(@state.edit_event.issue_id) and is_nil(@state.edit_event.person_id) do true else false end),
-          event: @state.edit_event,
-          return_to: nil %>
+          event: @state.edit_event %>
       </div>
     <% else %>
       <div id="issue-modal-content" class="modal-content">
@@ -107,8 +98,7 @@
           is_important: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id).important,
           has_event: true,
           event_archived: false,
-          contexts: nil,
-          return_to: nil %>
+          contexts: nil %>
       </div>
     <% end %>
   <% end %>
