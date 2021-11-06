@@ -1,6 +1,6 @@
 <tr id={"issue-#{@issue.id}"} phx-hook="IssueItemHook" class={"list-item #{if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end}"}>
     <td class="left" phx-click="select_issue" phx-value-target={@issue.id}>
-        <div class="{if @issue.important do 'important-color' else 'regular-color' end} type"><span class="text text-left">
+        <div class={"#{if @issue.important do 'important-color' else 'regular-color' end} type"}><span class="text text-left">
             <b><%= @issue.id %>
             </b>
             </span>
@@ -14,11 +14,13 @@
             </td>
 
             <td class="contexts">
-                <%= for context <- Enum.filter(@issue.contexts, fn ctx -> ctx.context.title != @state.selected_context.title end) do %>
-                    <span class="contexts-background-color regular-color">
-                        <%= context.context.title %>
-                    </span>
-                <% end %>
+              <%= for context <- Enum.filter(@issue.contexts, fn ctx -> is_nil(@state.selected_context) or ctx.context.title 
+                                                              != @state.selected_context.title end) do %>
+
+                <span class="contexts-background-color regular-color">
+                  <%= context.context.title %>
+                </span>
+              <% end %>
             </td>
 
             <td class="actions">

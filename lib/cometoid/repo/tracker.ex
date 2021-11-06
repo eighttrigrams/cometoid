@@ -143,28 +143,44 @@ defmodule Cometoid.Repo.Tracker do
 
   defmodule Query do
     defstruct selected_context: nil, # required
-      list_issues_done_instead_open: false
+      list_issues_done_instead_open: false,
+      selected_view: ""
   end
 
   def list_issues query do
     query =
       Issue
-      |> join(:left, [i], c in assoc(i, :contexts))
-      |> join(:left, [i, c], cc in assoc(c, :context))
+      |> join(:left, [i], context_relation in assoc(i, :contexts))
+      |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
       |> where_type(query)
-      |> order_by([i, _c, _cc, _it], [{:desc, i.important}, {:desc, i.updated_at}])
+      |> order_by([i, _context_relation, _context, _it],
+        [{:desc, i.important}, {:desc, i.updated_at}])
 
-      Repo.all(query)
-      |> Repo.preload(contexts: :context)
-      |> Repo.preload(:event)
+    Repo.all(query)
+    |> Enum.uniq
+    |> Repo.preload(contexts: :context)
+    |> Repo.preload(:event)
+  end
+
+  defp where_type(query, %{
+    selected_context: nil,
+    selected_view: selected_view,
+    list_issues_done_instead_open: list_issues_done_instead_open
+    }) do
+
+    query
+    |> where([i, _context_relation, context], context.view == ^selected_view
+      and i.done == ^list_issues_done_instead_open)
   end
 
   defp where_type(query, %{
       selected_context: selected_context,
       list_issues_done_instead_open: list_issues_done_instead_open
     }) do
+
     query
-    |> where([i, _c, cc], cc.id == ^selected_context.id and i.done == ^list_issues_done_instead_open)
+    |> where([i, _context_relation, context], context.id == ^selected_context.id
+      and i.done == ^list_issues_done_instead_open)
   end
 
   def get_issue! id do

@@ -40,7 +40,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   def set_context_properties_and_keep_selected_context state do
     contexts = reload_contexts state
-    selected_context = Tracker.get_context! state.selected_context.id
+    selected_context = unless is_nil state.selected_context do
+      Tracker.get_context! state.selected_context.id
+    end
     Map.merge state, %{
       selected_context: selected_context,
       contexts: contexts
@@ -106,16 +108,13 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     }
   end
 
-  def do_query(%{ selected_context: selected_context } = state) when is_nil(selected_context) do
-    Map.merge state, %{ issues: [] }
-  end
-
   def do_query state  do
     query = %Tracker.Query{
       list_issues_done_instead_open: state.list_issues_done_instead_open,
-      selected_context: state.selected_context
+      selected_context: state.selected_context,
+      selected_view: state.selected_view
     }
-    issues = Tracker.list_issues query
+    issues = Tracker.list_issues query # TODO review if passing state; or to use map take
     Map.merge state, %{ issues: issues }
   end
 

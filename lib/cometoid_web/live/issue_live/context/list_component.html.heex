@@ -1,9 +1,0 @@
-<table class="list-table">
-  <%= for context <- @contexts do %>
-      <%= live_component ListItemComponent,
-        context: context,
-        selected_context: @selected_context,
-        list_issues_done_instead_open: @list_issues_done_instead_open
-      %>
-  <% end %>
-</table>

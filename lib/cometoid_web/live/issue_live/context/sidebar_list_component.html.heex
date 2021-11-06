@@ -1,13 +1,13 @@
 <div class="list-base">
   <%= for context <- @contexts do %>
     <div id={"context-#{context.id}"} phx-hook="ContextItemHook" 
-         class={"list-item regular-color #{if @selected_context.id == context.id 
+         class={"list-item regular-color #{if not is_nil(@selected_context) and @selected_context.id == context.id 
                                            do 'selected-item-color' end}"} 
          phx-click="select_context" 
          phx-value-context={context.title}>
 
       <div class="top">
-        <div class="type {if context.important do 'important-color' else 'regular-color' end}">
+        <div class={"type #{if context.important do 'important-color' else 'regular-color' end}"}>
           <b><%=
               case context.view do
                   "People" -> "P#{context.person.id}"
@@ -27,11 +27,11 @@
         <div class="text">
 
           <br>
-          <%= if CometoidWeb.IssueLive.Context.ListItemComponent.show_issues_badge context do %>
+          <%= if CometoidWeb.IssueLive.Context.SidebarListComponent.show_issues_badge context do %>
               <i class="bi bi-envelope-open"></i>
               <%= Context.calc_open_issues context %>
           <% end %>
-          <%= if CometoidWeb.IssueLive.Context.ListItemComponent.show_archived_issues_badge context do %>
+          <%= if CometoidWeb.IssueLive.Context.SidebarListComponent.show_archived_issues_badge context do %>
               <i class="bi bi-archive"></i>
               <%= Context.calc_issues_done context %>
           <% end %>

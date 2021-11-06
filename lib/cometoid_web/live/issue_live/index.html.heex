@@ -1,44 +1,46 @@
-<div id="page-content" phx-window-keydown="keydown" phx-window-keyup="keyup">
-  <div id="issue-content">
-    <%= if assigns[:contexts] do %>
+<div>
+  <div id="page-content" phx-window-keydown="keydown" phx-window-keyup="keyup">
+    <div id="issue-content">
+      <%= if assigns[:contexts] do %>
 
-      <div id="left-column">
-        <div id="taskbar" class="taskbar border-color">
-          <%= live_component CometoidWeb.IssueLive.TaskbarComponent,
-            id: "taskbar", state: assigns %>
-        </div>
-
-        <div class="issues-view-list-arrangement">
-          <div id="contexts-container" class="border-color">
-            <div id="contexts-sidebar-list" class="sidebar-list contexts-list">
-              <%= live_component CometoidWeb.IssueLive.Context.SidebarListComponent,
-                contexts: @contexts,
-                selected_context: @selected_context %>
-            </div>
+        <div id="left-column">
+          <div id="taskbar" class="taskbar border-color">
+            <%= live_component CometoidWeb.IssueLive.TaskbarComponent,
+              id: "taskbar", state: assigns %>
           </div>
 
-          <div id="list-container" class="border-color">
-            <div id="issues-list" class="list">
-              <%= live_component CometoidWeb.IssueLive.ListComponent, state: assigns %>
+          <div class="issues-view-list-arrangement">
+            <div id="contexts-container" class="border-color">
+              <div id="contexts-sidebar-list" class="sidebar-list contexts-list">
+                <%= live_component CometoidWeb.IssueLive.Context.SidebarListComponent,
+                  contexts: @contexts,
+                  selected_context: @selected_context %>
+              </div>
+            </div>
+
+            <div id="list-container" class="border-color">
+              <div id="issues-list" class="list">
+                <%= live_component CometoidWeb.IssueLive.ListComponent, state: assigns %>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="right-column border-color">
-        <%= if assigns[:selected_issue]do %>
-          <%= live_component CometoidWeb.IssueLive.SidebarComponent, issue: @selected_issue %>
-        <% else %>
-          <%= unless is_nil(@selected_context) do %>
-            <%= if @selected_context.view == "People" do %>
-              <%= live_component CometoidWeb.IssueLive.Person.SidebarComponent, context: @selected_context %>
-            <% else %>
-              <%= live_component CometoidWeb.IssueLive.Context.SidebarComponent, context: @selected_context %>
+        <div class="right-column border-color">
+          <%= if assigns[:selected_issue] do %>
+            <%= live_component CometoidWeb.IssueLive.SidebarComponent, issue: @selected_issue %>
+          <% else %>
+            <%= unless is_nil(@selected_context) do %>
+              <%= if @selected_context.view == "People" do %>
+                <%= live_component CometoidWeb.IssueLive.Person.SidebarComponent, context: @selected_context %>
+              <% else %>
+                <%= live_component CometoidWeb.IssueLive.Context.SidebarComponent, context: @selected_context %>
+              <% end %>
             <% end %>
           <% end %>
-        <% end %>
-      </div>
-    <% end %>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
 
-<%= live_component CometoidWeb.ModalsComponent, state: assigns %>
+  <%= live_component CometoidWeb.ModalsComponent, state: assigns %>
+</div>

@@ -4,7 +4,7 @@
             <div phx-click="toggle_context"
                 phx-value-id={id}
                 phx-target={@myself}
-                class={if TaskbarComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}
+                class={"#{if TaskbarComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
                 >
                 <%= title %>
             </div>

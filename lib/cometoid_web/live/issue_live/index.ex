@@ -93,8 +93,20 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index } } = socket do
     case key do
       "Escape" ->
-        socket
-        |> assign(:selected_secondary_contexts, [])
+        if not is_nil(socket.assigns.selected_issue)
+               or socket.assigns.selected_secondary_contexts != [] do
+          if socket.assigns.selected_secondary_contexts != [] do
+            socket
+            |> assign(:selected_secondary_contexts, [])
+          else
+            socket
+            |> assign(:selected_issue, nil)
+          end
+        else
+          socket
+          |> assign(:selected_context, nil)
+          |> do_query(true)
+        end
       "n" ->
         socket
         |> assign(:live_action, :new)
@@ -333,6 +345,7 @@ defmodule CometoidWeb.IssueLive.Index do
     do_query socket, false
   end
   defp do_query socket, suppress_return do
+
     socket = socket
     |> assign(IssuesMachine.do_query(socket.assigns |> Map.delete(:flash)))
     |> assign(:live_action, :index)
