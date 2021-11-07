@@ -39,6 +39,9 @@ In its current state, it is designed to run in a desktop environment, supporting
 
 ### Tips
 
+Pressing escape first deselects the selected secondary issues, then the selected context,
+then the selected issue.
+
 Double click list items will provide edit menus for contexts and issues. 
 
 Double click on the sidebar will open an editor for the description of the selected context or issue.
