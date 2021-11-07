@@ -44,7 +44,6 @@ hooks.ContentsHook = {
             e.preventDefault()
         })
         this.el.addEventListener("mouseup", e => {
-            console.log("mouse_leave")
             this.pushEvent("mouse_leave")
             e.preventDefault()
         })
