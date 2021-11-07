@@ -21,8 +21,8 @@ let hooks = {};
 hooks.TextAreaHook = {
     mounted() {
         // https://stackoverflow.com/a/6637396
-        this.el.addEventListener('keydown', function(e) {
-            if (e.key == 'Tab') {
+        this.el.addEventListener("keydown", function(e) {
+            if (e.key == "Tab") {
               e.preventDefault();
               var start = this.selectionStart;
               var end = this.selectionEnd;
@@ -35,22 +35,39 @@ hooks.TextAreaHook = {
     }
 }
 hooks.ContentsHook = {
-    mounted () {
+    mounted() {
         this.el.addEventListener("mouseleave", e => { 
             this.pushEvent("mouse_leave");
         });
+        this.el.addEventListener("contextmenu", e => {
+            this.pushEvent("right_click")
+            e.preventDefault()
+        })
     },  
+}
+hooks.SecondaryContextBadgeHook = {
+    context_id: "",
+    issue_id: "",
+    mounted() {
+        const [context_id, issue_id] = this.el.id.split("_")[1].split(":")
+        this.context_id = context_id
+        this.issue_id = issue_id
+        this.el.addEventListener("mouseup", e => { 
+            this.pushEvent("jump_to_context", 
+                { target_context_id: context_id, target_issue_id: issue_id })
+        });
+    }
 }
 hooks.IssueEventHook = {
   inpStored: '',
   mounted() {
-      const inp = document.getElementById("issue-form_title");
-      this.inpStored = inp.value;
-      inp.addEventListener("input", e => { this.inpStored = inp.value; });
+      const inp = document.getElementById("issue-form_title")
+      this.inpStored = inp.value
+      inp.addEventListener("input", e => { this.inpStored = inp.value })
   },
   updated() {
       const inp = document.getElementById("issue-form_title");
-      inp.value = this.inpStored;
+      inp.value = this.inpStored
   }
 }
 hooks.ContextItemHook = {
@@ -59,13 +76,13 @@ hooks.ContextItemHook = {
         this.handleEvent("context_reprioritized", ({ id: id }) => {
           if (this.id == id) this.el.scrollIntoView(false)
         })
-        this.id = this.el.id.replace("context-", "");
-        document.addEventListener('mousedown', function (event) {
+        this.id = this.el.id.replace("context-", "")
+        document.addEventListener("mousedown", function (event) {
             if (event.detail > 1) {
-            event.preventDefault();
+            event.preventDefault()
           }
         }, false);
-         this.el.addEventListener('dblclick', e => {
+         this.el.addEventListener("dblclick", e => {
              this.pushEvent("edit_context", this.id);
          }, false);  
     }

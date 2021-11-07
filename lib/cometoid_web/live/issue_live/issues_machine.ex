@@ -31,7 +31,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     target_context = Tracker.get_context! target_context_id
     %{
         selected_context: target_context,
-        selected_issue: target_issue
+        selected_issue: target_issue,
+        control_pressed: false
     }
   end
 
