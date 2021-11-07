@@ -1,7 +1,7 @@
 defmodule CometoidWeb.Theme do
   def start_link do
     Agent.start_link(fn ->
-      ["2", "1"]
+      ["1", "2"]
     end, name: __MODULE__)
   end
 
