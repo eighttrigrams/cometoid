@@ -67,11 +67,13 @@
                     <% end %>
                 </span>
 
-                <span class="btn">
-                    <a phx-click="link_issue" phx-value-target={@issue.id}>
-                        <i class="bi bi-link"></i>
-                    </a>
-                </span>
+                <%= unless is_nil(@state.selected_context) do %>
+                    <span class="btn">
+                        <a phx-click="link_issue" phx-value-target={@issue.id}>
+                            <i class="bi bi-link"></i>
+                        </a>
+                    </span>
+                <% end %>
             </td>
         </tr></table>
     </td>

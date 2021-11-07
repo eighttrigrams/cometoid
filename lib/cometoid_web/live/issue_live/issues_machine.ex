@@ -10,11 +10,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       state = %{ selected_context: selected_context },
       selected_issue) when not is_nil(selected_context) do
 
-    issue_properties = %{
+    Map.merge state, %{
       selected_issue: selected_issue
     }
-    state
-    |> Map.merge(issue_properties)
   end
 
   def set_issue_properties(
