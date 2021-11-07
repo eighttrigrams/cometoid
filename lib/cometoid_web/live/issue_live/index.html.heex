@@ -35,6 +35,8 @@
               <% else %>
                 <%= live_component CometoidWeb.IssueLive.Context.SidebarComponent, context: @selected_context %>
               <% end %>
+            <% else %>
+              <%= live_component CometoidWeb.IssueLive.View.SidebarComponent, state: assigns %>
             <% end %>
           <% end %>
         </div>
