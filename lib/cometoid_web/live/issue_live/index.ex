@@ -346,12 +346,10 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "unarchive", %{ "target" => id }, socket do
-    issue = Tracker.get_issue! id
-    Tracker.update_issue2(issue, %{ "done" => false })
-
+    state = IssuesMachine.unarchive_issue(to_state(socket), id)
     socket
-    |> assign(IssuesMachine.set_context_properties(to_state(socket)))
-    |> assign(:list_issues_done_instead_open, false)
+    |> assign(state)
+    |> push_event(:issue_reprioritized, %{ id: id })
     |> do_query
   end
 
