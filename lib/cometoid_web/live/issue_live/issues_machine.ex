@@ -38,7 +38,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
         selected_context: target_context,
         selected_issue: target_issue
       })
-    |> Map.delete(:flash)
   end
 
   def set_context_properties state do
