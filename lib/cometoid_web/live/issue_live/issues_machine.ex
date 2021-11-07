@@ -1,4 +1,5 @@
 defmodule CometoidWeb.IssueLive.IssuesMachine do
+  use CometoidWeb.IssueLive.DeleteFlash
 
   import Cometoid.Utils
   alias Cometoid.Repo.Tracker
@@ -10,10 +11,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     issue_properties = %{
       selected_issue: selected_issue
     }
-
     state
     |> Map.merge(issue_properties)
-    |> Map.delete(:flash)
   end
 
   def set_issue_properties(
@@ -26,7 +25,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
     state
     |> Map.merge(issue_properties)
-    |> Map.delete(:flash)
   end
 
   @doc """
@@ -106,7 +104,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     Tracker.update_issue2(issue, %{ "done" => true, "important" => false })
 
     selected_issue = determine_selected_issue state, id
-    Map.merge(set_context_properties_and_keep_selected_context(state), %{ selected_issue: selected_issue })
+    Map.merge(set_context_properties_and_keep_selected_context(state),
+      %{ selected_issue: selected_issue })
   end
 
   def delete_issue state, id do
