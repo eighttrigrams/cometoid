@@ -35,4 +35,12 @@ defmodule CometoidWeb.IssueLive.TaskbarComponent do
       []
     end
   end
+
+  def done_button_disabled? state do
+    state.contexts == []
+      or length(Enum.flat_map(state.contexts,
+        &(&1.issues)) |> Enum.filter(&(&1.issue.done))) == 0
+      or not is_nil(state.selected_context) and
+        length(Enum.filter(state.selected_context.issues, &(&1.issue.done))) == 0
+  end
 end

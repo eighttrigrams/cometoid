@@ -31,7 +31,8 @@
       </div>
     <% end %>
 
-    <%= unless @state.contexts == [] do %>
+    <%= unless TaskbarComponent.done_button_disabled? @state do %>
+                                                            
       <div class="form-block button right enabled-button-color">
           <%= if @state[:list_issues_done_instead_open] do %>
               <a phx-click="show_open_issues"><i class="bi bi-check-circle">
