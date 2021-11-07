@@ -6,7 +6,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   def set_issue_properties(state, selected_issue \\ nil)
 
-  Kernel.def set_issue_properties(
+  def set_issue_properties(
       state = %{ selected_context: selected_context },
       selected_issue) when not is_nil(selected_context) do
 
