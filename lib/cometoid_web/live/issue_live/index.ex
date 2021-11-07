@@ -70,6 +70,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(state)
+    |> push_event(:context_reprioritized, %{ id: selected_context.id })
     |> do_query
   end
 
