@@ -4,7 +4,7 @@
          class={"list-item regular-color #{if not is_nil(@selected_context) and @selected_context.id == context.id 
                                            do 'selected-item-color' end}"} 
          phx-click="select_context" 
-         phx-value-context={context.title}>
+         phx-value-id={context.id}>
 
       <div class="top">
         <div class={"type #{if context.important do 'important-color' else 'regular-color' end}"}>
@@ -44,7 +44,7 @@
                 </a>
             </span>
             <span class="btn">
-                <a phx-click="reprioritize_context" phx-value-title={context.title}>
+                <a phx-click="reprioritize_context" phx-value-id={context.id}>
                     <i class="bi bi-arrow-up"></i>
                 </a>
             </span>
@@ -57,7 +57,7 @@
                 <% end %>
             </span>
             <span class="btn">
-                <a phx-click="link_context" phx-value-title={context.title}>
+                <a phx-click="link_context" phx-value-id={context.id}>
                     <i class="bi bi-link"></i>
                 </a>
             </span>

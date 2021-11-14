@@ -273,10 +273,11 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def handle_event "select_context", %{ "context" => context }, socket do
+  def handle_event "select_context", %{ "id" => id }, socket do
+    {id, ""} = Integer.parse id
     state =
       socket.assigns
-      |> IssuesMachine.select_context(context)
+      |> IssuesMachine.select_context(id)
       |> IssuesMachine.set_issue_properties
 
     socket
@@ -285,10 +286,11 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "link_context", %{ "title" => title }, socket do
+  def handle_event "link_context", %{ "id" => id }, socket do
+    {id, ""} = Integer.parse id
     state =
       socket.assigns
-      |> IssuesMachine.select_context(title)
+      |> IssuesMachine.select_context(id)
       |> IssuesMachine.set_issue_properties
 
     socket
@@ -297,11 +299,11 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def handle_event "reprioritize_context", %{ "title" => title }, socket do
-
+  def handle_event "reprioritize_context", %{ "id" => id }, socket do
+    {id, ""} = Integer.parse id
     state =
       socket.assigns
-      |> IssuesMachine.select_context!(title)
+      |> IssuesMachine.select_context!(id)
       |> IssuesMachine.set_issue_properties
 
     socket

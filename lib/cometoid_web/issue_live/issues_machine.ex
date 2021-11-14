@@ -67,8 +67,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     new_state
 
   """
-  def select_context! state, context do
-    selected_context = Enum.find(state.contexts, &(&1.title == context))
+  def select_context! state, id do
+    selected_context = Enum.find(state.contexts, &(&1.id == id))
     Tracker.update_context_updated_at selected_context
     contexts = reload_contexts state # TODO review duplication with set_context_properties
     %{
@@ -81,12 +81,12 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   ## Examples
 
-    iex> select_context old_state, "some_context_title"
+    iex> select_context old_state, some_context_id
     new_state
 
   """
-  def select_context state, context do # TODO do use id instead title
-    selected_context = state.contexts |> Enum.find(&(&1.title == context))
+  def select_context state, id do
+    selected_context = state.contexts |> Enum.find(&(&1.id == id))
     %{
       selected_context: selected_context
     }
@@ -99,7 +99,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       |> Tracker.remove_issue_relation(state.selected_context.id)
 
     if length(issue.contexts) == 1 do
-      select_context state, List.first(issue.contexts).context.title # TODO see above
+      select_context state, List.first(issue.contexts).context.id
     else
       %{
         selected_context: nil
