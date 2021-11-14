@@ -3,17 +3,17 @@ alias Cometoid.Model.Tracker
 
 software_task = Repo.insert! %Tracker.Context {
   title: "Task",
-  context_type: "Software:IssueType"
+  view: "Software"
 }
 my_software_component = Repo.insert! %Tracker.Context {
   title: "MySoftwareComponent",
-  context_type: "Software:Component",
-  children: [software_task]
+  view: "Software",
+  secondary_contexts: [software_task]
 }
 my_software_project = Repo.insert! %Tracker.Context {
   title: "MySoftwareProject",
-  context_type: "Software:Project",
-  children: [my_software_component, software_task]
+  view: "Software",
+  secondary_contexts: [my_software_component, software_task]
 }
 Enum.each(1..5,
   fn x ->
