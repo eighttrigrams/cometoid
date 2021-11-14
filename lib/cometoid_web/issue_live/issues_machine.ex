@@ -68,9 +68,11 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   """
   def select_context! state, id do
+
     selected_context = Enum.find(state.contexts, &(&1.id == id))
     Tracker.update_context_updated_at selected_context
     contexts = reload_contexts state # TODO review duplication with set_context_properties
+
     %{
       selected_context: selected_context,
       contexts: contexts
@@ -86,8 +88,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   """
   def select_context state, id do
+
     selected_context = state.contexts |> Enum.find(&(&1.id == id))
     selected_issue = keep_issue state, selected_context
+
     %{
       selected_context: selected_context,
       selected_issue: selected_issue
@@ -114,17 +118,23 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     Tracker.update_issue2(issue, %{ "done" => true, "important" => false })
 
     selected_issue = determine_selected_issue state, id
-    Map.merge(set_context_properties_and_keep_selected_context(state),
+    new_state = Map.merge(
+      set_context_properties_and_keep_selected_context(state),
       %{ selected_issue: selected_issue })
+
+    {:do_query, new_state}
   end
 
   def unarchive_issue state, id do
     issue = Tracker.get_issue! id
     Tracker.update_issue2(issue, %{ "done" => false })
-    %{
+
+    new_state = %{
       list_issues_done_instead_open: false,
       selected_issue: issue
     }
+
+    {:do_query, new_state}
   end
 
   def delete_issue state, id do
@@ -146,6 +156,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   def do_query state do
+    do_the_query state
+  end
+
+  defp do_the_query state do
     query = %Tracker.Query{
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context,

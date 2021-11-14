@@ -17,9 +17,20 @@ defmodule CometoidWeb.IssueLive.Machine do
   defp create(name_and_args, state, code) do
     quote do
       def unquote(name_and_args) do
-        unquote(state)
-        |> Map.merge(unquote(code))
-        |> Map.delete(:flash)
+        state = unquote(state)
+        result = unquote(code)
+
+        case result do
+          {:do_query, new_state} ->
+            state
+            |> Map.merge(new_state)
+            |> Map.delete(:flash)
+            |> do_query
+          new_state ->
+            state
+            |> Map.merge(new_state)
+            |> Map.delete(:flash)
+        end
       end
     end
   end

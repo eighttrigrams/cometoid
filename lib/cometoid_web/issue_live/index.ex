@@ -357,17 +357,16 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "unarchive", %{ "target" => id }, socket do
-    state = IssuesMachine.unarchive_issue(to_state(socket), id)
     socket
-    |> assign(state)
+    |> assign(IssuesMachine.unarchive_issue(to_state(socket), id))
     |> push_event(:issue_reprioritized, %{ id: id })
-    |> do_query
+    |> return_noreply
   end
 
   def handle_event "archive", %{ "target" => id }, socket do
     socket
     |> assign(IssuesMachine.archive_issue(to_state(socket), id))
-    |> do_query
+    |> return_noreply
   end
 
   defp do_query socket do
