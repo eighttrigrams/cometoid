@@ -12,6 +12,10 @@ defmodule Cometoid.Model.People.Person do
     belongs_to :context, Tracker.Context
     has_one :birthday, Calendar.Event, on_delete: :delete_all
 
+    field :original_birthday, :date, source: :birthday
+
+    field :use_birthday, :boolean
+
     timestamps()
   end
 
@@ -26,7 +30,7 @@ defmodule Cometoid.Model.People.Person do
 
   def update_changeset(person, attrs) do
     person
-    |> cast(attrs, [:name, :description])
+    |> cast(attrs, [:name, :description, :original_birthday, :use_birthday])
     |> cast_assoc(:birthday, with: &Calendar.Event.date_changeset/2)
     |> cast_assoc(:context, with: &Tracker.Context.changeset/2)
     |> validate_required([:name])

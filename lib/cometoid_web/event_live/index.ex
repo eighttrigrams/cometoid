@@ -141,6 +141,16 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
+  def get_events_to_display events do
+    Enum.filter events, fn event ->
+      if is_nil(event.person) do
+        true
+      else
+        event.person.use_birthday
+      end
+    end
+  end
+
   defp do_query(socket) do
     socket
     |> assign(:events, Calendar.list_events(socket.assigns.show_archived))

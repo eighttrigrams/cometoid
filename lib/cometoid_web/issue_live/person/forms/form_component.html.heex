@@ -12,11 +12,27 @@
     <%= text_input f, :name %>
     <%= error_tag f, :name %>
 
+    <br>
+    <br>
+
+    <%= label f, :use_birthday %>
+    <%= checkbox f, :use_birthday %>
+
+    <br>
+    <br>
+
     <%= inputs_for f, :birthday, fn b -> %>
-      <%= label b, :date %>
+      <%= label b, :next_birthday %>
       <%= date_select b, :date %>
       <%= error_tag b, :date %>
     <% end %>
+
+    <br>
+    <br>
+
+    <%= label f, :original_birthday %>
+    <%= date_select f, :original_birthday, [default: :calendar.local_time()] %>
+    <%= error_tag f, :original_birthday %>
 
     <%= submit "Save", phx_disable_with: "Saving..." %>
   </.form>

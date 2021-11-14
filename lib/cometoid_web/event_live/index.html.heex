@@ -19,7 +19,7 @@
     <div id="list-container">
       <div class="list">
         <table class="list-table">
-          <%= for event <- @events do %>
+          <%= for event <- get_events_to_display(@events) do %>
             <tr id={"event-#{event.id}"} 
                 phx-hook="EventItemHook" 
                 class={"list-item 

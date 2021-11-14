@@ -1,12 +1,15 @@
-<div class="upper border-color">
-  <b>PERSON-P<%= @context.person.id %></b>
-  <div><b>Changed at:</b> <%= @context.person.updated_at.day %>.<%= @context.person.updated_at.month %>.<%= @context.person.updated_at.year %></div>
-  <br>
-  <div><b>Birthday:</b> <%= @context.person.birthday.date.day %>.<%= @context.person.birthday.date.month %>.<%= @context.person.birthday.date.year %></div>
-
+<div class="upper border-color" style="padding-top: 0px;">
   <div class="smaller-text">
-    <br>
-    <h1 style="font-family: serif"><%= @context.person.name %></h1>
+    <%= if @context.person.use_birthday do %>
+      <br>
+      <div><b>Birthday:</b> <%= @context.person.original_birthday.day %>.<%= @context.person.original_birthday.month %>.<%= @context.person.original_birthday.year %></div>
+      <br>
+    <% end %>
+    <h1 style="font-family: serif">
+      <span style="float: left;">
+        <%= @context.person.name %>
+      </span>
+    </h1>
   </div>
 </div>
 <div class="inner smaller-text" id="context-description" phx-hook="ContextDescriptionHook">
