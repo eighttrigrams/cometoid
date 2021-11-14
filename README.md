@@ -49,3 +49,9 @@ Double click on the sidebar will open an editor for the description of the selec
 Hold control to not show action buttons for list items, which allows then for clicking
 secondary context badges in order to jump into the indicated context. Alternatively, first hold right-click. This will prevent the action buttons to be shown, then point to a secondary context badge
 and release the right-click (or left-click, which will act on its release) when hovering over the corresponding badge.
+
+## Tests
+
+Run
+
+    $ mix test
