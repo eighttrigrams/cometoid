@@ -85,11 +85,26 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     new_state
 
   """
-  def select_context state, context do
+  def select_context state, context do # TODO do use id instead title
     selected_context = state.contexts |> Enum.find(&(&1.title == context))
     %{
       selected_context: selected_context
     }
+  end
+
+  def unlink_issue state, id do
+
+    issue = id
+      |> Tracker.get_issue!
+      |> Tracker.remove_issue_relation(state.selected_context.id)
+
+    if length(issue.contexts) == 1 do
+      select_context state, List.first(issue.contexts).context.title # TODO see above
+    else
+      %{
+        selected_context: nil
+      }
+    end
   end
 
   def archive_issue state, id do

@@ -197,6 +197,20 @@ defmodule Cometoid.Repo.Tracker do
     {:ok, Repo.preload(issue, :event)}
   end
 
+  def remove_issue_relation issue, id_of_context_to_be_unlinked do
+
+    ctxs = Enum.filter issue.contexts,
+      fn relation ->
+        relation.context.id != id_of_context_to_be_unlinked
+      end
+
+    issue
+    |> Issue.relations_changeset(%{ "contexts" => ctxs })
+    |> Repo.update!
+    |> Repo.preload(contexts: :context)
+    |> Repo.preload(:event)
+  end
+
   def update_issue_relations issue, selected_contexts, contexts do
 
     context_from =  fn id -> Enum.find contexts, &(&1.id == id) end # TODO use get_context! instead

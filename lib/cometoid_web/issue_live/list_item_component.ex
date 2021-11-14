@@ -8,4 +8,9 @@ defmodule CometoidWeb.IssueLive.ListItemComponent do
     is_nil(state.selected_context)
     or length(issue.contexts) == 1
   end
+
+  def should_show_unlink_button state, issue do
+    not is_nil(state.selected_context)
+    and length(issue.contexts) > 1
+  end
 end
