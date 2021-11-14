@@ -1,7 +1,14 @@
 $list-item-height: $taskbar-height;
 
-#list-container {
-    height: 100%;
+.events-view-list-arrangement {
+
+    height: calc(100% - #{$taskbar-height});
+
+    #list-container {
+        
+        width: 100%;
+        height: 100%;
+    }
 }
 
 .issues-view-list-arrangement {
@@ -18,6 +25,7 @@ $list-item-height: $taskbar-height;
         
         float: left;
         width: 67%;
+        height: 100%;
 
         border-left-style: dotted;
         border-left-width: 1px;
