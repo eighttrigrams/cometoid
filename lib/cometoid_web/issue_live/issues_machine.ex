@@ -23,6 +23,14 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     }
   end
 
+  def reload_changed_context state, id do
+    selected_context = Tracker.get_context! id # fetch latest important flag
+    state
+    |> Map.merge(%{ selected_context: selected_context })
+    |> set_context_properties_and_keep_selected_context
+    |> set_issue_properties
+  end
+
   @doc """
   Call do_query after this, to reload all issues for the current context
   """
