@@ -32,34 +32,35 @@
             <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
 
                 <%= unless @state.list_issues_done_instead_open do %>
-                    <span class="btn">
-                        <a phx-click="toggle_issue_important" phx-value-target={@issue.id}>
-                            <i class="bi bi-exclamation-circle"></i>
-                        </a>
-                    </span>
+                  <span class="btn">
+                    <a phx-click="toggle_issue_important" phx-value-target={@issue.id}>
+                      <i class="bi bi-exclamation-circle"></i>
+                    </a>
+                  </span>
                 <% end %>
 
                 <span class="btn">
-                    <a phx-click="reprioritize_issue" phx-value-id={@issue.id}>
-                        <i class="bi bi-arrow-up"></i>
-                    </a>
+                  <a phx-click="reprioritize_issue" phx-value-id={@issue.id}>
+                    <i class="bi bi-arrow-up"></i>
+                  </a>
                 </span>
 
                 <%= if @state.list_issues_done_instead_open do %>
-                    <span class="btn">
-                        <a phx-click="unarchive" phx-value-target={@issue.id}>
-                            <i class="bi bi-envelope-open"></i>
-                        </a>
-                    </span>
+                  <span class="btn">
+                    <a phx-click="unarchive" phx-value-target={@issue.id}>
+                      <i class="bi bi-envelope-open"></i>
+                    </a>
+                  </span>
                 <% else %>
-                    <span class="btn">
-                        <a phx-click="archive" phx-value-target={@issue.id}>
-                            <i class="bi bi-archive"></i>
-                        </a>
-                    </span>
+                  <span class="btn">
+                    <a phx-click="archive" phx-value-target={@issue.id}>
+                      <i class="bi bi-archive"></i>
+                    </a>
+                  </span>
                 <% end %>
 
-                <span class="btn">
+                <%= if should_show_delete_button @state, @issue do %>
+                  <span class="btn">
                     <%= link to: "#",
                         phx_click: "delete_issue",
                         phx_value_id: @issue.id, data: [confirm: "Are you sure?"],
@@ -67,14 +68,15 @@
                         do %>
                         <i class="bi bi-trash"></i>
                     <% end %>
-                </span>
+                  </span>
+                <% end %>
 
                 <%= unless is_nil(@state.selected_context) do %>
-                    <span class="btn">
-                        <a phx-click="link_issue" phx-value-target={@issue.id}>
-                            <i class="bi bi-link"></i>
-                        </a>
-                    </span>
+                  <span class="btn">
+                    <a phx-click="link_issue" phx-value-target={@issue.id}>
+                      <i class="bi bi-link"></i>
+                    </a>
+                  </span>
                 <% end %>
             </td>
         </tr></table>
