@@ -114,12 +114,16 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     issue = Tracker.get_issue! id
     {:ok, _} = Tracker.delete_issue issue
 
-    selected_context = Tracker.get_context! state.selected_context.id # fetch latest issues
-    selected_issue = determine_selected_issue state, id
-    %{
-      selected_context: selected_context,
-      selected_issue: selected_issue
-    }
+    if is_nil state.selected_context do
+      %{}
+    else
+      selected_context = Tracker.get_context! state.selected_context.id # fetch latest issues
+      selected_issue = determine_selected_issue state, id
+      %{
+        selected_context: selected_context,
+        selected_issue: selected_issue
+      }
+    end
   end
 
   def do_query state do
