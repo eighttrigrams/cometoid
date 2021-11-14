@@ -216,14 +216,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "delete_context", %{ "id" => id }, socket do
-    context = Tracker.get_context!(id)
-    {:ok, _} = Tracker.delete_context(context)
 
-    state =
-      socket.assigns
-      |> IssuesMachine.set_context_properties
-      |> IssuesMachine.set_issue_properties
-
+    state = IssuesMachine.delete_context to_state(socket), id
     socket
     |> assign(state)
     |> return_noreply

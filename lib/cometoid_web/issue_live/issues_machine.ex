@@ -31,6 +31,15 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     |> set_issue_properties
   end
 
+  def delete_context state, id do
+    context = Tracker.get_context!(id)
+    {:ok, _} = Tracker.delete_context(context)
+
+    state
+    |> set_context_properties
+    |> set_issue_properties
+  end
+
   @doc """
   Call do_query after this, to reload all issues for the current context
   """
