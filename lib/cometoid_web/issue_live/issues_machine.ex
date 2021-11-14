@@ -87,8 +87,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   """
   def select_context state, id do
     selected_context = state.contexts |> Enum.find(&(&1.id == id))
+    selected_issue = keep_issue state, selected_context
     %{
-      selected_context: selected_context
+      selected_context: selected_context,
+      selected_issue: selected_issue
     }
   end
 
@@ -151,6 +153,15 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     }
     issues = Tracker.list_issues query # TODO review if passing state; or to use map take
     %{ issues: issues }
+  end
+
+  defp keep_issue state, selected_context do
+    unless is_nil(state.selected_issue) do
+      case Enum.find selected_context.issues, &(&1.issue.id == state.selected_issue.id) do
+        nil -> nil
+        relation -> relation.issue
+      end
+    end
   end
 
   defp determine_selected_issue state, id do

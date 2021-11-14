@@ -275,11 +275,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "select_context", %{ "id" => id }, socket do
     {id, ""} = Integer.parse id
-    state =
-      socket.assigns
-      |> IssuesMachine.select_context(id)
-      |> IssuesMachine.set_issue_properties
-
+    state = IssuesMachine.select_context to_state(socket), id
     socket
     |> assign(state)
     |> assign(:selected_secondary_contexts, [])
@@ -288,11 +284,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "link_context", %{ "id" => id }, socket do
     {id, ""} = Integer.parse id
-    state =
-      socket.assigns
-      |> IssuesMachine.select_context(id)
-      |> IssuesMachine.set_issue_properties
-
+    state = IssuesMachine.select_context to_state(socket), id
     socket
     |> assign(state)
     |> assign(:live_action, :link_context)
@@ -304,7 +296,6 @@ defmodule CometoidWeb.IssueLive.Index do
     state =
       socket.assigns
       |> IssuesMachine.select_context!(id)
-      |> IssuesMachine.set_issue_properties
 
     socket
     |> assign(state)
