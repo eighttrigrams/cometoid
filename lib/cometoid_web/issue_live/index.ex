@@ -64,9 +64,13 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_info {:after_edit_form_save, %{ context_id: context_id }}, socket do
 
     selected_context = Tracker.get_context! context_id # fetch latest important flag
-    state = Map.merge socket.assigns, %{ selected_context: selected_context }
-    state = IssuesMachine.set_context_properties_and_keep_selected_context state
-    state = IssuesMachine.set_issue_properties state
+
+    state =
+      socket
+      |> to_state
+      |> Map.merge(%{ selected_context: selected_context })
+      |> IssuesMachine.set_context_properties_and_keep_selected_context
+      |> IssuesMachine.set_issue_properties
 
     socket
     |> assign(state)
