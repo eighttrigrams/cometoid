@@ -2,10 +2,6 @@
   <div id="left-column">
     <div id="taskbar" class="taskbar border-color">
       <div class="form-block button right enabled">
-        <a phx-click="create_new_event"><i class="bi bi-plus-lg">
-        </i></a>
-      </div>
-      <div class="form-block button right enabled">
         <a phx-click="toggle_show_archived">
           <%= if @show_archived do %>
             <i class="bi bi-check-circle"></i>

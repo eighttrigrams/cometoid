@@ -105,13 +105,6 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
-  def handle_event("create_new_event", params, socket) do
-    socket
-    |> assign(:edit_event, %Event{})
-    |> assign(:live_action, :new_event)
-    |> return_noreply
-  end
-
   def handle_event("toggle_show_archived", params, socket) do
     socket
     |> assign(:show_archived, !socket.assigns.show_archived)
