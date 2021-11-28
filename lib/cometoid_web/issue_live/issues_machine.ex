@@ -121,13 +121,17 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       |> Tracker.get_issue!
       |> Tracker.remove_issue_relation(state.selected_context.id)
 
-    if length(issue.contexts) == 1 do
+    state = if length(issue.contexts) == 1 do
       select_context state, List.first(issue.contexts).context.id
     else
       %{
         selected_context: nil
       }
     end
+
+    Map.merge state, %{
+      selected_issue: issue
+    }
   end
 
   def archive_issue state, id do
