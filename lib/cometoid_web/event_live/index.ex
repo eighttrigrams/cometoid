@@ -117,21 +117,13 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign(:edit_event, nil)
   end
 
+  @impl true
   def handle_event("select_event", %{ "target" => id }, socket) do
     selected_event = Calendar.get_event!(id)
     socket =
       socket
       |> assign(:selected_event, selected_event)
     {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    event = Calendar.get_event!(id)
-    {:ok, _} = Calendar.delete_event(event)
-    socket
-    |> do_query
-    |> return_noreply
   end
 
   def get_events_to_display events do

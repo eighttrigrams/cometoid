@@ -36,11 +36,7 @@
                           if event.issue do
                             event.issue.title
                           else
-                            if not is_nil(event.person) do
-                              event.person.name <> "'s Geburtstag"
-                            else
-                              event.title
-                            end
+                            event.person.name <> "'s Geburtstag"
                           end %>
                     </td>
 
@@ -59,16 +55,6 @@
                                     <i class="bi bi-archive"></i>
                                 </a>
                             </span>
-                        <% end %>
-
-                        <%= if is_nil(event.issue) do %>
-                          <span class="btn">
-                            <%= link to: "#", 
-                                phx_click: "delete", 
-                                phx_value_id: event.id, data: [confirm: "Are you sure?"] do %>
-                              <i class="bi bi-trash"></i>
-                            <% end %>
-                          </span>
                         <% end %>
                       <% else %>
                         <div style="min-width: 1px;"/>
