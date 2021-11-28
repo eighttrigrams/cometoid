@@ -80,26 +80,16 @@
     <% end %>
   </div>
 
-  <%= if @state.live_action in [:new_event, :edit_event] do %>
-    <%= if @state.live_action == :new_event or is_nil(@state.edit_event.issue) do %>
-      <div id="event-modal-content" class="modal-content">
-        <%= live_modal @socket, CometoidWeb.EventLive.Modals.FormComponent,
-          id: @state.edit_event.id || :new_event,
-          action: @state.live_action,
-          is_standalone: (if is_nil(@state.edit_event.issue_id) and is_nil(@state.edit_event.person_id) do true else false end),
-          event: @state.edit_event %>
-      </div>
-    <% else %>
-      <div id="issue-modal-content" class="modal-content">
-        <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.FormComponent,
-          id: @state.edit_event.id,
-          action: :edit,
-          issue: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id),
-          is_important: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id).important,
-          has_event: true,
-          event_archived: false,
-          contexts: nil %>
-      </div>
-    <% end %>
+  <%= if @state.live_action == :edit_event and not is_nil(@state.edit_event.issue) do %>
+    <div id="issue-modal-content" class="modal-content">
+      <%= live_modal @socket, CometoidWeb.IssueLive.Issue.Modals.FormComponent,
+        id: @state.edit_event.id,
+        action: :edit,
+        issue: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id),
+        is_important: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id).important,
+        has_event: true,
+        event_archived: @state.edit_event.archived,
+        contexts: nil %>
+    </div>
   <% end %>
 <% end %>
