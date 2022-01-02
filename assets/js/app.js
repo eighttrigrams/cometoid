@@ -20,67 +20,79 @@ import {LiveSocket} from "phoenix_live_view"
 let hooks = {};
 
 hooks.DescriptionSaveHook = {
+  myTarget: undefined,
   controlPressed: false,
-  myTarget: "",
+  keyUpListener: undefined,
+  keyDownListener: undefined,
+  makeKeyUpListener: function(self) { return function(e) {
+    if (e.key === "Control") {
+      self.controlPressed = false
+    }
+  }},
+  makeKeyDownListener: function(self) { return function(e) {
+
+    if (e.key === "Control") {
+      self.controlPressed = true
+    }
+
+    if (e.key === "s") {
+      if (self.controlPressed) {
+        e.preventDefault()
+        self.pushEventTo(self.myTarget, "save", 
+          { description: self.el.querySelector("#text-area").value }
+        )
+      }
+    }}
+  },
   mounted() {
-    
-    const self = this;
     this.myTarget = this.el.getAttribute("phx-my-target")
     
-    this.el.addEventListener("keyup", function(e) {
+    this.keyUpListener = this.makeKeyUpListener(this)
+    this.keyDownListener = this.makeKeyDownListener(this)
 
-      if (e.key === "Control") {
-        this.controlPressed = false
-      }
-    })
-
-    this.el.addEventListener("keydown", function(e) {
-
-      if (e.key === "Control") {
-        this.controlPressed = true
-      }
-
-      if (e.key === "s") {
-        if (this.controlPressed) {
-          e.preventDefault()
-          self.pushEventTo(self.myTarget, "save", 
-            { description: self.el.querySelector("#text-area").value }
-          )
-        }
-      }
-    })
+    document.addEventListener("keyup", this.keyUpListener)
+    document.addEventListener("keydown", this.keyDownListener)
+  },
+  destroyed() {
+    document.removeEventListener("keyup", this.keyUpListener)
+    document.removeEventListener("keydown", this.keyDownListener)
   }
 }
-
-
 hooks.SaveHook = {
+  myTarget: undefined,
   controlPressed: false,
-  myTarget: "",
+  keyUpListener: undefined,
+  keyDownListener: undefined,
+  makeKeyUpListener: function(self) { return function(e) {
+    if (e.key === "Control") {
+      self.controlPressed = false
+    }
+  }},
+  makeKeyDownListener: function(self) { return function(e) {
+
+    if (e.key === "Control") {
+      self.controlPressed = true
+    }
+
+    if (e.key === "s") {
+      if (self.controlPressed) {
+        e.preventDefault()
+        self.pushEventTo(self.myTarget, "save")
+      }
+    }}
+  },
   mounted() {
-    
-    const self = this;
     this.myTarget = this.el.getAttribute("phx-my-target")
     
-    this.el.addEventListener("keyup", function(e) {
+    this.keyUpListener = this.makeKeyUpListener(this)
+    this.keyDownListener = this.makeKeyDownListener(this)
 
-      if (e.key === "Control") {
-        this.controlPressed = false
-      }
-    })
-
-    this.el.addEventListener("keydown", function(e) {
-
-      if (e.key === "Control") {
-        this.controlPressed = true
-      }
-
-      if (e.key === "s") {
-        if (this.controlPressed) {
-          e.preventDefault()
-          self.pushEventTo(self.myTarget, "save")
-        }
-      }
-    })
+    document.addEventListener("keyup", this.keyUpListener)
+    document.addEventListener("keydown", this.keyDownListener)
+  },
+  destroyed() {
+    document.removeEventListener("keyup", this.keyUpListener)
+    document.removeEventListener("keydown", this.keyDownListener)
   }
 }
 
