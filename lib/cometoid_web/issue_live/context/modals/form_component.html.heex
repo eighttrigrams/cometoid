@@ -1,11 +1,11 @@
-<div>
+<div phx-hook="SaveHook" phx-my-target={@myself}>
   <h2><%= @title %></h2>
 
   <.form
     let={f}
     for={@changeset}
     id="context-form"
-    phx-change="validate"
+    phx-change="changes"
     class="alternative-inputs"
     phx-target={@myself}
     phx-submit="save">
@@ -14,9 +14,6 @@
 
     <%= submit "Save", phx_disable_with: "Saving..." %>
     <br>
-
-    <%= checkbox f, :important, value: @context.important %>
-    <%= label f, :important %>
 
     <%= if @id == :new do %>
       <%= hidden_input f, :view, value: @selected_view %>

@@ -10,21 +10,20 @@ defmodule CometoidWeb.IssueLive.Context.Modals.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:context_params, %{})
      |> assign(:changeset, changeset)}
   end
 
   @impl true
-  def handle_event("validate", %{"context" => context_params}, socket) do
-    changeset =
-      socket.assigns.context
-      |> Tracker.change_context(context_params)
-      |> Map.put(:action, :validate)
-
-    {:noreply, assign(socket, :changeset, changeset)}
+  def handle_event("changes", %{"context" => context_params}, socket) do
+    socket =
+      socket
+      |> assign(:context_params, context_params)
+    {:noreply, socket}
   end
 
-  def handle_event("save", %{"context" => context_params}, socket) do
-    save_context(socket, socket.assigns.action, context_params)
+  def handle_event("save", _, socket) do
+    save_context(socket, socket.assigns.action, socket.assigns.context_params)
   end
 
   defp save_context(socket, :edit_context, context_params) do

@@ -53,6 +53,38 @@ hooks.DescriptionSaveHook = {
 }
 
 
+hooks.SaveHook = {
+  controlPressed: false,
+  myTarget: "",
+  mounted() {
+    
+    const self = this;
+    this.myTarget = this.el.getAttribute("phx-my-target")
+    
+    this.el.addEventListener("keyup", function(e) {
+
+      if (e.key === "Control") {
+        this.controlPressed = false
+      }
+    })
+
+    this.el.addEventListener("keydown", function(e) {
+
+      if (e.key === "Control") {
+        this.controlPressed = true
+      }
+
+      if (e.key === "s") {
+        if (this.controlPressed) {
+          e.preventDefault()
+          self.pushEventTo(self.myTarget, "save")
+        }
+      }
+    })
+  }
+}
+
+
 hooks.TextAreaHook = {
     mounted() {
         this.el.addEventListener("keydown", function(e) {
