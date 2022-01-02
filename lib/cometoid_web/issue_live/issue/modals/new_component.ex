@@ -12,8 +12,15 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
      |> assign(:changeset, changeset)}
   end
 
-  def handle_event("save", %{"issue" => issue_params}, socket) do
-    save_issue(socket, socket.assigns.action, issue_params)
+  def handle_event "changes", %{ "issue" => issue_params }, socket do
+    socket =
+      socket
+      |> assign(:issue_params, issue_params)
+    {:noreply, socket}
+  end
+
+  def handle_event("save", _, socket) do
+    save_issue(socket, socket.assigns.action, socket.assigns.issue_params)
   end
 
   defp save_issue(socket, :new, %{ "title" => title }) do

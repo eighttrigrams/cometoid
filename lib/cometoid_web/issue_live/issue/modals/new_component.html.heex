@@ -1,4 +1,4 @@
-<div>
+<div phx-hook="SaveHook" phx-my-target={@myself}>
   <h2>Create Issue</h2>
 
   <.form
@@ -6,13 +6,9 @@
     let={f}
     id="new-issue-form"
     class="alternative-inputs"
-    phx-target={@myself}
-    phx-submit="save">
+    phx-change="changes"
+    phx-target={@myself}>
 
     <%= text_input f, :title %>
-
-    <br>
-    <br>
-    <%= submit "Save", phx_disable_with: "Saving..." %>
   </.form>
 </div>
