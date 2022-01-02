@@ -62,9 +62,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_info {:after_edit_form_save, %{ context_id: context_id }}, socket do
-
     state = IssuesMachine.reload_changed_context to_state(socket), context_id
-
     socket
     |> assign(state)
     |> push_event(:context_reprioritized, %{ id: context_id })

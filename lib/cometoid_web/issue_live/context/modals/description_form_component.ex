@@ -32,11 +32,19 @@ defmodule CometoidWeb.IssueLive.Context.Modals.DescriptionFormComponent do
     end
 
     case f.(socket.assigns.context, context_params) do
-      {:ok, context} ->
-        send self(), {:after_edit_form_save, %{ context_id: context.id }}
+      {:ok, context_or_person} ->
+        send self(), {:after_edit_form_save, %{ context_id: get_context_id(socket, context_or_person) }}
         {:noreply, socket}
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  defp get_context_id socket, context_or_person do
+    if is_in_people_view? socket do
+      context_or_person.context.id
+    else
+      context_or_person.id
     end
   end
 
