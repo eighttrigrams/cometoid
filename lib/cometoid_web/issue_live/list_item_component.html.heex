@@ -14,6 +14,13 @@
             </td>
 
             <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
+
+              <%= if @issue.event do %>
+                <span class="contexts-background-color regular-color">
+                  <%= "#{@issue.event.date.day}.#{@issue.event.date.month}.#{@issue.event.date.year}" %>
+                </span>
+              <% end %>
+
               <%= for context <- Enum.filter(@issue.contexts, fn ctx -> is_nil(@state.selected_context) or ctx.context.title 
                                                               != @state.selected_context.title end) do %>
 
