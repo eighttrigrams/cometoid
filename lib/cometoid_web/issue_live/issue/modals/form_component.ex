@@ -14,10 +14,23 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
     }
   end
 
-  def handle_event("changes", %{ "issue" => issue_params }, socket) do
+  def handle_event "changes", %{ "issue" => issue_params }, socket do
 
     issue_params = if issue_params["has_event"] == "true" do
-      issue_params
+      if Map.has_key? issue_params, "event" do
+        issue_params
+      else
+        {{year, month, day}, _} = :calendar.local_time()
+        day = Integer.to_string(day)
+        month = Integer.to_string(month)
+        year = Integer.to_string(year)
+        Map.merge issue_params, %{
+          "event" => %{
+            "archived" => "false",
+            "date" => %{"day" => day, "month" => month, "year" => year }
+          }
+        }
+      end
     else
       Map.delete issue_params, "event"
     end
@@ -29,7 +42,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
     {:noreply, socket}
   end
 
-  def handle_event("save",_, socket) do
+  def handle_event("save", a, socket) do
+    IO.inspect a
     save_issue(socket, socket.assigns.action, socket.assigns.issue_params)
   end
 
