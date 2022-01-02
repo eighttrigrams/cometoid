@@ -43,7 +43,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   end
 
   def handle_event("save", a, socket) do
-    IO.inspect a
     save_issue(socket, socket.assigns.action, socket.assigns.issue_params)
   end
 
