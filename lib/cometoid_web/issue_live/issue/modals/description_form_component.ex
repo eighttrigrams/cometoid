@@ -18,8 +18,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.DescriptionFormComponent do
       (if issue_params["has_event"] == "true", do: true, else: false))}
   end
 
-  def handle_event("save", %{"issue" => issue_params }, socket) do
-    save_issue(socket, socket.assigns.action, issue_params)
+  def handle_event("save", %{"description" => description }, socket) do
+    save_issue(socket, socket.assigns.action, %{ description: description })
   end
 
   defp save_issue(socket, :describe, issue_params) do

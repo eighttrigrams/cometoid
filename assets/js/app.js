@@ -18,20 +18,59 @@ import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {};
+
+hooks.DescriptionSaveHook = {
+  controlPressed: false,
+  myTarget: "",
+  mounted() {
+    
+    const self = this;
+    this.myTarget = this.el.getAttribute("phx-my-target")
+    
+    this.el.addEventListener("keyup", function(e) {
+
+      if (e.key === "Control") {
+        this.controlPressed = false
+      }
+    })
+
+    this.el.addEventListener("keydown", function(e) {
+
+      if (e.key === "Control") {
+        this.controlPressed = true
+      }
+
+      if (e.key === "s") {
+        if (this.controlPressed) {
+          e.preventDefault()
+          self.pushEventTo(self.myTarget, "save", 
+            { description: self.el.querySelector("#text-area").value }
+          )
+        }
+      }
+    })
+  }
+}
+
+
 hooks.TextAreaHook = {
     mounted() {
-        // https://stackoverflow.com/a/6637396
         this.el.addEventListener("keydown", function(e) {
-            if (e.key == "Tab") {
+
+            /* 
+             * This is for using tabs for indentation, as is the usual behaviour.
+             * https://stackoverflow.com/a/6637396
+             */ 
+            if (e.key === "Tab") {
               e.preventDefault();
               var start = this.selectionStart;
               var end = this.selectionEnd;
               this.value = this.value.substring(0, start) +
-                "    " + this.value.substring(end);
+                "    " + this.value.substring(end)
               this.selectionStart =
-                this.selectionEnd = start + 4;
+                this.selectionEnd = start + 4
             }
-          });
+        })
     }
 }
 hooks.ContentsHook = {
@@ -59,7 +98,7 @@ hooks.SecondaryContextBadgeHook = {
         this.el.addEventListener("mouseup", e => { 
             this.pushEvent("jump_to_context", 
                 { target_context_id: context_id, target_issue_id: issue_id })
-        });
+        })
     }
 }
 hooks.IssueEventHook = {

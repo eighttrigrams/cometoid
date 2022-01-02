@@ -6,9 +6,8 @@
     phx-target={@myself}
     phx-submit="save">
 
-    <%= submit "Save", phx_disable_with: "Saving...", class: "background-color color" %>
-
-    <%= textarea f, :description, id: "text-area", phx_hook: "TextAreaHook" %>
-    <%= error_tag f, :description %>
+    <div phx-hook="DescriptionSaveHook" id="issue-description-form-save-hook" phx-my-target={@myself}>
+      <%= textarea f, :description, id: "text-area", phx_hook: "TextAreaHook" %>
+    </div>
   </.form>
 </div>

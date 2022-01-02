@@ -19,32 +19,28 @@ defmodule CometoidWeb.IssueLive.Context.Modals.DescriptionFormComponent do
      |> assign(:changeset, changeset)}
   end
 
-  def handle_event("save", %{"context" => context_params }, socket) do
-    save_context(socket, socket.assigns.action, context_params)
+  def handle_event("save", %{"description" => description }, socket) do
+    save_context(socket, socket.assigns.action, %{ description: description })
   end
 
-  def handle_event("save", %{"person" => context_params }, socket) do
-    save_context(socket, socket.assigns.action, context_params)
-  end
+  defp save_context(socket, :describe_context, context_params = %{ description: _description }) do
 
-  defp save_context(socket, :describe_context, context_params) do
-
-    unless Map.has_key?(socket.assigns.context, :view) do
-      case People.update_person_description(socket.assigns.context, context_params) do
-        {:ok, context} ->
-          send self(), {:after_edit_form_save, %{ context_id: context.id }}
-          {:noreply, socket}
-        {:error, %Ecto.Changeset{} = changeset} ->
-          {:noreply, assign(socket, :changeset, changeset)}
-      end
+    f = if is_in_people_view? socket do
+      &People.update_person_description/2
     else
-      case Tracker.update_context(socket.assigns.context, context_params) do
-        {:ok, context} ->
-          send self(), {:after_edit_form_save, %{ context_id: context.id }}
-          {:noreply, socket}
-        {:error, %Ecto.Changeset{} = changeset} ->
-          {:noreply, assign(socket, :changeset, changeset)}
-      end
+      &Tracker.update_context/2
     end
+
+    case f.(socket.assigns.context, context_params) do
+      {:ok, context} ->
+        send self(), {:after_edit_form_save, %{ context_id: context.id }}
+        {:noreply, socket}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  defp is_in_people_view? socket do
+    not Map.has_key? socket.assigns.context, :view
   end
 end
