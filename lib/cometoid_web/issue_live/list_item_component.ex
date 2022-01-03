@@ -18,7 +18,7 @@ defmodule CometoidWeb.IssueLive.ListItemComponent do
     Enum.filter issue.contexts,
       fn ctx ->
         (is_nil state.selected_context)
-        or ctx.context.title != state.selected_context.title # TODO id
+        or ctx.context.id != state.selected_context.id
       end
   end
 
