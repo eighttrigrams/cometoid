@@ -21,8 +21,7 @@
                 </span>
               <% end %>
 
-              <%= for context <- Enum.filter(@issue.contexts, fn ctx -> is_nil(@state.selected_context) or ctx.context.title 
-                                                              != @state.selected_context.title end) do %>
+              <%= for context <- contexts_to_show_as_badges @state, @issue.contexts do %>
 
                 <span class="contexts-background-color regular-color"
                       phx-hook="SecondaryContextBadgeHook"
