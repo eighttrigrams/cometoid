@@ -12,6 +12,14 @@
 
     <%= text_input f, :title, style: "width: 100%" %>
 
+    <br>
+    <br>
+    <%= label f, "Used like a tag?" %>
+    <br>
+    <%= checkbox f, :"is_tag?", value: @context.is_tag? %>
+    <br>
+    <br>
+
     <%= submit "Save", phx_disable_with: "Saving..." %>
     <br>
 
