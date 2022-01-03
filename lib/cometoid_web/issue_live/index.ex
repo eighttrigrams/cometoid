@@ -155,7 +155,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(state)
     |> push_event(:issue_reprioritized, %{ id: id })
-    |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
+    |> reprioritize_context
     |> do_query
   end
 
@@ -393,6 +393,14 @@ defmodule CometoidWeb.IssueLive.Index do
       Enum.filter selected_context.issues, &(!&1.issue.done)
     end
     length(issues) > 0
+  end
+
+  defp reprioritize_context socket do
+    unless is_nil socket.assigns.selected_context do
+      push_event(socket, :context_reprioritized, %{ id: socket.assigns.selected_context.id })
+    else
+      socket
+    end
   end
 
   defp to_state(socket), do: socket.assigns |> Map.delete(:flash)

@@ -121,8 +121,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       |> Tracker.get_issue!
       |> Tracker.remove_issue_relation(state.selected_context.id)
 
-    state = if length(issue.contexts) == 1 do
-      select_context state, List.first(issue.contexts).context.id
+    state = if has_one_non_tag_context? issue do
+      select_context state, (first_non_tag_context issue).id
     else
       %{
         selected_context: nil
@@ -208,5 +208,14 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   defp reload_contexts %{ selected_view: selected_view } = state do
     Tracker.list_contexts()
     |> Enum.filter(fn context -> context.view == selected_view end)
+  end
+
+  defp has_one_non_tag_context? issue do
+    1 == length Enum.filter issue.contexts, &(!&1.context.is_tag?)
+  end
+
+  # Expects there to be at least one.
+  defp first_non_tag_context issue do
+    (Enum.find issue.contexts, &(!&1.context.is_tag?)).context
   end
 end

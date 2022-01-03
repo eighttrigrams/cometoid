@@ -21,7 +21,7 @@
                 </span>
               <% end %>
 
-              <%= for context <- contexts_to_show_as_badges @state, @issue.contexts do %>
+              <%= for context <- contexts_to_show_as_badges @state, @issue do %>
 
                 <span class="contexts-background-color regular-color"
                       phx-hook="SecondaryContextBadgeHook"

@@ -6,19 +6,23 @@ defmodule CometoidWeb.IssueLive.ListItemComponent do
 
   def should_show_delete_button state, issue do
     (is_nil state.selected_context)
-    or (length issue.contexts) == 1
+    or (num_non_tag_contexts state, issue) == 0
   end
 
   def should_show_unlink_button state, issue do
     not (is_nil state.selected_context)
-    and (length issue.contexts) > 1
+    and (num_non_tag_contexts state, issue) > 0
   end
 
-  def contexts_to_show_as_badges state, contexts do
-    Enum.filter contexts,
+  def contexts_to_show_as_badges state, issue do
+    Enum.filter issue.contexts,
       fn ctx ->
         (is_nil state.selected_context)
-        or ctx.context.title != state.selected_context.title
+        or ctx.context.title != state.selected_context.title # TODO id
       end
+  end
+
+  defp num_non_tag_contexts state, issue do
+    length Enum.filter issue.contexts, &(not &1.context.is_tag? and &1.context.id != state.selected_context.id)
   end
 end
