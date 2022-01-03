@@ -35,9 +35,12 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     context = Tracker.get_context!(id)
     {:ok, _} = Tracker.delete_context(context)
 
-    state
-    |> set_context_properties
-    |> set_issue_properties
+    {
+      :do_query,
+      state
+      |> set_context_properties
+      |> set_issue_properties
+    }
   end
 
   @doc """

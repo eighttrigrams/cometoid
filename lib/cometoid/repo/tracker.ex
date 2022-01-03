@@ -80,7 +80,12 @@ defmodule Cometoid.Repo.Tracker do
 
     Enum.map issue_ids, fn issue_id ->
       issue = get_issue! issue_id
-      context_ids = Enum.map issue.contexts, &(&1.context.id)
+
+      context_ids =
+        issue.contexts
+        |> Enum.filter(&(context.is_tag? || !&1.context.is_tag?))
+        |> Enum.map(&(&1.context.id))
+
       if context_ids == [context.id] do
         Repo.delete issue
       end
