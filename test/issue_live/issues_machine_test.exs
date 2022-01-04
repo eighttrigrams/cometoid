@@ -128,4 +128,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     issues = (List.first Tracker.list_contexts "Software").issues
     assert 1 == length issues
   end
+
+  # TODO delete tag context where issue is also in other tag context -> delete issue
+
+  # TODO delete tag context where issue is also in other tag context and other normal context -> dont delete issue
 end
