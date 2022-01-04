@@ -73,4 +73,31 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     issues = (List.first Tracker.list_contexts "Software").issues
     assert 0 == length issues
   end
+
+  test "delete tag_context and leave issue in other context" do
+    context = Repo.insert! %Context {
+      title: "Project",
+      view: "Software"
+    }
+    tag_context = Repo.insert! %Context {
+      title: "Task",
+      view: "Software",
+      is_tag?: true
+    }
+    Repo.insert! %Issue {
+      title: "Issue",
+      contexts: [%{ context: context },
+                 %{ context: tag_context }]
+    }
+    state = %{
+      selected_view: "Software",
+      list_issues_done_instead_open: false
+    }
+    assert 2 == length Tracker.list_contexts "Software"
+    IssuesMachine.delete_context state, tag_context.id
+    assert 1 == length Tracker.list_contexts "Software"
+
+    issues = (List.first Tracker.list_contexts "Software").issues
+    assert 1 == length issues
+  end
 end
