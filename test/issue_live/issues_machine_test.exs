@@ -66,9 +66,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       selected_view: "Software",
       list_issues_done_instead_open: false
     }
-    assert 2 == length Tracker.list_contexts "Software"
     IssuesMachine.delete_context state, context.id
-    assert 1 == length Tracker.list_contexts "Software"
 
     issues = (List.first Tracker.list_contexts "Software").issues
     assert 0 == length issues
@@ -93,9 +91,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }
-    assert 1 == length Tracker.list_contexts "Software"
     IssuesMachine.delete_context state, tag_context.id
-    assert 0 == length Tracker.list_contexts "Software"
     assert 0 = length Tracker.list_issues %Tracker.Query {
       list_issues_done_instead_open: false,
       selected_view: "Software"
@@ -121,15 +117,75 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       selected_view: "Software",
       list_issues_done_instead_open: false
     }
-    assert 2 == length Tracker.list_contexts "Software"
     IssuesMachine.delete_context state, tag_context.id
-    assert 1 == length Tracker.list_contexts "Software"
-
-    issues = (List.first Tracker.list_contexts "Software").issues
-    assert 1 == length issues
+    assert 1 == length (List.first Tracker.list_contexts "Software").issues
   end
 
-  # TODO delete tag context where issue is also in other tag context -> delete issue
+  test "delete tag_context and remove issue also from other tag_context" do
+    tag_context = Repo.insert! %Context {
+      title: "Task1",
+      view: "Software",
+      is_tag?: true
+    }
+    other_tag_context = Repo.insert! %Context {
+      title: "Task2",
+      view: "Software",
+      is_tag?: true
+    }
+    Repo.insert! %Issue {
+      title: "Issue",
+      contexts: [%{ context: tag_context },
+                 %{ context: other_tag_context }]
+    }
+    state = %{
+      selected_view: "Software",
+      list_issues_done_instead_open: false
+    }
+    assert 1 == length Tracker.list_issues %Tracker.Query {
+      list_issues_done_instead_open: false,
+      selected_view: "Software"
+    }
+    IssuesMachine.delete_context state, tag_context.id
+    assert 0 == length Tracker.list_issues %Tracker.Query {
+      list_issues_done_instead_open: false,
+      selected_view: "Software"
+    }
+  end
 
-  # TODO delete tag context where issue is also in other tag context and other normal context -> dont delete issue
+  test "delete tag_context when there is also another tag_context, but leave issue in yet another context" do
+    context = Repo.insert! %Context {
+      title: "Project",
+      view: "Software"
+    }
+    tag_context = Repo.insert! %Context {
+      title: "Task1",
+      view: "Software",
+      is_tag?: true
+    }
+    other_tag_context = Repo.insert! %Context {
+      title: "Task2",
+      view: "Software",
+      is_tag?: true
+    }
+    Repo.insert! %Issue {
+      title: "Issue",
+      contexts: [%{ context: context },
+                 %{ context: tag_context },
+                 %{ context: other_tag_context }]
+    }
+    state = %{
+      selected_view: "Software",
+      list_issues_done_instead_open: false
+    }
+
+    assert 3 = length (List.first Tracker.list_issues %Tracker.Query {
+      list_issues_done_instead_open: false,
+      selected_view: "Software"
+    }).contexts
+    IssuesMachine.delete_context state, tag_context.id
+    assert 2 = length (List.first Tracker.list_issues %Tracker.Query {
+        list_issues_done_instead_open: false,
+        selected_view: "Software"
+      }).contexts
+  end
 end

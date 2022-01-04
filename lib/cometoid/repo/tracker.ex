@@ -83,7 +83,7 @@ defmodule Cometoid.Repo.Tracker do
 
       context_ids =
         issue.contexts
-        |> Enum.filter(&(context.is_tag? || !&1.context.is_tag?))
+        |> Enum.filter(&((context.is_tag? && &1.context.id == context.id) || !&1.context.is_tag?))
         |> Enum.map(&(&1.context.id))
 
       if context_ids == [context.id] do
