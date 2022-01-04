@@ -15,22 +15,22 @@ defmodule Cometoid.Repo.Tracker do
     |> where([c], c.view == ^view)
     |> order_by([c], [{:desc, c.important}, {:desc, c.updated_at}])
     |> Repo.all
-    |> Repo.preload(:person)
-    |> Repo.preload(:text)
-    |> Repo.preload(:secondary_contexts)
+    |> do_context_preload
   end
 
   def list_contexts do
     Repo.all(from c in Context,
       order_by: [desc: :important, desc: :updated_at])
-    |> Repo.preload(issues: :issue)
-    |> Repo.preload(person: :birthday)
-    |> Repo.preload(:text)
-    |> Repo.preload(:secondary_contexts)
+    |> do_context_preload
   end
 
   def get_context! id do
     Repo.get!(Context, id)
+    |> do_context_preload
+  end
+
+  def do_context_preload context do
+    context
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
     |> Repo.preload(issues: :issue)
