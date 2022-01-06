@@ -20,9 +20,9 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
 
   def handle_event "save", _, socket do
 
-    selected_contexts = get_selected_contexts socket
+    ids_of_selected_contexts = get_ids_of_selected_contexts socket
 
-    if length(selected_contexts) == 0 do
+    if 0 == length ids_of_selected_contexts do
       {:noreply, socket}
     else
       issue = socket.assigns.state.selected_issue
@@ -32,7 +32,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
         Tracker.list_contexts
         |> Enum.filter(&(&1.view in views))
 
-      case Tracker.update_issue_relations(issue, selected_contexts, contexts) do
+      case Tracker.update_issue_relations(issue, ids_of_selected_contexts, contexts) do
         {:ok, issue} ->
           send self(), {:after_edit_form_save, issue}
           {:noreply,
@@ -74,7 +74,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
     |> Enum.into(%{})
   end
 
-  defp get_selected_contexts socket do
+  defp get_ids_of_selected_contexts socket do
     selected_contexts = extract_from socket.assigns.links
     Enum.map selected_contexts,
       fn c -> {id, ""} = Integer.parse(c); id end
