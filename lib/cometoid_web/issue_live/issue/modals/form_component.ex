@@ -10,6 +10,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       socket
         |> assign(assigns)
         |> assign(:issue_params, %{})
+        |> assign(:changed?, false)
         |> assign(:changeset, Tracker.change_issue(issue))
     }
   end
@@ -17,6 +18,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   def handle_event "changes", %{ "issue" => issue_params }, socket do
 
     issue_params = if issue_params["has_event"] == "true" do
+
       if Map.has_key? issue_params, "event" do
         issue_params
       else
@@ -39,11 +41,17 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       |> assign(:issue_params, issue_params)
       |> assign(:has_event,
         (if issue_params["has_event"] == "true", do: true, else: false))
+      |> assign(:changed?, true)
     {:noreply, socket}
   end
 
-  def handle_event("save", a, socket) do
-    save_issue(socket, socket.assigns.action, socket.assigns.issue_params)
+  def handle_event("save", _, socket) do
+    if socket.assigns.changed? do
+      save_issue(socket, socket.assigns.action, socket.assigns.issue_params)
+    else
+      send self(), {:modal_closed}
+      {:noreply, socket}
+    end
   end
 
   defp save_issue(socket, :edit, issue_params) do
