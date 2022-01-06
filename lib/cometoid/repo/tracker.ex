@@ -216,9 +216,9 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:event)
   end
 
-  def update_issue_relations issue, ids_of_selected_contexts, all_contexts do
+  def update_issue_relations issue, ids_of_selected_contexts do
 
-    context_from =  fn id -> Enum.find all_contexts, &(&1.id == id) end # TODO use get_context! instead
+    context_from =  fn id -> Enum.find list_contexts, &(&1.id == id) end # TODO use get_context! instead
     contexts =
       ids_of_selected_contexts
       |> Enum.map(context_from)

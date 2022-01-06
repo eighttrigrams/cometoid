@@ -28,11 +28,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
       issue = socket.assigns.state.selected_issue
       views = get_views socket.assigns.state
 
-      contexts =
-        Tracker.list_contexts
-        |> Enum.filter(&(&1.view in views))
-
-      case Tracker.update_issue_relations(issue, ids_of_selected_contexts, contexts) do
+      case Tracker.update_issue_relations issue, ids_of_selected_contexts do
         {:ok, issue} ->
           send self(), {:after_edit_form_save, issue}
           {:noreply,
