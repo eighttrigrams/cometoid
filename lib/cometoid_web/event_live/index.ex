@@ -17,12 +17,20 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign(Theme.get)
     |> assign(:show_archived, false)
     |> assign(:view, "Events")
+    |> assign(:control_pressed, false)
     |> do_query
     |> return_ok
   end
 
+  def handle_event "right_click", _, socket do
+    socket
+    |> assign(:control_pressed, true)
+    |> return_noreply
+  end
+
   def handle_event "mouse_leave", _, socket do
     socket
+    |> assign(:control_pressed, false)
     |> return_noreply
   end
 

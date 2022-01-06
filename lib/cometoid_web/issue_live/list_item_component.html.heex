@@ -22,7 +22,6 @@
               <% end %>
 
               <%= for context <- contexts_to_show_as_badges @state, @issue do %>
-
                 <span class="contexts-background-color regular-color"
                       phx-hook="SecondaryContextBadgeHook"
                       id={"secondary-context-badge-hook_#{context.context.id}:#{@issue.id}"}

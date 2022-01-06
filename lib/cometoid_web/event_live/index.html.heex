@@ -17,54 +17,7 @@
         <div class="list">
           <table class="list-table">
             <%= for event <- get_events_to_display(@events) do %>
-              <tr id={"event-#{event.id}"} 
-                  phx-hook="EventItemHook" 
-                  class={"list-item 
-                          #{if not is_nil(assigns[:selected_event]) and @selected_event.id == event.id 
-                              do 'selected-item-color' end}"}>
-
-                <td class="left" phx-click="select_event" phx-value-target={event.id}>
-                  <div class="type"><span class="text text-left"><b>
-                    <%= event.date.day %>.<%= event.date.month %>.<%= event.date.year %>
-                  </b></span></div>
-                </td>
-
-                <td class="right border-background-color">
-                  <table><tr>
-                    <td class="heading" phx-click="select_event" phx-value-target={event.id}>
-                      <%=
-                          if event.issue do
-                            event.issue.title
-                          else
-                            event.person.name <> "'s Geburtstag"
-                          end %>
-                    </td>
-
-                    <td class="actions control-not-pressed">
-
-                      <%= if is_nil(event.person) do %>
-                        <%= if @show_archived do %>
-                            <span class="btn">
-                                <a phx-click="unarchive" phx-value-target={event.id}>
-                                    <i class="bi bi-envelope-open"></i>
-                                </a>
-                            </span>
-                        <% else %>
-                            <span class="btn">
-                                <a phx-click="archive" phx-value-target={event.id}>
-                                    <i class="bi bi-archive"></i>
-                                </a>
-                            </span>
-                        <% end %>
-                      <% else %>
-                        <div style="min-width: 1px;"/>
-                      <% end %>
-                    </td>
-
-                  </tr></table>
-                </td>
-
-              </tr>
+              <%= live_component CometoidWeb.EventLive.ListItemComponent, event: event, state: assigns %>
             <% end %>
           </table>
         </div>
