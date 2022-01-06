@@ -23,11 +23,13 @@
       </td>
 
       <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
-        <%= for context <- (Cometoid.Repo.Tracker.get_issue! @event.issue.id).contexts do %>
-          <span class="contexts-background-color regular-color">
-            <%= context.context.title %>
-          </span>
-        <% end %>
+        <%= if @event.issue do %>
+          <%= for context <- (Cometoid.Repo.Tracker.get_issue! @event.issue.id).contexts do %>
+            <span class="contexts-background-color regular-color">
+              <%= context.context.title %>
+            </span>
+          <% end %>
+        <%= end %>
       </td>
 
       <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
