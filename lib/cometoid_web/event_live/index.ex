@@ -75,7 +75,7 @@ defmodule CometoidWeb.EventLive.Index do
 
   def handle_info {:after_edit_form_save, %{ event: event }} = _issue, socket do
 
-    selected_event = Calendar.get_event! event.id
+    selected_event = if event do Calendar.get_event! event.id else nil end
     socket
     |> assign(:selected_event, selected_event)
     |> do_query
