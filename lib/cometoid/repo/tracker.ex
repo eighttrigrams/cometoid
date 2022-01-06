@@ -216,14 +216,16 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:event)
   end
 
-  def update_issue_relations issue, selected_contexts, contexts do
+  def update_issue_relations issue, ids_ofselected_contexts, all_contexts do
 
-    context_from =  fn id -> Enum.find contexts, &(&1.id == id) end # TODO use get_context! instead
-    ctxs = Enum.map(selected_contexts, context_from)
+    context_from =  fn id -> Enum.find all_contexts, &(&1.id == id) end # TODO use get_context! instead
+    contexts =
+      ids_of_selected_contexts
+      |> Enum.map(context_from)
       |> Enum.map(fn ctx -> %{ context: ctx } end)
 
     issue
-    |> Issue.relations_changeset(%{ "contexts" => ctxs })
+    |> Issue.relations_changeset(%{ "contexts" => contexts })
     |> Repo.update
   end
 
