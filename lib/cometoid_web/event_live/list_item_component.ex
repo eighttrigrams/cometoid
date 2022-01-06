@@ -1,5 +1,10 @@
 defmodule CometoidWeb.EventLive.ListItemComponent do
-  # If you generated an app with mix phx.new --live,
-  # the line below would be:
   use CometoidWeb, :live_component
+
+  alias Cometoid.Repo.Tracker
+
+  def get_contexts_to_show issue do
+    issue = Tracker.get_issue! issue.id
+    issue.contexts
+  end
 end

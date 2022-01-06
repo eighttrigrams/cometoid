@@ -24,7 +24,7 @@
 
       <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
         <%= if @event.issue do %>
-          <%= for context <- (Cometoid.Repo.Tracker.get_issue! @event.issue.id).contexts do %>
+          <%= for context <- get_contexts_to_show @event.issue do %>
             <span class="contexts-background-color regular-color">
               <%= context.context.title %>
             </span>
