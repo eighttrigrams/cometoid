@@ -1,11 +1,8 @@
 defmodule CometoidWeb.IssueLive.Index do
   use CometoidWeb, :live_view
 
-  alias Cometoid.CodeAdapter
   alias Cometoid.Repo.Tracker
-  alias Cometoid.Repo.Writing
   alias Cometoid.Repo.People
-  alias Cometoid.Model.Writing.Text
   alias Cometoid.Model.People.Person
   alias Cometoid.Model.Tracker.Issue
   alias Cometoid.Model.Tracker.Context
@@ -21,15 +18,8 @@ defmodule CometoidWeb.IssueLive.Index do
     }
   end
 
-  def handle_event "switch-theme", %{ "name" => name }, socket do
-    Theme.toggle!
-    socket
-    |> assign(Theme.get)
-    |> return_noreply
-  end
-
   @impl true
-  def handle_params params, url, socket do
+  def handle_params params, _url, socket do
     selected_view = get_selected_view params
 
     state = %{
@@ -49,6 +39,7 @@ defmodule CometoidWeb.IssueLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  @impl true
   def handle_info {:modal_closed}, socket do
     socket
     |> assign(:live_action, :index)
@@ -81,11 +72,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  defp apply_action(socket, :index, _params) do # ?
-    socket
-    |> assign(:issue, nil)
-  end
-
+  @impl true
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index } } = socket do
     case key do
       "Escape" -> handle_escape socket
@@ -102,20 +89,11 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  defp handle_escape socket do
-    unless socket.assigns.selected_secondary_contexts == [] do
-      socket
-      |> assign(:selected_secondary_contexts, [])
-    else
-      unless is_nil(socket.assigns.selected_context) do
-        socket
-        |> assign(:selected_context, nil)
-        |> do_query(true)
-      else
-        socket
-        |> assign(:selected_issue, nil)
-      end
-    end
+  def handle_event "switch-theme", %{ "name" => _name }, socket do
+    Theme.toggle!
+    socket
+    |> assign(Theme.get)
+    |> return_noreply
   end
 
   def handle_event "keyup", %{ "key" => key }, socket do
@@ -131,7 +109,6 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event("keydown", _params, socket), do: {:noreply, socket}
 
-  @impl true
   def handle_event "delete_issue", %{ "id" => id }, socket do
     state = IssuesMachine.delete_issue to_state(socket), id
     socket
@@ -173,7 +150,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def handle_event "create_new_issue", params, socket do
+  def handle_event "create_new_issue", _params, socket do
     socket
     |> assign(:issue, %Issue{})
     |> assign(:live_action, :new)
@@ -293,13 +270,13 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "show_open_issues", params, socket do
+  def handle_event "show_open_issues", _params, socket do
     socket
     |> assign(:list_issues_done_instead_open, false)
     |> do_query
   end
 
-  def handle_event "show_closed_issues", params, socket do
+  def handle_event "show_closed_issues", _params, socket do
     socket
     |> assign(:list_issues_done_instead_open, true)
     |> do_query
@@ -395,6 +372,27 @@ defmodule CometoidWeb.IssueLive.Index do
     length(issues) > 0
   end
 
+  defp apply_action(socket, :index, _params) do # ?
+    socket
+    |> assign(:issue, nil)
+  end
+
+  defp handle_escape socket do
+    unless socket.assigns.selected_secondary_contexts == [] do
+      socket
+      |> assign(:selected_secondary_contexts, [])
+    else
+      unless is_nil(socket.assigns.selected_context) do
+        socket
+        |> assign(:selected_context, nil)
+        |> do_query(true)
+      else
+        socket
+        |> assign(:selected_issue, nil)
+      end
+    end
+  end
+
   defp reprioritize_context socket do
     unless is_nil socket.assigns.selected_context do
       push_event(socket, :context_reprioritized, %{ id: socket.assigns.selected_context.id })
@@ -404,8 +402,6 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp to_state(socket), do: socket.assigns |> Map.delete(:flash)
-
-  defp return_noreply(socket, flash_type, flash_value), do: {:noreply, socket |> put_flash(flash_type, flash_value)}
 
   defp return_noreply(socket), do: {:noreply, socket |> Map.delete(:flash) }
 end

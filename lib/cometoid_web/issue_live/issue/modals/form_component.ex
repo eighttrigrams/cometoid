@@ -15,6 +15,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
     }
   end
 
+  @impl true
   def handle_event "changes", %{ "issue" => issue_params }, socket do
 
     issue_params = if issue_params["has_event"] == "true" do

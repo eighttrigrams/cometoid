@@ -13,7 +13,7 @@
       <%= label f, :title %>
       <%= text_input f, :title %>
       <%= error_tag f, :title %>
-    <%= end %>
+    <% end %>
 
     <%= label f, :date %>
     <%= date_select f, :date, [default: :calendar.local_time()] %>

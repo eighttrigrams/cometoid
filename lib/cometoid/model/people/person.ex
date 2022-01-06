@@ -20,7 +20,7 @@ defmodule Cometoid.Model.People.Person do
   end
 
   @doc false
-  def changeset(person, attrs) do
+  def changeset person, attrs do
     person
     |> cast(attrs, [:name, :description])
     |> put_assoc_birthday(attrs)
@@ -28,7 +28,7 @@ defmodule Cometoid.Model.People.Person do
     |> validate_required([:name])
   end
 
-  def update_changeset(person, attrs) do
+  def update_changeset person, attrs do
     person
     |> cast(attrs, [:name, :description, :original_birthday, :use_birthday])
     |> cast_assoc(:birthday, with: &Calendar.Event.date_changeset/2)
@@ -36,12 +36,7 @@ defmodule Cometoid.Model.People.Person do
     |> validate_required([:name])
   end
 
-  def update_description_changeset(person, attrs) do
-    person
-    |> cast(attrs, [:description])
-  end
-
-  def update_description_changeset(person, attrs) do
+  def update_description_changeset person, attrs do
     person
     |> cast(attrs, [:description])
   end

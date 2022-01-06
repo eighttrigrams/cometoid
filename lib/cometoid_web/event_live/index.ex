@@ -1,15 +1,12 @@
 defmodule CometoidWeb.EventLive.Index do
   use CometoidWeb, :live_view
 
-  alias CometoidWeb.IssueLive.Issue
   alias CometoidWeb.IssueLive.Person
-  alias CometoidWeb.EventLive
   alias CometoidWeb.Theme
 
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.People
   alias Cometoid.Repo.Calendar
-  alias Cometoid.Model.Calendar.Event
 
   @impl true
   def mount(_params, _session, socket) do
@@ -22,52 +19,13 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_ok
   end
 
-  def handle_event "right_click", _, socket do
-    socket
-    |> assign(:control_pressed, true)
-    |> return_noreply
-  end
-
-  def handle_event "mouse_leave", _, socket do
-    socket
-    |> assign(:control_pressed, false)
-    |> return_noreply
-  end
-
-  def handle_event "switch-theme", %{ "name" => name }, socket do
-    Theme.toggle!
-    socket
-    |> assign(Theme.get)
-    |> return_noreply
-  end
-
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  def handle_event("edit_event", id, socket) do
-    socket
-    |> assign(:edit_event, Calendar.get_event!(id))
-    |> assign(:live_action, :edit_event)
-    |> return_noreply
-  end
-
-  def handle_event "edit_issue_description", _, socket do
-    socket
-    |> assign(:issue, Tracker.get_issue!(socket.assigns.selected_event.issue.id))
-    |> assign(:live_action, :describe)
-    |> return_noreply
-  end
-
-  def handle_event "edit_context_description", _, socket do
-    socket
-    |> assign(:edit_entity, socket.assigns.selected_event.person)
-    |> assign(:live_action, :describe_context)
-    |> return_noreply
-  end
-
-  def handle_info({:modal_closed}, socket) do
+  @impl true
+  def handle_info {:modal_closed}, socket do
     socket
     |> assign(:live_action, nil)
     |> return_noreply
@@ -97,6 +55,47 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
+  @impl true
+  def handle_event "right_click", _, socket do
+    socket
+    |> assign(:control_pressed, true)
+    |> return_noreply
+  end
+
+  def handle_event "mouse_leave", _, socket do
+    socket
+    |> assign(:control_pressed, false)
+    |> return_noreply
+  end
+
+  def handle_event "switch-theme", %{ "name" => _name }, socket do
+    Theme.toggle!
+    socket
+    |> assign(Theme.get)
+    |> return_noreply
+  end
+
+  def handle_event("edit_event", id, socket) do
+    socket
+    |> assign(:edit_event, Calendar.get_event!(id))
+    |> assign(:live_action, :edit_event)
+    |> return_noreply
+  end
+
+  def handle_event "edit_issue_description", _, socket do
+    socket
+    |> assign(:issue, Tracker.get_issue!(socket.assigns.selected_event.issue.id))
+    |> assign(:live_action, :describe)
+    |> return_noreply
+  end
+
+  def handle_event "edit_context_description", _, socket do
+    socket
+    |> assign(:edit_entity, socket.assigns.selected_event.person)
+    |> assign(:live_action, :describe_context)
+    |> return_noreply
+  end
+
   def handle_event "unarchive", %{ "target" => id }, socket do
     event = Calendar.get_event! id
     Calendar.update_event(event, %{ "archived" => false })
@@ -113,25 +112,24 @@ defmodule CometoidWeb.EventLive.Index do
     |> return_noreply
   end
 
-  def handle_event("toggle_show_archived", params, socket) do
+  def handle_event "toggle_show_archived", _params, socket do
     socket
     |> assign(:show_archived, !socket.assigns.show_archived)
     |> do_query
     |> return_noreply
   end
 
-  defp apply_action(socket, :index, _params) do # ?
-    socket
-    |> assign(:edit_event, nil)
-  end
-
-  @impl true
   def handle_event("select_event", %{ "target" => id }, socket) do
     selected_event = Calendar.get_event!(id)
     socket =
       socket
       |> assign(:selected_event, selected_event)
     {:noreply, socket}
+  end
+
+  defp apply_action(socket, :index, _params) do # ?
+    socket
+    |> assign(:edit_event, nil)
   end
 
   def get_events_to_display events do

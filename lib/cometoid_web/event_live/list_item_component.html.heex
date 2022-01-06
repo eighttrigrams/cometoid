@@ -29,12 +29,12 @@
               <%= context.context.title %>
             </span>
           <% end %>
-        <%= end %>
+        <% end %>
         <%= if @event.person do %>
           <span class="contexts-background-color regular-color">
             <%= @event.person.name %>
           </span>
-        <%= end %>
+        <% end %>
       </td>
 
       <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>

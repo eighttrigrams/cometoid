@@ -54,6 +54,6 @@ defmodule Cometoid.Model.Tracker.Issue do
   defp put_assoc_contexts(issue, %{ "contexts" => contexts }), do: put_assoc(issue, :contexts, contexts)
   defp put_assoc_contexts(issue, _), do: issue
 
-  defp cast_assoc_event(issue, %{ "event" => event }), do: cast_assoc(issue, :event, with: &Calendar.Event.date_changeset/2)
+  defp cast_assoc_event(issue, %{ "event" => _event }), do: cast_assoc(issue, :event, with: &Calendar.Event.date_changeset/2)
   defp cast_assoc_event(issue, _), do: issue
 end

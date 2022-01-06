@@ -1,7 +1,6 @@
 defmodule CometoidWeb.IssueLive.IssuesMachine do
   use CometoidWeb.IssueLive.Machine
 
-  import Cometoid.Utils
   alias Cometoid.Repo.Tracker
 
   def set_issue_properties(state, selected_issue \\ nil)
@@ -208,7 +207,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       and Integer.to_string(selected_issue.id) != id do selected_issue end
   end
 
-  defp reload_contexts %{ selected_view: selected_view } = state do
+  defp reload_contexts %{ selected_view: selected_view } = _state do
     Tracker.list_contexts()
     |> Enum.filter(fn context -> context.view == selected_view end)
   end

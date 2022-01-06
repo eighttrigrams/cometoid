@@ -5,9 +5,7 @@ defmodule Cometoid.Repo.Tracker do
 
   import Ecto.Query, warn: false
   alias Cometoid.Repo
-  alias Cometoid.Model.Tracker.Relation
   alias Cometoid.Model.Tracker.Context
-  alias Cometoid.Model.Calendar
   alias Cometoid.Model.Tracker.Issue
 
   def list_contexts view do
@@ -218,7 +216,7 @@ defmodule Cometoid.Repo.Tracker do
 
   def update_issue_relations issue, ids_of_selected_contexts do
 
-    context_from =  fn id -> Enum.find list_contexts, &(&1.id == id) end # TODO use get_context! instead
+    context_from =  fn id -> Enum.find list_contexts(), &(&1.id == id) end # TODO use get_context! instead
     contexts =
       ids_of_selected_contexts
       |> Enum.map(context_from)
@@ -252,8 +250,8 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.update
   end
 
-  def update_issue2(issue, attrs) do
-    changeset = Issue.changeset(issue, attrs)
+  def update_issue2 issue, attrs do
+    Issue.changeset(issue, attrs)
     |> Repo.update
   end
 

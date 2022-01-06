@@ -1,7 +1,6 @@
 defmodule CometoidWeb.IssueLive.TaskbarComponent do
   use CometoidWeb, :live_component
 
-  alias Cometoid.Model.Tracker.Context
   alias CometoidWeb.IssueLive.TaskbarComponent
 
   def handle_event "toggle_context", %{ "id" => id }, socket do
@@ -25,7 +24,7 @@ defmodule CometoidWeb.IssueLive.TaskbarComponent do
   def get_contexts state do
     if state.selected_context do
       all_secondary_contexts = state.selected_context.secondary_contexts
-      contexts =
+
       all_secondary_contexts
       |> Enum.map(fn ctx -> {ctx.id, ctx.title} end)
       |> Enum.filter(fn {_id, title} -> title != state.selected_context.title end)

@@ -19,6 +19,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.DescriptionFormComponent do
      |> assign(:changeset, changeset)}
   end
 
+  @impl true
   def handle_event("save", %{"description" => description }, socket) do
     save_context(socket, socket.assigns.action, %{ description: description })
   end

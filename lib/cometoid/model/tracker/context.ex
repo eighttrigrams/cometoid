@@ -19,7 +19,7 @@ defmodule Cometoid.Model.Tracker.Context do
     field :view, :string
     field :important, :boolean, default: false
     field :description, :string
-    field :"is_tag?", :boolean, [source: :is_tag]
+    field :is_tag?, :boolean, [source: :is_tag]
 
     has_many(
       :issues,
@@ -46,7 +46,7 @@ defmodule Cometoid.Model.Tracker.Context do
   @doc false
   def changeset context, attrs do
     context
-    |> cast(attrs, [:title, :view, :important, :description, :"is_tag?"])
+    |> cast(attrs, [:title, :view, :important, :description, :is_tag?])
     |> put_assoc_person(attrs)
     |> put_assoc_text(attrs)
     |> validate_required([:title, :view])

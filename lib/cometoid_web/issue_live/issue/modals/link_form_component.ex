@@ -2,7 +2,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker
-  alias CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent
 
   def update assigns, socket do
     state = assigns.state
@@ -82,7 +81,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
     |> Enum.map(&to_key/1)
   end
 
-  defp filter_true({k, v}), do: v == "true"
+  defp filter_true({_k, v}), do: v == "true"
 
   defp to_key({k, _v}), do: k
 end

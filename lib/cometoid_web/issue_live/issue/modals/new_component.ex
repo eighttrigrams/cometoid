@@ -12,6 +12,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
      |> assign(:changeset, changeset)}
   end
 
+  @impl true
   def handle_event "changes", %{ "issue" => issue_params }, socket do
     socket =
       socket

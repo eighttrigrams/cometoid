@@ -13,6 +13,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.DescriptionFormComponent do
      |> assign(:changeset, changeset)}
   end
 
+  @impl true
   def handle_event("changes", %{ "issue" => issue_params }, socket) do
     {:noreply, socket |> assign(:has_event,
       (if issue_params["has_event"] == "true", do: true, else: false))}

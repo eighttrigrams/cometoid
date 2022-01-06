@@ -1,6 +1,6 @@
 <div>
     <div class="form-block form-block-1 context-type-grid">
-        <%= for context = {id, title} <- TaskbarComponent.get_contexts(@state) do %>
+        <%= for _context = {id, title} <- TaskbarComponent.get_contexts(@state) do %>
             <div phx-click="toggle_context"
                 phx-value-id={id}
                 phx-target={@myself}
