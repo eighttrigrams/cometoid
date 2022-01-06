@@ -30,6 +30,11 @@
             </span>
           <% end %>
         <%= end %>
+        <%= if @event.person do %>
+          <span class="contexts-background-color regular-color">
+            <%= @event.person.name %>
+          </span>
+        <%= end %>
       </td>
 
       <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
