@@ -70,10 +70,10 @@ hooks.SaveHook = {
   }},
   makeKeyDownListener: function(self) { return function(e) {
 
-    if (e.key === "Control") {
-      self.controlPressed = true
-    }
+    console.log(e.key)
 
+    if (e.key === "Enter") e.preventDefault()
+    if (e.key === "Control") self.controlPressed = true
     if (e.key === "s") {
       if (self.controlPressed) {
         e.preventDefault()
