@@ -7,8 +7,8 @@
     </div>
   <% end %>
 
-  <div id="contexts-sidebar-list" 
-       class={"sidebar-list contexts-list #{if @context_search_open do "searchbar-included" end}"}>
+  <div id="contexts-list" 
+       class={if @context_search_open do "searchbar-included" end}>
     <div class="list-base">
       <%= for context <- @contexts do %>
         <%= if should_show context, @q do %>

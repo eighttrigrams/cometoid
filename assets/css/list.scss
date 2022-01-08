@@ -32,17 +32,6 @@ $list-item-height: $taskbar-height;
     }
 }
 
-#contexts-list { // TODO see if this can be removed
-    height: 56%;
-    border-bottom-style: dashed;
-    border-bottom-width: 2px;
-
-    &.only-contexts {
-        height: 100%;
-        border-bottom-style: unset;
-    }
-}
-
 #contexts-search-bar {
     position: relative;
     height: 20px;
@@ -112,10 +101,10 @@ $list-item-height: $taskbar-height;
 }
 
 
-.sidebar-list::-webkit-scrollbar {
+#contexts-list::-webkit-scrollbar {
     display: none;
 }
-.sidebar-list {
+#contexts-list {
     overflow: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
