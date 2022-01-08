@@ -19,6 +19,12 @@ import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {};
 
+hooks.ContextSearchInputHook = {
+  mounted() {
+    document.getElementById("context_search_q").focus()
+  }
+}
+
 hooks.DescriptionSaveHook = {
   myTarget: undefined,
   controlPressed: false,

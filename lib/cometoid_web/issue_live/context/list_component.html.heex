@@ -1,6 +1,6 @@
 <div id="contexts-container" class="border-color">
   <%= if @context_search_open do %>
-    <div id="contexts-search-bar">
+    <div id="contexts-search-bar" phx-hook="ContextSearchInputHook">
       <.form let={f} for={:context_search} phx-change="changes" phx-target={@myself}>
         <%= text_input f, :q %>
       </.form>
