@@ -255,13 +255,15 @@ defmodule CometoidWeb.IssueLive.Index do
     {id, ""} = Integer.parse id
     state = IssuesMachine.select_context to_state(socket), id
 
+    context_search_open = socket.assigns.context_search_open
+
     socket =
       socket
       |> assign(state)
       |> assign(:context_search_open, false)
       |> assign(:selected_secondary_contexts, [])
 
-    if socket.assigns.context_search_open do
+    if context_search_open do
       socket |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
     else
       socket
