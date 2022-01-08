@@ -1,5 +1,9 @@
-<table class="list-table">
-    <%= for issue <- ListComponent.get_issues(@state) do %>
+<div id="list-container" class="border-color">
+  <div id="issues-list" class="list">
+    <table class="list-table">
+      <%= for issue <- ListComponent.get_issues(@state) do %>
         <%= live_component ListItemComponent, issue: issue, state: @state %>
-    <% end %>
-</table>
+      <% end %>
+    </table>
+  </div>
+</div>

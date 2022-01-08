@@ -16,11 +16,7 @@
               selected_context: @selected_context,
               context_search_open: @context_search_open %>
 
-            <div id="list-container" class="border-color">
-              <div id="issues-list" class="list">
-                <%= live_component IssueLive.Issue.ListComponent, state: assigns %>
-              </div>
-            </div>
+            <%= live_component IssueLive.Issue.ListComponent, state: assigns %>
           </div>
         </div>
         <div class="right-column border-color">
