@@ -7,6 +7,7 @@ defmodule CometoidWeb.IssueLive.Index do
   alias Cometoid.Model.Tracker.Issue
   alias Cometoid.Model.Tracker.Context
   alias CometoidWeb.Theme
+  alias CometoidWeb.IssueLive
   alias CometoidWeb.IssueLive.IssuesMachine
 
   @impl true

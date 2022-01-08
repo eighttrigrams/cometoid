@@ -1,11 +1,11 @@
-defmodule CometoidWeb.IssueLive.ListComponent do
+defmodule CometoidWeb.IssueLive.Issue.ListComponent do
   # If you generated an app with mix phx.new --live,
   # the line below would be:
   use CometoidWeb, :live_component
   # use Phoenix.LiveComponent
 
-  alias CometoidWeb.IssueLive.ListComponent
-  alias CometoidWeb.IssueLive.ListItemComponent
+  alias CometoidWeb.IssueLive.Issue.ListComponent
+  alias CometoidWeb.IssueLive.Issue.ListItemComponent
 
   def get_issues state do
     all_issues = state.issues
