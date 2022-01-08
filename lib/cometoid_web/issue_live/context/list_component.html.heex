@@ -8,16 +8,14 @@
   <% end %>
 
   <div id="contexts-list" 
-       class={if @context_search_open do "searchbar-included" end}>
-    <div class="list-base">
-      <%= for context <- @contexts do %>
-        <%= if should_show context, @q do %>
-          <%= live_component ListItemComponent, 
-            context: context, 
-            contexts: @contexts, 
-            selected_context: @selected_context %>
-        <% end %>
+       class={"list-base #{if @context_search_open do "searchbar-included" end}"}>
+    <%= for context <- @contexts do %>
+      <%= if should_show context, @q do %>
+        <%= live_component ListItemComponent, 
+          context: context, 
+          contexts: @contexts, 
+          selected_context: @selected_context %>
       <% end %>
-    </div>
+    <% end %>
   </div>
 </div>
