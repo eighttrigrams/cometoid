@@ -1,69 +1,8 @@
 <div class="list-base">
   <%= for context <- @contexts do %>
-    <div id={"context-#{context.id}"} phx-hook="ContextItemHook" 
-         class={"list-item regular-color #{if not is_nil(@selected_context) and @selected_context.id == context.id 
-                                           do 'selected-item-color' end}"} 
-         phx-click="select_context" 
-         phx-value-id={context.id}>
-
-      <div class="top">
-        <div class={"type #{if context.important do 'important-color' else 'regular-color' end}"}>
-          <b><%=
-              case context.view do
-                  "People" -> "P#{context.person.id}"
-                  _ -> "C#{context.id}"
-              end
-          %> | <%= context.title %></b>
-          <br>
-
-          <%
-          view = context.view
-          view = if String.contains?(view, ":") do Enum.at(String.split(view,":"),1) else view end
-          %>
-        </div>
-      </div>
-
-      <div class="bottom">
-        <div class="text">
-
-          <br>
-          <%= if show_issues_badge context do %>
-              <i class="bi bi-envelope-open"></i>
-              <%= Context.calc_open_issues context %>
-          <% end %>
-          <%= if show_archived_issues_badge context do %>
-              <i class="bi bi-archive"></i>
-              <%= Context.calc_issues_done context %>
-          <% end %>
-        </div>
-        <div class="right">
-          <div class="actions">
-            <span class="btn">
-                <a phx-click="toggle_context_important" phx-value-target={context.id}>
-                    <i class="bi bi-exclamation-circle"></i>
-                </a>
-            </span>
-            <span class="btn">
-                <a phx-click="reprioritize_context" phx-value-id={context.id}>
-                    <i class="bi bi-arrow-up"></i>
-                </a>
-            </span>
-            <span class="btn">
-                <%= link to: "#",
-                    phx_click: "delete_context",
-                    phx_value_id: context.id, data: [confirm: "Are you sure?"],
-                    tabindex: -1 do %>
-                    <i class="bi bi-trash"></i>
-                <% end %>
-            </span>
-            <span class="btn">
-                <a phx-click="link_context" phx-value-id={context.id}>
-                    <i class="bi bi-link"></i>
-                </a>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= live_component ListItemComponent, 
+      context: context, 
+      contexts: @contexts, 
+      selected_context: @selected_context %>
   <% end %>
 </div>
