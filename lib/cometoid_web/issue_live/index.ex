@@ -79,7 +79,7 @@ defmodule CometoidWeb.IssueLive.Index do
     case key do
       "Escape" -> handle_escape socket
       "n" ->
-        if socket.assigns.selected_context and not socket.assigns.context_search_open do
+        if not socket.assigns.context_search_open and socket.assigns.selected_context  do
           socket
           |> assign(:live_action, :new)
           |> assign(:issue, %Issue{})
