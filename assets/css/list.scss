@@ -32,8 +32,7 @@ $list-item-height: $taskbar-height;
     }
 }
 
-
-#contexts-list {
+#contexts-list { // TODO see if this can be removed
     height: 56%;
     border-bottom-style: dashed;
     border-bottom-width: 2px;
@@ -44,12 +43,27 @@ $list-item-height: $taskbar-height;
     }
 }
 
+#contexts-search-bar {
+    position: relative;
+    height: 20px;
+    padding: 10px;
+    padding-left: 18px;
+    input {
+        width: calc(100% - 4px);
+        height: 100%;
+        border: none;
+        outline: none;
+    }
+    input:focus {
+        border: none;
+        outline: none;
+    }
+}
 
 #issues-list {
     bottom: 0;
     height: 100%;
 }
-
 
 .list-base {
     .list-item {
@@ -58,7 +72,6 @@ $list-item-height: $taskbar-height;
         }
     }
 }
-
 
 .actions {
                 
@@ -284,4 +297,9 @@ $list-item-height: $taskbar-height;
             }
         }
     }
+}
+
+.searchbar-included {
+    position: relative;
+    height: calc(100% - 40px);
 }

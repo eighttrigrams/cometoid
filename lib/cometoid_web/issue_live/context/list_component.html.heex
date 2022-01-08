@@ -1,8 +1,23 @@
-<div class="list-base">
-  <%= for context <- @contexts do %>
-    <%= live_component ListItemComponent, 
-      context: context, 
-      contexts: @contexts, 
-      selected_context: @selected_context %>
+<div id="contexts-container" class="border-color">
+  <%= if @context_search_open do %>
+    <div id="contexts-search-bar">
+      <.form let={f} for={:context_search} phx-change="changes" phx-target={@myself}>
+        <%= text_input f, :q %>
+      </.form>
+    </div>
   <% end %>
+
+  <div id="contexts-sidebar-list" 
+       class={"sidebar-list contexts-list #{if @context_search_open do "searchbar-included" end}"}>
+    <div class="list-base">
+      <%= for context <- @contexts do %>
+        <%= if should_show context, @q do %>
+          <%= live_component ListItemComponent, 
+            context: context, 
+            contexts: @contexts, 
+            selected_context: @selected_context %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>

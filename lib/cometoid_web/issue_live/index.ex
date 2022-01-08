@@ -25,6 +25,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     state = %{
       control_pressed: false,
+      context_search_open: false,
       list_issues_done_instead_open: false,
       selected_secondary_contexts: [],
       selected_view: selected_view
@@ -78,7 +79,7 @@ defmodule CometoidWeb.IssueLive.Index do
     case key do
       "Escape" -> handle_escape socket
       "n" ->
-        if socket.assigns.selected_context do
+        if socket.assigns.selected_context and not socket.assigns.context_search_open do
           socket
           |> assign(:live_action, :new)
           |> assign(:issue, %Issue{})
@@ -86,8 +87,13 @@ defmodule CometoidWeb.IssueLive.Index do
           socket
         end
       "Control" ->
-        socket
-          |> assign(:control_pressed, true)
+        if socket.assigns.context_search_open do
+          socket
+        else
+          socket |> assign(:control_pressed, true)
+        end
+      "c" ->
+        socket |> assign(:context_search_open, true)
       _ ->
         socket
     end
@@ -250,6 +256,7 @@ defmodule CometoidWeb.IssueLive.Index do
     state = IssuesMachine.select_context to_state(socket), id
     socket
     |> assign(state)
+    |> assign(:context_search_open, false)
     |> assign(:selected_secondary_contexts, [])
     |> do_query
   end
@@ -383,17 +390,21 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp handle_escape socket do
-    unless socket.assigns.selected_secondary_contexts == [] do
-      socket
-      |> assign(:selected_secondary_contexts, [])
+    if socket.assigns.context_search_open do
+      socket |> assign(:context_search_open, false)
     else
-      unless is_nil(socket.assigns.selected_context) do
+      unless socket.assigns.selected_secondary_contexts == [] do
         socket
-        |> assign(:selected_context, nil)
-        |> do_query(true)
+        |> assign(:selected_secondary_contexts, [])
       else
-        socket
-        |> assign(:selected_issue, nil)
+        unless is_nil(socket.assigns.selected_context) do
+          socket
+          |> assign(:selected_context, nil)
+          |> do_query(true)
+        else
+          socket
+          |> assign(:selected_issue, nil)
+        end
       end
     end
   end

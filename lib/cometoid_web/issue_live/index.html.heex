@@ -10,13 +10,11 @@
           </div>
 
           <div class="issues-view-list-arrangement">
-            <div id="contexts-container" class="border-color">
-              <div id="contexts-sidebar-list" class="sidebar-list contexts-list">
-                <%= live_component IssueLive.Context.ListComponent,
-                  contexts: @contexts,
-                  selected_context: @selected_context %>
-              </div>
-            </div>
+            <%= live_component IssueLive.Context.ListComponent,
+              id: :contexts,
+              contexts: @contexts,
+              selected_context: @selected_context,
+              context_search_open: @context_search_open %>
 
             <div id="list-container" class="border-color">
               <div id="issues-list" class="list">
