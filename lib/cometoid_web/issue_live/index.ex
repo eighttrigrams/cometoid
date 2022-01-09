@@ -49,7 +49,6 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_info {:select_context, id}, socket do
-    IO.inspect id
     select_context socket, id
   end
 
