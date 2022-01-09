@@ -191,11 +191,11 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
 
   test "previous context" do
     ctx1 = Repo.insert! %Context {
-      title: "Task1",
+      title: "Project1",
       view: "Software"
     }
     ctx2 = Repo.insert! %Context {
-      title: "Task2",
+      title: "Project2",
       view: "Software"
     }
     state = %{
@@ -209,7 +209,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       |> IssuesMachine.select_context(ctx1.id)
       |> IssuesMachine.select_context(ctx2.id)
       |> IssuesMachine.select_previous_context
-    assert "Task1" == state.selected_context.title
+    assert "Project1" == state.selected_context.title
 
     state =
       state
@@ -217,6 +217,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       |> IssuesMachine.select_context(ctx2.id)
       |> IssuesMachine.select_context(ctx1.id)
       |> IssuesMachine.select_previous_context
-    assert "Task2" == state.selected_context.title
+    assert "Project2" == state.selected_context.title
   end
 end
