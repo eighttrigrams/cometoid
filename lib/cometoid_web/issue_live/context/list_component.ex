@@ -25,10 +25,11 @@ defmodule CometoidWeb.IssueLive.Context.ListComponent do
     socket =
       socket
       |> assign(:q, q)
+      |> assign(:contexts, (Enum.filter socket.assigns.contexts, fn context -> should_show context, q end))
     {:noreply, socket}
   end
 
-  def should_show context, q do
+  defp should_show context, q do
     String.starts_with? (String.downcase context.title), (String.downcase q)
   end
 end
