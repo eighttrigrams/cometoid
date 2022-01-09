@@ -178,14 +178,44 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       list_issues_done_instead_open: false
     }
 
-    assert 3 = length (List.first Tracker.list_issues %Tracker.Query {
+    assert 3 == length (List.first Tracker.list_issues %Tracker.Query {
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }).contexts
     IssuesMachine.delete_context state, tag_context.id
-    assert 2 = length (List.first Tracker.list_issues %Tracker.Query {
+    assert 2 == length (List.first Tracker.list_issues %Tracker.Query {
         list_issues_done_instead_open: false,
         selected_view: "Software"
       }).contexts
+  end
+
+  test "previous context" do
+    ctx1 = Repo.insert! %Context {
+      title: "Task1",
+      view: "Software"
+    }
+    ctx2 = Repo.insert! %Context {
+      title: "Task2",
+      view: "Software"
+    }
+    state = %{
+      selected_view: "Software",
+      selected_issue: nil
+    }
+    state =
+      state
+      |> IssuesMachine.init_context_properties
+      |> IssuesMachine.select_context(ctx1.id)
+      |> IssuesMachine.select_context(ctx2.id)
+      |> IssuesMachine.select_previous_context
+    assert "Task1" == state.selected_context.title
+
+    state =
+      state
+      |> IssuesMachine.init_context_properties
+      |> IssuesMachine.select_context(ctx2.id)
+      |> IssuesMachine.select_context(ctx1.id)
+      |> IssuesMachine.select_previous_context
+    assert "Task2" == state.selected_context.title
   end
 end

@@ -114,6 +114,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   @doc """
+  TODO rename: it is used for jumping to context with (!) an issue
+
   Call do_query after this, to reload all issues for the current context                TODO
   """
   def jump_to_context state, target_context_id, target_issue_id do
