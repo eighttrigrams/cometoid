@@ -37,34 +37,22 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     {
       :do_query,
       state
-      |> set_context_properties
+      |> init_context_properties
       |> set_issue_properties
     }
   end
 
-  @doc """
-  Call do_query after this, to reload all issues for the current context
-  """
-  def jump_to_context state, target_context_id, target_issue_id do
-    target_issue = Tracker.get_issue! target_issue_id
-    target_context = Tracker.get_context! target_context_id
-    %{
-        selected_context: target_context,
-        selected_issue: target_issue,
-        control_pressed: false
-    }
-  end
-
-  def set_context_properties state do
-    contexts = reload_contexts state
+  def init_context_properties state do
+    contexts = load_contexts_for_view state
     %{
       selected_context: nil,
+      selected_contexts: [],
       contexts: contexts
     }
   end
 
   def set_context_properties_and_keep_selected_context state do
-    contexts = reload_contexts state
+    contexts = load_contexts_for_view state
     selected_context = unless is_nil state.selected_context do
       Tracker.get_context! state.selected_context.id
     end
@@ -90,7 +78,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
     selected_context = Enum.find(state.contexts, &(&1.id == id))
     Tracker.update_context_updated_at selected_context
-    contexts = reload_contexts state # TODO review duplication with set_context_properties
+    contexts = load_contexts_for_view state # TODO review duplication with init_context_properties
 
     %{
       selected_context: selected_context,
@@ -110,11 +98,43 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
     selected_context = state.contexts |> Enum.find(&(&1.id == id))
     selected_issue = keep_issue state, selected_context
-
+    selected_contexts = [selected_context.id|state.selected_contexts]
     %{
       selected_context: selected_context,
+      selected_contexts: selected_contexts,
       selected_issue: selected_issue
     }
+  end
+
+  @doc """
+  Call do_query after this, to reload all issues for the current context                TODO
+  """
+  def jump_to_context state, target_context_id, target_issue_id do
+    target_issue = Tracker.get_issue! target_issue_id
+    target_context = Tracker.get_context! target_context_id
+    selected_contexts = [target_context.id|state.selected_contexts] # TODO only do if we are in some context
+    %{
+        selected_context: target_context,
+        selected_contexts: selected_contexts,
+        selected_issue: target_issue,
+        control_pressed: false
+    }
+  end
+
+  def select_previous_context state do
+    with [_selected_context_id, previous_context_id|rest]
+                                    <- state.selected_contexts,
+         selected_context           <- (Enum.find state.contexts, &(&1.id == previous_context_id)),
+         selected_issue             <- (keep_issue state, selected_context) do
+      %{
+        selected_context: selected_context,
+        selected_contexts: [previous_context_id|rest],
+        selected_issue: selected_issue,
+      }
+    else
+      [] -> %{}
+      [_|_] -> %{}
+    end
   end
 
   def unlink_issue state, id do
@@ -193,7 +213,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   defp keep_issue state, selected_context do
-    unless is_nil(state.selected_issue) do
+    unless is_nil state.selected_issue do
       case Enum.find selected_context.issues, &(&1.issue.id == state.selected_issue.id) do
         nil -> nil
         relation -> relation.issue
@@ -207,9 +227,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       and Integer.to_string(selected_issue.id) != id do selected_issue end
   end
 
-  defp reload_contexts %{ selected_view: selected_view } = _state do
+  defp load_contexts_for_view %{ selected_view: selected_view } = _state do
     Tracker.list_contexts()
-    |> Enum.filter(fn context -> context.view == selected_view end)
+    |> Enum.filter(&(&1.view == selected_view))
   end
 
   defp has_one_non_tag_context? issue do

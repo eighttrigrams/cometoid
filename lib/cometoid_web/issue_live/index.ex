@@ -31,7 +31,7 @@ defmodule CometoidWeb.IssueLive.Index do
       selected_view: selected_view
     }
     state = Map.merge socket.assigns, state
-    state = IssuesMachine.set_context_properties state
+    state = IssuesMachine.init_context_properties state
     state = IssuesMachine.set_issue_properties state
 
     socket = socket
@@ -192,7 +192,17 @@ defmodule CometoidWeb.IssueLive.Index do
     |> do_query
   end
 
-  def handle_event "create_new_context", %{ "view" => view }, socket do
+  def handle_event "select_previous_context", _, socket do
+
+    state = IssuesMachine.select_previous_context (to_state socket)
+
+    socket
+    |> assign(state)
+    |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
+    |> return_noreply
+  end
+
+  def handle_event "create_new_context", %{ "view" => view }, socket do # TODO why is view passed?
 
     entity = case view do
       "People" -> %Person{}
@@ -417,9 +427,10 @@ defmodule CometoidWeb.IssueLive.Index do
         socket
         |> assign(:selected_secondary_contexts, [])
       else
-        unless is_nil(socket.assigns.selected_context) do
+        unless (is_nil socket.assigns.selected_context) do
           socket
           |> assign(:selected_context, nil)
+          |> assign(:selected_contexts, [])
           |> do_query(true)
         else
           socket
