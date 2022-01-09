@@ -9,7 +9,7 @@
               id: "taskbar", state: assigns %>
           </div>
 
-          <div class="issues-view-list-arrangement">
+          <div id="contexts-and-issues">
             <%= live_component IssueLive.Context.ListComponent,
               id: :contexts,
               contexts: @contexts,
