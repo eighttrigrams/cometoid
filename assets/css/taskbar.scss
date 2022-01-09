@@ -59,10 +59,14 @@
         font-size: 1.4rem;
         a {
             position: absolute;
-            padding-top: 19px;
             height: $taskbar-height;
             width: $taskbar-height;
             text-align: center;
+            i {
+                position: absolute;
+                top: 20px;
+                left: 21px;
+            }
             i::before {
                 text-align: center;
             }
