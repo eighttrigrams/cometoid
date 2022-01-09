@@ -200,7 +200,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       selected_view: "Software",
-      selected_issue: nil
+      selected_issue: nil,
+      list_issues_done_instead_open: false
     }
     state =
       state

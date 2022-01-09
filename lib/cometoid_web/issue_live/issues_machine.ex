@@ -131,9 +131,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   def select_previous_context state do
-    with [_selected_context_id, previous_context_id|rest]
+   result = with [_selected_context_id, previous_context_id|rest]
                                     <- state.selected_contexts,
-         selected_context           <- (Enum.find state.contexts, &(&1.id == previous_context_id)),
+         selected_context           <- (Tracker.get_context! previous_context_id),
          selected_issue             <- (keep_issue state, selected_context) do
       %{
         selected_context: selected_context,
@@ -144,6 +144,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       [] -> %{}
       [_|_] -> %{}
     end
+    {:do_query, result}
   end
 
   def unlink_issue state, id do
