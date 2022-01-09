@@ -5,28 +5,25 @@ defmodule CometoidWeb.IssueLive.Context.ListComponent do
 
   @impl true
   def mount socket do
-    socket =
-      socket
-      |> assign(:q, "")
-    {:ok, socket}
+    socket
+    |> assign(:q, "")
+    |> return_ok
   end
 
   @impl true
   def update assigns, socket do
-    socket =
-      socket
-      |> assign(assigns)
-      |> assign(:q, "")
-    {:ok, socket}
+    socket
+    |> assign(assigns)
+    |> assign(:q, "")
+    |> return_ok
   end
 
   @impl true
   def handle_event "changes", %{ "context_search" => %{ "q" => q }}, socket do
-    socket =
-      socket
-      |> assign(:q, q)
-      |> assign(:contexts, (Enum.filter socket.assigns.contexts, fn context -> should_show context, q end))
-    {:noreply, socket}
+    socket
+    |> assign(:q, q)
+    |> assign(:contexts, (Enum.filter socket.assigns.contexts, &(should_show &1, q)))
+    |> return_noreply
   end
 
   defp should_show context, q do

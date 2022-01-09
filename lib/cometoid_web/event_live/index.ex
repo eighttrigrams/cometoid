@@ -121,10 +121,9 @@ defmodule CometoidWeb.EventLive.Index do
 
   def handle_event("select_event", %{ "target" => id }, socket) do
     selected_event = Calendar.get_event!(id)
-    socket =
-      socket
-      |> assign(:selected_event, selected_event)
-    {:noreply, socket}
+    socket
+    |> assign(:selected_event, selected_event)
+    |> return_noreply
   end
 
   defp apply_action(socket, :index, _params) do # ?
@@ -146,8 +145,4 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign(:events, Calendar.list_events(socket.assigns.show_archived))
   end
-
-  defp return_noreply(socket), do: {:noreply, socket}
-
-  defp return_ok(socket), do: {:ok, socket}
 end

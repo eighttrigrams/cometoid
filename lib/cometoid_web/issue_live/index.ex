@@ -428,6 +428,4 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp to_state(socket), do: socket.assigns |> Map.delete(:flash)
-
-  defp return_noreply(socket), do: {:noreply, socket |> Map.delete(:flash) }
 end
