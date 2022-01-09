@@ -96,9 +96,16 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   """
   def select_context state, id do
 
-    selected_context = state.contexts |> Enum.find(&(&1.id == id))
+    selected_context = Tracker.get_context! id
     selected_issue = keep_issue state, selected_context
-    selected_contexts = [selected_context.id|state.selected_contexts]
+    selected_contexts = case state.selected_contexts do
+      [previous_context_id|_] -> if previous_context_id == selected_context.id do
+        state.selected_contexts
+      else
+        [selected_context.id|state.selected_contexts]
+      end
+      [] -> [selected_context.id]
+    end
     %{
       selected_context: selected_context,
       selected_contexts: selected_contexts,

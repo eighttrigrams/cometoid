@@ -14,7 +14,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     state = %{
       selected_view: "Software"
     }
-    new_state = IssuesMachine.set_context_properties state
+    new_state = IssuesMachine.init_context_properties state
 
     assert List.first(new_state.contexts).id == context.id
     assert new_state.selected_context == nil
