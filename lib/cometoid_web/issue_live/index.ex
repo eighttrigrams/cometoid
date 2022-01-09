@@ -48,6 +48,11 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
+  def handle_info {:select_context, id}, socket do
+    IO.inspect id
+    select_context socket, id
+  end
+
   def handle_info {:select_secondary_contexts, selected_secondary_contexts}, socket do
     socket
     |> assign(:selected_secondary_contexts, selected_secondary_contexts)
@@ -253,22 +258,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "select_context", %{ "id" => id }, socket do
     {id, ""} = Integer.parse id
-    state = IssuesMachine.select_context to_state(socket), id
-
-    context_search_open = socket.assigns.context_search_open
-
-    socket =
-      socket
-      |> assign(state)
-      |> assign(:context_search_open, false)
-      |> assign(:selected_secondary_contexts, [])
-
-    if context_search_open do
-      socket |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
-    else
-      socket
-    end
-    |> do_query
+    select_context socket, id
   end
 
   def handle_event "link_context", %{ "id" => id }, socket do
@@ -397,6 +387,25 @@ defmodule CometoidWeb.IssueLive.Index do
   defp apply_action(socket, :index, _params) do # ?
     socket
     |> assign(:issue, nil)
+  end
+
+  defp select_context socket, id do
+    state = IssuesMachine.select_context to_state(socket), id
+
+    context_search_open = socket.assigns.context_search_open
+
+    socket =
+      socket
+      |> assign(state)
+      |> assign(:context_search_open, false)
+      |> assign(:selected_secondary_contexts, [])
+
+    if context_search_open do
+      socket |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
+    else
+      socket
+    end
+    |> do_query
   end
 
   defp handle_escape socket do

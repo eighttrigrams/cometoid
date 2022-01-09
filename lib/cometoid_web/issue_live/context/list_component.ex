@@ -7,6 +7,7 @@ defmodule CometoidWeb.IssueLive.Context.ListComponent do
   def mount socket do
     socket
     |> assign(:q, "")
+    |> assign(:filtered_contexts, [])
     |> return_ok
   end
 
@@ -15,6 +16,7 @@ defmodule CometoidWeb.IssueLive.Context.ListComponent do
     socket
     |> assign(assigns)
     |> assign(:q, "")
+    |> assign(:filtered_contexts, assigns.contexts)
     |> return_ok
   end
 
@@ -22,7 +24,15 @@ defmodule CometoidWeb.IssueLive.Context.ListComponent do
   def handle_event "changes", %{ "context_search" => %{ "q" => q }}, socket do
     socket
     |> assign(:q, q)
-    |> assign(:contexts, (Enum.filter socket.assigns.contexts, &(should_show &1, q)))
+    |> assign(:filtered_contexts, (Enum.filter socket.assigns.contexts, &(should_show &1, q)))
+    |> return_noreply
+  end
+
+  def handle_event "select", _, socket do
+    if 1 == length socket.assigns.filtered_contexts do
+      send self(), {:select_context, (List.first socket.assigns.filtered_contexts).id}
+    end
+    socket
     |> return_noreply
   end
 
