@@ -277,7 +277,21 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(state)
+    |> assign(:context_search_open, false)
     |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
+    |> do_query
+  end
+
+  def handle_event "toggle_context_important", %{ "target" => id }, socket do
+
+    context = Tracker.get_context! id
+    socket = socket |> assign(:selected_context, context)
+    Tracker.update_context(context, %{ "important" => !context.important })
+
+    socket
+    |> assign(IssuesMachine.set_context_properties_and_keep_selected_context(to_state(socket)))
+    |> assign(:context_search_open, false)
+    |> push_event(:context_reprioritized, %{ id: id })
     |> do_query
   end
 
@@ -307,18 +321,6 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> push_event(:issue_reprioritized, %{ id: id })
     |> assign(:selected_issue, selected_issue)
-    |> do_query
-  end
-
-  def handle_event "toggle_context_important", %{ "target" => id }, socket do
-
-    context = Tracker.get_context! id
-    socket = socket |> assign(:selected_context, context)
-    Tracker.update_context(context, %{ "important" => !context.important })
-
-    socket
-    |> assign(IssuesMachine.set_context_properties_and_keep_selected_context(to_state(socket)))
-    |> push_event(:context_reprioritized, %{ id: id })
     |> do_query
   end
 
