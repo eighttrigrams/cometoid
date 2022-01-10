@@ -121,13 +121,19 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     target_issue = Tracker.get_issue! target_issue_id
     target_context = Tracker.get_context! target_context_id
     selected_contexts = [target_context.id|state.selected_contexts] # TODO only do if we are in some context
-    %{
+    contexts = if target_context.view != state.selected_view do
+      load_contexts_for_view Map.merge state, %{ selected_view: target_context.view }
+    else
+      state.contexts
+    end
+    {:do_query, %{
+        contexts: contexts,
         selected_context: target_context,
         selected_contexts: selected_contexts,
         selected_issue: target_issue,
         control_pressed: false,
-        view: target_context.view
-    }
+        selected_view: target_context.view
+    }}
   end
 
   def select_previous_context state do
