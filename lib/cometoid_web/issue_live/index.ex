@@ -21,6 +21,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   @impl true
   def handle_params params, _url, socket do
+
     selected_view = get_selected_view params
 
     state = %{
@@ -34,11 +35,12 @@ defmodule CometoidWeb.IssueLive.Index do
     state = IssuesMachine.init_context_properties state
     state = IssuesMachine.set_issue_properties state
 
-    socket = socket
-      |> assign(state)
-      |> assign(:view, params["view"])
-      |> do_query(true)
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    socket
+    |> assign(state)
+    |> assign(:view, params["view"])
+    |> do_query(true)
+    |> apply_action(socket.assigns.live_action, params)
+    |> return_noreply
   end
 
   @impl true
