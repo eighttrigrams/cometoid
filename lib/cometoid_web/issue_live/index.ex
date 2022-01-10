@@ -99,7 +99,11 @@ defmodule CometoidWeb.IssueLive.Index do
       "c" ->
         socket |> assign(:context_search_open, true)
       "d" ->
-        handle_describe socket
+        unless socket.assigns.context_search_open do
+          handle_describe socket
+        else
+          socket
+        end
       _ ->
         socket
     end
