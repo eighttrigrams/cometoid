@@ -5,17 +5,26 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
   alias Cometoid.Repo.People
 
   @impl true
-  def update(%{person: person} = assigns, socket) do
+  def update %{person: person} = assigns, socket do
 
     changeset = People.change_person(person)
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:person_params, %{})
+     |> assign(:changed?, false)
      |> assign(:changeset, changeset)}
   end
 
   @impl true
-  def handle_event("validate", %{"context" => context_params}, socket) do
+  def handle_event "changes", %{ "person" => person_params }, socket do
+    socket
+    |> assign(:person_params, person_params)
+    |> assign(:changed?, true)
+    |> return_noreply
+  end
+
+  def handle_event "validate", %{"context" => context_params}, socket do
     changeset =
       socket.assigns.context
       |> Tracker.change_context(context_params)
@@ -24,11 +33,11 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def handle_event("save", %{ "person" => person_params }, socket) do
-    save_person(socket, socket.assigns.action, person_params)
+  def handle_event "save", _, socket do
+    save_person socket, socket.assigns.action, socket.assigns.person_params
   end
 
-  defp save_person(socket, :edit_context, context_params) do
+  defp save_person socket, :edit_context, context_params do
     case People.update_person(socket.assigns.person, context_params) do
       {:ok, person} ->
         send self(), {:after_edit_form_save, %{ context_id: person.context.id }}
@@ -39,7 +48,7 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
     end
   end
 
-  defp save_person(socket, :new_context, person_params) do
+  defp save_person socket, :new_context, person_params do
     case People.create_person(person_params) do
       {:ok, person} ->
         send self(), {:after_edit_form_save, %{ context_id: person.context.id }}

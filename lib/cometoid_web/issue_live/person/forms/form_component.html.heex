@@ -1,10 +1,11 @@
-<div>
-  <h2><%= @title %>HI</h2>
+<div phx-hook="SaveHook" phx-my-target={@myself}>
+  <h2><%= @title %></h2>
 
   <.form
     for={@changeset}
     let={f}
     id="person-form"
+    phx-change="changes"
     phx-target={@myself}
     phx-submit="save">
 

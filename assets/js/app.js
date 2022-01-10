@@ -51,8 +51,10 @@ hooks.DescriptionSaveHook = {
     }}
   },
   mounted() {
-    this.el.getElementsByTagName("textarea")[0].focus()
-    
+    const el = this.el.getElementsByTagName("textarea")[0]
+    el.focus()
+    el.selectionStart = el.selectionEnd = el.value.length
+
     this.myTarget = this.el.getAttribute("phx-my-target")
     
     this.keyUpListener = this.makeKeyUpListener(this)
@@ -78,8 +80,6 @@ hooks.SaveHook = {
   }},
   makeKeyDownListener: function(self) { return function(e) {
 
-    console.log(e.key)
-
     if (e.key === "Enter") e.preventDefault()
     if (e.key === "Control") self.controlPressed = true
     if (e.key === "s") {
@@ -90,6 +90,14 @@ hooks.SaveHook = {
     }}
   },
   mounted() {
+    for (const inputField of this.el.getElementsByTagName("input")) {
+      if (inputField.type === "text") {
+        inputField.focus()
+        inputField.selectionStart = inputField.selectionEnd = inputField.value.length
+        break
+      }
+    }
+
     this.myTarget = this.el.getAttribute("phx-my-target")
     
     this.keyUpListener = this.makeKeyUpListener(this)
