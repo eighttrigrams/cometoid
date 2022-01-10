@@ -33,7 +33,7 @@ defmodule CometoidWeb.IssueLive.Index do
     }
     state = Map.merge socket.assigns, state
     state = IssuesMachine.init_context_properties state
-    state = IssuesMachine.set_issue_properties state
+    state = IssuesMachine.set_issue_properties state # TODO necessary? If yes, use at least the pipe operator
 
     socket
     |> assign(state)
