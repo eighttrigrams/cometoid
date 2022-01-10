@@ -125,7 +125,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
         selected_context: target_context,
         selected_contexts: selected_contexts,
         selected_issue: target_issue,
-        control_pressed: false
+        control_pressed: false,
+        view: target_context.view
     }
   end
 
