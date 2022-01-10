@@ -98,6 +98,8 @@ defmodule CometoidWeb.IssueLive.Index do
         end
       "c" ->
         socket |> assign(:context_search_open, true)
+      "d" ->
+        handle_describe socket
       _ ->
         socket
     end
@@ -160,8 +162,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "edit_issue_description", _, socket do
     socket
-    |> assign(:issue, Tracker.get_issue!(socket.assigns.selected_issue.id))
-    |> assign(:live_action, :describe)
+    |> edit_issue_description(socket.assigns.selected_issue.id)
     |> return_noreply
   end
 
@@ -237,14 +238,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "edit_context_description", _, socket do
-    context = Tracker.get_context! socket.assigns.selected_context.id
-    entity = case context.view do
-      "People" -> People.get_person! context.person.id
-      _ -> context
-    end
     socket
-    |> assign(:edit_entity, entity)
-    |> assign(:live_action, :describe_context)
+    |> edit_context_description(socket.assigns.selected_context.id)
     |> return_noreply
   end
 
@@ -400,6 +395,23 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign(:issue, nil)
   end
 
+  defp edit_issue_description socket, id do
+    socket
+    |> assign(:issue, Tracker.get_issue!(id))
+    |> assign(:live_action, :describe)
+  end
+
+  defp edit_context_description socket, id do
+    context = Tracker.get_context! id
+    entity = case context.view do
+      "People" -> People.get_person! context.person.id
+      _ -> context
+    end
+    socket
+    |> assign(:edit_entity, entity)
+    |> assign(:live_action, :describe_context)
+  end
+
   defp select_context socket, id do
     state = IssuesMachine.select_context to_state(socket), id
 
@@ -417,6 +429,18 @@ defmodule CometoidWeb.IssueLive.Index do
       socket
     end
     |> do_query
+  end
+
+  defp handle_describe socket do
+    if socket.assigns.selected_issue do
+      edit_issue_description socket, socket.assigns.selected_issue.id
+    else
+      if socket.assigns.selected_context do
+        edit_context_description socket, socket.assigns.selected_context.id
+      else
+        socket
+      end
+    end
   end
 
   defp handle_escape socket do

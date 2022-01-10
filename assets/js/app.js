@@ -51,6 +51,8 @@ hooks.DescriptionSaveHook = {
     }}
   },
   mounted() {
+    this.el.getElementsByTagName("textarea")[0].focus()
+    
     this.myTarget = this.el.getAttribute("phx-my-target")
     
     this.keyUpListener = this.makeKeyUpListener(this)
@@ -212,7 +214,7 @@ hooks.EventItemHook = {
   }
 }
 hooks.IssueDescriptionHook = {
-   mounted() {
+    mounted() {
       document.addEventListener('mousedown', function (event) {
         if (event.detail > 1) {
           event.preventDefault();
@@ -221,21 +223,20 @@ hooks.IssueDescriptionHook = {
        this.el.addEventListener('dblclick', e => {
            this.pushEvent("edit_issue_description");
        }, false);
-   }
+    }
 }
 hooks.ContextDescriptionHook = {
     mounted() {
        // https://stackoverflow.com/a/43321596
-       document.addEventListener('mousedown', function (event) {
+      document.addEventListener('mousedown', function (event) {
          if (event.detail > 1) {
            event.preventDefault();
          }
-       }, false);
-        this.el.addEventListener('dblclick', e => {
-            this.pushEvent("edit_context_description");
-        }, false);
-    },
-    
+      }, false);
+      this.el.addEventListener('dblclick', e => {
+          this.pushEvent("edit_context_description");
+      }, false);
+    }, 
  }
 hooks.DescHook = {
   mounted() {
