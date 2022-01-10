@@ -1,73 +1,73 @@
 <div>
-    <div class="form-block form-block-1 context-type-grid">
-        <%= for _context = {id, title} <- TaskbarComponent.get_contexts(@state) do %>
-            <div phx-click="toggle_context"
-                phx-value-id={id}
-                phx-target={@myself}
-                class={"#{if TaskbarComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
-                >
-                <%= title %>
-            </div>
-        <% end %>
+  <div class="form-block form-block-1 context-type-grid">
+    <%= for _context = {id, title} <- TaskbarComponent.get_contexts(@state) do %>
+      <div phx-click="toggle_context"
+        phx-value-id={id}
+        phx-target={@myself}
+        class={"#{if TaskbarComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
+        >
+        <%= title %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= if (1 < length @state.selected_contexts) and not @state.context_search_open do %>
+    <div class="form-block button left enabled-button-color %>">
+      <a phx-click="select_previous_context" phx-value-view={@state.selected_view}><i class="bi bi-arrow-left-circle">
+      </i></a>
     </div>
+  <% else %>
+    <div class="form-block button left disabled-button-color %>">
+      <a><i class="bi bi-arrow-left-circle">
+      </i></a>
+    </div>
+  <% end %>
 
-    <%= if (1 < length @state.selected_contexts) and not @state.context_search_open do %>
-      <div class="form-block button left enabled-button-color %>">
-        <a phx-click="select_previous_context" phx-value-view={@state.selected_view}><i class="bi bi-arrow-left-circle">
-        </i></a>
-      </div>
-    <% else %>
-      <div class="form-block button left disabled-button-color %>">
-        <a><i class="bi bi-arrow-left-circle">
-        </i></a>
-      </div>
-    <% end %>
+  <%= unless @state.context_search_open do %>
+    <div class="form-block button left enabled-button-color %>">
+      <a phx-click="create_new_context" phx-value-view={@state.selected_view}><i class="bi bi-plus-lg">
+      </i></a>
+    </div>
+  <% else %>
+    <div class="form-block button left disabled-button-color %>">
+      <a><i class="bi bi-plus-lg">
+      </i></a>
+    </div>
+  <% end %>
 
-    <%= unless @state.context_search_open do %>
-      <div class="form-block button left enabled-button-color %>">
-        <a phx-click="create_new_context" phx-value-view={@state.selected_view}><i class="bi bi-plus-lg">
-        </i></a>
-      </div>
-    <% else %>
-      <div class="form-block button left disabled-button-color %>">
-        <a><i class="bi bi-plus-lg">
-        </i></a>
-      </div>
-    <% end %>
+  <%= unless is_nil(@state.selected_context) or @state.list_issues_done_instead_open or @state.context_search_open do %>
+    <div class="form-block button right enabled-button-color">
+      <a phx-click="create_new_issue">
+        <i class="bi bi-plus-lg">
+        </i>
+      </a>
+    </div>
+  <% else %>
+    <div class="form-block button right disabled-button-color">
+      <a>
+        <i class="bi bi-plus-lg">
+        </i>
+      </a>
+    </div>
+  <% end %>
 
-    <%= unless is_nil(@state.selected_context) or @state.list_issues_done_instead_open or @state.context_search_open do %>
-      <div class="form-block button right enabled-button-color">
-          <a phx-click="create_new_issue">
-            <i class="bi bi-plus-lg">
-            </i>
-          </a>
-      </div>
-    <% else %>
-      <div class="form-block button right disabled-button-color">
-          <a>
-            <i class="bi bi-plus-lg">
-            </i>
-          </a>
-      </div>
-    <% end %>
-
-    <%= unless TaskbarComponent.done_button_disabled? @state do %>
-                                                            
-      <div class="form-block button right enabled-button-color">
-          <%= if @state[:list_issues_done_instead_open] do %>
-              <a phx-click="show_open_issues"><i class="bi bi-check-circle">
-              </i></a>
-          <% else %>
-              <a phx-click="show_closed_issues"><i class="bi bi-circle">
-              </i></a>
-          <% end %>
-      </div>
-    <% else %>
-      <div class="form-block button right disabled-button-color">
-        <a>
-          <i class="bi bi-circle">
-          </i>
-        </a>
-      </div>
-    <% end %>
+  <%= unless TaskbarComponent.done_button_disabled? @state do %>
+                                                          
+    <div class="form-block button right enabled-button-color">
+      <%= if @state[:list_issues_done_instead_open] do %>
+        <a phx-click="show_open_issues"><i class="bi bi-check-circle">
+        </i></a>
+      <% else %>
+        <a phx-click="show_closed_issues"><i class="bi bi-circle">
+        </i></a>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="form-block button right disabled-button-color">
+      <a>
+        <i class="bi bi-circle">
+        </i>
+      </a>
+    </div>
+  <% end %>
 </div>
