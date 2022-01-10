@@ -132,6 +132,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
         selected_contexts: selected_contexts,
         selected_issue: target_issue,
         control_pressed: false,
+        view: target_context.view, # TODO fix duplication with next line
         selected_view: target_context.view
     }}
   end
