@@ -97,7 +97,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   def select_context state, id do
 
     selected_context = Tracker.get_context! id
-    selected_issue = keep_issue state, selected_context
     selected_contexts = case state.selected_contexts do
       [previous_context_id|_] -> if previous_context_id == selected_context.id do
         state.selected_contexts
@@ -109,7 +108,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     %{
       selected_context: selected_context,
       selected_contexts: selected_contexts,
-      selected_issue: selected_issue
+      selected_issue: nil
     }
   end
 
@@ -133,12 +132,11 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   def select_previous_context state do
    result = with [_selected_context_id, previous_context_id|rest]
                                     <- state.selected_contexts,
-         selected_context           <- (Tracker.get_context! previous_context_id),
-         selected_issue             <- (keep_issue state, selected_context) do
+         selected_context           <- (Tracker.get_context! previous_context_id) do
       %{
         selected_context: selected_context,
         selected_contexts: [previous_context_id|rest],
-        selected_issue: selected_issue,
+        selected_issue: nil,
       }
     else
       [] -> %{}
@@ -220,15 +218,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     }
     issues = Tracker.list_issues query # TODO review if passing state; or to use map take
     %{ issues: issues }
-  end
-
-  defp keep_issue state, selected_context do
-    unless is_nil state.selected_issue do
-      case Enum.find selected_context.issues, &(&1.issue.id == state.selected_issue.id) do
-        nil -> nil
-        relation -> relation.issue
-      end
-    end
   end
 
   defp determine_selected_issue state, id do
