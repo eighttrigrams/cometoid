@@ -43,11 +43,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   def init_context_properties state do
-    contexts = load_contexts_for_view state
     %{
       selected_context: nil,
       selected_contexts: [],
-      contexts: contexts
+      contexts: (load_contexts_for_view state)
     }
   end
 
