@@ -1,0 +1,18 @@
+<div class="upper border-color" style="padding-top: 0px;">
+  <div class="smaller-text">
+    <h1 style="font-family: serif">
+      <span style="float: left;">
+        <%= @issue.title %>
+      </span>
+    </h1>
+  </div>
+</div>
+<div class="inner smaller-text" id="issue-description" phx-hook="IssueDescriptionHook">
+  <div>
+    <%= unless is_nil(@issue.description) or @issue.description == "" do %>
+      <div id="desc" phx-hook="DescHook">
+        <%= Phoenix.HTML.raw(convert(@issue.description)) %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,18 +1,15 @@
-<div class="upper border-color" style="padding-top: 0px;">
-  <div class="smaller-text">
-    <h1 style="font-family: serif">
-      <span style="float: left;">
-        <%= @issue.title %>
-      </span>
-    </h1>
-  </div>
-</div>
-<div class="inner smaller-text" id="issue-description" phx-hook="IssueDescriptionHook">
-  <div>
-    <%= unless is_nil(@issue.description) or @issue.description == "" do %>
-      <div id="desc" phx-hook="DescHook">
-        <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.SidebarComponent.convert(@issue.description)) %>
-      </div>
+<div>
+  <%= if @state[:selected_issue] do %>
+    <%= live_component IssueLive.Issue.SidebarComponent, issue: @state.selected_issue %>
+  <% else %>
+    <%= unless is_nil(@state.selected_context) do %>
+      <%= if @state.selected_context.view == "People" do %>
+        <%= live_component IssueLive.Person.SidebarComponent, context: @state.selected_context %>
+      <% else %>
+        <%= live_component IssueLive.Context.SidebarComponent, context: @state.selected_context %>
+      <% end %>
+    <% else %>
+      <%= live_component IssueLive.View.SidebarComponent, state: @state %>
     <% end %>
-  </div>
+  <% end %>
 </div>

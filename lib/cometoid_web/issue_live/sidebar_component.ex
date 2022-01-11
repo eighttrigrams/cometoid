@@ -1,12 +1,5 @@
 defmodule CometoidWeb.IssueLive.SidebarComponent do
-  # If you generated an app with mix phx.new --live,
-  # the line below would be: use MyAppWeb, :live_component
-  use Phoenix.LiveComponent
+  use CometoidWeb, :live_component
 
-  def convert raw do
-    case Earmark.as_html raw do
-      {:ok, html, _} -> html
-      _ -> raw
-    end
-  end
+  alias CometoidWeb.IssueLive
 end
