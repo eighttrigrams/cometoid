@@ -24,6 +24,11 @@ hooks.ContextSearchInputHook = {
     document.getElementById("context_search_q").focus()
   }
 }
+hooks.IssueSearchInputHook = {
+  mounted() {
+    document.getElementById("issue_search_q").focus()
+  }
+}
 
 hooks.DescriptionSaveHook = {
   myTarget: undefined,

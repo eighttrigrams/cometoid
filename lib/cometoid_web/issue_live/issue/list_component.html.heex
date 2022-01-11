@@ -1,7 +1,15 @@
 <div id="list-container" class="border-color">
+  <%= if @state.issue_search_active do %>
+    <div id="issues-search-bar" class="border-color" phx-hook="IssueSearchInputHook">
+      <.form let={f} for={:issue_search} phx-change="changes" phx-target={@myself} phx-submit="select">
+        <%= text_input f, :q, autocomplete: :off %>
+      </.form>
+    </div>
+  <% end %>
+
   <div id="issues-list" class="list">
     <table class="list-table">
-      <%= for issue <- ListComponent.get_issues(@state) do %>
+      <%= for issue <- @filtered_issues do %>
         <%= live_component ListItemComponent, issue: issue, state: @state %>
       <% end %>
     </table>

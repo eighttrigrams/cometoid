@@ -49,6 +49,25 @@ $list-item-height: $taskbar-height;
     }
 }
 
+#issues-search-bar {
+    position: relative;
+    height: 20px;
+    padding: 10px;
+    padding-left: 18px;
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    input {
+        width: calc(100% - 4px);
+        height: 100%;
+        border: none;
+        outline: none;
+    }
+    input:focus {
+        border: none;
+        outline: none;
+    }
+}
+
 #issues-list {
     bottom: 0;
     height: 100%;

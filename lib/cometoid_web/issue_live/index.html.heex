@@ -9,7 +9,7 @@
           </div>
           <div id="contexts-and-issues">
             <%= live_component IssueLive.Context.ListComponent, id: :contexts, state: assigns %>
-            <%= live_component IssueLive.Issue.ListComponent, state: assigns %>
+            <%= live_component IssueLive.Issue.ListComponent, id: :issues, state: assigns %>
           </div>
         </div>
         

@@ -24,7 +24,7 @@ defmodule CometoidWeb.IssueLive.Context.ListComponent do
   def handle_event "changes", %{ "context_search" => %{ "q" => q }}, socket do
     socket
     |> assign(:q, q)
-    |> assign(:filtered_contexts, (Enum.filter socket.assigns.state.contexts, &(should_show &1, q)))
+    |> assign(:filtered_contexts, (Enum.filter socket.assigns.state.contexts, &(should_show? &1, q)))
     |> return_noreply
   end
 
@@ -36,7 +36,7 @@ defmodule CometoidWeb.IssueLive.Context.ListComponent do
     |> return_noreply
   end
 
-  defp should_show context, q do
+  defp should_show? context, q do
     String.starts_with? (String.downcase context.title), (String.downcase q)
   end
 end

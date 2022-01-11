@@ -325,6 +325,7 @@ defmodule CometoidWeb.IssueLive.Index do
     selected_issue = Tracker.get_issue! id
     socket
     |> assign(:selected_issue, selected_issue)
+    |> assign(:issue_search_active, false)
     |> return_noreply
   end
 
@@ -453,8 +454,10 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp handle_escape socket do
-    if socket.assigns.context_search_active do
-      socket |> assign(:context_search_active, false)
+    if socket.assigns.context_search_active or socket.assigns.issue_search_active do
+      socket
+      |> assign(:context_search_active, false)
+      |> assign(:issue_search_active, false)
     else
       unless socket.assigns.selected_secondary_contexts == [] do
         socket

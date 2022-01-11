@@ -1,18 +1,35 @@
 defmodule CometoidWeb.IssueLive.Issue.ListComponent do
-  # If you generated an app with mix phx.new --live,
-  # the line below would be:
   use CometoidWeb, :live_component
-  # use Phoenix.LiveComponent
 
   alias CometoidWeb.IssueLive.Issue.ListComponent
   alias CometoidWeb.IssueLive.Issue.ListItemComponent
 
-  def get_issues state do
-    all_issues = state.issues
-    Enum.filter all_issues, &(should_show?(state, &1))
+  @impl true
+  def mount socket do
+    socket
+    |> assign(:q, "")
+    |> assign(:filtered_issues, [])
+    |> return_ok
   end
 
-  defp should_show? state, issue do
+  @impl true
+  def update assigns, socket do
+    socket
+    |> assign(assigns)
+    |> assign(:q, "")
+    |> assign(:filtered_issues, assigns.state.issues)
+    |> return_ok
+  end
+
+  @impl true
+  def handle_event "changes", %{ "issue_search" => %{ "q" => q }}, socket do
+    socket
+    |> assign(:q, q)
+    |> assign(:filtered_issues, (Enum.filter socket.assigns.state.issues, &(should_show? socket.assigns.state, &1, q)))
+    |> return_noreply
+  end
+
+  defp should_show? state, issue, q do
 
     selected_secondary_contexts = state.selected_secondary_contexts
 
@@ -22,6 +39,6 @@ defmodule CometoidWeb.IssueLive.Issue.ListComponent do
       issues_contexts = Enum.map issue.contexts, &(&1.context.id)
       diff = selected_secondary_contexts -- issues_contexts
       length(diff) == 0
-    end
+    end and String.starts_with? (String.downcase issue.title), (String.downcase q)
   end
 end
