@@ -17,4 +17,9 @@
         context_search_active: @state.context_search_active %>
     <% end %>
   </div>
+
+  <%= if @state.issue_search_active do %>
+    <div id="context-list-component-mask">
+    </div>
+  <% end %>
 </div>

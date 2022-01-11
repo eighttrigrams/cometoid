@@ -13,10 +13,10 @@
     <%= live_component IssueLive.SidebarComponent, state: assigns %>
   </div>
 
-  <%= if @context_search_active do %>
+  <%= if @context_search_active or @issue_search_active do %>
     <div id="context-search-mask-top">
     </div>
-    <div id="context-search-mask-right">
+    <div id="context-search-mask-right" class={if @issue_search_active do "in-issue-search" end}>
     </div>
   <% end %>
 
