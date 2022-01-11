@@ -14,7 +14,7 @@
               id: :contexts,
               contexts: @contexts,
               selected_context: @selected_context,
-              context_search_open: @context_search_open %>
+              context_search_active: @context_search_active %>
 
             <%= live_component IssueLive.Issue.ListComponent, state: assigns %>
           </div>

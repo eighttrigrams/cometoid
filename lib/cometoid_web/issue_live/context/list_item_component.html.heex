@@ -1,5 +1,5 @@
 <div id={"context-#{@context.id}"} phx-hook="ContextItemHook" 
-      class={"list-item regular-color #{should_highlight @context, @selected_context, @filtered_contexts, @context_search_open}"} 
+      class={"list-item regular-color #{should_highlight @context, @selected_context, @filtered_contexts, @context_search_active}"} 
       phx-click="select_context" 
       phx-value-id={@context.id}>
 
@@ -45,7 +45,7 @@
                 <i class="bi bi-arrow-up"></i>
             </a>
         </span>
-        <%= unless @context_search_open do %>
+        <%= unless @context_search_active do %>
           <span class="btn">
               <%= link to: "#",
                   phx_click: "delete_context",

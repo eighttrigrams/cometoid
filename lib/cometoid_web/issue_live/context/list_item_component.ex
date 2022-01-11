@@ -3,9 +3,9 @@ defmodule CometoidWeb.IssueLive.Context.ListItemComponent do
 
   alias Cometoid.Model.Tracker.Context
 
-  def should_highlight context, selected_context, contexts, context_search_open do # TODO reduce num params
+  def should_highlight context, selected_context, contexts, context_search_active do # TODO reduce num params
     if (not is_nil(selected_context) and selected_context.id == context.id)
-    or (context_search_open and 1 == length contexts)
+    or (context_search_active and 1 == length contexts)
     do 'selected-item-color' end
   end
 

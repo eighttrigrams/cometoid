@@ -26,7 +26,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     state = %{
       control_pressed: false,
-      context_search_open: false,
+      context_search_active: false,
       list_issues_done_instead_open: false,
       selected_secondary_contexts: [],
       selected_view: selected_view
@@ -85,7 +85,7 @@ defmodule CometoidWeb.IssueLive.Index do
     case key do
       "Escape" -> handle_escape socket
       "n" ->
-        if not socket.assigns.context_search_open and socket.assigns.selected_context  do
+        if not socket.assigns.context_search_active and socket.assigns.selected_context  do
           socket
           |> assign(:live_action, :new)
           |> assign(:issue, %Issue{})
@@ -93,15 +93,15 @@ defmodule CometoidWeb.IssueLive.Index do
           socket
         end
       "Control" ->
-        if socket.assigns.context_search_open do
+        if socket.assigns.context_search_active do
           socket
         else
           socket |> assign(:control_pressed, true)
         end
       "c" ->
-        socket |> assign(:context_search_open, true)
+        socket |> assign(:context_search_active, true)
       "d" ->
-        unless socket.assigns.context_search_open do
+        unless socket.assigns.context_search_active do
           handle_describe socket
         else
           socket
@@ -288,7 +288,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(state)
-    |> assign(:context_search_open, false)
+    |> assign(:context_search_active, false)
     |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
     |> do_query
   end
@@ -301,7 +301,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign(IssuesMachine.set_context_properties_and_keep_selected_context(to_state(socket)))
-    |> assign(:context_search_open, false)
+    |> assign(:context_search_active, false)
     |> push_event(:context_reprioritized, %{ id: id })
     |> do_query
   end
@@ -421,15 +421,15 @@ defmodule CometoidWeb.IssueLive.Index do
   defp select_context socket, id do
     state = IssuesMachine.select_context to_state(socket), id
 
-    context_search_open = socket.assigns.context_search_open
+    context_search_active = socket.assigns.context_search_active
 
     socket =
       socket
       |> assign(state)
-      |> assign(:context_search_open, false)
+      |> assign(:context_search_active, false)
       |> assign(:selected_secondary_contexts, [])
 
-    if context_search_open do
+    if context_search_active do
       socket |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
     else
       socket
@@ -450,8 +450,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp handle_escape socket do
-    if socket.assigns.context_search_open do
-      socket |> assign(:context_search_open, false)
+    if socket.assigns.context_search_active do
+      socket |> assign(:context_search_active, false)
     else
       unless socket.assigns.selected_secondary_contexts == [] do
         socket
