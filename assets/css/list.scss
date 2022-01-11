@@ -11,27 +11,6 @@ $list-item-height: $taskbar-height;
     }
 }
 
-#contexts-and-issues {
-    
-    height: calc(100% - #{$taskbar-height});
-
-    #contexts-container {
-        height: 100%;
-        width: calc(33% - 1px);
-        float: left;
-    }
-    
-    #list-container {
-        
-        float: left;
-        width: 67%;
-        height: 100%;
-
-        border-left-style: dotted;
-        border-left-width: 1px;
-    }
-}
-
 #contexts-search-bar {
     position: relative;
     height: 20px;

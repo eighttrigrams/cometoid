@@ -1,4 +1,4 @@
-<div id="contexts-container" class="border-color">
+<div id="context-list-component" class="border-color">
   <%= if @state.context_search_active do %>
     <div id="contexts-search-bar" phx-hook="ContextSearchInputHook">
       <.form let={f} for={:context_search} phx-change="changes" phx-target={@myself} phx-submit="select">

@@ -11,7 +11,7 @@
     <% end %>
   </div>
 
-  <%= if (1 < length @state.selected_contexts) and not @state.context_search_active do %>
+  <%= if 1 < length @state.selected_contexts do %>
     <div class="form-block button left enabled-button-color %>">
       <a phx-click="select_previous_context" phx-value-view={@state.selected_view}><i class="bi bi-arrow-left-circle">
       </i></a>
@@ -23,19 +23,12 @@
     </div>
   <% end %>
 
-  <%= unless @state.context_search_active do %>
-    <div class="form-block button left enabled-button-color %>">
-      <a phx-click="create_new_context" phx-value-view={@state.selected_view}><i class="bi bi-plus-lg">
-      </i></a>
-    </div>
-  <% else %>
-    <div class="form-block button left disabled-button-color %>">
-      <a><i class="bi bi-plus-lg">
-      </i></a>
-    </div>
-  <% end %>
+  <div class="form-block button left enabled-button-color %>">
+    <a phx-click="create_new_context" phx-value-view={@state.selected_view}><i class="bi bi-plus-lg">
+    </i></a>
+  </div>
 
-  <%= unless is_nil(@state.selected_context) or @state.list_issues_done_instead_open or @state.context_search_active do %>
+  <%= unless is_nil(@state.selected_context) or @state.list_issues_done_instead_open do %>
     <div class="form-block button right enabled-button-color">
       <a phx-click="create_new_issue">
         <i class="bi bi-plus-lg">

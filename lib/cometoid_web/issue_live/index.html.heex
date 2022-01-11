@@ -3,7 +3,7 @@
     <div id="taskbar" class="taskbar border-color">
       <%= live_component IssueLive.TaskbarComponent, id: "taskbar", state: assigns %>
     </div>
-    <div id="contexts-and-issues">
+    <div id="contexts-and-issues-row">
       <%= live_component IssueLive.Context.ListComponent, id: :contexts, state: assigns %>
       <%= live_component IssueLive.Issue.ListComponent, id: :issues, state: assigns %>
     </div>
@@ -12,5 +12,13 @@
   <div class="right-column border-color">
     <%= live_component IssueLive.SidebarComponent, state: assigns %>
   </div>
+
+  <%= if @context_search_active do %>
+    <div id="context-search-mask-top">
+    </div>
+    <div id="context-search-mask-right">
+    </div>
+  <% end %>
+
   <%= live_component CometoidWeb.ModalsComponent, state: assigns %>
 </div>

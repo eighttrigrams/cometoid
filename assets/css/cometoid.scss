@@ -1,5 +1,6 @@
 @import './variables.scss';
 @import './popovers.scss';
+@import './layout.scss';
 @import './list.scss';
 @import './taskbar.scss';
 @import './sidebar.scss';
@@ -49,7 +50,6 @@ a {
 }
 
 #page-content {
-
     position: fixed;
     top: calc(#{$navbar-height} + #{$navbar-padding} - 4px);
     bottom: 0;
@@ -61,6 +61,35 @@ a {
     width: 66%;
     top: 0;
     height: 100%;
+}
+
+#context-search-mask-top {
+    position: absolute;
+    height: calc(#{$navbar-height} + #{$navbar-padding} + #{$taskbar-height});
+    width: 100%;
+    top: calc(0px - #{$navbar-height} - #{$navbar-padding});
+    z-index: 1000;
+    opacity: 0.7;
+    background-color: black;
+}
+#issue-list-component-mask {
+    position: absolute;
+    z-index: 1000;
+    width: 67%;
+    top: $taskbar-height;
+    height: 100%;
+    opacity: 0.7;
+    background-color: black;
+}
+#context-search-mask-right {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    bottom: 0;
+    left: 66%;
+    width: 33%;
+    opacity: 0.7;
+    background-color: black;
 }
 
 #search-taskbar {

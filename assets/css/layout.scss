@@ -1,0 +1,20 @@
+#contexts-and-issues-row {
+    
+    height: calc(100% - #{$taskbar-height});
+
+    #context-list-component {
+        height: 100%;
+        width: calc(33% - 1px);
+        float: left;
+    }
+    
+    #issue-list-component {
+        
+        float: left;
+        width: 67%;
+        height: 100%;
+
+        border-left-style: dotted;
+        border-left-width: 1px;
+    }
+}
