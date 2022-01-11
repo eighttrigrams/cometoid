@@ -100,9 +100,17 @@ defmodule CometoidWeb.IssueLive.Index do
           socket |> assign(:control_pressed, true)
         end
       "c" ->
-        socket |> assign(:context_search_active, true)
+        unless socket.assigns.issue_search_active or socket.assigns.context_search_active do
+          socket |> assign(:context_search_active, true)
+        else
+          socket
+        end
       "i" ->
-        socket |> assign(:issue_search_active, true)
+        unless socket.assigns.issue_search_active or socket.assigns.context_search_active do
+          socket |> assign(:issue_search_active, true)
+        else
+          socket
+        end
       "d" ->
         unless socket.assigns.context_search_active do
           handle_describe socket
