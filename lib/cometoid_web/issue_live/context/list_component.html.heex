@@ -1,5 +1,5 @@
 <div id="contexts-container" class="border-color">
-  <%= if @context_search_active do %>
+  <%= if @state.context_search_active do %>
     <div id="contexts-search-bar" phx-hook="ContextSearchInputHook">
       <.form let={f} for={:context_search} phx-change="changes" phx-target={@myself} phx-submit="select">
         <%= text_input f, :q, autocomplete: :off %>
@@ -8,13 +8,13 @@
   <% end %>
 
   <div id="contexts-list" 
-       class={"list-base #{if @context_search_active do "searchbar-included" end}"}>
+       class={"list-base #{if @state.context_search_active do "searchbar-included" end}"}>
     <%= for context <- @filtered_contexts do %>
       <%= live_component ListItemComponent, 
         context: context, 
         filtered_contexts: @filtered_contexts, 
-        selected_context: @selected_context,
-        context_search_active: @context_search_active %>
+        selected_context: @state.selected_context,
+        context_search_active: @state.context_search_active %>
     <% end %>
   </div>
 </div>

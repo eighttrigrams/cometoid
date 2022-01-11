@@ -27,6 +27,7 @@ defmodule CometoidWeb.IssueLive.Index do
     state = %{
       control_pressed: false,
       context_search_active: false,
+      issue_search_active: false,
       list_issues_done_instead_open: false,
       selected_secondary_contexts: [],
       selected_view: selected_view
@@ -100,6 +101,8 @@ defmodule CometoidWeb.IssueLive.Index do
         end
       "c" ->
         socket |> assign(:context_search_active, true)
+      "i" ->
+        socket |> assign(:issue_search_active, true)
       "d" ->
         unless socket.assigns.context_search_active do
           handle_describe socket

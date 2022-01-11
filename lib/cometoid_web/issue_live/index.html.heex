@@ -5,20 +5,14 @@
 
         <div id="left-column">
           <div id="taskbar" class="taskbar border-color">
-            <%= live_component IssueLive.TaskbarComponent,
-              id: "taskbar", state: assigns %>
+            <%= live_component IssueLive.TaskbarComponent, id: "taskbar", state: assigns %>
           </div>
-
           <div id="contexts-and-issues">
-            <%= live_component IssueLive.Context.ListComponent,
-              id: :contexts,
-              contexts: @contexts,
-              selected_context: @selected_context,
-              context_search_active: @context_search_active %>
-
+            <%= live_component IssueLive.Context.ListComponent, id: :contexts, state: assigns %>
             <%= live_component IssueLive.Issue.ListComponent, state: assigns %>
           </div>
         </div>
+        
         <div class="right-column border-color">
           <%= if assigns[:selected_issue] do %>
             <%= live_component IssueLive.SidebarComponent, issue: @selected_issue %>
