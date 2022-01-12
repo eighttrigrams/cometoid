@@ -1,6 +1,6 @@
 $pad: 20px;
 
-.right-column {
+#sidebar {
 
     display: flex;
     flex-flow: column;
@@ -32,6 +32,6 @@ $pad: 20px;
 
     position: absolute;
     left: 66%;
-    width: 33%;
+    width: 34%;
     height: 100%;
 }

@@ -1,4 +1,4 @@
-<div>
+<div id="sidebar">
   <%= if @state[:selected_issue] do %>
     <%= live_component IssueLive.Issue.SidebarComponent, issue: @state.selected_issue %>
   <% else %>
