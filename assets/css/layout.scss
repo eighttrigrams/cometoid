@@ -23,9 +23,51 @@
 }
 
 #right-column {
-    
+
     position: absolute;
     left: 66%;
     width: 34%;
     height: 100%;
+}
+
+#context-search-mask-top {
+    position: absolute;
+    height: calc(#{$navbar-height} + #{$navbar-padding} + #{$taskbar-height});
+    width: 100%;
+    top: calc(0px - #{$navbar-height} - #{$navbar-padding});
+    z-index: 1000;
+    opacity: 0.7;
+    background-color: black;
+}
+#issue-list-component-mask {
+    position: absolute;
+    z-index: 1000;
+    width: 67%;
+    top: $taskbar-height;
+    height: 100%;
+    opacity: 0.7;
+    background-color: black;
+}
+#context-list-component-mask {
+    position: absolute;
+    z-index: 1000;
+    width: calc(33% - 1px);
+    top: $taskbar-height;
+    height: 100%;
+    opacity: 0.7;
+    background-color: black;
+}
+#context-search-mask-right {
+    position: absolute;
+    z-index: 1000;
+    top: $taskbar-height;
+    bottom: 0;
+    left: 66%;
+    width: 34%;
+    opacity: 0.7;
+    background-color: black;
+}
+#context-search-mask-right.in-issue-search {
+    left: calc(66% + 1px);
+    width: calc(34% - 1px);
 }
