@@ -24,16 +24,18 @@
       </div>
     </div>
   </div>
-  <div class="right-column border-color">
-    <%= if assigns[:selected_event] do %>
-      <%= cond do
-        not is_nil(@selected_event.issue) ->
-          live_component CometoidWeb.IssueLive.SidebarComponent, issue: Tracker.get_issue!(@selected_event.issue.id)
-        not is_nil(@selected_event.person) ->
-          live_component Person.SidebarComponent, context: Tracker.get_context!((People.get_person!(@selected_event.person.id)).context.id)
-        true -> live_component CometoidWeb.EventLive.SidebarComponent, event: @selected_event
-          end %>
-    <% end %>
+  <div id="right-column">
+    <div id="sidebar" class="border-color">
+      <%= if assigns[:selected_event] do %>
+        <%= cond do
+          not is_nil(@selected_event.issue) ->
+            live_component CometoidWeb.IssueLive.Issue.SidebarComponent, issue: Tracker.get_issue!(@selected_event.issue.id)
+          not is_nil(@selected_event.person) ->
+            live_component Person.SidebarComponent, context: Tracker.get_context!((People.get_person!(@selected_event.person.id)).context.id)
+          true -> live_component CometoidWeb.EventLive.SidebarComponent, event: @selected_event
+            end %>
+      <% end %>
+    </div>
   </div>
 </div>
 
