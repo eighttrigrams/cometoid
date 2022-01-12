@@ -112,7 +112,7 @@ defmodule CometoidWeb.IssueLive.Index do
           socket
         end
       "d" ->
-        unless socket.assigns.context_search_active do
+        unless socket.assigns.context_search_active or socket.assigns.issue_search_active do
           handle_describe socket
         else
           socket
