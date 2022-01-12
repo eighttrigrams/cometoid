@@ -49,20 +49,6 @@ a {
     }
 }
 
-#page-content {
-    position: fixed;
-    top: calc(#{$navbar-height} + #{$navbar-padding} - 4px);
-    bottom: 0;
-    width: 100%;
-}
-
-#left-column {
-    position: absolute;
-    width: 66%;
-    top: 0;
-    height: 100%;
-}
-
 #search-taskbar {
     height: $taskbar-height;
     
