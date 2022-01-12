@@ -16,6 +16,7 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
+import {editorHook} from "./editor"
 
 let hooks = {};
 
@@ -118,26 +119,9 @@ hooks.SaveHook = {
 }
 
 
-hooks.TextAreaHook = {
-    mounted() {
-        this.el.addEventListener("keydown", function(e) {
+hooks.TextAreaHook = editorHook;
 
-            /* 
-             * This is for using tabs for indentation, as is the usual behaviour.
-             * https://stackoverflow.com/a/6637396
-             */ 
-            if (e.key === "Tab") {
-              e.preventDefault();
-              var start = this.selectionStart;
-              var end = this.selectionEnd;
-              this.value = this.value.substring(0, start) +
-                "    " + this.value.substring(end)
-              this.selectionStart =
-                this.selectionEnd = start + 4
-            }
-        })
-    }
-}
+
 hooks.ContentsHook = {
     mounted() {
         this.el.addEventListener("mouseleave", e => { 
