@@ -25,8 +25,9 @@ export const editorHook = {
                 if (i > 0) {
                     if (isAltStop(this.value[i-1])) {
                         for (; i > 0 && isAltStop(this.value[i-1]); i--);
+                    } else {
+                        for (; i > 0 && !isAltStop(this.value[i-1]); i--);
                     }
-                    for (; i > 0 && !isAltStop(this.value[i-1]); i--);
                 }
                 this.selectionStart = this.selectionEnd = i
             }
@@ -35,8 +36,9 @@ export const editorHook = {
                 if (i < this.value.length) {
                     if (isAltStop(this.value[i])) {
                         for (; i < this.value.length && isAltStop(this.value[i]); i++);
+                    } else {
+                        for (; i < this.value.length && !isAltStop(this.value[i]); i++);
                     }
-                    for (; i < this.value.length && !isAltStop(this.value[i]); i++);
                 }
                 this.selectionStart = this.selectionEnd = i
             }
