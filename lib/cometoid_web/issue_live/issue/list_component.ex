@@ -47,6 +47,18 @@ defmodule CometoidWeb.IssueLive.Issue.ListComponent do
       issues_contexts = Enum.map issue.contexts, &(&1.context.id)
       diff = selected_secondary_contexts -- issues_contexts
       length(diff) == 0
-    end and (q == "" or String.starts_with? (String.downcase issue.title), (String.downcase q))
+    end and (q == "" or search_matches? issue.title, q)
+  end
+
+  defp search_matches? title, q do
+    tokenized =
+      (
+        title
+        |> String.downcase
+        |> String.split(" ")
+      )
+
+    q = String.downcase q
+    not is_nil Enum.find tokenized, &(String.starts_with? &1, q)
   end
 end
