@@ -47,8 +47,6 @@
         width: 100%;
         top: calc(0px - #{$navbar-height} - #{$navbar-padding});
         z-index: 1000;
-        opacity: 0.7;
-        background-color: black;
     }
     #issue-list-component-mask {
         position: absolute;
@@ -56,8 +54,6 @@
         width: 67%;
         top: $taskbar-height;
         height: 100%;
-        opacity: 0.7;
-        background-color: black;
     }
     #context-list-component-mask {
         position: absolute;
@@ -65,8 +61,6 @@
         width: calc(33% - 1px);
         top: $taskbar-height;
         height: 100%;
-        opacity: 0.7;
-        background-color: black;
     }
     #context-search-mask-right {
         position: absolute;
@@ -75,8 +69,6 @@
         bottom: 0;
         left: 66%;
         width: 34%;
-        opacity: 0.7;
-        background-color: black;
     }
     #context-search-mask-right.in-issue-search {
         left: calc(66% + 1px);

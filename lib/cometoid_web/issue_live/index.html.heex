@@ -14,9 +14,11 @@
   </div>
 
   <%= if @context_search_active or @issue_search_active do %>
-    <div id="context-search-mask-top">
+    <div id="context-search-mask-top" 
+         class="opacity">
     </div>
-    <div id="context-search-mask-right" class={if @issue_search_active do "in-issue-search" end}>
+    <div id="context-search-mask-right" 
+         class={"opacity #{if @issue_search_active do "in-issue-search" end}"}>
     </div>
   <% end %>
 

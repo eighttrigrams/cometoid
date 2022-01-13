@@ -6,7 +6,7 @@ defmodule CometoidWeb.ModalComponent do
     ~H"""
     <div
       id={@id}
-      class="phx-modal"
+      class="phx-modal opacity"
       phx-window-keydown="close"
       phx-key="escape"
       phx-target={@myself}
