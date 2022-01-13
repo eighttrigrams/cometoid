@@ -154,10 +154,11 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   def unlink_issue state, id do
-
     issue = id
       |> Tracker.get_issue!
       |> Tracker.remove_issue_relation(state.selected_context.id)
+
+    state = set_context_properties_and_keep_selected_context state
 
     state = if has_one_non_tag_context? issue do
       select_context state, (first_non_tag_context issue).id
