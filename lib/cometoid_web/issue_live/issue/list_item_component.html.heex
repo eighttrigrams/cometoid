@@ -50,46 +50,49 @@
                   </a>
                 </span>
 
-                <%= if @state.list_issues_done_instead_open do %>
-                  <span class="btn">
-                    <a phx-click="unarchive" phx-value-target={@issue.id}>
-                      <i class="bi bi-envelope-open"></i>
-                    </a>
-                  </span>
-                <% else %>
-                  <span class="btn">
-                    <a phx-click="archive" phx-value-target={@issue.id}>
-                      <i class="bi bi-archive"></i>
-                    </a>
-                  </span>
-                <% end %>
 
-                <%= if should_show_delete_button @state, @issue do %>
-                  <span class="btn">
-                    <%= link to: "#",
-                        phx_click: "delete_issue",
-                        phx_value_id: @issue.id, data: [confirm: "Are you sure?"],
-                        tabindex: -1
-                        do %>
-                        <i class="bi bi-trash"></i>
-                    <% end %>
-                  </span>
-                <% end %>
+                <%= unless @state.issue_search_active do %>
+                  <%= if @state.list_issues_done_instead_open do %>
+                    <span class="btn">
+                      <a phx-click="unarchive" phx-value-target={@issue.id}>
+                        <i class="bi bi-envelope-open"></i>
+                      </a>
+                    </span>
+                  <% else %>
+                    <span class="btn">
+                      <a phx-click="archive" phx-value-target={@issue.id}>
+                        <i class="bi bi-archive"></i>
+                      </a>
+                    </span>
+                  <% end %>
 
-                <%= if should_show_unlink_button @state, @issue do %>
-                  <span class="btn">
-                    <a phx-click="unlink_issue" phx-value-target={@issue.id}>
-                      <i class="bi bi-x"></i>
-                    </a>
-                  </span>
-                <% end %>
+                  <%= if should_show_delete_button @state, @issue do %>
+                    <span class="btn">
+                      <%= link to: "#",
+                          phx_click: "delete_issue",
+                          phx_value_id: @issue.id, data: [confirm: "Are you sure?"],
+                          tabindex: -1
+                          do %>
+                          <i class="bi bi-trash"></i>
+                      <% end %>
+                    </span>
+                  <% end %>
 
-                <%= unless is_nil(@state.selected_context) do %>
-                  <span class="btn">
-                    <a phx-click="link_issue" phx-value-target={@issue.id}>
-                      <i class="bi bi-link"></i>
-                    </a>
-                  </span>
+                  <%= if should_show_unlink_button @state, @issue do %>
+                    <span class="btn">
+                      <a phx-click="unlink_issue" phx-value-target={@issue.id}>
+                        <i class="bi bi-x"></i>
+                      </a>
+                    </span>
+                  <% end %>
+
+                  <%= unless is_nil(@state.selected_context) do %>
+                    <span class="btn">
+                      <a phx-click="link_issue" phx-value-target={@issue.id}>
+                        <i class="bi bi-link"></i>
+                      </a>
+                    </span>
+                  <% end %>
                 <% end %>
             </td>
         </tr></table>
