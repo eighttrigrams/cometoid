@@ -178,7 +178,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
     selected_issue = determine_selected_issue state, id
     new_state = Map.merge(
-      set_context_properties_and_keep_selected_context(state),
+      (set_context_properties_and_keep_selected_context state),
       %{ selected_issue: selected_issue })
 
     {:do_query, new_state}
@@ -188,10 +188,12 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     issue = Tracker.get_issue! id
     Tracker.update_issue2(issue, %{ "done" => false })
 
-    new_state = %{
-      list_issues_done_instead_open: false,
-      selected_issue: issue
-    }
+    new_state = Map.merge(
+      (set_context_properties_and_keep_selected_context state),
+      %{
+        list_issues_done_instead_open: false,
+        selected_issue: issue
+      })
 
     {:do_query, new_state}
   end
