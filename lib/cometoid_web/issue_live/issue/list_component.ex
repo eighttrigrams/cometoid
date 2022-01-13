@@ -17,7 +17,7 @@ defmodule CometoidWeb.IssueLive.Issue.ListComponent do
     socket
     |> assign(assigns)
     |> assign(:q, "")
-    |> assign(:filtered_issues, assigns.state.issues)
+    |> filter_issues
     |> return_ok
   end
 
@@ -25,8 +25,16 @@ defmodule CometoidWeb.IssueLive.Issue.ListComponent do
   def handle_event "changes", %{ "issue_search" => %{ "q" => q }}, socket do
     socket
     |> assign(:q, q)
-    |> assign(:filtered_issues, (Enum.filter socket.assigns.state.issues, &(should_show? socket.assigns.state, &1, q)))
+    |> filter_issues
     |> return_noreply
+  end
+
+  defp filter_issues socket do
+    socket
+    |> assign(:filtered_issues,
+      (Enum.filter socket.assigns.state.issues,
+        &(should_show? socket.assigns.state, &1, socket.assigns.q))
+    )
   end
 
   defp should_show? state, issue, q do
@@ -39,6 +47,6 @@ defmodule CometoidWeb.IssueLive.Issue.ListComponent do
       issues_contexts = Enum.map issue.contexts, &(&1.context.id)
       diff = selected_secondary_contexts -- issues_contexts
       length(diff) == 0
-    end and String.starts_with? (String.downcase issue.title), (String.downcase q)
+    end and (q == "" or String.starts_with? (String.downcase issue.title), (String.downcase q))
   end
 end
