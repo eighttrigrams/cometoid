@@ -6,7 +6,6 @@ export const editorHook = {
     altPressed: false,
     metaPressed: false,
     mounted() {
-        console.log("hi")
         this.el.addEventListener("keydown", function(e) {
 
             /* 
