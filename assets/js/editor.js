@@ -27,7 +27,6 @@ export const editorHook = {
                 if (e.key === "Enter") {
                     e.preventDefault()
                     let i = this.selectionStart
-                    console.log("here", i)
                     if (i === this.value.length) {
                         this.value += "\n"
                         this.selectionStart = this.selectionEnd = i + 1
@@ -46,6 +45,28 @@ export const editorHook = {
                             this.selectionStart = this.selectionEnd = i + 2
                             break
                         }
+                    }
+                }
+            }
+
+            if (this.altPressed && e.key === "Enter") {
+                e.preventDefault()
+                let i = this.selectionStart
+                if (i === 0) {
+                    this.value = "\n" + this.value
+                    this.selectionStart = this.selectionEnd = 0
+                } else for (; i > 0; i--) {
+                    if (this.value[i] === "\n" && i !== this.selectionStart) {
+                        this.value =
+                            this.value.slice(0, i)
+                            + "\n"
+                            + this.value.slice(i, this.value.length)
+                        this.selectionStart = this.selectionEnd = i + 1
+                        break
+                    } else if (i - 1 === 0) {
+                        this.value = "\n" + this.value
+                        this.selectionStart = this.selectionEnd = 0
+                        break
                     }
                 }
             }
