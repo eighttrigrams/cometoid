@@ -90,6 +90,7 @@ export const editorHook = {
                     this.value = 
                         this.value.slice(0, i)
                         + this.value.slice(this.selectionEnd, this.value.length)
+                    this.selectionStart = this.selectionEnd = i
                 }
             }
 
