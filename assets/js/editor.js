@@ -55,18 +55,26 @@ export const editorHook = {
                 if (i === 0) {
                     this.value = "\n" + this.value
                     this.selectionStart = this.selectionEnd = 0
-                } else for (; i > 0; i--) {
-                    if (this.value[i] === "\n" && i !== this.selectionStart) {
-                        this.value =
-                            this.value.slice(0, i)
-                            + "\n"
-                            + this.value.slice(i, this.value.length)
-                        this.selectionStart = this.selectionEnd = i + 1
-                        break
-                    } else if (i - 1 === 0) {
-                        this.value = "\n" + this.value
-                        this.selectionStart = this.selectionEnd = 0
-                        break
+                } else {
+                    if (this.value[i] === "\n") i--
+                    for (; i >= 0; i--) {
+                        console.log(i, this.value[i])
+                        if (this.value[i] === "\n") {
+                            console.log("h", i, this.selectionStart, this.value[i])
+                            this.value =
+                                this.value.slice(0, i+1)
+                                + "\n"
+                                + this.value.slice(i+1, this.value.length)
+                            this.selectionStart = this.selectionEnd = i + 1
+                            break
+                        } 
+                        else if (i === 0) {
+                            this.value =
+                                "\n"
+                                + this.value
+                            this.selectionStart = this.selectionEnd = 0
+                            break
+                        }
                     }
                 }
             }
