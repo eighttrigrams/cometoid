@@ -27,6 +27,7 @@ export const editorHook = {
                 if (e.key === "Enter") {
                     e.preventDefault()
                     let i = this.selectionStart
+                    console.log("here", i)
                     if (i === this.value.length) {
                         this.value += "\n"
                         this.selectionStart = this.selectionEnd = i + 1
@@ -38,6 +39,11 @@ export const editorHook = {
                                 + "\n" 
                                 + this.value.slice(i, this.value.length)
                             this.selectionStart = this.selectionEnd = i + 1
+                            break
+                        }
+                        else if (i + 1 === this.value.length) {
+                            this.value += "\n"
+                            this.selectionStart = this.selectionEnd = i + 2
                             break
                         }
                     }
