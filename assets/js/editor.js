@@ -29,7 +29,7 @@ export const editorHook = {
                     let i = this.selectionStart
                     if (i === this.value.length) {
                         this.value += "\n"
-                        this.selectionStart = this.selectionEnd = i
+                        this.selectionStart = this.selectionEnd = i + 1
                     } 
                     else for (; i < this.value.length; i++) {
                         if (this.value[i] === "\n") {
