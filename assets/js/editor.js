@@ -5,6 +5,7 @@ function isAltStop(s) {
 export const editorHook = {
     altPressed: false,
     metaPressed: false,
+    shiftPressed: false,
     mounted() {
         this.el.addEventListener("keydown", function(e) {
 
@@ -20,6 +21,27 @@ export const editorHook = {
                 "    " + this.value.substring(end)  
               this.selectionStart =
                 this.selectionEnd = start + 4
+            }
+
+            if (this.shiftPressed) {
+                if (e.key === "Enter") {
+                    e.preventDefault()
+                    let i = this.selectionStart
+                    if (i === this.value.length) {
+                        this.value += "\n"
+                        this.selectionStart = this.selectionEnd = i
+                    } 
+                    else for (; i < this.value.length; i++) {
+                        if (this.value[i] === "\n") {
+                            this.value = 
+                                this.value.slice(0, i) 
+                                + "\n" 
+                                + this.value.slice(i, this.value.length)
+                            this.selectionStart = this.selectionEnd = i + 1
+                            break
+                        }
+                    }
+                }
             }
 
             if (this.metaPressed && e.code === "KeyJ") {
@@ -60,13 +82,15 @@ export const editorHook = {
                 }
                 this.selectionStart = this.selectionEnd = i
             }
-            if (e.code === "AltLeft") this.altPressed = true;
-            if (e.code === "MetaLeft") this.metaPressed = true;
+            if (e.code === "AltLeft") this.altPressed = true
+            if (e.code === "MetaLeft") this.metaPressed = true
+            if (e.code === "ShiftLeft") this.shiftPressed = true
         })
         this.el.addEventListener("keyup", function(e) {
 
-            if (e.code === "AltLeft") this.altPressed = false;
-            if (e.code === "MetaLeft") this.metaPressed = false;
+            if (e.code === "AltLeft") this.altPressed = false
+            if (e.code === "MetaLeft") this.metaPressed = false
+            if (e.code === "ShiftLeft") this.shiftPressed = false
         })
     }
 }
