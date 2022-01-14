@@ -58,9 +58,7 @@ export const editorHook = {
                 } else {
                     if (this.value[i] === "\n") i--
                     for (; i >= 0; i--) {
-                        console.log(i, this.value[i])
                         if (this.value[i] === "\n") {
-                            console.log("h", i, this.selectionStart, this.value[i])
                             this.value =
                                 this.value.slice(0, i+1)
                                 + "\n"
@@ -79,6 +77,22 @@ export const editorHook = {
                 }
             }
 
+            if (this.metaPressed && e.code === "Backspace") {
+                e.preventDefault()
+                let i = this.selectionEnd
+                if (i > 0) {
+                    // TODO dedup #A
+                    if (isAltStop(this.value[i-1])) {
+                        for (; i > 0 && isAltStop(this.value[i-1]); i--);
+                    } else {
+                        for (; i > 0 && !isAltStop(this.value[i-1]); i--);
+                    }
+                    this.value = 
+                        this.value.slice(0, i)
+                        + this.value.slice(this.selectionEnd, this.value.length)
+                }
+            }
+
             if (this.metaPressed && e.code === "KeyJ") {
                 e.preventDefault()
                 let i = this.selectionEnd
@@ -89,6 +103,7 @@ export const editorHook = {
                         } 
                         for (; i > 0 && !isAltStop(this.value[i-1]); i--);
                     } else {
+                        // TODO dedup #A
                         if (isAltStop(this.value[i-1])) {
                             for (; i > 0 && isAltStop(this.value[i-1]); i--);
                         } else {
