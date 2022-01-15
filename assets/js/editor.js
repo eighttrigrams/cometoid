@@ -2,6 +2,30 @@ function isAltStop(s) {
     return s === " " || s === "." || s === "\t" || s === "\n"
 }
 
+function insertLineAfterCurrent(selectionStart, value) {
+
+    let resultValue = value
+    let offset = 1
+
+    if (selectionStart === value.length) resultValue += "\n"
+    else for (; selectionStart < value.length; selectionStart++) {
+        if (value[selectionStart] === "\n") {
+            resultValue = 
+                value.slice(0, selectionStart) 
+                + "\n" 
+                + value.slice(selectionStart, value.length)
+            break
+        }
+        else if (selectionStart + 1 === value.length) {
+            resultValue += "\n"
+            offset++
+            break
+        }
+    }
+    
+    return [selectionStart + offset, resultValue]
+}
+
 export const editorHook = {
     altPressed: false,
     metaPressed: false,
@@ -23,30 +47,13 @@ export const editorHook = {
                 this.selectionEnd = start + 4
             }
 
-            if (this.shiftPressed) {
-                if (e.key === "Enter") {
-                    e.preventDefault()
-                    let i = this.selectionStart
-                    if (i === this.value.length) {
-                        this.value += "\n"
-                        this.selectionStart = this.selectionEnd = i + 1
-                    } 
-                    else for (; i < this.value.length; i++) {
-                        if (this.value[i] === "\n") {
-                            this.value = 
-                                this.value.slice(0, i) 
-                                + "\n" 
-                                + this.value.slice(i, this.value.length)
-                            this.selectionStart = this.selectionEnd = i + 1
-                            break
-                        }
-                        else if (i + 1 === this.value.length) {
-                            this.value += "\n"
-                            this.selectionStart = this.selectionEnd = i + 2
-                            break
-                        }
-                    }
-                }
+            if (!this.altPressed && !this.metaPressed && this.shiftPressed && e.key === "Enter") {
+                e.preventDefault()
+                const [resultSelection, resultValue] = 
+                    insertLineAfterCurrent(this.selectionStart, this.value)
+
+                this.value = resultValue
+                this.selectionStart = this.selectionEnd = resultSelection
             }
 
             if (this.altPressed && e.key === "Enter") {
