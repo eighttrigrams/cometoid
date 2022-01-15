@@ -2,6 +2,10 @@ function isAltStop(s) {
     return s === " " || s === "." || s === "\t" || s === "\n"
 }
 
+function isSentenceStop(s) {
+    return s === "."
+}
+
 function insertLineAfterCurrent(selectionStart, value) {
 
     let resultValue = value
@@ -22,7 +26,32 @@ function insertLineAfterCurrent(selectionStart, value) {
             break
         }
     }
-    
+
+    return [selectionStart + offset, resultValue]
+}
+
+function deleteBackwardsTowardsSentenceStart(selectionStart, value) {
+
+    let resultValue = value
+    let offset = -1
+    let _selectionStart = selectionStart
+
+    if (selectionStart === 0) return [selectionStart, value]
+
+    if (isSentenceStop(value[selectionStart-1])) selectionStart--
+    for (; selectionStart > 0; selectionStart--) {
+        if (selectionStart - 1 === 0) {
+            resultValue = value.slice(_selectionStart, value.length)
+            break;
+        } else if (isSentenceStop(value[selectionStart-1])) {
+            resultValue = 
+                value.slice(0, selectionStart)
+                + value.slice(_selectionStart, value.length)
+            offset++
+            break;
+        }
+    }
+
     return [selectionStart + offset, resultValue]
 }
 
@@ -45,6 +74,16 @@ export const editorHook = {
                 "    " + this.value.substring(end)  
               this.selectionStart =
                 this.selectionEnd = start + 4
+            }
+
+            if (this.altPressed && !this.metaPressed && !this.shiftPressed && e.code === "Backspace") {
+                e.preventDefault()
+                
+                const [resultSelection, resultValue] = 
+                    deleteBackwardsTowardsSentenceStart(this.selectionStart, this.value)
+
+                this.value = resultValue
+                this.selectionStart = this.selectionEnd = resultSelection
             }
 
             if (!this.altPressed && !this.metaPressed && this.shiftPressed && e.key === "Enter") {
