@@ -49,7 +49,7 @@ function deleteBackwardsTowardsSentenceStart(selectionStart, value) {
             return [selectionStart - 1, resultValue]
         }
     }
-    else if (selectionStart > 0) {
+    if (selectionStart > 0) {
         if (isSentenceStop(value[selectionStart-1])) selectionStart--
     }
     for (; selectionStart > 0; selectionStart--) {
