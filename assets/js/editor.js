@@ -58,7 +58,6 @@ function deleteBackwardsTowardsSentenceStart(selectionStart, value) {
             offset--
             break;
         } else if (isSentenceStop(value[selectionStart-1])) {
-            console.log(_selectionStart, value.length)
             resultValue = 
                 value.slice(0, selectionStart)
                 + (_selectionStart !== value.length 
@@ -99,23 +98,26 @@ export const editorHook = {
                 this.selectionEnd = start + 4
             }
 
-            if (this.altPressed && !this.metaPressed && !this.shiftPressed && e.code === "Backspace") {
-                e.preventDefault()
-                
-                const [resultSelection, resultValue] = 
-                    deleteBackwardsTowardsSentenceStart(this.selectionStart, this.value)
+            const applyIt = ([resultSelection, resultValue]) => {
 
+                e.preventDefault()
                 this.value = resultValue
                 this.selectionStart = this.selectionEnd = resultSelection
             }
 
-            if (!this.altPressed && !this.metaPressed && this.shiftPressed && e.key === "Enter") {
-                e.preventDefault()
-                const [resultSelection, resultValue] = 
-                    insertLineAfterCurrent(this.selectionStart, this.value)
+            if (this.altPressed 
+                && !this.metaPressed 
+                && !this.shiftPressed 
+                && e.code === "Backspace") {
 
-                this.value = resultValue
-                this.selectionStart = this.selectionEnd = resultSelection
+                applyIt(deleteBackwardsTowardsSentenceStart(this.selectionStart, this.value))                
+            }
+            if (!this.altPressed 
+                && !this.metaPressed 
+                && this.shiftPressed 
+                && e.key === "Enter") {
+                
+                applyIt(insertLineAfterCurrent(this.selectionStart, this.value))
             }
 
             if (this.altPressed && e.key === "Enter") {
