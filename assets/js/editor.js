@@ -58,8 +58,11 @@ function deleteBackwardsTowardsSentenceStart(selectionStart, value) {
             offset--
             break;
         } else if (isSentenceStop(value[selectionStart-1])) {
+            console.log(_selectionStart, value.length)
             resultValue = 
                 value.slice(0, selectionStart)
+                + (_selectionStart !== value.length 
+                    && value[_selectionStart] !== " " ? " " : "")
                 + value.slice(_selectionStart, value.length)
             break;
         } else if (value[selectionStart-1] === "\n") {
