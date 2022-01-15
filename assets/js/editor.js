@@ -3,7 +3,11 @@ function isAltStop(s) {
 }
 
 function isSentenceStop(s) {
-    return s === "."
+    return s === "." || s === "," || s === ";"
+}
+
+function isWhitespace(s) {
+    return s === " " || s === "\n"
 }
 
 function insertLineAfterCurrent(selectionStart, value) {
@@ -33,22 +37,36 @@ function insertLineAfterCurrent(selectionStart, value) {
 function deleteBackwardsTowardsSentenceStart(selectionStart, value) {
 
     let resultValue = value
-    let offset = -1
+    let offset = 0
     let _selectionStart = selectionStart
 
     if (selectionStart === 0) return [selectionStart, value]
 
-    if (isSentenceStop(value[selectionStart-1])) selectionStart--
+    if (selectionStart > 0) {
+        if (value[selectionStart-1] === "\n") {
+            resultValue = value.slice(0, selectionStart-1) 
+                + value.slice(selectionStart, value.length)
+            return [selectionStart - 1, resultValue]
+        }
+        else if (isSentenceStop(value[selectionStart-1])) selectionStart--
+    }
     for (; selectionStart > 0; selectionStart--) {
         if (selectionStart - 1 === 0) {
             resultValue = value.slice(_selectionStart, value.length)
+            offset--
             break;
         } else if (isSentenceStop(value[selectionStart-1])) {
             resultValue = 
                 value.slice(0, selectionStart)
                 + value.slice(_selectionStart, value.length)
-            offset++
             break;
+        } else if (value[selectionStart-1] === "\n") {
+            if (selectionStart > 1 && value[selectionStart-2] === "\n") {
+                resultValue = 
+                    value.slice(0, selectionStart)
+                    + value.slice(_selectionStart, value.length)
+                break
+            }
         }
     }
 
