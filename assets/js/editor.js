@@ -42,13 +42,15 @@ function deleteBackwardsTowardsSentenceStart(selectionStart, value) {
 
     if (selectionStart === 0) return [selectionStart, value]
 
-    if (selectionStart > 0) {
-        if (value[selectionStart-1] === "\n") {
+    if (selectionStart > 2) {
+        if (value[selectionStart-1] === "\n" && value[selectionStart-2] === "\n") {
             resultValue = value.slice(0, selectionStart-1) 
                 + value.slice(selectionStart, value.length)
             return [selectionStart - 1, resultValue]
         }
-        else if (isSentenceStop(value[selectionStart-1])) selectionStart--
+    }
+    else if (selectionStart > 0) {
+        if (isSentenceStop(value[selectionStart-1])) selectionStart--
     }
     for (; selectionStart > 0; selectionStart--) {
         if (selectionStart - 1 === 0) {
