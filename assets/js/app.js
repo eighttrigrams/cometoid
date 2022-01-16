@@ -16,7 +16,7 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
-import {editorHook} from "./editor"
+import {editorHook} from "./editorHook"
 
 let hooks = {};
 
