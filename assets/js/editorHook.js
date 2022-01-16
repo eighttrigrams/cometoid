@@ -35,14 +35,14 @@ export const editorHook = {
                 && !this.shiftPressed 
                 && e.code === "Backspace") {
 
-                applyIt(deleteBackwardsTowardsSentenceStart(this.selectionStart, this.value))                
+                applyIt(deleteBackwardsTowardsSentenceStart([this.selectionStart, this.value]))                
             }
             if (!this.altPressed 
                 && !this.metaPressed 
                 && this.shiftPressed 
                 && e.key === "Enter") {
                 
-                applyIt(insertLineAfterCurrent(this.selectionStart, this.value))
+                applyIt(insertLineAfterCurrent([this.selectionStart, this.value]))
             }
 
             if (this.altPressed && e.key === "Enter") {

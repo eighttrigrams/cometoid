@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import {insertLineAfterCurrent} from "../js/editor"
+import {insertLineAfterCurrent, deleteBackwardsTowardsSentenceStart} from "../js/editor"
 
 
 function convert(what) {
@@ -9,29 +9,56 @@ function convert(what) {
     return [i, result]
 }
 
-describe("Array", function() {
+describe("Editor", function() {
     
-    it("insertLineAfterCurrent - cursor at start of line", function() {
-        
-        const [i, line] = convert("|abc")
-        const result = insertLineAfterCurrent(i, line)
+    describe("insertLineAfterCurrent", function() {
 
-        assert.deepEqual(result, convert("abc\n|"))
+        it("cursor at start of line", function() {
+            
+            assert.deepEqual(
+                insertLineAfterCurrent(
+                    convert("|abc")), 
+                convert("abc\n|"))
+        })
+    
+        it("cursor at end of line", function() {
+            
+            assert.deepEqual(insertLineAfterCurrent(
+                    convert("abc|")), 
+                convert("abc\n|"))
+        })
+    
+        it("cursor somewhere in the line", function() {
+            
+            assert.deepEqual(insertLineAfterCurrent(
+                    convert("a|bc")),
+                convert("abc\n|"))
+        })
     })
 
-    it("insertLineAfterCurrent - cursor at end of line", function() {
+    describe("deleteBackwardsTowardsSentenceStart", function() {
         
-        const [i, line] = convert("abc|")
-        const result = insertLineAfterCurrent(i, line)
+        it("cursor at end of line", function() {
+            
+            assert.deepEqual(
+                deleteBackwardsTowardsSentenceStart(
+                    convert("abc. abc|")), 
+                convert("abc.|"))
+        })
 
-        assert.deepEqual(result, convert("abc\n|"))
-    })
+        it("cursor between sentences", function() {
+            
+            assert.deepEqual(
+                deleteBackwardsTowardsSentenceStart(
+                    convert("abc. abc. |abc")), 
+                convert("abc. abc.| abc"))
+        })
 
-    it("insertLineAfterCurrent - cursor somewhere in the line", function() {
-        
-        const [i, line] = convert("a|bc")
-        const result = insertLineAfterCurrent(i, line)
-
-        assert.deepEqual(result, convert("abc\n|"))
+        it("cursor between sentences, delete middle", function() {
+            
+            assert.deepEqual(deleteBackwardsTowardsSentenceStart(
+                    convert("abc. abc.| abc")), 
+                convert("abc.| abc"))
+        })
     })
 })

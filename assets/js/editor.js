@@ -10,7 +10,7 @@ function isWhitespace(s) {
     return s === " " || s === "\n"
 }
 
-export function insertLineAfterCurrent(selectionStart, value) {
+export function insertLineAfterCurrent([selectionStart, value]) {
 
     let resultValue = value
     let offset = 1
@@ -34,7 +34,7 @@ export function insertLineAfterCurrent(selectionStart, value) {
     return [selectionStart + offset, resultValue]
 }
 
-export function deleteBackwardsTowardsSentenceStart(selectionStart, value) {
+export function deleteBackwardsTowardsSentenceStart([selectionStart, value]) {
 
     let resultValue = value
     let offset = 0
