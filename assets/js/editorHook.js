@@ -2,7 +2,11 @@ import {deleteBackwardsTowardsSentenceStart,
         insertLineAfterCurrent,
         moveCaretForwardTowardsNextSentence,
         isAltStop,
-        moveCaretBackwardsTowardsSentenceStart} from "./editor"
+        moveCaretBackwardsTowardsSentenceStart,
+        moveCaretWordLeft,
+        moveCaretWordRight,
+        moveCaretWordPartLeft,
+        moveCaretWordPartRight} from "./editor"
 
 export const editorHook = {
     altPressed: false,
@@ -62,6 +66,36 @@ export const editorHook = {
                 && e.key === "Enter") {
                 
                 applyIt(insertLineAfterCurrent([this.selectionStart, this.value]))
+            }
+
+            if (!this.shiftPressed 
+                && this.metaPressed 
+                && !this.altPressed  
+                && e.code === "KeyJ") {
+                
+                applyIt(moveCaretWordPartLeft([this.selectionStart, this.value]))
+            }
+            if (!this.shiftPressed 
+                && this.metaPressed 
+                && this.altPressed 
+                && e.code === "KeyJ") {
+                
+                applyIt(moveCaretWordLeft([this.selectionStart, this.value]))
+            }
+
+            if (!this.shiftPressed 
+                && this.metaPressed 
+                && !this.altPressed 
+                && e.code === "KeyL") {
+                
+                applyIt(moveCaretWordPartRight([this.selectionStart, this.value]))
+            }
+            if (!this.shiftPressed 
+                && this.metaPressed 
+                && this.altPressed 
+                && e.code === "KeyL") {
+                
+                applyIt(moveCaretWordRight([this.selectionStart, this.value]))
             }
 
             if (this.altPressed && e.key === "Enter") {
@@ -129,45 +163,6 @@ export const editorHook = {
                 }    
             }
 
-            if (this.metaPressed && e.code === "KeyJ") {
-                e.preventDefault()
-                let i = this.selectionEnd
-                if (i > 0) {
-                    if (this.altPressed) {
-                        if (isAltStop(this.value[i-1])) {
-                            for (; i > 0 && isAltStop(this.value[i-1]); i--);
-                        } 
-                        for (; i > 0 && !isAltStop(this.value[i-1]); i--);
-                    } else {
-                        // TODO dedup #A
-                        if (isAltStop(this.value[i-1])) {
-                            for (; i > 0 && isAltStop(this.value[i-1]); i--);
-                        } else {
-                            for (; i > 0 && !isAltStop(this.value[i-1]); i--);
-                        }
-                    }
-                }
-                this.selectionStart = this.selectionEnd = i
-            }
-            if (this.metaPressed && e.code === "KeyL") {
-                e.preventDefault()
-                let i = this.selectionStart
-                if (i < this.value.length) {
-                    if (this.altPressed) {
-                        if (isAltStop(this.value[i])) {
-                            for (; i < this.value.length && isAltStop(this.value[i]); i++);
-                        }
-                        for (; i < this.value.length && !isAltStop(this.value[i]); i++);
-                    } else {
-                        if (isAltStop(this.value[i])) {
-                            for (; i < this.value.length && isAltStop(this.value[i]); i++);
-                        } else {
-                            for (; i < this.value.length && !isAltStop(this.value[i]); i++);
-                        }
-                    }
-                }
-                this.selectionStart = this.selectionEnd = i
-            }
             if (e.code === "AltLeft") this.altPressed = true
             if (e.code === "MetaLeft") this.metaPressed = true
             if (e.code === "ShiftLeft") this.shiftPressed = true

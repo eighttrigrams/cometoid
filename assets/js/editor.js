@@ -82,6 +82,56 @@ function forwardTowardsSentenceStart([selectionStart, value]) {
     return selectionStart
 }
 
+function wordPartLeft([selectionStart, value]) {
+
+    let i = selectionStart
+    if (i > 0) {
+        if (isAltStop(value[i-1])) {
+            for (; i > 0 && isAltStop(value[i-1]); i--);
+        } else {
+            for (; i > 0 && !isAltStop(value[i-1]); i--);
+        }
+    }
+    return i
+}
+
+function wordLeft([selectionStart, value]) {
+
+    let i = selectionStart
+    if (i > 0) {
+        if (isAltStop(value[i-1])) {
+            for (; i > 0 && isAltStop(value[i-1]); i--);
+        } 
+        for (; i > 0 && !isAltStop(value[i-1]); i--);
+    }
+    return i
+}
+
+function wordPartRight([selectionStart, value]) {
+   
+    let i = selectionStart
+    if (i < value.length) {
+        if (isAltStop(value[i])) {
+            for (; i < value.length && isAltStop(value[i]); i++);
+        } else {
+            for (; i < value.length && !isAltStop(value[i]); i++);
+        }
+    }
+    return i
+}
+
+function wordRight([selectionStart, value]) {
+   
+    let i = selectionStart
+    if (i < value.length) {
+        if (isAltStop(value[i])) {
+            for (; i < value.length && isAltStop(value[i]); i++);
+        }
+        for (; i < value.length && !isAltStop(value[i]); i++);
+    }
+    return i
+}
+
 export function moveCaretForwardTowardsNextSentence(params) {
 
     return [forwardTowardsSentenceStart(params), params[1]]
@@ -90,6 +140,26 @@ export function moveCaretForwardTowardsNextSentence(params) {
 export function moveCaretBackwardsTowardsSentenceStart(params) {
 
     return [backwardsTowardsSentenceStart(params), params[1]]
+}
+
+export function moveCaretWordLeft(params) {
+    
+    return [wordLeft(params), params[1]]
+}
+
+export function moveCaretWordPartLeft(params) {
+    
+    return [wordPartLeft(params), params[1]]
+}
+
+export function moveCaretWordRight(params) {
+
+    return [wordRight(params), params[1]]
+}
+
+export function moveCaretWordPartRight(params) {
+
+    return [wordPartRight(params), params[1]]
 }
 
 export function deleteBackwardsTowardsSentenceStart(params) {
