@@ -55,3 +55,5 @@ and release the right-click (or left-click, which will act on its release) when 
 Run
 
     $ mix test
+    $ cd assets
+    $ npx mocha -R list --require @babel/register test/*test.js
