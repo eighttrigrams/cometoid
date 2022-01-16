@@ -16,10 +16,13 @@ export const editorHook = {
     altPressed: false,
     metaPressed: false,
     mounted() {
+        this.el.addEventListener("mouseleave", function(e) {
+            this.controlPressed = false
+            this.shiftPressed = false
+            this.altPressed = false
+            this.metaPressed = false
+        })
         this.el.addEventListener("keydown", function(e) {
-
-            console.log(e.code)
-
             /* 
              * This is for using tabs for indentation, as is the usual behaviour.
              * https://stackoverflow.com/a/6637396
