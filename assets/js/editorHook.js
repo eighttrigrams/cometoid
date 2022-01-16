@@ -1,5 +1,6 @@
 import {deleteBackwardsTowardsSentenceStart, 
         insertLineAfterCurrent,
+        moveCaretForwardTowardsNextSentence,
         isAltStop,
         moveCaretBackwardsTowardsSentenceStart} from "./editor"
 
@@ -45,6 +46,14 @@ export const editorHook = {
                 && e.code === "KeyJ") {
 
                 applyIt(moveCaretBackwardsTowardsSentenceStart([this.selectionStart, this.value]))
+            }
+
+            if (this.altPressed
+                && !this.metaPressed
+                && !this.shiftPressed
+                && e.code === "KeyL") {
+
+                applyIt(moveCaretForwardTowardsNextSentence([this.selectionStart, this.value]))
             }
 
             if (!this.altPressed 

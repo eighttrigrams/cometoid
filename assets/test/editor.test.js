@@ -1,5 +1,6 @@
 import * as assert from "assert"
-import {insertLineAfterCurrent, deleteBackwardsTowardsSentenceStart} from "../js/editor"
+import {insertLineAfterCurrent, moveCaretForwardTowardsNextSentence,
+    deleteBackwardsTowardsSentenceStart} from "../js/editor"
 
 
 function convert(what) {
@@ -33,6 +34,41 @@ describe("Editor", function() {
             assert.deepEqual(insertLineAfterCurrent(
                     convert("a|bc")),
                 convert("abc\n|"))
+        })
+    })
+
+    describe("moveCaretTowardsNextSentence", function() {
+
+        it("base case", function() {
+            
+            assert.deepEqual(
+                moveCaretForwardTowardsNextSentence(
+                    convert("|abc. def")), 
+                convert("abc. |def"))
+        })
+
+        it("double newline", function() {
+            
+            assert.deepEqual(
+                moveCaretForwardTowardsNextSentence(
+                    convert("|abc\n\ndef")), 
+                convert("abc\n\n|def"))
+        })
+
+        it("double newline, 1", function() {
+            
+            assert.deepEqual(
+                moveCaretForwardTowardsNextSentence(
+                    convert("abc|.\n\ndef")), 
+                convert("abc.\n|\ndef"))
+        })
+
+        it("double newline, 2", function() {
+            
+            assert.deepEqual(
+                moveCaretForwardTowardsNextSentence(
+                    convert("abc.|\n\ndef")), 
+                convert("abc.\n\n|def"))
         })
     })
 

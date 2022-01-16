@@ -64,6 +64,29 @@ function backwardsTowardsSentenceStart([selectionStart, value]) {
     return selectionStart
 }
 
+function forwardTowardsSentenceStart([selectionStart, value]) {
+
+    for (; selectionStart < value.length; selectionStart++) {
+        if (isSentenceStop(value[selectionStart])) {
+            if (selectionStart + 1 < value.length) selectionStart += 2
+            break
+        }
+        if (value[selectionStart] === "\n" 
+            && selectionStart + 1 < value.length 
+            && value[selectionStart+1] === "\n") {
+
+            selectionStart += 2
+            break;
+        }
+    }
+    return selectionStart
+}
+
+export function moveCaretForwardTowardsNextSentence(params) {
+
+    return [forwardTowardsSentenceStart(params), params[1]]
+}
+
 export function moveCaretBackwardsTowardsSentenceStart(params) {
 
     return [backwardsTowardsSentenceStart(params), params[1]]
