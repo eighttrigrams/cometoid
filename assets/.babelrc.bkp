@@ -1,0 +1,7 @@
+{
+    "presets": [
+        "@babel/preset-env"
+    ]
+}
+
+// taken out in favor of config in package.js, when introducing mocha
