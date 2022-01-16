@@ -34,19 +34,14 @@ export function insertLineAfterCurrent([selectionStart, value]) {
     return [selectionStart + offset, resultValue]
 }
 
-export function deleteBackwardsTowardsSentenceStart([selectionStart, value]) {
-
-    let resultValue = value
-    let offset = 0
-    let _selectionStart = selectionStart
-
-    if (selectionStart === 0) return [selectionStart, value]
+function backwardsTowardsSentenceStart([selectionStart, value]) {
 
     if (selectionStart > 2) {
+        if (value[selectionStart-1] === " " && value[selectionStart-2] === ".") {
+            return backwardsTowardsSentenceStart([selectionStart-1, value])
+        }
         if (value[selectionStart-1] === "\n" && value[selectionStart-2] === "\n") {
-            resultValue = value.slice(0, selectionStart-1) 
-                + value.slice(selectionStart, value.length)
-            return [selectionStart - 1, resultValue]
+            return selectionStart - 1
         }
     }
     if (selectionStart > 0) {
@@ -54,25 +49,33 @@ export function deleteBackwardsTowardsSentenceStart([selectionStart, value]) {
     }
     for (; selectionStart > 0; selectionStart--) {
         if (selectionStart - 1 === 0) {
-            resultValue = value.slice(_selectionStart, value.length)
-            offset--
+            selectionStart --
             break;
         } else if (isSentenceStop(value[selectionStart-1])) {
-            resultValue = 
-                value.slice(0, selectionStart)
-                + (_selectionStart !== value.length 
-                    && value[_selectionStart] !== " " ? " " : "")
-                + value.slice(_selectionStart, value.length)
+            
             break;
         } else if (value[selectionStart-1] === "\n") {
             if (selectionStart > 1 && value[selectionStart-2] === "\n") {
-                resultValue = 
-                    value.slice(0, selectionStart)
-                    + value.slice(_selectionStart, value.length)
                 break
             }
         }
     }
 
-    return [selectionStart + offset, resultValue]
+    return selectionStart
+}
+
+export function deleteBackwardsTowardsSentenceStart(params) {
+
+    const [selectionStart_, value] = params
+    let resultValue = value
+
+    const selectionStart = backwardsTowardsSentenceStart(params)
+
+    resultValue = 
+        value.slice(0, selectionStart)
+        + (selectionStart_ !== value.length && selectionStart !== 0
+            && value[selectionStart_] !== " " ? " " : "")
+        + value.slice(selectionStart_, value.length)
+
+    return [selectionStart, resultValue]
 }
