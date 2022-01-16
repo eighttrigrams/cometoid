@@ -132,6 +132,16 @@ function wordRight([selectionStart, value]) {
     return i
 }
 
+function cleft([selectionStart, _value]) {
+   
+    return selectionStart > 0 ? selectionStart - 1 : selectionStart
+}
+
+function cright([selectionStart, value]) {
+   
+    return selectionStart < value.length -1 ? selectionStart + 1 : selectionStart
+}
+
 export function moveCaretForwardTowardsNextSentence(params) {
 
     return [forwardTowardsSentenceStart(params), params[1]]
@@ -160,6 +170,16 @@ export function moveCaretWordRight(params) {
 export function moveCaretWordPartRight(params) {
 
     return [wordPartRight(params), params[1]]
+}
+
+export function caretLeft(params) {
+
+    return [cleft(params), params[1]]
+}
+
+export function caretRight(params) {
+
+    return [cright(params), params[1]]
 }
 
 export function deleteBackwardsTowardsSentenceStart(params) {

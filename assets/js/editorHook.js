@@ -3,17 +3,22 @@ import {deleteBackwardsTowardsSentenceStart,
         moveCaretForwardTowardsNextSentence,
         isAltStop,
         moveCaretBackwardsTowardsSentenceStart,
+        caretLeft,
+        caretRight,
         moveCaretWordLeft,
         moveCaretWordRight,
         moveCaretWordPartLeft,
         moveCaretWordPartRight} from "./editor"
 
 export const editorHook = {
+    controlPressed: false,
+    shiftPressed: false,
     altPressed: false,
     metaPressed: false,
-    shiftPressed: false,
     mounted() {
         this.el.addEventListener("keydown", function(e) {
+
+            console.log(e.code)
 
             /* 
              * This is for using tabs for indentation, as is the usual behaviour.
@@ -34,6 +39,24 @@ export const editorHook = {
                 e.preventDefault()
                 this.value = resultValue
                 this.selectionStart = this.selectionEnd = resultSelection
+            }
+
+            if (this.controlPressed 
+                && !this.shiftPressed 
+                && !this.metaPressed 
+                && !this.altPressed 
+                && e.code === "KeyJ") {
+
+                applyIt(caretLeft([this.selectionStart, this.value]))                
+            }
+
+            if (this.controlPressed 
+                && !this.shiftPressed 
+                && !this.metaPressed 
+                && !this.altPressed 
+                && e.code === "KeyL") {
+
+                applyIt(caretRight([this.selectionStart, this.value]))                
             }
 
             if (this.altPressed 
@@ -163,15 +186,17 @@ export const editorHook = {
                 }    
             }
 
-            if (e.code === "AltLeft") this.altPressed = true
-            if (e.code === "MetaLeft") this.metaPressed = true
+            if (e.code === "ControlLeft") this.controlPressed = true
             if (e.code === "ShiftLeft") this.shiftPressed = true
+            if (e.code === "MetaLeft") this.metaPressed = true
+            if (e.code === "AltLeft") this.altPressed = true
         })
         this.el.addEventListener("keyup", function(e) {
 
-            if (e.code === "AltLeft") this.altPressed = false
-            if (e.code === "MetaLeft") this.metaPressed = false
+            if (e.code === "ControlLeft") this.controlPressed = false
             if (e.code === "ShiftLeft") this.shiftPressed = false
+            if (e.code === "MetaLeft") this.metaPressed = false
+            if (e.code === "AltLeft") this.altPressed = false
         })
     }
 }
