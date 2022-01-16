@@ -64,6 +64,11 @@ function backwardsTowardsSentenceStart([selectionStart, value]) {
     return selectionStart
 }
 
+export function moveCaretBackwardsTowardsSentenceStart(params) {
+
+    return [backwardsTowardsSentenceStart(params), params[1]]
+}
+
 export function deleteBackwardsTowardsSentenceStart(params) {
 
     const [selectionStart_, value] = params
