@@ -1,6 +1,7 @@
 import * as assert from "assert"
 import {insertLineAfterCurrent, moveCaretForwardTowardsNextSentence,
-    deleteBackwardsTowardsSentenceStart} from "../js/editor"
+    deleteBackwardsTowardsSentenceStart,
+    moveCaretBackwardsSentenceWise} from "../js/editor"
 
 
 function convert(what) {
@@ -72,6 +73,49 @@ describe("Editor", function() {
         })
     })
 
+    describe("moveCaretBackwardsSentenceWise", function() {
+
+        it("beginning of file", function() {
+            
+            assert.deepEqual(
+                moveCaretBackwardsSentenceWise(
+                    convert("abc|")), 
+                convert("|abc"))
+        })
+
+        it("baseCase", function() {
+            
+            assert.deepEqual(
+                moveCaretBackwardsSentenceWise(
+                    convert("abc. abc|")), 
+                convert("abc. |abc"))
+        })
+
+        it("baseCase, middle of sentence", function() {
+            
+            assert.deepEqual(
+                moveCaretBackwardsSentenceWise(
+                    convert("abc. ab|c")), 
+                convert("abc. |abc"))
+        })
+
+        it("baseCase, caret immediately after sentenceStop", function() {
+            
+            assert.deepEqual(
+                moveCaretBackwardsSentenceWise(
+                    convert("abc. abc.|")), 
+                convert("abc. |abc."))
+        })
+
+        it("interpret consecutive newlines as sentence stop", function() {
+            
+            assert.deepEqual(
+                moveCaretBackwardsSentenceWise(
+                    convert("abc\n\nabc|")), 
+                convert("abc\n\n|abc"))
+        })
+    })
+
     describe("deleteBackwardsTowardsSentenceStart", function() {
         
         it("cursor at the very beginning", function() {
@@ -111,23 +155,23 @@ describe("Editor", function() {
             assert.deepEqual(
                 deleteBackwardsTowardsSentenceStart(
                     convert("abc. abc|")), 
-                convert("abc.|"))
+                convert("abc. |"))
         })
 
         it("cursor between sentences, one whitespace", function() {
             
             assert.deepEqual(
                 deleteBackwardsTowardsSentenceStart(
-                    convert("abc. abc. |abc")), 
-                convert("abc.| abc"))
+                    convert("abc. |abc")), 
+                convert("abc.|abc"))
         })
 
         it("cursor between sentences, multiple whitespaces", function() {
             
             assert.deepEqual(
                 deleteBackwardsTowardsSentenceStart(
-                    convert("abc. abc.  |abc")), 
-                convert("abc. abc.| abc"))
+                    convert("abc.  |abc")), 
+                convert("abc.|abc"))
         })
 
         it("cursor between sentences, middle of word", function() {
@@ -135,14 +179,14 @@ describe("Editor", function() {
             assert.deepEqual(
                 deleteBackwardsTowardsSentenceStart(
                     convert("abc. a|bc")), 
-                convert("abc.| bc"))
+                convert("abc. |bc"))
         })
 
         it("cursor between sentences, delete middle", function() {
             
             assert.deepEqual(deleteBackwardsTowardsSentenceStart(
                     convert("abc. abc.| abc")), 
-                convert("abc.| abc"))
+                convert("abc. | abc"))
         })
     })
 })

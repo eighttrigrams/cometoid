@@ -2,7 +2,7 @@ import {deleteBackwardsTowardsSentenceStart,
         insertLineAfterCurrent,
         moveCaretForwardTowardsNextSentence,
         isAltStop,
-        moveCaretBackwardsTowardsSentenceStart,
+        moveCaretBackwardsSentenceWise,
         caretLeft,
         caretRight,
         moveCaretWordLeft,
@@ -72,7 +72,7 @@ export const editorHook = {
                 && !this.shiftPressed
                 && e.code === "KeyJ") {
 
-                applyIt(moveCaretBackwardsTowardsSentenceStart([this.selectionStart, this.value]))
+                applyIt(moveCaretBackwardsSentenceWise([this.selectionStart, this.value]))
             }
 
             if (this.altPressed

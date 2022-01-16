@@ -36,29 +36,23 @@ export function insertLineAfterCurrent([selectionStart, value]) {
 
 function backwardsTowardsSentenceStart([selectionStart, value]) {
 
-    if (selectionStart > 2) {
-        if (value[selectionStart-1] === " " && value[selectionStart-2] === ".") {
-            return backwardsTowardsSentenceStart([selectionStart-1, value])
-        }
-        if (value[selectionStart-1] === "\n" && value[selectionStart-2] === "\n") {
-            return selectionStart - 1
-        }
-    }
+    if (selectionStart > 2
+        && value[selectionStart-1] === "\n"
+        && value[selectionStart-2] === "\n") return selectionStart-1
+    
     if (selectionStart > 0) {
         if (isSentenceStop(value[selectionStart-1])) selectionStart--
-    }
+    } 
+    let onlyWhitespace = true
     for (; selectionStart > 0; selectionStart--) {
-        if (selectionStart - 1 === 0) {
-            selectionStart --
-            break;
-        } else if (isSentenceStop(value[selectionStart-1])) {
-            
-            break;
-        } else if (value[selectionStart-1] === "\n") {
-            if (selectionStart > 1 && value[selectionStart-2] === "\n") {
-                break
-            }
-        }
+        if (isSentenceStop(value[selectionStart-1])) break
+        else if (selectionStart > 2 
+            && value[selectionStart-1] === "\n"
+            && value[selectionStart-2] === "\n") break
+        if (!isWhitespace(value[selectionStart-1])) onlyWhitespace = false
+    }
+    if (!onlyWhitespace) for (; selectionStart < value.length; selectionStart++) {
+        if (!isWhitespace(value[selectionStart])) break;
     }
 
     return selectionStart
@@ -147,7 +141,7 @@ export function moveCaretForwardTowardsNextSentence(params) {
     return [forwardTowardsSentenceStart(params), params[1]]
 }
 
-export function moveCaretBackwardsTowardsSentenceStart(params) {
+export function moveCaretBackwardsSentenceWise(params) {
 
     return [backwardsTowardsSentenceStart(params), params[1]]
 }
@@ -191,8 +185,6 @@ export function deleteBackwardsTowardsSentenceStart(params) {
 
     resultValue = 
         value.slice(0, selectionStart)
-        + (selectionStart_ !== value.length && selectionStart !== 0
-            && value[selectionStart_] !== " " ? " " : "")
         + value.slice(selectionStart_, value.length)
 
     return [selectionStart, resultValue]
