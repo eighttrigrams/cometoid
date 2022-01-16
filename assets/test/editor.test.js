@@ -134,6 +134,20 @@ describe("Editor", function() {
                 convert("|"))
         })
 
+        it("move across one linebreak", function() {
+            
+            assert.deepEqual(deleteBackwardsTowardsSentenceStart(
+                    convert("abc. abc\nabc|")), 
+                convert("abc. |"))
+        })
+
+        it("dont move across one linebreak if ending with sentence stop", function() {
+            
+            assert.deepEqual(deleteBackwardsTowardsSentenceStart(
+                    convert("abc. abc.\nabc|")), 
+                convert("abc. abc.\n|"))
+        })
+
         it("delete towards consecutive line breaks", function() {
             
             assert.deepEqual(
