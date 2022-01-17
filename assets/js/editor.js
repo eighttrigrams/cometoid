@@ -94,18 +94,10 @@ function wordPartLeft([selectionStart, value]) {
         if (isAltStop(value[selectionStart-1])) return selectionStart - 1
     }
 
-    let onlySpaces = true
     selectionStart--
     for (; selectionStart >= 0; selectionStart--) {
         if (isAltStop(value[selectionStart])) break
         else if (selectionStart === 0) return 0
-        else if (value[selectionStart] !== " ") onlySpaces = false
-    }
-    if (!onlySpaces) {
-        selectionStart++
-        for (; selectionStart < value.length; selectionStart++) {
-            if (value[selectionStart] !== " ") return selectionStart
-        } 
     }
     return selectionStart + 1
 }
