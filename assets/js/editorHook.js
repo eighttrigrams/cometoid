@@ -152,7 +152,7 @@ export const editorHook = {
                 }
             }
 
-            if (this.metaPressed && e.code === "Backspace") {
+            if (!this.controlPressed && !this.shiftPressed && this.metaPressed && e.code === "Backspace") {
             
                 e.preventDefault()
 

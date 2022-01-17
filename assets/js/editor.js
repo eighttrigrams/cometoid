@@ -83,20 +83,20 @@ function forwardTowardsSentenceStart([selectionStart, value]) {
 
 function wordPartLeft([selectionStart, value]) {
 
-    if (selectionStart - 1 > 0 
+    if (selectionStart - 1 >= 0 
         && isAltStop(value[selectionStart-1])) return selectionStart - 1
 
-    let onlyWhitespace = true
+    let onlySpaces = true
     selectionStart--
     for (; selectionStart >= 0; selectionStart--) {
         if (isAltStop(value[selectionStart])) break
         else if (selectionStart === 0) return 0
-        else if (!isWhitespace(value[selectionStart])) onlyWhitespace = false
+        else if (value[selectionStart] !== " ") onlySpaces = false
     }
-    if (!onlyWhitespace) {
+    if (!onlySpaces) {
         selectionStart++
         for (; selectionStart < value.length; selectionStart++) {
-            if (!isWhitespace(value[selectionStart])) return selectionStart
+            if (value[selectionStart] !== " ") return selectionStart
         } 
     }
     return selectionStart + 1
