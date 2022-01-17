@@ -134,7 +134,7 @@ function wordPartRight([selectionStart, value]) {
         for (; selectionStart < value.length 
             && value[selectionStart] === " "; selectionStart++);
         return selectionStart
-    }
+    } else if (isAltStop(value[selectionStart-1])) return selectionStart
 
     for (; selectionStart < value.length 
         && !isAltStop(value[selectionStart]); selectionStart++);

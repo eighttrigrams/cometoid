@@ -156,6 +156,14 @@ describe("Editor", function() {
                     convert("abc|,")), 
                 convert("abc,|"))
         })
+
+        it("move at newline", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartRight(
+                    convert("|\nabc")), 
+                convert("\n|abc"))
+        })
     })
 
     describe("moveCaretBackwardWordPart", function() {
