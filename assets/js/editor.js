@@ -1,5 +1,9 @@
 export function isAltStop(s) {
-    return s === " " || s === "." || s === "\t" || s === "\n"
+    return s === "." 
+    || s === "," 
+    || s === ";" 
+    || s === "\t" 
+    || s === "\n"
 }
 
 function isSentenceStop(s) {
@@ -79,15 +83,23 @@ function forwardTowardsSentenceStart([selectionStart, value]) {
 
 function wordPartLeft([selectionStart, value]) {
 
-    let i = selectionStart
-    if (i > 0) {
-        if (isAltStop(value[i-1])) {
-            for (; i > 0 && isAltStop(value[i-1]); i--);
-        } else {
-            for (; i > 0 && !isAltStop(value[i-1]); i--);
-        }
+    if (selectionStart - 1 > 0 
+        && isAltStop(value[selectionStart-1])) return selectionStart - 1
+
+    let onlyWhitespace = true
+    selectionStart--
+    for (; selectionStart >= 0; selectionStart--) {
+        if (isAltStop(value[selectionStart])) break
+        else if (selectionStart === 0) return 0
+        else if (!isWhitespace(value[selectionStart])) onlyWhitespace = false
     }
-    return i
+    if (!onlyWhitespace) {
+        selectionStart++
+        for (; selectionStart < value.length; selectionStart++) {
+            if (!isWhitespace(value[selectionStart])) return selectionStart
+        } 
+    }
+    return selectionStart + 1
 }
 
 function wordLeft([selectionStart, value]) {

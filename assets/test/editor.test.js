@@ -1,7 +1,8 @@
 import * as assert from "assert"
 import {insertLineAfterCurrent, moveCaretForwardTowardsNextSentence,
     deleteBackwardsTowardsSentenceStart,
-    moveCaretBackwardsSentenceWise} from "../js/editor"
+    moveCaretBackwardsSentenceWise,
+    moveCaretWordPartLeft} from "../js/editor"
 
 
 function convert(what) {
@@ -113,6 +114,57 @@ describe("Editor", function() {
                 moveCaretBackwardsSentenceWise(
                     convert("abc\n\nabc|")), 
                 convert("abc\n\n|abc"))
+        })
+    })
+
+    describe("moveCaretBackwardWordPart", function() {
+
+        it("line beginning", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("abc|")), 
+                convert("|abc"))
+        })
+
+        it("newline as altStop", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("\nabc|")), 
+                convert("\n|abc"))
+        })
+
+        it("cursor behind altStop", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("abc,|")), 
+                convert("abc|,"))
+        })
+
+        it("cursor behind altStop, more stuff present", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("abc, |abc")), 
+                convert("abc,| abc"))
+        })
+
+        it("cursor behind altStop, more whitespace present", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("abc,  |abc")), 
+                convert("abc,|  abc"))
+        })
+
+        it("to word beginning", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("abc, abc|")), 
+                convert("abc, |abc"))
         })
     })
 
