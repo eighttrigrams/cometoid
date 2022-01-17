@@ -60,17 +60,18 @@ function backwardsTowardsSentenceStart([selectionStart, value]) {
 
 function forwardTowardsSentenceStart([selectionStart, value]) {
 
+    if (selectionStart + 1 < value.length
+        && value[selectionStart] === "\n"
+        && value[selectionStart+1] === "\n") return selectionStart+1
+
     for (; selectionStart < value.length; selectionStart++) {
-        if (isSentenceStop(value[selectionStart])) {
-            if (selectionStart + 1 < value.length) selectionStart += 2
-            break
-        }
+        if (isSentenceStop(value[selectionStart])) return selectionStart + 1
+
         if (value[selectionStart] === "\n" 
             && selectionStart + 1 < value.length 
             && value[selectionStart+1] === "\n") {
 
-            selectionStart += 2
-            break;
+            return selectionStart
         }
     }
     return selectionStart

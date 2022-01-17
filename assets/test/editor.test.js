@@ -44,8 +44,8 @@ describe("Editor", function() {
             
             assert.deepEqual(
                 moveCaretForwardTowardsNextSentence(
-                    convert("|abc. def")), 
-                convert("abc. |def"))
+                    convert("|abc.")), 
+                convert("abc.|"))
         })
 
         it("double newline", function() {
@@ -53,23 +53,23 @@ describe("Editor", function() {
             assert.deepEqual(
                 moveCaretForwardTowardsNextSentence(
                     convert("|abc\n\ndef")), 
-                convert("abc\n\n|def"))
+                convert("abc|\n\ndef"))
         })
-
+ 
         it("double newline, 1", function() {
             
             assert.deepEqual(
                 moveCaretForwardTowardsNextSentence(
-                    convert("abc|.\n\ndef")), 
-                convert("abc.\n|\ndef"))
+                    convert("abc|\n\ndef")), 
+                convert("abc\n|\ndef"))
         })
-
+ 
         it("double newline, 2", function() {
             
             assert.deepEqual(
                 moveCaretForwardTowardsNextSentence(
-                    convert("abc.|\n\ndef")), 
-                convert("abc.\n\n|def"))
+                    convert("|\nabc. def")), 
+                convert("\nabc.| def"))
         })
     })
 
