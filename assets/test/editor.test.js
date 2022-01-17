@@ -166,6 +166,14 @@ describe("Editor", function() {
                     convert("abc, abc|")), 
                 convert("abc, |abc"))
         })
+
+        it("fixme", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("abc, abc |")), 
+                convert("abc, abc| "))
+        })
     })
 
     describe("deleteBackwardsTowardsSentenceStart", function() {
