@@ -191,6 +191,18 @@ export function caretRight(params) {
     return [cright(params), params[1]]
 }
 
+export function deleteCharRight(params) {
+
+    const [selectionStart, value] = params
+    if (selectionStart === value.length) return params
+
+    const resultValue = 
+        value.slice(0, selectionStart)
+        + value.slice(selectionStart + 1, value.length)
+
+    return [selectionStart, resultValue]
+}
+
 export function deleteWordPartLeft(params) {
 
     const [selectionStart_, value] = params

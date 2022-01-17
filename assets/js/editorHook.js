@@ -3,6 +3,7 @@ import {deleteBackwardsTowardsSentenceStart,
         moveCaretForwardTowardsNextSentence,
         deleteWordPartLeft,
         deleteWordPartRight,
+        deleteCharRight,
         moveCaretBackwardsSentenceWise,
         caretLeft,
         caretRight,
@@ -151,6 +152,15 @@ export const editorHook = {
                         }
                     }
                 }
+            }
+
+            if (!this.controlPressed 
+                && this.shiftPressed 
+                && !this.metaPressed 
+                && !this.altPressed
+                && e.code === "Backspace") {
+            
+                applyIt(deleteCharRight([this.selectionStart, this.value]))
             }
 
             if (!this.controlPressed 
