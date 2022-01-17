@@ -189,14 +189,25 @@ export function caretRight(params) {
     return [cright(params), params[1]]
 }
 
+export function deleteWordPartLeft(params) {
+
+    const [selectionStart_, value] = params
+    const selectionStart = wordPartLeft(params)    
+
+    const resultValue = 
+        value.slice(0, selectionStart)
+        + value.slice(selectionStart_, value.length)
+
+    return [selectionStart, resultValue]
+}
+
 export function deleteBackwardsTowardsSentenceStart(params) {
 
     const [selectionStart_, value] = params
-    let resultValue = value
-
+    
     const selectionStart = backwardsTowardsSentenceStart(params)
-
-    resultValue = 
+    
+    const resultValue = 
         value.slice(0, selectionStart)
         + value.slice(selectionStart_, value.length)
 

@@ -1,7 +1,7 @@
 import {deleteBackwardsTowardsSentenceStart, 
         insertLineAfterCurrent,
         moveCaretForwardTowardsNextSentence,
-        isAltStop,
+        deleteWordPartLeft,
         moveCaretBackwardsSentenceWise,
         caretLeft,
         caretRight,
@@ -152,41 +152,13 @@ export const editorHook = {
                 }
             }
 
-            if (!this.controlPressed && !this.shiftPressed && this.metaPressed && e.code === "Backspace") {
+            if (!this.controlPressed 
+                && !this.shiftPressed 
+                && this.metaPressed 
+                && !this.altPressed
+                && e.code === "Backspace") {
             
-                e.preventDefault()
-
-                if (this.shiftPressed) {
-                    let i = this.selectionStart
-                    
-                    if (i < this.value.length) {
-                        // TODO dedup #A
-                        if (isAltStop(this.value[i])) {
-                            for (; i < this.value.length && isAltStop(this.value[i]); i++);
-                        } else {
-                            for (; i < this.value.length && !isAltStop(this.value[i]); i++);
-                        }
-                        const start = this.selectionStart
-                        this.value = 
-                            this.value.slice(0, this.selectionStart)
-                            + this.value.slice(i, this.value.length) 
-                        this.selectionStart = this.selectionEnd = start
-                    }
-                } else {
-                    let i = this.selectionEnd
-                    if (i > 0) {
-                        // TODO dedup #A
-                        if (isAltStop(this.value[i-1])) {
-                            for (; i > 0 && isAltStop(this.value[i-1]); i--);
-                        } else {
-                            for (; i > 0 && !isAltStop(this.value[i-1]); i--);
-                        }
-                        this.value = 
-                            this.value.slice(0, i)
-                            + this.value.slice(this.selectionEnd, this.value.length)
-                        this.selectionStart = this.selectionEnd = i
-                    }
-                }    
+                applyIt(deleteWordPartLeft([this.selectionStart, this.value]))
             }
 
             if (e.code === "ControlLeft") this.controlPressed = true
