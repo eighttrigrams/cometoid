@@ -102,18 +102,6 @@ function wordPartLeft([selectionStart, value]) {
     return selectionStart + 1
 }
 
-function wordLeft([selectionStart, value]) {
-
-    let i = selectionStart
-    if (i > 0) {
-        if (isAltStop(value[i-1])) {
-            for (; i > 0 && isAltStop(value[i-1]); i--);
-        } 
-        for (; i > 0 && !isAltStop(value[i-1]); i--);
-    }
-    return i
-}
-
 function wordPartRight([selectionStart, value]) {
    
     let i = selectionStart
@@ -123,6 +111,18 @@ function wordPartRight([selectionStart, value]) {
         } else {
             for (; i < value.length && !isAltStop(value[i]); i++);
         }
+    }
+    return i
+}
+
+function wordLeft([selectionStart, value]) {
+
+    let i = selectionStart
+    if (i > 0) {
+        if (isAltStop(value[i-1])) {
+            for (; i > 0 && isAltStop(value[i-1]); i--);
+        } 
+        for (; i > 0 && !isAltStop(value[i-1]); i--);
     }
     return i
 }
