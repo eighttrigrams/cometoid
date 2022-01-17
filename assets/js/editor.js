@@ -85,7 +85,7 @@ function forwardTowardsSentenceStart([selectionStart, value]) {
 function wordPartLeft([selectionStart, value]) {
 
     selectionStart--
-    
+
     if (selectionStart >= 0) {
         if (value[selectionStart] === " ") {
             for (; selectionStart > 0; selectionStart--) {
@@ -201,6 +201,18 @@ export function deleteWordPartLeft(params) {
         + value.slice(selectionStart_, value.length)
 
     return [selectionStart, resultValue]
+}
+
+export function deleteWordPartRight(params) {
+
+    const [selectionStart_, value] = params
+    const selectionStart = wordPartRight(params)    
+
+    const resultValue = 
+        value.slice(0, selectionStart_)
+        + value.slice(selectionStart, value.length)
+
+    return [selectionStart_, resultValue]
 }
 
 export function deleteBackwardsTowardsSentenceStart(params) {

@@ -2,6 +2,7 @@ import {deleteBackwardsTowardsSentenceStart,
         insertLineAfterCurrent,
         moveCaretForwardTowardsNextSentence,
         deleteWordPartLeft,
+        deleteWordPartRight,
         moveCaretBackwardsSentenceWise,
         caretLeft,
         caretRight,
@@ -159,6 +160,15 @@ export const editorHook = {
                 && e.code === "Backspace") {
             
                 applyIt(deleteWordPartLeft([this.selectionStart, this.value]))
+            }
+
+            if (!this.controlPressed 
+                && this.shiftPressed 
+                && this.metaPressed 
+                && !this.altPressed
+                && e.code === "Backspace") {
+            
+                applyIt(deleteWordPartRight([this.selectionStart, this.value]))
             }
 
             if (e.code === "ControlLeft") this.controlPressed = true
