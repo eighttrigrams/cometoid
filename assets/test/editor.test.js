@@ -135,6 +135,14 @@ describe("Editor", function() {
                 convert("\n|abc"))
         })
 
+        it("white spaces", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartLeft(
+                    convert("abc |")), 
+                convert("abc| "))
+        })
+
         it("cursor behind altStop", function() {
 
             assert.deepEqual(
@@ -165,14 +173,6 @@ describe("Editor", function() {
                 moveCaretWordPartLeft(
                     convert("abc, abc|")), 
                 convert("abc, |abc"))
-        })
-
-        it("fixme", function() {
-
-            assert.deepEqual(
-                moveCaretWordPartLeft(
-                    convert("abc, abc |")), 
-                convert("abc, abc| "))
         })
     })
 
