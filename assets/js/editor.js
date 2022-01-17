@@ -102,15 +102,14 @@ function wordPartLeft([selectionStart, value]) {
     return selectionStart + 1
 }
 
-function wordPartRight([selectionStart, value]) {
+function wordRight([selectionStart, value]) {
    
     let i = selectionStart
     if (i < value.length) {
         if (isAltStop(value[i])) {
             for (; i < value.length && isAltStop(value[i]); i++);
-        } else {
-            for (; i < value.length && !isAltStop(value[i]); i++);
-        }
+        } 
+        for (; i < value.length && !isAltStop(value[i]); i++);
     }
     return i
 }
@@ -127,16 +126,20 @@ function wordLeft([selectionStart, value]) {
     return i
 }
 
-function wordRight([selectionStart, value]) {
+function wordPartRight([selectionStart, value]) {
    
-    let i = selectionStart
-    if (i < value.length) {
-        if (isAltStop(value[i])) {
-            for (; i < value.length && isAltStop(value[i]); i++);
-        }
-        for (; i < value.length && !isAltStop(value[i]); i++);
+    selectionStart++
+    if (value[selectionStart-1] === " ") {
+        
+        for (; selectionStart < value.length 
+            && value[selectionStart] === " "; selectionStart++);
+        return selectionStart
     }
-    return i
+
+    for (; selectionStart < value.length 
+        && !isAltStop(value[selectionStart]); selectionStart++);
+
+    return selectionStart
 }
 
 function cleft([selectionStart, _value]) {

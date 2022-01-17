@@ -2,6 +2,7 @@ import * as assert from "assert"
 import {insertLineAfterCurrent, moveCaretForwardTowardsNextSentence,
     deleteBackwardsTowardsSentenceStart,
     moveCaretBackwardsSentenceWise,
+    moveCaretWordPartRight,
     moveCaretWordPartLeft} from "../js/editor"
 
 
@@ -114,6 +115,46 @@ describe("Editor", function() {
                 moveCaretBackwardsSentenceWise(
                     convert("abc\n\nabc|")), 
                 convert("abc\n\n|abc"))
+        })
+    })
+
+    describe("moveCaretWordPartRight", function() {
+
+        it("whitespace", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartRight(
+                    convert("| abc")), 
+                convert(" |abc"))
+
+            assert.deepEqual(
+                moveCaretWordPartRight(
+                    convert("|  abc")), 
+                convert("  |abc"))
+        })
+
+        it("stop at altStop", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartRight(
+                    convert("|abc,")), 
+                convert("abc|,"))
+        })
+
+        it("move one altStop", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartRight(
+                    convert("abc|, ")), 
+                convert("abc,| "))
+        })
+
+        it("move one altStop, at end", function() {
+
+            assert.deepEqual(
+                moveCaretWordPartRight(
+                    convert("abc|,")), 
+                convert("abc,|"))
         })
     })
 
