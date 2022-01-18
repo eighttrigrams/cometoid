@@ -21,18 +21,13 @@ let hooks = {};
 
 const editorHook = {
     mounted() {
-        console.log("Editor")
+        editor.newEditor(this.el)
     }
 }
 hooks.TextAreaHook = editorHook;
 
 hooks.ContentsHook = {
     mounted() {
-        document.addEventListener("keydown", function(e) {
-            console.log("hi")
-            console.log(app.main.hello("dan"))
-        })
-
         this.el.addEventListener("mouseleave", e => { 
             this.pushEvent("mouse_leave");
         });

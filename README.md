@@ -31,10 +31,11 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ mix deps.get
     $ cd assets
     $ npm i
-    $ npx shadow-cljs release
+    $ npx shadow-cljs release app
     $ cp -r node_modules/bootstrap-icons/font/fonts ../priv/static/css
+    $ npm run deploy
     $ cd ..
-    $ npm run deploy --prefix ./assets && mix phx.digest
+    $ mix phx.digest
     $ export SECRET_KEY_BASE=SOMESECRETKEYBASE
     $ MIX_ENV=prod mix ecto.setup # or ecto.migrate
     $ MIX_ENV=prod mix phx.server

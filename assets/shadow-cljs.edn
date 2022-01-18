@@ -9,5 +9,4 @@
  :builds {:app {:output-dir "../priv/static/js/"
                 :asset-path "/js"
                 :target :browser
-                :modules {:app {:entries [app.main]}}
-                :devtools {:after-load app.main/reload!}}}}
+                :modules {:app {:entries [editor]}}}}}
