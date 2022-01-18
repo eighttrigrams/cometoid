@@ -34,3 +34,7 @@ npm-debug.log
 /priv/static/
 
 .elixir_ls
+
+.clj-kondo
+.lsp
+assets/.shadow-cljs

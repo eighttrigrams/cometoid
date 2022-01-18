@@ -18,6 +18,13 @@ config :cometoid, CometoidWeb.Endpoint,
       "development",
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
+    ],
+    bash: [
+      "cljs-start.sh",
+      "node_modules/.bin/shadow-cljs",
+      "watch",
+      "app",
+      cd: Path.expand("../assets", __DIR__)
     ]
   ]
 
@@ -49,7 +56,7 @@ config :cometoid, CometoidWeb.Endpoint,
 config :cometoid, CometoidWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/cometoid_web/(live|views)/.*(ex)$",
       ~r"lib/cometoid_web/templates/.*(eex)$"
