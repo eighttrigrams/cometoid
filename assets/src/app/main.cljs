@@ -3,12 +3,15 @@
 (def value-a 4)
 (defonce value-b 2)
 
+
+(defn hello [name]
+  (str "Hallo, " name))
+
 (defn main! []
-  (println "App loaded!!!!!"))
+  (println "App loaded!!!!!")
+  )
 
 (defn reload! []
   (println "Code updated.")
   (println "Trying values:" value-a value-b))
 
-(defn hello [name]
-  (str "Hallo, " name))

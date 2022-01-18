@@ -14,9 +14,11 @@ In its current state, it is designed to run in a desktop environment, supporting
 
     $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ vim config/dev.secret.exs # Edit settings
-    $ mkdir data                # or use an existing dir, see data_path in config
     $ mix deps.get
-    $ npm i --prefix ./assets
+    $ cd assets
+    $ npm i
+    $ cp -r node_modules/bootstrap-icons/font/fonts ../priv/static/css
+    $ cd ..
     $ mix ecto.setup
     $ mix phx.server
     Visit http://localhost:4000
@@ -26,9 +28,12 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ cp config/prod.secret.template.exs config/prod.secret.exs
     $ vim config/prod.secret.exs # Edit settings
-    $ mkdir data                 # or use an existing dir, see data_path in config
     $ mix deps.get
-    $ npm i --prefix ./assets
+    $ cd assets
+    $ npm i
+    $ npx shadow-cljs release
+    $ cp -r node_modules/bootstrap-icons/font/fonts ../priv/static/css
+    $ cd ..
     $ npm run deploy --prefix ./assets && mix phx.digest
     $ export SECRET_KEY_BASE=SOMESECRETKEYBASE
     $ MIX_ENV=prod mix ecto.setup # or ecto.migrate

@@ -9,5 +9,6 @@
  :builds {:app {:output-dir "../priv/static/js/"
                 :asset-path "/js"
                 :target :browser
-                :modules {:app {:init-fn app.main/main!}}
+                :release {:compiler-options {:optimizations :simple}}
+                :modules {:app {:entries [app.main]}}
                 :devtools {:after-load app.main/reload!}}}}
