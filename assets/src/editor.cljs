@@ -28,7 +28,7 @@
     (reset! meta-pressed false)
     (reset! alt-pressed false)))
 
-(defn ^:export newEditor [el]
+(defn ^:export new [el]
   (.addEventListener el "keydown" (keydown el))
   (.addEventListener el "keyup" (keyup el))
   (.addEventListener el "mouseleave" (mouseleave el)))
