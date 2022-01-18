@@ -21,7 +21,7 @@ let hooks = {};
 
 const editorHook = {
     mounted() {
-        editor.newEditor(this.el)
+        editor.new$(this.el)
     }
 }
 hooks.TextAreaHook = editorHook;
