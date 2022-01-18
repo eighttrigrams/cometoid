@@ -4,7 +4,7 @@
 (defonce value-b 2)
 
 
-(defn hello [name]
+(defn ^:export hello [name]
   (str "Hallo, " name))
 
 (defn main! []
