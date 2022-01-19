@@ -1,20 +1,26 @@
-(ns editor)
+(ns editor
+  (:require lowlevel))
 
 (def ctrl-pressed (atom false))
 (def shift-pressed (atom false))
 (def meta-pressed (atom false))
 (def alt-pressed (atom false))
 
-(defn hey [abc] (str abc abc))
-
-(defn keydown [_el]
+(defn keydown [el]
   (fn [e]
-    (.preventDefault e)
+
     (when (= (.-code e) "ControlLeft") (reset! ctrl-pressed true))
     (when (= (.-code e) "ShiftLeft") (reset! shift-pressed true))
     (when (= (.-code e) "MetaLeft") (reset! meta-pressed true))
     (when (= (.-code e) "AltLeft") (reset! alt-pressed true))
-    (prn "hallo!!" (.-code e) @ctrl-pressed @shift-pressed @alt-pressed @meta-pressed)))
+
+    (when (= (.-code e) "KeyJ")
+      (.preventDefault e)
+      (let [[value selection-start]
+            (lowlevel/caret-left [(.-value el) (.-selectionStart el)])]
+        (set! (.-value el) value)
+        (set! (.-selectionStart el) selection-start)
+        (set! (.-selectionEnd el) selection-start)))))
 
 (defn keyup [_el]
   (fn [e]

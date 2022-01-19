@@ -1637,6 +1637,7 @@ SHADOW_IMPORT("shadow.remote.runtime.eval_support.js");
 SHADOW_IMPORT("shadow.cljs.devtools.client.shared.js");
 SHADOW_IMPORT("shadow.cljs.devtools.client.node.js");
 SHADOW_IMPORT("cljs.test.js");
+SHADOW_IMPORT("lowlevel.js");
 SHADOW_IMPORT("editor.js");
 SHADOW_IMPORT("editor_test.js");
 SHADOW_IMPORT("shadow.module.main.append.js");
