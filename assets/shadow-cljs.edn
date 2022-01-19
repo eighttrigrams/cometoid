@@ -1,12 +1,18 @@
 {:source-paths
- ["src"]
+ ["src/main" "src/test"]
 
  :dependencies
- []
+ [[org.clojars.knubie/cljs-run-test "1.0.1"]
+  [binaryage/devtools               "0.9.10"]]
 
  :dev-http {9080 "../priv/static/js/"}
 
  :builds {:app {:output-dir "../priv/static/js/"
                 :asset-path "/js"
                 :target :browser
-                :modules {:app {:entries [editor]}}}}}
+                :modules {:app {:entries [editor]}}}
+          
+          :test {:target :node-script
+                 :output-to "test-main.js"
+                 :main      editor-test/init
+                 :devtools  {:preloads [devtools.preload]}}}}

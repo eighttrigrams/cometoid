@@ -62,4 +62,9 @@ Run
 
     $ mix test
     $ cd assets
-    $ npx mocha -R list --require @babel/register test/*test.js
+    1$ npx shadow-cljs watch test
+    2$ npx node test-main.js
+    3$ npx shadow-cljs cljs-repl test
+    => (require '[cljs-run-test :refer [run-test]])
+    => (run-test editor-test/base-case)
+    

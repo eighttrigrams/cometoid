@@ -5,6 +5,8 @@
 (def meta-pressed (atom false))
 (def alt-pressed (atom false))
 
+(defn hey [abc] (str abc abc))
+
 (defn keydown [_el]
   (fn [e]
     (.preventDefault e)
@@ -12,7 +14,7 @@
     (when (= (.-code e) "ShiftLeft") (reset! shift-pressed true))
     (when (= (.-code e) "MetaLeft") (reset! meta-pressed true))
     (when (= (.-code e) "AltLeft") (reset! alt-pressed true))
-    (prn (.-code e) @ctrl-pressed @shift-pressed @alt-pressed @meta-pressed)))
+    (prn "hallo!!" (.-code e) @ctrl-pressed @shift-pressed @alt-pressed @meta-pressed)))
 
 (defn keyup [_el]
   (fn [e]
