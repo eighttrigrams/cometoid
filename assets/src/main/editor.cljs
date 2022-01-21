@@ -6,6 +6,8 @@
 (def meta-pressed (atom false))
 (def alt-pressed (atom false))
 
+(defn hey [s] (str s s))
+
 (defn keydown [el]
   (fn [e]
 

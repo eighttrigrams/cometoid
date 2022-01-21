@@ -38,4 +38,4 @@ npm-debug.log
 .clj-kondo
 .lsp
 assets/.shadow-cljs
-assets/test-main.cljs
+assets/test-main.js

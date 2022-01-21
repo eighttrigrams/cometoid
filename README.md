@@ -62,9 +62,8 @@ Run
 
     $ mix test
     $ cd assets
-    1$ npx shadow-cljs watch test
-    2$ npx node test-main.js
-    3$ npx shadow-cljs cljs-repl test
+    $ ./start_testing.sh 
     => (require '[cljs-run-test :refer [run-test]])
-    => (run-test editor-test/base-case)
+    => (run-test editor-test/base-case) ;; Hot-code reloading works. Just edit a file, save and re-run this expression. 
     
+
