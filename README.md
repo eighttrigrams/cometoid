@@ -65,5 +65,6 @@ Run
     $ ./start_testing.sh 
     => (require '[cljs-run-test :refer [run-test]])
     => (run-test editor-test/base-case) ;; Hot-code reloading works. Just edit a file, save and re-run this expression. 
+    => ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
     
 
