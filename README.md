@@ -61,11 +61,17 @@ and release the right-click (or left-click, which will act on its release) when 
 Run
 
     $ mix test
+
+To run all tests for the editor, run
+
     $ cd assets
+    $ npm t
+
+For running single tests during development of the editor, run
+
     $ ./start_testing.sh 
     run-tests=> (require 'editor-test)
     run-tests=> (run-test editor-test/base-case) ;; Hot-code reloading works. Just edit a file, save and re-run this expression. 
     run-tests=> (run-tests 'editor-test)
     run-tests=> ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
     
-
