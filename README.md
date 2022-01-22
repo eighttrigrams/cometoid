@@ -32,7 +32,7 @@ For a repl into the running editor environment, run
     cljs.user=> (js/alert "Hi")
     nil
 
-An alert should pop up in the browser.
+An alert should pop up in the browser. Here as well, new code is compiled and available immediately. Just call your function of choice again after hitting `save`.
 
 ### Tests
 
