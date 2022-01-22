@@ -15,10 +15,8 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ vim config/dev.secret.exs # Edit settings
     $ mix deps.get
-    $ cd assets
-    $ npm i
-    $ cp -r node_modules/bootstrap-icons/font/fonts ../priv/static/css
-    $ cd ..
+    $ npm i --prefix=./assets
+    $ cp -r assets/node_modules/bootstrap-icons/font/fonts priv/static/css
     $ mix ecto.setup
     $ mix phx.server
     Visit http://localhost:4000
