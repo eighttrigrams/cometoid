@@ -10,7 +10,7 @@
 
 (defn keydown [el]
   (fn [e]
-
+    
     (when (= (.-code e) "ControlLeft") (reset! ctrl-pressed true))
     (when (= (.-code e) "ShiftLeft") (reset! shift-pressed true))
     (when (= (.-code e) "MetaLeft") (reset! meta-pressed true))

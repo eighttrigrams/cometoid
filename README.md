@@ -41,11 +41,11 @@ For running single tests during development of the editor, run
 
     $ ./start_testing.sh 
     run-tests=> (require 'editor-test)
-    run-tests=> (run-test editor-test/base-case) ;; Hot-code reloading works. Just edit a file, save and re-run this expression. 
+    run-tests=> (run-test editor-test/base-case) ;; Hot-code-reloading works. Just edit a file, save and re-run this expression. 
     run-tests=> (run-tests 'editor-test)
     run-tests=> ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
     
-If these should be run alongside `mix phx.server`, then start `./start_testing.sh` first, then `mix.phx server`, in order for the hot-code-reload in the testing environment works.
+Note that hot-code-reloading does not work for both `./start_testing.sh` and `mix phx.server` at the same time.
 
 ## Deployment for Production
 
