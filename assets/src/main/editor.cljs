@@ -28,24 +28,29 @@
                                (map first))]
     (= (vec modifiers-expected) modifiers-pressed)))
 
-(defn is-pressed? [e code modifiers-expected]
-  (and (= (.-code e) code) 
-       (modifiers-matching? modifiers-expected @modifiers)))
+(defn is-pressed? [e modifiers] 
+  (fn [code modifiers-expected]
+    (and (= (.-code e) code)
+         (modifiers-matching? modifiers-expected modifiers))))
+
+(defn convert [el]
+  {:value           (.-value el)
+   :selection-start (.-selectionStart el)})
+
+(defn apply-action [el e]
+  (fn [a]
+    (.preventDefault e)
+    (set-values el (a (convert el)))))
 
 (defn keydown [el]
   (fn [e]
     (set-modifiers e true)
-
-    (cond (is-pressed? e "KeyJ" [:ctrl?])
-          (do (.preventDefault e)
-              (let [values (lowlevel/caret-left {:value           (.-value el)
-                                                 :selection-start (.-selectionStart el)})]
-                (set-values el values)))
-          (is-pressed? e "KeyL" [:ctrl?])
-          (do (.preventDefault e)
-              (let [values (lowlevel/caret-right {:value           (.-value el)
-                                                  :selection-start (.-selectionStart el)})]
-                (set-values el values))))))
+    (let [is-pressed? (is-pressed? e @modifiers)
+          apply-action (apply-action el e)]
+      (cond (is-pressed? "KeyJ" [:ctrl?])
+            (apply-action lowlevel/caret-left)
+            (is-pressed? "KeyL" [:ctrl?])
+            (apply-action lowlevel/caret-right)))))
 
 (defn keyup [_el]
   (fn [e]
