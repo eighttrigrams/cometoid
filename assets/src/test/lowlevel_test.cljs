@@ -17,3 +17,11 @@
 (deftest caret-left-beginning-of-line
   (is (= (lowlevel/caret-left (convert "|abc"))
          (convert "|abc"))))
+
+(deftest caret-right-base-case
+  (is (= (lowlevel/caret-right (convert "|abc"))
+         (convert "a|bc"))))
+
+(deftest caret-right-end-of-line
+  (is (= (lowlevel/caret-right (convert "abc|"))
+         (convert "abc|"))))
