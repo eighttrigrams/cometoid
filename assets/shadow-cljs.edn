@@ -14,5 +14,6 @@
           
           :test {:target :node-script
                  :output-to "test-main.js"
-                 :main      editor-test/init
-                 :devtools  {:preloads [devtools.preload]}}}}
+                 :main      run-tests/init
+                 :devtools  {:repl-init-ns run-tests
+                             :preloads [devtools.preload]}}}}

@@ -1,4 +1,4 @@
-(ns editor-test
+(ns other-test
   (:require [cljs.test :refer (deftest is)]
             editor))
 
