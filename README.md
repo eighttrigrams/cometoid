@@ -10,7 +10,7 @@ In its current state, it is designed to run in a desktop environment, supporting
 - Elixir
 - A running postgres database
 
-### Start Development
+### Preparations
 
     $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ vim config/dev.secret.exs # Edit settings
@@ -18,10 +18,13 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ npm i --prefix=./assets
     $ cp -r assets/node_modules/bootstrap-icons/font/fonts priv/static/css
     $ mix ecto.setup
+
+### Start
+
     $ mix phx.server
     Visit http://localhost:4000
 
-## Tests
+### Tests
 
 Run
 
