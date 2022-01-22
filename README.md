@@ -24,7 +24,15 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ mix phx.server
     Visit http://localhost:4000
 
-Also provides the hot-code-reload for the editor which is written in ClojureScript
+Also provides the hot-code-reload for the editor which is written in ClojureScript. In the js console, a message `shadow-cljs: #x ready!` shows that the websocket connection for shadow-cljs has been established.
+
+For a repl into the running editor environment, run 
+
+    2$ cd assets && npx shadow-cljs cljs-repl app
+    cljs.user=> (js/alert "Hi")
+    nil
+
+An alert should pop up in the browser.
 
 ### Tests
 
