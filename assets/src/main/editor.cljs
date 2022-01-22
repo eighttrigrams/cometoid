@@ -1,10 +1,12 @@
 (ns editor
   (:require lowlevel))
 
-(def ctrl-pressed (atom false))
-(def shift-pressed (atom false))
-(def meta-pressed (atom false))
-(def alt-pressed (atom false))
+(def orig-modifiers {:alt? false
+                     :shift? false
+                     :meta? false
+                     :ctrl? false})
+
+(def modifiers (atom orig-modifiers))
 
 (defn hey [s] (str s s))
 
@@ -14,37 +16,32 @@
   (set! (.-selectionStart el) selection-start)
   (set! (.-selectionEnd el) selection-start))
 
+(defn set-modifiers [e b]
+  (when (= (.-code e) "ControlLeft") (swap! modifiers assoc :ctrl? b))
+  (when (= (.-code e) "ShiftLeft") (swap! modifiers assoc :shift? b))
+  (when (= (.-code e) "AltLeft") (swap! modifiers assoc :alt? b))
+  (when (= (.-code e) "MetaLeft") (swap! modifiers assoc :meta? b)))
+
 (defn keydown [el]
   (fn [e]
+    (set-modifiers e true)
 
-    (when (= (.-code e) "ControlLeft") (reset! ctrl-pressed true))
-    (when (= (.-code e) "ShiftLeft") (reset! shift-pressed true))
-    (when (= (.-code e) "MetaLeft") (reset! meta-pressed true))
-    (when (= (.-code e) "AltLeft") (reset! alt-pressed true))
-
-    
-    (when (and (= (.-code e) "KeyJ") @ctrl-pressed)
+    (when (and (= (.-code e) "KeyJ") (:ctrl? @modifiers))
       (.preventDefault e)
       (let [values (lowlevel/caret-left {:value (.-value el) :selection-start (.-selectionStart el)})]
         (set-values el values)))
-    (when (and (= (.-code e) "KeyL") @ctrl-pressed)
+    (when (and (= (.-code e) "KeyL") (:ctrl? @modifiers))
       (.preventDefault e)
       (let [values (lowlevel/caret-right {:value (.-value el) :selection-start (.-selectionStart el)})]
         (set-values el values)))))
 
 (defn keyup [_el]
   (fn [e]
-    (when (= (.-code e) "ControlLeft") (reset! ctrl-pressed false))
-    (when (= (.-code e) "ShiftLeft") (reset! shift-pressed false))
-    (when (= (.-code e) "MetaLeft") (reset! meta-pressed false))
-    (when (= (.-code e) "AltLeft") (reset! alt-pressed false))))
+    (set-modifiers e false)))
 
 (defn mouseleave [_el]
   (fn [_e]
-    (reset! shift-pressed false)
-    (reset! ctrl-pressed false)
-    (reset! meta-pressed false)
-    (reset! alt-pressed false)))
+    (reset! modifiers orig-modifiers)))
 
 (defn ^:export new [el]
   (.addEventListener el "keydown" (keydown el))
