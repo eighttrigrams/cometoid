@@ -24,6 +24,8 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ mix phx.server
     Visit http://localhost:4000
 
+Also provides the hot-code-reload for the editor which is written in ClojureScript
+
 ### Tests
 
 Run
@@ -43,6 +45,8 @@ For running single tests during development of the editor, run
     run-tests=> (run-tests 'editor-test)
     run-tests=> ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
     
+If these should be run alongside `mix phx.server`, then start `./start_testing.sh` first, then `mix.phx server`, in order for the hot-code-reload in the testing environment works.
+
 ## Deployment for Production
 
     $ cp config/dev.secret.template.exs config/dev.secret.exs
