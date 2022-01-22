@@ -63,8 +63,9 @@ Run
     $ mix test
     $ cd assets
     $ ./start_testing.sh 
-    => (require '[cljs-run-test :refer [run-test]])
+    => (require '[cljs-run-test :refer [run-test]] '[cljs.test :refer [run-tests]])
     => (run-test editor-test/base-case) ;; Hot-code reloading works. Just edit a file, save and re-run this expression. 
+    => (run-tests 'editor-test)
     => ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
     
 
