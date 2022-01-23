@@ -24,11 +24,23 @@
         (recur (apply str (rest rst)) (inc i))
         i))))
 
+(defn move [s selection-start]
+  (+ selection-start (index-of-substr-or-end
+                      s
+                      (str "["
+                           (when (starts-with-pattern? s "[\\s]") "^")
+                           "\\s]"))))
+
 (defn word-part-right [{value :value selection-start :selection-start}]
   (let [rest (subs value selection-start (count value))
-        selection-start (+ selection-start (index-of-substr-or-end
-                                            rest
-                                            (str "["
-                                                 (when (starts-with-pattern? rest "[\\s]") "^")
-                                                 "\\s]")))]
-    {:value value :selection-start selection-start}))
+        selection-start (move rest selection-start)]
+    {:value value 
+     :selection-start selection-start}))
+
+(defn word-part-left [{value           :value
+                       selection-start :selection-start}]
+  (let [inv             #(- (count value) %1)
+        selection-start (inv selection-start)
+        rest            (subs (apply str (reverse value)) selection-start (count value))]
+    {:value           value 
+     :selection-start (inv (move rest selection-start))}))

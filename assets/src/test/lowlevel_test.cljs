@@ -40,3 +40,6 @@
   (is (= (lowlevel/word-part-right (convert "|abc"))
          (convert "abc|"))))
 
+(deftest word-part-left
+  (is (= (lowlevel/word-part-left (convert "abc def|"))
+         (convert "abc |def"))))
