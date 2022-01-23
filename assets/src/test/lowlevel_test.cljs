@@ -30,6 +30,13 @@
   (is (= (lowlevel/word-part-right (convert "|abc def"))
          (convert "abc| def"))))
 
+(deftest word-part-right-skip-whitespace
+  (is (= (lowlevel/word-part-right (convert "abc| def"))
+         (convert "abc |def")))
+  (is (= (lowlevel/word-part-right (convert "abc|  def"))
+         (convert "abc  |def"))))
+
 (deftest word-part-right-to-end-of-line
   (is (= (lowlevel/word-part-right (convert "|abc"))
          (convert "abc|"))))
+
