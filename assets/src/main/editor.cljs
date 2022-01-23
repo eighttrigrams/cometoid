@@ -1,37 +1,29 @@
 (ns editor
   (:require lowlevel))
 
-(def orig-modifiers {:alt? false
-                     :shift? false
-                     :meta? false
-                     :ctrl? false})
-
-(def modifiers (atom orig-modifiers))
+(def modifiers (atom #{}))
 
 (defn hey [s] (str s s))
 
 (defn set-values! [el {selection-start :selection-start
-                      value           :value}]
+                       value           :value}]
   (set! (.-value el) value)
   (set! (.-selectionStart el) selection-start)
   (set! (.-selectionEnd el) selection-start))
 
 (defn set-modifiers! [e b]
-  (when (= (.-code e) "ControlLeft") (swap! modifiers assoc :ctrl? b))
-  (when (= (.-code e) "ShiftLeft") (swap! modifiers assoc :shift? b))
-  (when (= (.-code e) "AltLeft") (swap! modifiers assoc :alt? b))
-  (when (= (.-code e) "MetaLeft") (swap! modifiers assoc :meta? b)))
+  (let [code (case (.-code e)
+               "ControlLeft" :ctrl
+               "ShiftLeft" :shift
+               "AltLeft" :alt
+               "MetaLeft" :meta
+               nil)]
+    (when code (swap! modifiers (if b conj disj) code))))
 
-(defn modifiers-matching? [modifiers-expected modifiers]
-  (let [modifiers-pressed (->> modifiers
-                               (filter (fn [[_k v]] (= v true)))
-                               (map first))]
-    (= (vec modifiers-expected) modifiers-pressed)))
-
-(defn is-pressed? [e modifiers] 
+(defn is-pressed? [e modifiers]
   (fn [code modifiers-expected]
     (and (= (.-code e) code)
-         (modifiers-matching? modifiers-expected modifiers))))
+         (= modifiers modifiers-expected))))
 
 (defn convert [el]
   {:value           (.-value el)
@@ -47,9 +39,9 @@
     (set-modifiers! e true)
     (let [is-pressed? (is-pressed? e @modifiers)
           apply-action (apply-action el e)]
-      (cond (is-pressed? "KeyJ" [:ctrl?])
+      (cond (is-pressed? "KeyJ" #{:ctrl})
             (apply-action lowlevel/caret-left)
-            (is-pressed? "KeyL" [:ctrl?])
+            (is-pressed? "KeyL" #{:ctrl})
             (apply-action lowlevel/caret-right)))))
 
 (defn keyup [_el]
@@ -58,7 +50,7 @@
 
 (defn mouseleave [_el]
   (fn [_e]
-    (reset! modifiers orig-modifiers)))
+    (reset! modifiers #{})))
 
 (defn ^:export new [el]
   (.addEventListener el "keydown" (keydown el))
