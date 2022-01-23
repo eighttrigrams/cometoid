@@ -42,7 +42,9 @@
       (cond (is-pressed? "KeyJ" #{:ctrl})
             (apply-action lowlevel/caret-left)
             (is-pressed? "KeyL" #{:ctrl})
-            (apply-action lowlevel/caret-right)))))
+            (apply-action lowlevel/caret-right)
+            (is-pressed? "KeyL" #{:meta})
+            (apply-action lowlevel/word-part-right)))))
 
 (defn keyup [_el]
   (fn [e]
