@@ -43,3 +43,13 @@
 (deftest word-part-left
   (is (= (lowlevel/word-part-left (convert "abc def|"))
          (convert "abc |def"))))
+
+(deftest word-part-left-skip-whitespace
+  (is (= (lowlevel/word-part-left (convert "abc |def"))
+         (convert "abc| def")))
+  (is (= (lowlevel/word-part-left (convert "abc  |def"))
+         (convert "abc|  def"))))
+
+(deftest word-part-left-to-beginning-of-line
+  (is (= (lowlevel/word-part-left (convert "abc|"))
+         (convert "|abc"))))
