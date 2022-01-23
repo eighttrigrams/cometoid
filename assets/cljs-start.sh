@@ -1,5 +1,10 @@
   #!/usr/bin/env bash
 
+if [ -f test-main.js ]
+then
+    rm test-main.js
+fi
+
   # Start the program in the background
   exec "$@" &
   pid1=$!

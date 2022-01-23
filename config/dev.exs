@@ -24,6 +24,7 @@ config :cometoid, CometoidWeb.Endpoint,
       "node_modules/.bin/shadow-cljs",
       "watch",
       "app",
+      "test",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]

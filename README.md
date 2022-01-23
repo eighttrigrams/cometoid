@@ -45,15 +45,21 @@ To run all tests for the editor, run
     $ cd assets
     $ npm t
 
-For running single tests during development of the editor, run
+For running single tests during development of the editor, run,
 
-    $ ./start_testing.sh 
+a) if `mix phx.server` is running
+
+    $ ./add_testing.sh 
     run-tests=> (require 'editor-test)
     run-tests=> (run-test editor-test/base-case) ;; Hot-code-reloading works. Just edit a file, save and re-run this expression. 
     run-tests=> (run-tests 'editor-test)
     run-tests=> ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
     
-Note that hot-code-reloading does not work for both `./start_testing.sh` and `mix phx.server` at the same time.
+b) otherwise
+
+    $ ./start_testing.sh
+
+Note that hot-code-reloading does not work for both `./start_testing.sh` and `mix phx.server` at the same time, which is why `add_testing.sh` should be used in case both should run.
 
 ## Deployment for Production
 
