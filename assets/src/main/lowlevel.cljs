@@ -48,7 +48,7 @@
 (defn moves [s selection-start]
   (+ selection-start (index-of-substr-or-end
                       s
-                      (str "[\\n][\\n]"))))
+                      "([\\n][\\n]|\\.)")))
 
 (defn sentence-part-right [{value :value selection-start :selection-start}]
   (let [rest (subs value selection-start (count value))

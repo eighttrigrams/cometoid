@@ -55,6 +55,10 @@
          (convert "|abc"))))
 
 (deftest sentence-part-right
+  (is (= (lowlevel/sentence-part-right (convert "|abc def. a"))
+         (convert "abc def|. a"))))
+
+(deftest sentence-part-right-double-newline
   (is (= (lowlevel/sentence-part-right (convert "|abc\n\ndef"))
          (convert "abc|\n\ndef")))
   (is (= (lowlevel/sentence-part-right (convert "|abc\ndef"))
