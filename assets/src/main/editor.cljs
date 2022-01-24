@@ -46,7 +46,9 @@
             (is-pressed? "KeyL" #{:meta})
             (apply-action lowlevel/word-part-right)
             (is-pressed? "KeyJ" #{:meta})
-            (apply-action lowlevel/word-part-left)))))
+            (apply-action lowlevel/word-part-left)
+            (is-pressed? "KeyL" #{:alt})
+            (apply-action lowlevel/sentence-part-right)))))
 
 (defn keyup [_el]
   (fn [e]

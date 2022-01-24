@@ -44,3 +44,14 @@
         rest            (subs (apply str (reverse value)) selection-start (count value))]
     {:value           value 
      :selection-start (inv (move rest selection-start))}))
+
+(defn moves [s selection-start]
+  (+ selection-start (index-of-substr-or-end
+                      s
+                      (str "[\\n][\\n]"))))
+
+(defn sentence-part-right [{value :value selection-start :selection-start}]
+  (let [rest (subs value selection-start (count value))
+        selection-start (moves rest selection-start)]
+    {:value value
+     :selection-start selection-start}))
