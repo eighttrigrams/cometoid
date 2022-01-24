@@ -47,6 +47,8 @@
             (apply-action lowlevel/word-part-right)
             (is-pressed? "KeyJ" #{:meta})
             (apply-action lowlevel/word-part-left)
+            (is-pressed? "KeyJ" #{:alt})
+            (apply-action lowlevel/sentence-part-left)
             (is-pressed? "KeyL" #{:alt})
             (apply-action lowlevel/sentence-part-right)))))
 
