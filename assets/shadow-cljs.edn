@@ -1,5 +1,5 @@
 {:source-paths
- ["src/main" "src/test" "src/cljc"]
+ ["src/main" "src/test"]
 
  :dependencies
  [[org.clojars.knubie/cljs-run-test "1.0.1"]

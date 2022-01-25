@@ -1,5 +1,4 @@
-(ns lowlevel
-  (:require-macros [lowlevel :refer (leftwards)]))
+(ns lowlevel)
 
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
@@ -34,6 +33,19 @@
                            (when (starts-with-pattern? s "[\\s]") "^")
                            "\\s]"))))
 
+(defn leftwards [fun state]
+  (let [{value           :value
+         selection-start :selection-start} state
+        inv                                              #(- (count value) %1)
+        selection-start                                  (inv selection-start)
+        original-value                                   value
+        value                                            (apply str (reverse value))
+        state                                            {:value           value
+                                                          :selection-start selection-start}
+        {selection-start :selection-start}               (fun state)]
+    {:value           original-value
+     :selection-start (inv selection-start)}))
+
 (defn word-part-right [{value :value selection-start :selection-start}]
   (let [rest (subs value selection-start (count value))
         selection-start (move rest selection-start)]
@@ -41,8 +53,7 @@
      :selection-start selection-start}))
 
 (defn word-part-left [state]
-  (leftwards 
-   (word-part-right state)))
+  (leftwards word-part-right state))
 
 (defn moves [s selection-start]
   (+ selection-start 
@@ -59,5 +70,4 @@
      :selection-start selection-start}))
 
 (defn sentence-part-left [state]
-  (leftwards 
-   (sentence-part-right state)))
+  (leftwards sentence-part-right state))
