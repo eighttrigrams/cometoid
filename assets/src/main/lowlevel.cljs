@@ -1,4 +1,5 @@
-(ns lowlevel)
+(ns lowlevel
+  (:require-macros [lowlevel :refer (leftwards)]))
 
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
@@ -39,14 +40,9 @@
     {:value value 
      :selection-start selection-start}))
 
-;; TODO extract invert function
-(defn word-part-left [{value           :value
-                       selection-start :selection-start}]
-  (let [inv             #(- (count value) %1)
-        selection-start (inv selection-start)
-        rest            (subs (apply str (reverse value)) selection-start (count value))]
-    {:value           value 
-     :selection-start (inv (move rest selection-start))}))
+(defn word-part-left [state]
+  (leftwards 
+   (word-part-right state)))
 
 (defn moves [s selection-start]
   (+ selection-start 
@@ -62,9 +58,6 @@
     {:value value
      :selection-start selection-start}))
 
-(defn sentence-part-left [{value :value selection-start :selection-start}]
-  (let [inv             #(- (count value) %1)
-        selection-start (inv selection-start)
-        rest (subs (apply str (reverse value)) selection-start (count value))]
-    {:value value
-     :selection-start (inv (moves rest selection-start))}))
+(defn sentence-part-left [state]
+  (leftwards 
+   (sentence-part-right state)))
