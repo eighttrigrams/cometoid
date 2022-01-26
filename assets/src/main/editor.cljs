@@ -54,7 +54,11 @@
             (is-pressed? "Backspace" #{:meta})
             (apply-action lowlevel/delete-word-part-left)
             (is-pressed? "Backspace" #{:shift :meta})
-            (apply-action lowlevel/delete-word-part-right)))))
+            (apply-action lowlevel/delete-word-part-right)
+            (is-pressed? "Backspace" #{:alt})
+            (apply-action lowlevel/delete-sentence-part-left)
+            (is-pressed? "Backspace" #{:shift :alt})
+            (apply-action lowlevel/delete-sentence-part-right)))))
 
 (defn keyup [_el]
   (fn [e]

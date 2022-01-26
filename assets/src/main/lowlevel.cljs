@@ -52,11 +52,14 @@
     {:value value 
      :selection-start selection-start}))
 
-(defn delete-word-part-right [{value :value selection-start :selection-start :as state}]
-  (let [{new-selection-start :selection-start} (word-part-right state)]
+(defn delete-right [fun {value :value selection-start :selection-start :as state}]
+  (let [{new-selection-start :selection-start} (fun state)]
     {:value (str (subs value 0 selection-start)
                  (subs value new-selection-start (count value)))
      :selection-start selection-start}))
+
+(defn delete-word-part-right [state]
+  (delete-right word-part-right state))
 
 (defn delete-word-part-left [state]
   (leftwards delete-word-part-right state))
@@ -80,3 +83,9 @@
 
 (defn sentence-part-left [state]
   (leftwards sentence-part-right state))
+
+(defn delete-sentence-part-right [state]
+  (delete-right sentence-part-right state))
+
+(defn delete-sentence-part-left [state]
+  (leftwards delete-sentence-part-right state))
