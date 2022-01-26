@@ -43,8 +43,9 @@
   {:value           (apply str (reverse value))
    :selection-start (- (count value) selection-start)})
 
-(defn leftwards [fun state]
-  (-> state reverse-state fun reverse-state))
+(defn leftwards [fun] 
+  (fn [state]
+    (-> state reverse-state fun reverse-state)))
 
 (defn word-part-right [{value :value selection-start :selection-start}]
   (let [rest (subs value selection-start (count value))
@@ -52,23 +53,19 @@
     {:value value 
      :selection-start selection-start}))
 
-(defn delete-right [fun {value :value selection-start :selection-start :as state}]
+(defn delete-right [fun] (fn [{value :value selection-start :selection-start :as state}]
   (let [{new-selection-start :selection-start} (fun state)]
     {:value (str (subs value 0 selection-start)
                  (subs value new-selection-start (count value)))
-     :selection-start selection-start}))
+     :selection-start selection-start})))
 
-(defn delete-character-right [state]
-  (delete-right caret-right state))
+(def delete-character-right (delete-right caret-right))
 
-(defn delete-word-part-right [state]
-  (delete-right word-part-right state))
+(def delete-word-part-right (delete-right word-part-right))
 
-(defn delete-word-part-left [state]
-  (leftwards delete-word-part-right state))
+(def delete-word-part-left (leftwards delete-word-part-right))
 
-(defn word-part-left [state]
-  (leftwards word-part-right state))
+(def word-part-left (leftwards word-part-right))
 
 (defn moves [s selection-start]
   (+ selection-start 
@@ -84,11 +81,8 @@
     {:value value
      :selection-start selection-start}))
 
-(defn sentence-part-left [state]
-  (leftwards sentence-part-right state))
+(def sentence-part-left (leftwards sentence-part-right))
 
-(defn delete-sentence-part-right [state]
-  (delete-right sentence-part-right state))
+(def delete-sentence-part-right (delete-right sentence-part-right))
 
-(defn delete-sentence-part-left [state]
-  (leftwards delete-sentence-part-right state))
+(def delete-sentence-part-left (leftwards delete-sentence-part-right))
