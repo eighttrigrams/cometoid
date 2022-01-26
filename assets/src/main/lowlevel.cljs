@@ -58,6 +58,9 @@
                  (subs value new-selection-start (count value)))
      :selection-start selection-start}))
 
+(defn delete-character-right [state]
+  (delete-right caret-right state))
+
 (defn delete-word-part-right [state]
   (delete-right word-part-right state))
 

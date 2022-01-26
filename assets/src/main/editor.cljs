@@ -51,6 +51,8 @@
             (apply-action lowlevel/sentence-part-left)
             (is-pressed? "KeyL" #{:alt})
             (apply-action lowlevel/sentence-part-right)
+            (is-pressed? "Backspace" #{:shift})
+            (apply-action lowlevel/delete-character-right)
             (is-pressed? "Backspace" #{:meta})
             (apply-action lowlevel/delete-word-part-left)
             (is-pressed? "Backspace" #{:shift :meta})
