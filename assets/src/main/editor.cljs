@@ -39,7 +39,6 @@
     (set-modifiers! e true)
     (let [is-pressed?  (is-pressed? e @modifiers)
           apply-action (apply-action el e)]
-      (prn (.-code e))
       (cond (is-pressed? "KeyJ" #{:ctrl})
             (apply-action lowlevel/caret-left)
             (is-pressed? "KeyL" #{:ctrl})
