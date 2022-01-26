@@ -75,3 +75,11 @@
 (deftest sentence-part-left
   (is (= (lowlevel/sentence-part-left (convert "abc def. abc abc|"))
          (convert "abc def.| abc abc"))))
+
+(deftest delete-word-part-right
+  (is (= (lowlevel/delete-word-part-right (convert "|abc def"))
+         (convert "| def"))))
+
+(deftest delete-word-part-left
+  (is (= (lowlevel/delete-word-part-left (convert "abc def|"))
+         (convert "abc |"))))

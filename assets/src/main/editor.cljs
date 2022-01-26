@@ -37,8 +37,9 @@
 (defn keydown [el]
   (fn [e]
     (set-modifiers! e true)
-    (let [is-pressed? (is-pressed? e @modifiers)
+    (let [is-pressed?  (is-pressed? e @modifiers)
           apply-action (apply-action el e)]
+      (prn (.-code e))
       (cond (is-pressed? "KeyJ" #{:ctrl})
             (apply-action lowlevel/caret-left)
             (is-pressed? "KeyL" #{:ctrl})
@@ -50,7 +51,11 @@
             (is-pressed? "KeyJ" #{:alt})
             (apply-action lowlevel/sentence-part-left)
             (is-pressed? "KeyL" #{:alt})
-            (apply-action lowlevel/sentence-part-right)))))
+            (apply-action lowlevel/sentence-part-right)
+            (is-pressed? "Backspace" #{:meta})
+            (apply-action lowlevel/delete-word-part-left)
+            (is-pressed? "Backspace" #{:shift :meta})
+            (apply-action lowlevel/delete-word-part-right)))))
 
 (defn keyup [_el]
   (fn [e]

@@ -33,24 +33,28 @@
                            (when (starts-with-pattern? s "[\\s]") "^")
                            "\\s]"))))
 
+(defn reverse-state [{value           :value
+                selection-start :selection-start}]
+  {:value           (apply str (reverse value))
+   :selection-start (- (count value) selection-start)})
+
 (defn leftwards [fun state]
-  (let [{value           :value
-         selection-start :selection-start} state
-        inv                                              #(- (count value) %1)
-        selection-start                                  (inv selection-start)
-        original-value                                   value
-        value                                            (apply str (reverse value))
-        state                                            {:value           value
-                                                          :selection-start selection-start}
-        {selection-start :selection-start}               (fun state)]
-    {:value           original-value
-     :selection-start (inv selection-start)}))
+  (reverse-state (fun (reverse-state state))))
 
 (defn word-part-right [{value :value selection-start :selection-start}]
   (let [rest (subs value selection-start (count value))
         selection-start (move rest selection-start)]
     {:value value 
      :selection-start selection-start}))
+
+(defn delete-word-part-right [{value :value selection-start :selection-start :as state}]
+  (let [{new-selection-start :selection-start} (word-part-right state)]
+    {:value (str (subs value 0 selection-start)
+                 (subs value new-selection-start (count value)))
+     :selection-start selection-start}))
+
+(defn delete-word-part-left [state]
+  (leftwards delete-word-part-right state))
 
 (defn word-part-left [state]
   (leftwards word-part-right state))
