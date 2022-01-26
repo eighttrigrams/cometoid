@@ -39,12 +39,12 @@
                            (index-of-substr-or-end s word-stop-pattern-incl-whitespace))))
 
 (defn reverse-state [{value           :value
-                selection-start :selection-start}]
+                      selection-start :selection-start}]
   {:value           (apply str (reverse value))
    :selection-start (- (count value) selection-start)})
 
 (defn leftwards [fun state]
-  (reverse-state (fun (reverse-state state))))
+  (-> state reverse-state fun reverse-state))
 
 (defn word-part-right [{value :value selection-start :selection-start}]
   (let [rest (subs value selection-start (count value))
