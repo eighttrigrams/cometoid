@@ -1,5 +1,9 @@
 (ns lowlevel)
 
+(def word-stop-pattern "[,;.-_]")
+
+(def word-stop-pattern-incl-whitespace "[,;.-_\\s\\n\\t]")
+
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
 (defn caret-left [{value :value selection-start :selection-start}]
@@ -27,11 +31,12 @@
         i))))
 
 (defn move [s selection-start]
-  (+ selection-start (index-of-substr-or-end
-                      s
-                      (str "["
-                           (when (starts-with-pattern? s "[\\s]") "^")
-                           "\\s]"))))
+  (+ selection-start (cond (starts-with-pattern? s word-stop-pattern)
+                           1
+                           (starts-with-pattern? s "[\\s]")
+                           (index-of-substr-or-end s "[^\\s]")
+                           :else
+                           (index-of-substr-or-end s word-stop-pattern-incl-whitespace))))
 
 (defn reverse-state [{value           :value
                 selection-start :selection-start}]
