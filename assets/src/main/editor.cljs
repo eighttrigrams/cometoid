@@ -3,6 +3,8 @@
 
 (def modifiers (atom #{}))
 
+(def history (atom '()))
+
 (defn hey [s] (str s s))
 
 (defn set-values! [el {selection-start :selection-start
@@ -34,12 +36,29 @@
     (.preventDefault e)
     (set-values! el (a (convert el)))))
 
+(defn apply-action-and-track [el e]
+  (fn [a]
+    (.preventDefault e)
+    (let [old-value (convert el)
+          result (a old-value)]
+      (swap! history conj old-value)
+      (set-values! el result))))
+
+(defn restore [el e]
+  (.preventDefault e)
+  (when (seq @history)
+    (set-values! el (first @history)))
+    (swap! history rest))
+
 (defn keydown [el]
   (fn [e]
     (set-modifiers! e true)
     (let [is-pressed?  (is-pressed? e @modifiers)
-          apply-action (apply-action el e)]
-      (cond (is-pressed? "KeyJ" #{:ctrl})
+          apply-action (apply-action el e)
+          apply-action-and-track (apply-action-and-track el e)]
+      (cond (is-pressed? "KeyY" #{:ctrl})
+            (restore el e)
+            (is-pressed? "KeyJ" #{:ctrl})
             (apply-action lowlevel/caret-left)
             (is-pressed? "KeyL" #{:ctrl})
             (apply-action lowlevel/caret-right)
@@ -54,13 +73,13 @@
             (is-pressed? "Backspace" #{:shift})
             (apply-action lowlevel/delete-character-right)
             (is-pressed? "Backspace" #{:meta})
-            (apply-action lowlevel/delete-word-part-left)
+            (apply-action-and-track lowlevel/delete-word-part-left)
             (is-pressed? "Backspace" #{:shift :meta})
-            (apply-action lowlevel/delete-word-part-right)
+            (apply-action-and-track lowlevel/delete-word-part-right)
             (is-pressed? "Backspace" #{:alt})
-            (apply-action lowlevel/delete-sentence-part-left)
+            (apply-action-and-track lowlevel/delete-sentence-part-left)
             (is-pressed? "Backspace" #{:shift :alt})
-            (apply-action lowlevel/delete-sentence-part-right)
+            (apply-action-and-track lowlevel/delete-sentence-part-right)
             (is-pressed? "Enter" #{:shift})
             (apply-action lowlevel/newline-after-current)
             (is-pressed? "Enter" #{:alt})
