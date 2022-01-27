@@ -8,14 +8,14 @@
 
 (defn caret-left [{value :value selection-start :selection-start}]
   {:selection-start (if (> selection-start 0)
-                     (- selection-start 1)
-                     selection-start)
+                      (- selection-start 1)
+                      selection-start)
    :value value})
 
 (defn caret-right [{value :value selection-start :selection-start}]
   {:selection-start (if (< selection-start (count value))
-                     (+ selection-start 1)
-                     selection-start)
+                      (+ selection-start 1)
+                      selection-start)
    :value value})
 
 (defn starts-with-pattern? [s pattern]
@@ -30,35 +30,38 @@
         (recur (apply str (rest rst)) (inc i))
         i))))
 
-;; TODO inline into word-part-right
-(defn move [s selection-start]
-  (+ selection-start (cond (starts-with-pattern? s word-stop-pattern)
-                           1
-                           (starts-with-pattern? s "[ ]")
-                           (index-of-substr-or-end s "[^ ]")
-                           :else
-                           (index-of-substr-or-end s word-stop-pattern-incl-whitespace))))
-
 (defn reverse-state [{value           :value
                       selection-start :selection-start}]
   {:value           (apply str (reverse value))
    :selection-start (- (count value) selection-start)})
 
-(defn leftwards [fun] 
+(defn leftwards [fun]
   (fn [state]
     (-> state reverse-state fun reverse-state)))
 
-(defn word-part-right [{value :value selection-start :selection-start}]
-  (let [rest (subs value selection-start (count value))
-        selection-start (move rest selection-start)]
-    {:value value 
+(defn calc-rest [{value :value selection-start :selection-start}]
+  (subs value selection-start (count value)))
+
+(defn word-part-right [{value :value selection-start :selection-start :as state}]
+  (let [rest            (calc-rest state)
+        selection-start (+ selection-start
+                           (cond (starts-with-pattern? rest word-stop-pattern)
+                                 1
+                                 (starts-with-pattern? rest "[ ]")
+                                 (index-of-substr-or-end rest "[^ ]")
+                                 :else
+                                 (index-of-substr-or-end rest word-stop-pattern-incl-whitespace)))]
+    {:value value
      :selection-start selection-start}))
 
-(defn delete-right [fun] (fn [{value :value selection-start :selection-start :as state}]
-  (let [{new-selection-start :selection-start} (fun state)]
-    {:value (str (subs value 0 selection-start)
-                 (subs value new-selection-start (count value)))
-     :selection-start selection-start})))
+(defn delete-right [fun]
+  (fn [{value           :value
+        selection-start :selection-start
+        :as             state}]
+    (let [{new-selection-start :selection-start} (fun state)]
+      {:value           (str (subs value 0 selection-start)
+                             (subs value new-selection-start (count value)))
+       :selection-start selection-start})))
 
 (def delete-character-right (delete-right caret-right))
 
@@ -68,17 +71,14 @@
 
 (def word-part-left (leftwards word-part-right))
 
-(defn moves [s selection-start]
-  (+ selection-start 
-     (if (starts-with-pattern? s sentence-stop-pattern)
-       1
-       (index-of-substr-or-end
-        s
-        sentence-stop-pattern))))
-
-(defn sentence-part-right [{value :value selection-start :selection-start}]
-  (let [rest (subs value selection-start (count value))
-        selection-start (moves rest selection-start)]
+(defn sentence-part-right [{value :value selection-start :selection-start :as state}]
+  (let [rest (calc-rest state)
+        selection-start (+ selection-start
+                           (if (starts-with-pattern? rest sentence-stop-pattern)
+                             1
+                             (index-of-substr-or-end
+                              rest
+                              sentence-stop-pattern)))]
     {:value value
      :selection-start selection-start}))
 
@@ -91,8 +91,7 @@
 (defn newline-after-current [{value :value selection-start :selection-start :as state}]
   (if (= selection-start (count value))
     state
-    ;; TODO deduplicate rest calculation
-    (let [rest (subs value selection-start (count value))
+    (let [rest (calc-rest state)
           i    (+ selection-start (index-of-substr-or-end rest "\\n"))]
       {:selection-start (inc i)
        :value           (str (subs value 0 i) "\n" (subs value i (count value)))})))
