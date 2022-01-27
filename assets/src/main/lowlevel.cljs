@@ -90,7 +90,8 @@
 
 (defn newline-after-current [{value :value selection-start :selection-start :as state}]
   (if (= selection-start (count value))
-    state
+    {:value (str value "\n")
+     :selection-start (inc selection-start)}
     (let [rest (calc-rest state)
           i    (+ selection-start (index-of-substr-or-end rest "\\n"))]
       {:selection-start (inc i)

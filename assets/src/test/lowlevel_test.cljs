@@ -92,9 +92,9 @@
   (is (= (lowlevel/newline-after-current (convert "abc|\ndef"))
          (convert "abc\n|\ndef"))))
 
-(deftest newline-after-current-end-of-file
-  (is (= (lowlevel/newline-after-current (convert "abc|"))
-         (convert "abc|"))))
+(deftest newline-after-current-newline-at-end-of-line
+  (is (= (lowlevel/newline-after-current (convert "abc\n|"))
+         (convert "abc\n\n|"))))
 
 (deftest newline-before-current
   (is (= (lowlevel/newline-before-current (convert "abc\nde|f"))
@@ -106,4 +106,4 @@
 
 (deftest newline-before-current-beginning-of-file
   (is (= (lowlevel/newline-before-current (convert "|abc"))
-         (convert "|abc"))))
+         (convert "|\nabc"))))
