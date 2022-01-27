@@ -60,7 +60,9 @@
             (is-pressed? "Backspace" #{:alt})
             (apply-action lowlevel/delete-sentence-part-left)
             (is-pressed? "Backspace" #{:shift :alt})
-            (apply-action lowlevel/delete-sentence-part-right)))))
+            (apply-action lowlevel/delete-sentence-part-right)
+            (is-pressed? "Enter" #{:shift})
+            (apply-action lowlevel/newline-after-current)))))
 
 (defn keyup [_el]
   (fn [e]

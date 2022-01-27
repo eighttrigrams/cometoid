@@ -83,3 +83,15 @@
 (deftest delete-word-part-left
   (is (= (lowlevel/delete-word-part-left (convert "abc def|"))
          (convert "abc |"))))
+
+(deftest newline-after-current 
+  (is (= (lowlevel/newline-after-current (convert "a|bc\ndef"))
+         (convert "abc\n|\ndef"))))
+
+(deftest newline-after-current-end-of-line
+  (is (= (lowlevel/newline-after-current (convert "abc|\ndef"))
+         (convert "abc\n|\ndef"))))
+
+(deftest newline-after-current-end-of-file
+  (is (= (lowlevel/newline-after-current (convert "abc|"))
+         (convert "abc|"))))

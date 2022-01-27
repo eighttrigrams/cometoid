@@ -30,6 +30,7 @@
         (recur (apply str (rest rst)) (inc i))
         i))))
 
+;; TODO inline into word-part-right
 (defn move [s selection-start]
   (+ selection-start (cond (starts-with-pattern? s word-stop-pattern)
                            1
@@ -86,3 +87,12 @@
 (def delete-sentence-part-right (delete-right sentence-part-right))
 
 (def delete-sentence-part-left (leftwards delete-sentence-part-right))
+
+(defn newline-after-current [{value :value selection-start :selection-start :as state}]
+  (if (= selection-start (count value))
+    state
+    ;; TODO deduplicate rest calculation
+    (let [rest (subs value selection-start (count value))
+          i    (+ selection-start (index-of-substr-or-end rest "\\n"))]
+      {:selection-start (inc i)
+       :value           (str (subs value 0 i) "\n" (subs value i (count value)))})) )
