@@ -84,7 +84,7 @@
   (is (= (lowlevel/delete-word-part-left (convert "abc def|"))
          (convert "abc |"))))
 
-(deftest newline-after-current 
+(deftest newline-after-current
   (is (= (lowlevel/newline-after-current (convert "a|bc\ndef"))
          (convert "abc\n|\ndef"))))
 
@@ -95,3 +95,15 @@
 (deftest newline-after-current-end-of-file
   (is (= (lowlevel/newline-after-current (convert "abc|"))
          (convert "abc|"))))
+
+(deftest newline-before-current
+  (is (= (lowlevel/newline-before-current (convert "abc\nde|f"))
+         (convert "abc\n|\ndef"))))
+
+(deftest newline-before-current-beginning-of-line
+  (is (= (lowlevel/newline-before-current (convert "abc\n|def"))
+         (convert "abc\n|\ndef"))))
+
+(deftest newline-before-current-beginning-of-file
+  (is (= (lowlevel/newline-before-current (convert "|abc"))
+         (convert "|abc"))))

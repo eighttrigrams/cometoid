@@ -95,4 +95,6 @@
     (let [rest (subs value selection-start (count value))
           i    (+ selection-start (index-of-substr-or-end rest "\\n"))]
       {:selection-start (inc i)
-       :value           (str (subs value 0 i) "\n" (subs value i (count value)))})) )
+       :value           (str (subs value 0 i) "\n" (subs value i (count value)))})))
+
+(def newline-before-current (leftwards newline-after-current))
