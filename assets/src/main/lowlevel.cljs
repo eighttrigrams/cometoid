@@ -75,3 +75,10 @@
        :value           (str (subs value 0 i) "\n" (subs value i (count value)))})))
 
 (def newline-before-current (h/leftwards newline-after-current))
+
+(defn insert [clipboard-data]
+  (fn [{value           :value
+        selection-start :selection-start
+        :as             state}]
+    {:value           (str (subs value 0 selection-start) clipboard-data (h/calc-rest state))
+     :selection-start (+ selection-start (count clipboard-data))}))

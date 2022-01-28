@@ -47,8 +47,15 @@
 (defn restore [el e]
   (.preventDefault e)
   (when (seq @history)
-    (set-values! el (first @history)))
-    (swap! history rest))
+    (set-values! el (first @history))
+    (swap! history rest)))
+
+(defn paste [el]
+  (fn [e]
+    (.preventDefault e)
+    (let [clipboard-data (.getData (.-clipboardData e) "Text")
+          apply-action-and-track (apply-action-and-track el e)]
+      (apply-action-and-track (lowlevel/insert clipboard-data)))))
 
 (defn keydown [el]
   (fn [e]
@@ -94,6 +101,7 @@
     (reset! modifiers #{})))
 
 (defn ^:export new [el]
+  (.addEventListener el "paste" (paste el))
   (.addEventListener el "keydown" (keydown el))
   (.addEventListener el "keyup" (keyup el))
   (.addEventListener el "mouseleave" (mouseleave el)))
