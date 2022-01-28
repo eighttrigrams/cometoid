@@ -8,10 +8,11 @@
 (defn hey [s] (str s s))
 
 (defn set-values! [el {selection-start :selection-start
+                       selection-end :selection-end
                        value           :value}]
   (set! (.-value el) value)
   (set! (.-selectionStart el) selection-start)
-  (set! (.-selectionEnd el) selection-start))
+  (set! (.-selectionEnd el) selection-end))
 
 (defn set-modifiers! [e b]
   (let [code (case (.-code e)
@@ -29,7 +30,8 @@
 
 (defn convert [el]
   {:value           (.-value el)
-   :selection-start (.-selectionStart el)})
+   :selection-start (.-selectionStart el)
+   :selection-end (.-selectionEnd el)})
 
 (defn apply-action [el e]
   (fn [a]
