@@ -90,10 +90,12 @@
 (defn insert [clipboard-data]
   (fn [{value           :value
         selection-start :selection-start
-        _selection-end  :selection-end
-        :as             state}]
-    (let [selection-start (+ selection-start (count clipboard-data))
-          value           (str (subs value 0 selection-start) clipboard-data (h/calc-rest state))]
+        selection-end  :selection-end}]
+    (let [value           (str (subs value 0 selection-start)
+                               clipboard-data
+                               (subs value selection-end (count value)))
+          selection-start (+ selection-start (count clipboard-data))]
+      (prn value)
       {:value           value
        :selection-start selection-start
        :selection-end   selection-start})))
