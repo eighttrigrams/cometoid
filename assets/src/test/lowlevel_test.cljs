@@ -5,10 +5,11 @@
 
 (defn convert [s]
   (let [selection-start (.indexOf s "|")
-        [l r] (str/split s #"\|")
-        value (str l r)]
+        [l r]           (str/split s #"\|")
+        value           (str l r)]
     {:selection-start selection-start
-     :value value}))
+     :selection-end   selection-start
+     :value           value}))
 
 (deftest caret-left-base-case
   (is (= (lowlevel/caret-left (convert "abc|"))

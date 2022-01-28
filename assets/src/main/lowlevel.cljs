@@ -8,16 +8,20 @@
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
 (defn caret-left [{value :value selection-start :selection-start}]
-  {:selection-start (if (> selection-start 0)
-                      (- selection-start 1)
-                      selection-start)
-   :value value})
+  (let [selection-start  (if (> selection-start 0)
+                           (- selection-start 1)
+                           selection-start)]
+    {:selection-start selection-start
+     :selection-end   selection-start
+     :value           value}))
 
 (defn caret-right [{value :value selection-start :selection-start}]
-  {:selection-start (if (< selection-start (count value))
-                      (+ selection-start 1)
-                      selection-start)
-   :value value})
+  (let [selection-start  (if (< selection-start (count value))
+                           (+ selection-start 1)
+                           selection-start)]
+    {:selection-start selection-start
+     :selection-end   selection-start
+     :value           value}))
 
 (defn word-part-right [{value :value selection-start :selection-start :as state}]
   (let [rest            (h/calc-rest state)
@@ -28,8 +32,9 @@
                                  (h/index-of-substr-or-end rest "[^ ]")
                                  :else
                                  (h/index-of-substr-or-end rest word-stop-pattern-incl-whitespace)))]
-    {:value value
-     :selection-start selection-start}))
+    {:value           value
+     :selection-start selection-start
+     :selection-end   selection-start}))
 
 (defn delete-right [fun]
   (fn [{value           :value
@@ -38,7 +43,8 @@
     (let [{new-selection-start :selection-start} (fun state)]
       {:value           (str (subs value 0 selection-start)
                              (subs value new-selection-start (count value)))
-       :selection-start selection-start})))
+       :selection-start selection-start
+       :selection-end   selection-start})))
 
 (def delete-character-right (delete-right caret-right))
 
@@ -57,7 +63,8 @@
                               rest
                               sentence-stop-pattern)))]
     {:value value
-     :selection-start selection-start}))
+     :selection-start selection-start
+     :selection-end selection-start}))
 
 (def sentence-part-left (h/leftwards sentence-part-right))
 
@@ -67,11 +74,15 @@
 
 (defn newline-after-current [{value :value selection-start :selection-start :as state}]
   (if (= selection-start (count value))
-    {:value (str value "\n")
-     :selection-start (inc selection-start)}
+    (let [selection-start (inc selection-start)]
+      {:value           (str value "\n")
+       :selection-start selection-start
+       :selection-end   selection-start})
     (let [rest (h/calc-rest state)
-          i    (+ selection-start (h/index-of-substr-or-end rest "\\n"))]
-      {:selection-start (inc i)
+          i    (+ selection-start (h/index-of-substr-or-end rest "\\n"))
+          selection-start (inc i)]
+      {:selection-start selection-start
+       :selection-end   selection-start
        :value           (str (subs value 0 i) "\n" (subs value i (count value)))})))
 
 (def newline-before-current (h/leftwards newline-after-current))
@@ -80,5 +91,8 @@
   (fn [{value           :value
         selection-start :selection-start
         :as             state}]
-    {:value           (str (subs value 0 selection-start) clipboard-data (h/calc-rest state))
-     :selection-start (+ selection-start (count clipboard-data))}))
+    (let [selection-start (+ selection-start (count clipboard-data))
+          value           (str (subs value 0 selection-start) clipboard-data (h/calc-rest state))]
+      {:value           value
+       :selection-start selection-start
+       :selection-end   selection-start})))
