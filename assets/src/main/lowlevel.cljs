@@ -95,7 +95,6 @@
                                clipboard-data
                                (subs value selection-end (count value)))
           selection-start (+ selection-start (count clipboard-data))]
-      (prn value)
       {:value           value
        :selection-start selection-start
        :selection-end   selection-start})))
