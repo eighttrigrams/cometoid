@@ -23,19 +23,19 @@
          :value           value}))))
 
 (deftest caret-left-base-case
-  (is (= (lowlevel/caret-left (convert "abc|"))
+  (is (= (h/pull-l (lowlevel/caret-left (convert "abc|")))
          (convert "ab|c"))))
 
 (deftest caret-left-beginning-of-line
-  (is (= (lowlevel/caret-left (convert "|abc"))
+  (is (= (h/pull-l (lowlevel/caret-left (convert "|abc")))
          (convert "|abc"))))
 
 (deftest caret-right-base-case
-  (is (= (lowlevel/caret-right (convert "|abc"))
+  (is (= (h/pull-r (lowlevel/caret-right (convert "|abc")))
          (convert "a|bc"))))
 
 (deftest caret-right-end-of-line
-  (is (= (lowlevel/caret-right (convert "abc|"))
+  (is (= (h/pull-r (lowlevel/caret-right (convert "abc|")))
          (convert "abc|"))))
 
 (deftest word-part-right

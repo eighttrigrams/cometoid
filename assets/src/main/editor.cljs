@@ -72,13 +72,14 @@
       (cond (is-pressed? "KeyY" #{:ctrl})
             (restore el e)
             (is-pressed? "KeyJ" #{:ctrl})
-            (apply-action lowlevel/caret-left)
+            (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/caret-left))
             (is-pressed? "KeyL" #{:ctrl})
-            (apply-action lowlevel/caret-right)
+            (apply-action (comp (if (= @direction 1) h/pull-r h/pull-l) lowlevel/caret-right))
+
             (is-pressed? "KeyL" #{:meta})
-            (apply-action (comp h/pull-r lowlevel/word-part-right))
+            (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/word-part-right))
             (is-pressed? "KeyJ" #{:meta})
-            (apply-action (comp h/pull-l lowlevel/word-part-left))
+            (apply-action (comp (if (= @direction 1) h/pull-r h/pull-l) lowlevel/word-part-left))
 
             (is-pressed? "KeyL" #{:shift :meta})
             (if (= @direction -1)
@@ -91,9 +92,9 @@
               (do (reset! direction -1) (apply-action lowlevel/word-part-left)))
 
             (is-pressed? "KeyJ" #{:alt})
-            (apply-action (comp h/pull-l lowlevel/sentence-part-left))
+            (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/sentence-part-left))
             (is-pressed? "KeyL" #{:alt})
-            (apply-action (comp h/pull-r lowlevel/sentence-part-right))
+            (apply-action (comp (if (= @direction 1) h/pull-r h/pull-l) lowlevel/sentence-part-right))
 
             (is-pressed? "KeyL" #{:shift :alt})
             (if (= @direction -1)
