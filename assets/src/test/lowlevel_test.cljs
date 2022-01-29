@@ -5,22 +5,22 @@
             [lowlevel-helpers :as h] ))
 
 (defn convert [s]
-  (let [pipe            (.indexOf s "|")
-        left            (.indexOf s "[")
-        right           (.indexOf s "]")]
+  (let [pipe            (.indexOf s "|")]
     (if (not= pipe -1)
       (let [[l r] (str/split s #"\|")
             value (str l r)]
         {:selection-start pipe
          :selection-end   pipe
          :value           value})
-      (let [[l r] (str/split s #"\[")
+      (let [left  (.indexOf s "[")
+            right (.indexOf s "]")
+            [l r] (str/split s #"\[")
             value (str l r)
             [l r] (str/split value #"\]")
             value (str l r)]
-      {:selection-start left
-       :selection-end   (dec right)
-       :value           value}))))
+        {:selection-start left
+         :selection-end   (dec right)
+         :value           value}))))
 
 (deftest caret-left-base-case
   (is (= (lowlevel/caret-left (convert "abc|"))
