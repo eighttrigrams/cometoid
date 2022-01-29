@@ -128,9 +128,13 @@
                          (not (is-pressed? "KeyX" #{:ctrl})))
                 (.preventDefault e))))
       (let [{selection-start :selection-start
-             selection-end   :selection-end} (convert el)]
+             selection-end   :selection-end
+             :as             state} (convert el)]
         (when (or (= selection-start selection-end)
                   (not (:shift @modifiers)))
+          (if (= @direction 1)
+            (set-values! el (assoc state :selection-start selection-end))
+            (set-values! el (assoc state :selection-end selection-start)))
           (reset! direction 0))))))
 
 (defn keyup [_el]
