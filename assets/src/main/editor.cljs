@@ -119,23 +119,24 @@
             (apply-action lowlevel/newline-after-current)
             (is-pressed? "Enter" #{:alt})
             (apply-action lowlevel/newline-before-current)
+
+            (is-pressed? "KeyV" #{:ctrl})
+            (reset! direction 0)
+
+            (is-pressed? "KeyX" #{:ctrl})
+            (reset! direction 0)
+
+            (is-pressed? "KeyC" #{:ctrl})
+            (reset! direction 0)
+
             :else
             (let [{selection-start :selection-start
                    selection-end   :selection-end} (convert el)]
-              (when (and (not= selection-start selection-end)
-                         (not (is-pressed? "KeyV" #{:ctrl}))
-                         (not (is-pressed? "KeyC" #{:ctrl}))
-                         (not (is-pressed? "KeyX" #{:ctrl})))
+              (when (not= selection-start selection-end)
                 (.preventDefault e))))
       (let [{selection-start :selection-start
-             selection-end   :selection-end
-             :as             state} (convert el)]
-        (when (or (= selection-start selection-end)
-                  (not (:shift @modifiers)))
-          (if (= @direction 1)
-            (set-values! el (assoc state :selection-start selection-end))
-            (set-values! el (assoc state :selection-end selection-start)))
-          (reset! direction 0))))))
+             selection-end   :selection-end} (convert el)]
+        (when (= selection-start selection-end) (reset! direction 0))))))
 
 (defn keyup [_el]
   (fn [e]
