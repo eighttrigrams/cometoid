@@ -26,12 +26,12 @@
 (defn word-part-right [{value :value selection-start :selection-start selection-end :selection-end :as state}]
   (let [rest            (h/calc-rest state)
         selection-end (+ selection-end
-                           (cond (h/starts-with-pattern? rest word-stop-pattern)
-                                 1
-                                 (h/starts-with-pattern? rest "[ ]")
-                                 (h/index-of-substr-or-end rest "[^ ]")
-                                 :else
-                                 (h/index-of-substr-or-end rest word-stop-pattern-incl-whitespace)))]
+                         (cond (h/starts-with-pattern? rest word-stop-pattern)
+                               1
+                               (h/starts-with-pattern? rest "[ ]")
+                               (h/index-of-substr-or-end rest "[^ ]")
+                               :else
+                               (h/index-of-substr-or-end rest word-stop-pattern-incl-whitespace)))]
     {:value           value
      :selection-start selection-start
      :selection-end   selection-end}))

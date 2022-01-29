@@ -23,8 +23,8 @@
   (fn [state]
     (-> state reverse-state fun reverse-state)))
 
-(defn calc-rest [{value :value selection-start :selection-start}]
-  (subs value selection-start (count value)))
+(defn calc-rest [{value :value selection-end :selection-end}]
+  (subs value selection-end (count value)))
 
 (defn pull-r [{selection-end :selection-end :as state}]
   (assoc state :selection-start selection-end))
