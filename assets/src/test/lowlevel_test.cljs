@@ -5,12 +5,22 @@
             [lowlevel-helpers :as h] ))
 
 (defn convert [s]
-  (let [selection-start (.indexOf s "|")
-        [l r]           (str/split s #"\|")
-        value           (str l r)]
-    {:selection-start selection-start
-     :selection-end   selection-start
-     :value           value}))
+  (let [pipe            (.indexOf s "|")
+        left            (.indexOf s "[")
+        right           (.indexOf s "]")]
+    (if (not= pipe -1)
+      (let [[l r] (str/split s #"\|")
+            value (str l r)]
+        {:selection-start pipe
+         :selection-end   pipe
+         :value           value})
+      (let [[l r] (str/split s #"\[")
+            value (str l r)
+            [l r] (str/split value #"\]")
+            value (str l r)]
+      {:selection-start left
+       :selection-end   (dec right)
+       :value           value}))))
 
 (deftest caret-left-base-case
   (is (= (lowlevel/caret-left (convert "abc|"))
@@ -32,6 +42,10 @@
   (is (= (h/pull-r (lowlevel/word-part-right (convert "|abc def")))
          (convert "abc| def"))))
 
+(deftest word-part-right-with-selection
+  (is (= (lowlevel/word-part-right (convert "|abc def"))
+         (convert "[abc] def"))))
+
 (deftest word-part-right-skip-whitespace
   (is (= (h/pull-r (lowlevel/word-part-right (convert "abc| def")))
          (convert "abc |def")))
@@ -45,6 +59,10 @@
 (deftest word-part-left
   (is (= (h/pull-l (lowlevel/word-part-left (convert "abc def|")))
          (convert "abc |def"))))
+
+(deftest word-part-left-with-selection
+  (is (= (lowlevel/word-part-left (convert "abc def|"))
+         (convert "abc [def]"))))
 
 (deftest word-part-left-skip-whitespace
   (is (= (h/pull-l (lowlevel/word-part-left (convert "abc |def")))
