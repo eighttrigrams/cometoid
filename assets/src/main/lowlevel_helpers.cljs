@@ -16,8 +16,8 @@
                       selection-start :selection-start
                       selection-end   :selection-end}]
   {:value           (apply str (reverse value))
-   :selection-start (- (count value) selection-start)
-   :selection-end   (- (count value) selection-end)})
+   :selection-start (- (count value) selection-end)
+   :selection-end   (- (count value) selection-start)})
 
 (defn leftwards [fun]
   (fn [state]
@@ -25,3 +25,9 @@
 
 (defn calc-rest [{value :value selection-start :selection-start}]
   (subs value selection-start (count value)))
+
+(defn pull-r [{selection-end :selection-end :as state}]
+  (assoc state :selection-start selection-end))
+
+(defn pull-l [{selection-start :selection-start :as state}]
+  (assoc state :selection-end selection-start))

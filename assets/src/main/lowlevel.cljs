@@ -23,9 +23,9 @@
      :selection-end   selection-start
      :value           value}))
 
-(defn word-part-right [{value :value selection-start :selection-start :as state}]
+(defn word-part-right [{value :value selection-start :selection-start selection-end :selection-end :as state}]
   (let [rest            (h/calc-rest state)
-        selection-start (+ selection-start
+        selection-end (+ selection-end
                            (cond (h/starts-with-pattern? rest word-stop-pattern)
                                  1
                                  (h/starts-with-pattern? rest "[ ]")
@@ -34,17 +34,17 @@
                                  (h/index-of-substr-or-end rest word-stop-pattern-incl-whitespace)))]
     {:value           value
      :selection-start selection-start
-     :selection-end   selection-start}))
+     :selection-end   selection-end}))
 
 (defn delete-right [fun]
   (fn [{value           :value
-        selection-start :selection-start
+        selection-end :selection-end
         :as             state}]
-    (let [{new-selection-start :selection-start} (fun state)]
-      {:value           (str (subs value 0 selection-start)
-                             (subs value new-selection-start (count value)))
-       :selection-start selection-start
-       :selection-end   selection-start})))
+    (let [{new-selection-end :selection-end} (fun state)]
+      {:value           (str (subs value 0 selection-end)
+                             (subs value new-selection-end (count value)))
+       :selection-start selection-end
+       :selection-end   selection-end})))
 
 (def delete-character-right (delete-right caret-right))
 
@@ -54,17 +54,17 @@
 
 (def word-part-left (h/leftwards word-part-right))
 
-(defn sentence-part-right [{value :value selection-start :selection-start :as state}]
+(defn sentence-part-right [{value :value selection-end :selection-end :as state}]
   (let [rest (h/calc-rest state)
-        selection-start (+ selection-start
+        selection-end (+ selection-end
                            (if (h/starts-with-pattern? rest sentence-stop-pattern)
                              1
                              (h/index-of-substr-or-end
                               rest
                               sentence-stop-pattern)))]
     {:value value
-     :selection-start selection-start
-     :selection-end selection-start}))
+     :selection-start selection-end
+     :selection-end selection-end}))
 
 (def sentence-part-left (h/leftwards sentence-part-right))
 

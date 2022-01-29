@@ -1,7 +1,8 @@
 (ns lowlevel-test
   (:require [cljs.test :refer (deftest is)]
             [clojure.string :as str]
-            lowlevel))
+            lowlevel
+            [lowlevel-helpers :as h] ))
 
 (defn convert [s]
   (let [selection-start (.indexOf s "|")
@@ -28,31 +29,31 @@
          (convert "abc|"))))
 
 (deftest word-part-right
-  (is (= (lowlevel/word-part-right (convert "|abc def"))
+  (is (= (h/pull-r (lowlevel/word-part-right (convert "|abc def")))
          (convert "abc| def"))))
 
 (deftest word-part-right-skip-whitespace
-  (is (= (lowlevel/word-part-right (convert "abc| def"))
+  (is (= (h/pull-r (lowlevel/word-part-right (convert "abc| def")))
          (convert "abc |def")))
-  (is (= (lowlevel/word-part-right (convert "abc|  def"))
+  (is (= (h/pull-r (lowlevel/word-part-right (convert "abc|  def")))
          (convert "abc  |def"))))
 
 (deftest word-part-right-to-end-of-line
-  (is (= (lowlevel/word-part-right (convert "|abc"))
+  (is (= (h/pull-r (lowlevel/word-part-right (convert "|abc")))
          (convert "abc|"))))
 
 (deftest word-part-left
-  (is (= (lowlevel/word-part-left (convert "abc def|"))
+  (is (= (h/pull-l (lowlevel/word-part-left (convert "abc def|")))
          (convert "abc |def"))))
 
 (deftest word-part-left-skip-whitespace
-  (is (= (lowlevel/word-part-left (convert "abc |def"))
+  (is (= (h/pull-l (lowlevel/word-part-left (convert "abc |def")))
          (convert "abc| def")))
-  (is (= (lowlevel/word-part-left (convert "abc  |def"))
+  (is (= (h/pull-l (lowlevel/word-part-left (convert "abc  |def")))
          (convert "abc|  def"))))
 
 (deftest word-part-left-to-beginning-of-line
-  (is (= (lowlevel/word-part-left (convert "abc|"))
+  (is (= (h/pull-l (lowlevel/word-part-left (convert "abc|")))
          (convert "|abc"))))
 
 (deftest sentence-part-right
