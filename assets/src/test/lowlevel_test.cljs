@@ -82,6 +82,10 @@
   (is (= (lowlevel/sentence-part-right (convert "|abc def. a"))
          (convert "[abc def]. a"))))
 
+(deftest sentence-part-left-with-selection-backwards
+  (is (= ((comp h/flip lowlevel/sentence-part-left h/flip) (convert "[abc def]. a"))
+         (convert "|abc def. a"))))
+
 (deftest sentence-part-right-skip-period
   (is (= (h/pull-r (lowlevel/sentence-part-right (convert "abc def|. a")))
          (convert "abc def.| a")))
