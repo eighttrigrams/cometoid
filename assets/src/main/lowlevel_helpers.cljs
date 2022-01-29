@@ -31,3 +31,8 @@
 
 (defn pull-l [{selection-start :selection-start :as state}]
   (assoc state :selection-end selection-start))
+
+(defn flip [{selection-start :selection-start selection-end :selection-end :as state}]
+  (-> state
+      (assoc :selection-end selection-start)
+      (assoc :selection-start selection-end)))

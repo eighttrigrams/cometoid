@@ -6,6 +6,8 @@
 
 (def history (atom '()))
 
+(def direction (atom 0))
+
 (defn hey [s] (str s s))
 
 (defn set-values! [el {selection-start :selection-start
@@ -64,8 +66,8 @@
 (defn keydown [el]
   (fn [e]
     (set-modifiers! e true)
-    (let [is-pressed?  (is-pressed? e @modifiers)
-          apply-action (apply-action el e)
+    (let [is-pressed?            (is-pressed? e @modifiers)
+          apply-action           (apply-action el e)
           apply-action-and-track (apply-action-and-track el e)]
       (cond (is-pressed? "KeyY" #{:ctrl})
             (restore el e)
@@ -77,18 +79,32 @@
             (apply-action (comp h/pull-r lowlevel/word-part-right))
             (is-pressed? "KeyJ" #{:meta})
             (apply-action (comp h/pull-l lowlevel/word-part-left))
+
             (is-pressed? "KeyL" #{:shift :meta})
-            (apply-action lowlevel/word-part-right)
+            (if (= @direction -1)
+              (apply-action (comp h/flip lowlevel/word-part-right h/flip))
+              (do (reset! direction 1) (apply-action lowlevel/word-part-right)))
+
             (is-pressed? "KeyJ" #{:shift :meta})
-            (apply-action lowlevel/word-part-left)
+            (if (= @direction 1)
+              (apply-action (comp h/flip lowlevel/word-part-left h/flip))
+              (do (reset! direction -1) (apply-action lowlevel/word-part-left)))
+
             (is-pressed? "KeyJ" #{:alt})
             (apply-action (comp h/pull-l lowlevel/sentence-part-left))
             (is-pressed? "KeyL" #{:alt})
             (apply-action (comp h/pull-r lowlevel/sentence-part-right))
-            (is-pressed? "KeyJ" #{:shift :alt})
-            (apply-action lowlevel/sentence-part-left)
+
             (is-pressed? "KeyL" #{:shift :alt})
-            (apply-action lowlevel/sentence-part-right)
+            (if (= @direction -1)
+              (apply-action (comp h/flip lowlevel/sentence-part-right h/flip))
+              (do (reset! direction 1) (apply-action lowlevel/sentence-part-right)))
+
+            (is-pressed? "KeyJ" #{:shift :alt})
+            (if (= @direction 1)
+              (apply-action (comp h/flip lowlevel/sentence-part-left h/flip))
+              (do (reset! direction -1) (apply-action lowlevel/sentence-part-left)))
+
             (is-pressed? "Backspace" #{:shift})
             (apply-action lowlevel/delete-character-right)
             (is-pressed? "Backspace" #{:meta})
@@ -110,7 +126,12 @@
                          (not (is-pressed? "KeyV" #{:ctrl}))
                          (not (is-pressed? "KeyC" #{:ctrl}))
                          (not (is-pressed? "KeyX" #{:ctrl})))
-                (.preventDefault e)))))))
+                (.preventDefault e))))
+      (let [{selection-start :selection-start
+             selection-end   :selection-end} (convert el)]
+        (when (or (= selection-start selection-end)
+                  (not (:shift @modifiers)))
+          (reset! direction 0))))))
 
 (defn keyup [_el]
   (fn [e]
