@@ -71,10 +71,21 @@
           apply-action-and-track (apply-action-and-track el e)]
       (cond (is-pressed? "KeyY" #{:ctrl})
             (restore el e)
-            (is-pressed? "KeyJ" #{:ctrl})
-            (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/caret-left))
+
             (is-pressed? "KeyL" #{:ctrl})
-            (apply-action (comp (if (= @direction 1) h/pull-r h/pull-l) lowlevel/caret-right))
+            (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/caret-right))
+            (is-pressed? "KeyJ" #{:ctrl})
+            (apply-action (comp (if (= @direction 1) h/pull-r h/pull-l) lowlevel/caret-left))
+
+            (is-pressed? "KeyL" #{:shift :ctrl})
+            (if (= @direction -1)
+              (apply-action (comp h/flip lowlevel/caret-right h/flip))
+              (do (reset! direction 1) (apply-action lowlevel/caret-right)))
+
+            (is-pressed? "KeyJ" #{:shift :ctrl})
+            (if (= @direction 1)
+              (apply-action (comp h/flip lowlevel/caret-left h/flip))
+              (do (reset! direction -1) (apply-action lowlevel/caret-left)))
 
             (is-pressed? "KeyL" #{:meta})
             (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/word-part-right))
@@ -91,10 +102,10 @@
               (apply-action (comp h/flip lowlevel/word-part-left h/flip))
               (do (reset! direction -1) (apply-action lowlevel/word-part-left)))
 
-            (is-pressed? "KeyJ" #{:alt})
-            (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/sentence-part-left))
             (is-pressed? "KeyL" #{:alt})
-            (apply-action (comp (if (= @direction 1) h/pull-r h/pull-l) lowlevel/sentence-part-right))
+            (apply-action (comp (if (= @direction -1) h/pull-l h/pull-r) lowlevel/sentence-part-right))
+            (is-pressed? "KeyJ" #{:alt})
+            (apply-action (comp (if (= @direction 1) h/pull-r h/pull-l) lowlevel/sentence-part-left))
 
             (is-pressed? "KeyL" #{:shift :alt})
             (if (= @direction -1)
