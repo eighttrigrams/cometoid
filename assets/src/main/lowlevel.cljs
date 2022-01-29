@@ -54,17 +54,21 @@
 
 (def word-part-left (h/leftwards word-part-right))
 
-(defn sentence-part-right [{value :value selection-end :selection-end :as state}]
-  (let [rest (h/calc-rest state)
+(defn sentence-part-right 
+  [{value           :value
+    selection-start :selection-start
+    selection-end   :selection-end
+    :as             state}]
+  (let [rest          (h/calc-rest state)
         selection-end (+ selection-end
-                           (if (h/starts-with-pattern? rest sentence-stop-pattern)
-                             1
-                             (h/index-of-substr-or-end
-                              rest
-                              sentence-stop-pattern)))]
-    {:value value
-     :selection-start selection-end
-     :selection-end selection-end}))
+                         (if (h/starts-with-pattern? rest sentence-stop-pattern)
+                           1
+                           (h/index-of-substr-or-end
+                            rest
+                            sentence-stop-pattern)))]
+    {:value           value
+     :selection-start selection-start
+     :selection-end   selection-end}))
 
 (def sentence-part-left (h/leftwards sentence-part-right))
 

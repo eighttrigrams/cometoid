@@ -75,26 +75,34 @@
          (convert "|abc"))))
 
 (deftest sentence-part-right
-  (is (= (lowlevel/sentence-part-right (convert "|abc def. a"))
+  (is (= (h/pull-r (lowlevel/sentence-part-right (convert "|abc def. a")))
          (convert "abc def|. a"))))
 
+(deftest sentence-part-right-with-selection
+  (is (= (lowlevel/sentence-part-right (convert "|abc def. a"))
+         (convert "[abc def]. a"))))
+
 (deftest sentence-part-right-skip-period
-  (is (= (lowlevel/sentence-part-right (convert "abc def|. a"))
+  (is (= (h/pull-r (lowlevel/sentence-part-right (convert "abc def|. a")))
          (convert "abc def.| a")))
-  (is (= (lowlevel/sentence-part-right (convert "abc def|, a"))
+  (is (= (h/pull-r (lowlevel/sentence-part-right (convert "abc def|, a")))
          (convert "abc def,| a")))
-  (is (= (lowlevel/sentence-part-right (convert "abc def|; a"))
+  (is (= (h/pull-r (lowlevel/sentence-part-right (convert "abc def|; a")))
          (convert "abc def;| a"))))
 
 (deftest sentence-part-right-double-newline
-  (is (= (lowlevel/sentence-part-right (convert "|abc\n\ndef"))
+  (is (= (h/pull-r (lowlevel/sentence-part-right (convert "|abc\n\ndef")))
          (convert "abc|\n\ndef")))
-  (is (= (lowlevel/sentence-part-right (convert "|abc\ndef"))
+  (is (= (h/pull-r (lowlevel/sentence-part-right (convert "|abc\ndef")))
          (convert "abc\ndef|"))))
 
 (deftest sentence-part-left
-  (is (= (lowlevel/sentence-part-left (convert "abc def. abc abc|"))
+  (is (= (h/pull-l (lowlevel/sentence-part-left (convert "abc def. abc abc|")))
          (convert "abc def.| abc abc"))))
+
+(deftest sentence-part-left-with-selection
+  (is (= (lowlevel/sentence-part-left (convert "abc def. abc abc|"))
+         (convert "abc def.[ abc abc]"))))
 
 (deftest delete-word-part-right
   (is (= (lowlevel/delete-word-part-right (convert "|abc def"))
