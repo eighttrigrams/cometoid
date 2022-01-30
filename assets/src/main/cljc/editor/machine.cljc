@@ -69,16 +69,15 @@
     :alt-enter
     (lowlevel/newline-before-current state)
 
+    ;; TODO review these
     :keyv-ctrl
     (-> state
         (assoc :dont-prevent-default true)
         (assoc :direction 0))
-
     :keyx-ctrl
     (-> state
         (assoc :dont-prevent-default true)
         (assoc :direction 0))
-
     :keyc-ctrl
     (-> state
         (assoc :dont-prevent-default true)
