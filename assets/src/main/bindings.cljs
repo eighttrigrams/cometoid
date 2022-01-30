@@ -3,9 +3,9 @@
 (defn get-command [is-pressed?]
   (cond (is-pressed? "KeyY" #{:ctrl})
         :restore
-        (is-pressed? "KeyL" #{:ctrl})
-        :caret-left
         (is-pressed? "KeyJ" #{:ctrl})
+        :caret-left
+        (is-pressed? "KeyL" #{:ctrl})
         :caret-right
         (is-pressed? "KeyL" #{:shift :ctrl})
         :caret-left-with-selection

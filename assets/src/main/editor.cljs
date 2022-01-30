@@ -56,7 +56,7 @@
     (let [is-pressed? (is-pressed? e @modifiers)
           key         (bindings/get-command is-pressed?)
           state       (convert el direction history)
-          {dir :direction :as new-state}      (machine/handle-key key state)]
+          {dir :direction :as new-state}      (machine/execute key state)]
 
       (set-values! el new-state)
       (reset! direction dir)

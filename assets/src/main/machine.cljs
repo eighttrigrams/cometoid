@@ -2,7 +2,7 @@
   (:require lowlevel
             [lowlevel-helpers :as h]))
 
-(defn handle-key [key {direction :direction :as state}]
+(defn execute [key {direction :direction :as state}]
   (case key
     nil
     (assoc state :dont-prevent-default true)
@@ -13,9 +13,9 @@
           (assoc :do-pop-history true))
       state)
 
-    :caret-left
-    ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/caret-right) state)
     :caret-right
+    ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/caret-right) state)
+    :caret-left
     ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/caret-left) state)
 
     :caret-left-with-selection
