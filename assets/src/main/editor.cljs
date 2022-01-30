@@ -3,8 +3,6 @@
             machine
             bindings))
 
-(defn hey [s] (str s s))
-
 (defn set-values! [el {selection-start :selection-start
                        selection-end :selection-end
                        value           :value}]
