@@ -1,5 +1,5 @@
 (ns editor.lowlevel
-  (:require [editor.lowlevel-helpers :as h]))
+  (:require [editor.helpers :as h]))
 
 (def word-stop-pattern "[,;.-_\\n]")
 

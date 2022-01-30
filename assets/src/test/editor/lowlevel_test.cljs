@@ -2,7 +2,7 @@
   (:require [cljs.test :refer (deftest is)]
             [test-helpers :as th]
             [editor.lowlevel :as lowlevel]
-            [editor.lowlevel-helpers :as h] ))
+            [editor.helpers :as h] ))
 
 (deftest caret-left-base-case
   (is (= (h/pull-l (lowlevel/caret-left (th/convert "abc|")))

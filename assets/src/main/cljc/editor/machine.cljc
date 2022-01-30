@@ -1,6 +1,6 @@
 (ns editor.machine
   (:require [editor.lowlevel :as lowlevel]
-            [editor.lowlevel-helpers :as h]))
+            [editor.helpers :as h]))
 
 (defn build [] 
   (let [direction-atom (atom 0)]
