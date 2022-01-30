@@ -1,4 +1,9 @@
-(ns bindings)
+(ns editor.bindings-resolver)
+
+(defn is-pressed? [key-code modifiers]
+  (fn [key-code-expected modifiers-expected]
+    (and (= key-code key-code-expected)
+         (= modifiers modifiers-expected))))
 
 (defn get-command [is-pressed?]
   (cond (is-pressed? "KeyY" #{:ctrl})
@@ -49,3 +54,11 @@
         :keyx-ctrl
         (is-pressed? "KeyC" #{:ctrl})
         :keyc-ctrl))
+
+(defn build [execute]
+  (fn _execute_ [[key-code modifiers] state]
+    (let [is-pressed? (is-pressed? key-code modifiers)
+          command (get-command is-pressed?)]
+      (if command 
+        (execute command state)
+        (assoc state :dont-prevent-default true)))))

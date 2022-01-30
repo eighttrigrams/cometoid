@@ -3,7 +3,7 @@
             [editor.machine :as machine]
             [editor.director :as director]
             [editor.time-machine :as time-machine]
-            bindings))
+            [editor.bindings-resolver :as bindings-resolver]))
 
 (defn set-values! [el {selection-start :selection-start
                        selection-end :selection-end
@@ -22,11 +22,6 @@
                nil)]
     (when code (swap! modifiers (if b conj disj) code))))
 
-(defn is-pressed? [e modifiers]
-  (fn [code modifiers-expected]
-    (and (= (.-code e) code)
-         (= modifiers modifiers-expected))))
-
 (defn convert [el]
   {:value                (.-value el)
    :selection-start      (.-selectionStart el)
@@ -43,11 +38,7 @@
 (defn keydown [el modifiers execute]
   (fn [e]
     (set-modifiers! e true modifiers)
-    (let [is-pressed? (is-pressed? e @modifiers)
-          command     (bindings/get-command is-pressed?)
-          state       (convert el)
-          #_(comment "TODO only execute if command not nil")
-          new-state   (execute command state)]
+    (let [new-state   (execute [(.-code e) @modifiers] (convert el))]
       (set-values! el new-state)
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
 
@@ -61,7 +52,7 @@
 
 (defn ^:export new [el]
   (let [modifiers (atom #{})
-        execute (-> machine/execute director/build time-machine/build)]
+        execute (-> machine/execute director/build time-machine/build bindings-resolver/build)]
     (.addEventListener el "paste" (paste el))
     (.addEventListener el "keydown" (keydown el modifiers execute))
     (.addEventListener el "keyup" (keyup el modifiers))
