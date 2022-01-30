@@ -5,9 +5,6 @@
 (defn execute [key {direction       :direction
                     :as             state}]
   (case key
-    nil #_(comment "review")
-    (assoc state :dont-prevent-default true)
-
     :caret-right
     ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/caret-right) state)
     :caret-left
