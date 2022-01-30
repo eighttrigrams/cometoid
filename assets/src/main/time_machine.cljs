@@ -1,5 +1,7 @@
 (ns time-machine)
 
+(def commands-to-track #{:delete})
+
 (defn- clean [state]
   (select-keys state #{:value :selection-start :selection-end}))
 
@@ -15,6 +17,7 @@
           state)
 
         (let [new-state (execute command (assoc state :history @history))]
-          (when (:do-track new-state)
+          (when (and (not= nil command (comment "review")) 
+                     (command commands-to-track))
             (swap! history conj (clean state)))
           new-state)))))

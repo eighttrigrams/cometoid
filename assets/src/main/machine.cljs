@@ -7,7 +7,7 @@
                     selection-end   :selection-end
                     :as             state}]
   (case key
-    nil
+    nil #_(comment "review")
     (assoc state :dont-prevent-default true)
 
     :caret-right
@@ -56,20 +56,20 @@
       (assoc (lowlevel/sentence-part-left state) :direction -1))
 
     :delete
-    (assoc (if (= selection-start selection-end)
-             (lowlevel/delete-character-left state)
-             (lowlevel/delete-selection state)) :do-track true)
-    
+    (if (= selection-start selection-end)
+      (lowlevel/delete-character-left state)
+      (lowlevel/delete-selection state))
+
     :shift-backspace
     (lowlevel/delete-character-right state)
     :meta-backspace
-    (assoc (lowlevel/delete-word-part-left state) :do-track true)
+    (lowlevel/delete-word-part-left state)
     :shift-meta-backspace
-    (assoc (lowlevel/delete-word-part-right state) :do-track true)
+    (lowlevel/delete-word-part-right state)
     :alt-backspace
-    (assoc (lowlevel/delete-sentence-part-left state) :do-track true)
+    (lowlevel/delete-sentence-part-left state)
     :shift-alt-backspace
-    (assoc (lowlevel/delete-sentence-part-right state) :do-track true)
+    (lowlevel/delete-sentence-part-right state)
     :shift-enter
     (lowlevel/newline-after-current state)
     :alt-enter
