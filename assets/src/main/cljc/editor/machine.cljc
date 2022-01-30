@@ -70,11 +70,4 @@
     :shift-enter
     (lowlevel/newline-after-current state)
     :alt-enter
-    (lowlevel/newline-before-current state)
-
-    ;; TODO review this block
-    (let [{selection-start :selection-start
-           selection-end   :selection-end} state]
-      (if (= selection-start selection-end)
-        (assoc state :dont-prevent-default true)
-        state))))
+    (lowlevel/newline-before-current state)))
