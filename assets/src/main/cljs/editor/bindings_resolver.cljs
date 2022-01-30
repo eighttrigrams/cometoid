@@ -44,13 +44,14 @@
         :delete-forward
 
         (is-pressed? "Backspace" #{:meta})
-        :meta-backspace
+        :delete-wordwise-backward
         (is-pressed? "Backspace" #{:shift :meta})
-        :shift-meta-backspace
+        :delete-wordwise-forward
         (is-pressed? "Backspace" #{:alt})
-        :alt-backspace
+        :delete-sentence-wise-backward
         (is-pressed? "Backspace" #{:shift :alt})
-        :shift-alt-backspace
+        :delete-sentence-wise-forward
+        
         (is-pressed? "Enter" #{:shift})
         :shift-enter
         (is-pressed? "Enter" #{:alt})

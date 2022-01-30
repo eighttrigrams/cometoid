@@ -56,13 +56,13 @@
     :delete-forward (lowlevel/delete-character-right state)
     :delete-with-selection-present (lowlevel/delete-selection state)
     
-    :meta-backspace
+    :delete-wordwise-backward
     (lowlevel/delete-word-part-left state)
-    :shift-meta-backspace
+    :delete-wordwise-forward
     (lowlevel/delete-word-part-right state)
-    :alt-backspace
+    :delete-sentence-wise-backward
     (lowlevel/delete-sentence-part-left state)
-    :shift-alt-backspace
+    :delete-sentence-wise-forward
     (lowlevel/delete-sentence-part-right state)
     :shift-enter
     (lowlevel/newline-after-current state)
