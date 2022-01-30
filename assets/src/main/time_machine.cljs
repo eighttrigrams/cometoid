@@ -16,8 +16,8 @@
             (merge state first))
           state)
 
-        (do (prn "no") (let [new-state (execute command (assoc state :history @history))]
-              (when (and (not= nil command (comment "TODO review"))
-                         (command commands-to-track))
-                (swap! history conj (clean state)))
-              new-state))))))
+        (let [new-state (execute command (assoc state :history @history))]
+          (when (and (not= nil command (comment "TODO review"))
+                     (command commands-to-track))
+            (swap! history conj (clean state)))
+          new-state)))))
