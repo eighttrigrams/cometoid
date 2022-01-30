@@ -14,10 +14,12 @@
 
 (defn reverse-state [{value           :value
                       selection-start :selection-start
-                      selection-end   :selection-end}]
-  {:value           (apply str (reverse value))
-   :selection-start (- (count value) selection-end)
-   :selection-end   (- (count value) selection-start)})
+                      selection-end   :selection-end
+                      :as state}]
+  (-> state
+      (assoc :value (apply str (reverse value)))
+      (assoc :selection-start (- (count value) selection-end))
+      (assoc :selection-end (- (count value) selection-start))))
 
 (defn leftwards [fun]
   (fn [state]

@@ -16,9 +16,9 @@
         (is-pressed? "KeyJ" #{:meta})
         :word-part-left
         (is-pressed? "KeyL" #{:shift :meta})
-        :word-part-right-with-selection
+        :move-selection-wordwise-right
         (is-pressed? "KeyJ" #{:shift :meta})
-        :word-part-left-with-selection
+        :move-selection-wordwise-left
         (is-pressed? "KeyL" #{:alt})
         :sentence-right
         (is-pressed? "KeyJ" #{:alt})

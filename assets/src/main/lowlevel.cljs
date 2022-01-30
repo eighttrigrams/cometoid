@@ -28,7 +28,9 @@
         (assoc :selection-start selection-start)
         (assoc :selection-end selection-end))))
 
-(defn word-part-right [{selection-start :selection-start selection-end :selection-end :as state}]
+(defn word-part-right [{selection-start :selection-start 
+                        selection-end :selection-end 
+                        :as state}]
   (let [rest            (h/calc-rest state)
         selection-end (+ selection-end
                          (cond (h/starts-with-pattern? rest word-stop-pattern)

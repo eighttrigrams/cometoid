@@ -36,12 +36,12 @@
     :word-part-left
     ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/word-part-left) state)
 
-    :word-part-right-with-selection
+    :move-selection-wordwise-right
     (if (= direction -1)
       ((comp h/flip lowlevel/word-part-right h/flip) state)
       (assoc (lowlevel/word-part-right state) :direction 1))
 
-    :word-part-left-with-selection
+    :move-selection-wordwise-left
     (if (= direction 1)
       (do (prn "here") ((comp h/flip lowlevel/word-part-left h/flip) state))
       (assoc (lowlevel/word-part-left state) :direction -1))
