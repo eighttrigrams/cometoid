@@ -64,9 +64,8 @@
 
 (defn build [execute]
   (fn _execute_ [[key-code modifiers] {selection-present? :selection-present? :as state}]
-    (prn selection-present?)
     (let [is-pressed? (is-pressed? key-code modifiers)
           command (get-command is-pressed? selection-present?)]
-      (if command 
+      (if command
         (execute command state)
         (assoc state :dont-prevent-default true)))))
