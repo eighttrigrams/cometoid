@@ -2,6 +2,8 @@
   (:require [editor.lowlevel :as lowlevel]
             [editor.lowlevel-helpers :as h]))
 
+;; TODO could be that we better put the direction atom directly
+
 (defn execute [key {direction       :direction
                     :as             state}]
   (case key
