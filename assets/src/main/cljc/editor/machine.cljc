@@ -83,6 +83,7 @@
         (assoc :dont-prevent-default true)
         (assoc :direction 0))
 
+    ;; TODO review this block
     (let [{selection-start :selection-start
            selection-end   :selection-end} state]
       (if (= selection-start selection-end)
