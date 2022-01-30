@@ -1,6 +1,6 @@
 (ns editor
   (:require lowlevel
-            machine
+            time-machine
             bindings))
 
 (defn set-values! [el {selection-start :selection-start
@@ -25,48 +25,37 @@
     (and (= (.-code e) code)
          (= modifiers modifiers-expected))))
 
-(defn convert [el direction history]
+(defn convert [el direction]
   {:value                (.-value el)
    :selection-start      (.-selectionStart el)
    :selection-end        (.-selectionEnd el)
-   :history              @history
    :direction            @direction
    :dont-prevent-default false
    :do-track             false
    :do-pop-history       false})
 
-(defn paste [el direction history]
+(defn paste [el direction]
   (fn [e]
     (.preventDefault e)
     (let [clipboard-data (.getData (.-clipboardData e) "Text")
-          new-state      ((lowlevel/insert clipboard-data) (convert el direction history))]
+          new-state      ((lowlevel/insert clipboard-data) (convert el direction))]
       (set-values! el new-state))))
 
-(defn clean [{selection-start :selection-start selection-end :selection-end value :value}]
-  {:value value :selection-start selection-start :selection-end selection-end})
-
-;; TODO handle history completely outside of machine
-
-(defn keydown [el direction history modifiers]
+(defn keydown [el direction modifiers execute]
   (fn [e]
     (set-modifiers! e true modifiers)
     (let [is-pressed? (is-pressed? e @modifiers)
           key         (bindings/get-command is-pressed?)
-          state       (convert el direction history)
-          {dir :direction :as new-state}      (machine/execute key state)]
+          state       (convert el direction)
+          {dir :direction :as new-state}      (execute key state)]
 
       (set-values! el new-state)
       (reset! direction dir)
 
-      (if (:do-pop-history new-state)
-        (swap! history rest)
-        (when (:do-track new-state)
-          (swap! history conj (clean state))))
-
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e))
 
       (let [{selection-start :selection-start
-             selection-end   :selection-end} (convert el direction history)]
+             selection-end   :selection-end} (convert el direction)]
         (when (= selection-start selection-end) (reset! direction 0))))))
 
 (defn keyup [_el modifiers]
@@ -79,9 +68,9 @@
 
 (defn ^:export new [el]
   (let [direction (atom 0)
-        history   (atom '())
-        modifiers (atom #{})]
-    (.addEventListener el "paste" (paste el direction history))
-    (.addEventListener el "keydown" (keydown el direction history modifiers))
+        modifiers (atom #{})
+        execute (time-machine/build)]
+    (.addEventListener el "paste" (paste el direction))
+    (.addEventListener el "keydown" (keydown el direction modifiers execute))
     (.addEventListener el "keyup" (keyup el modifiers))
     (.addEventListener el "mouseleave" (mouseleave el modifiers))))
