@@ -43,7 +43,7 @@
 
     :move-selection-wordwise-left
     (if (= direction 1)
-      (do (prn "here") ((comp h/flip lowlevel/word-part-left h/flip) state))
+      ((comp h/flip lowlevel/word-part-left h/flip) state)
       (assoc (lowlevel/word-part-left state) :direction -1))
 
     :sentence-right
