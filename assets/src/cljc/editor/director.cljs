@@ -1,4 +1,4 @@
-(ns director)
+(ns editor.director)
 
 (defn build [execute]
   (let [direction (atom 0)]

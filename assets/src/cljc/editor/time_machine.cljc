@@ -1,4 +1,4 @@
-(ns time-machine)
+(ns editor.time-machine)
 
 (def commands-to-track #{:delete})
 

@@ -1,8 +1,8 @@
 (ns editor
-  (:require lowlevel
-            machine
-            director
-            time-machine
+  (:require [editor.lowlevel :as lowlevel]
+            [editor.machine :as machine]
+            [editor.director :as director]
+            [editor.time-machine :as time-machine]
             bindings))
 
 (defn set-values! [el {selection-start :selection-start

@@ -1,6 +1,6 @@
-(ns machine
-  (:require lowlevel
-            [lowlevel-helpers :as h]))
+(ns editor.machine
+  (:require [editor.lowlevel :as lowlevel]
+            [editor.lowlevel-helpers :as h]))
 
 (defn execute [key {direction       :direction 
                     selection-start :selection-start

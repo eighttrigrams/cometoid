@@ -1,6 +1,6 @@
-(ns machine-test
+(ns editor.machine-test
   (:require [cljs.test :refer (deftest is)]
-            machine))
+            [editor.machine :as machine]))
 
 (deftest base-case
   (is (= {:direction       0

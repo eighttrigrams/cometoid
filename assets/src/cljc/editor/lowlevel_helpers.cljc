@@ -1,4 +1,4 @@
-(ns lowlevel-helpers)
+(ns editor.lowlevel-helpers)
 
 (defn starts-with-pattern? [s pattern]
   (not (nil? (re-find (re-pattern (str "^" pattern)) s))))
