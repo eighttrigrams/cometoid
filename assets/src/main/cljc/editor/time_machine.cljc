@@ -1,6 +1,6 @@
 (ns editor.time-machine)
 
-(def commands-to-track #{:delete})
+(def commands-to-track #{:delete :delete-forward})
 
 (defn- clean [state]
   (select-keys state #{:value :selection-start :selection-end}))

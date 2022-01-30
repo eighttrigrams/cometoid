@@ -60,8 +60,9 @@
       (lowlevel/delete-character-left state)
       (lowlevel/delete-selection state))
 
-    :shift-backspace
+    :delete-forward
     (lowlevel/delete-character-right state)
+    
     :meta-backspace
     (lowlevel/delete-word-part-left state)
     :shift-meta-backspace

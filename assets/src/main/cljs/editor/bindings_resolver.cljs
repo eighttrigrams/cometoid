@@ -35,7 +35,7 @@
         (is-pressed? "Backspace" #{})
         :delete
         (is-pressed? "Backspace" #{:shift})
-        :shift-backspace
+        :delete-forward
         (is-pressed? "Backspace" #{:meta})
         :meta-backspace
         (is-pressed? "Backspace" #{:shift :meta})
