@@ -55,13 +55,9 @@
       ((comp h/flip lowlevel/sentence-part-left h/flip) state)
       (assoc (lowlevel/sentence-part-left state) :direction -1))
 
-    :delete
-    (if (= selection-start selection-end)
-      (lowlevel/delete-character-left state)
-      (lowlevel/delete-selection state))
-
-    :delete-forward
-    (lowlevel/delete-character-right state)
+    :delete (lowlevel/delete-character-left state)
+    :delete-forward (lowlevel/delete-character-right state)
+    :delete-with-selection-present (lowlevel/delete-selection state)
     
     :meta-backspace
     (lowlevel/delete-word-part-left state)

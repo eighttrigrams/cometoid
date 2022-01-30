@@ -5,7 +5,7 @@
     (and (= key-code key-code-expected)
          (= modifiers modifiers-expected))))
 
-(defn get-command [is-pressed?]
+(defn get-command [is-pressed? selection-present?]
   (cond (is-pressed? "KeyY" #{:ctrl})
         :restore
         (is-pressed? "KeyJ" #{:ctrl})
@@ -32,10 +32,17 @@
         :sentence-right-with-selection
         (is-pressed? "KeyJ" #{:shift :alt})
         :sentence-left-with-selection
+
+        (and selection-present? (is-pressed? "Backspace" #{}))
+        :delete-with-selection-present
+        (and selection-present? (is-pressed? "Backspace" #{:shift}))
+        :delete-with-selection-present
+
         (is-pressed? "Backspace" #{})
         :delete
         (is-pressed? "Backspace" #{:shift})
         :delete-forward
+
         (is-pressed? "Backspace" #{:meta})
         :meta-backspace
         (is-pressed? "Backspace" #{:shift :meta})
@@ -56,9 +63,10 @@
         :keyc-ctrl))
 
 (defn build [execute]
-  (fn _execute_ [[key-code modifiers] state]
+  (fn _execute_ [[key-code modifiers] {selection-present? :selection-present? :as state}]
+    (prn selection-present?)
     (let [is-pressed? (is-pressed? key-code modifiers)
-          command (get-command is-pressed?)]
+          command (get-command is-pressed? selection-present?)]
       (if command 
         (execute command state)
         (assoc state :dont-prevent-default true)))))

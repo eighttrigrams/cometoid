@@ -23,10 +23,13 @@
     (when code (swap! modifiers (if b conj disj) code))))
 
 (defn convert [el]
-  {:value                (.-value el)
-   :selection-start      (.-selectionStart el)
-   :selection-end        (.-selectionEnd el)
-   :dont-prevent-default false})
+  (let [selection-start (.-selectionStart el)
+        selection-end (.-selectionEnd el)]
+    {:value                (.-value el)
+     :selection-start      selection-start
+     :selection-end        selection-end
+     :selection-present?   (not= selection-start selection-end)
+     :dont-prevent-default false}))
 
 (defn paste [el]
   (fn [e]
