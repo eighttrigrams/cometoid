@@ -18,7 +18,6 @@
   (is (= {:selection-start 1
           :selection-end   1
           :value           "adef"
-          :do-track        true
           :direction 0}
          (machine/execute
           :delete
