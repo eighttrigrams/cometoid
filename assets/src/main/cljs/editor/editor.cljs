@@ -1,6 +1,5 @@
 (ns editor.editor
   (:require [editor.machine :as machine]
-            [editor.director :as director]
             [editor.time-machine :as time-machine]
             [editor.bindings-resolver :as bindings-resolver]))
 
@@ -55,7 +54,7 @@
 
 (defn ^:export new [el]
   (let [modifiers (atom #{})
-        execute (-> machine/execute director/build time-machine/build bindings-resolver/build)]
+        execute (-> (machine/build) time-machine/build bindings-resolver/build)]
     (.addEventListener el "paste" (paste el modifiers execute))
     (.addEventListener el "keydown" (keydown el modifiers execute))
     (.addEventListener el "keyup" (keyup el modifiers))
