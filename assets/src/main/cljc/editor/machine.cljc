@@ -2,9 +2,7 @@
   (:require [editor.lowlevel :as lowlevel]
             [editor.lowlevel-helpers :as h]))
 
-(defn execute [key {direction       :direction 
-                    selection-start :selection-start
-                    selection-end   :selection-end
+(defn execute [key {direction       :direction
                     :as             state}]
   (case key
     nil #_(comment "review")
