@@ -35,13 +35,12 @@
    :do-track             false
    :do-pop-history       false})
 
-;; TODO reenable
-#_(defn paste [el]
-    (fn [e]
-      (.preventDefault e)
-      (let [clipboard-data (.getData (.-clipboardData e) "Text")
-            apply-action-and-track (apply-action-and-track el)]
-        (apply-action-and-track (lowlevel/insert clipboard-data) (convert el)))))
+(defn paste [el direction history]
+  (fn [e]
+    (.preventDefault e)
+    (let [clipboard-data (.getData (.-clipboardData e) "Text")
+          new-state      ((lowlevel/insert clipboard-data) (convert el direction history))]
+      (set-values! el new-state))))
 
 (defn clean [{selection-start :selection-start selection-end :selection-end value :value}]
   {:value value :selection-start selection-start :selection-end selection-end})
@@ -82,7 +81,7 @@
   (let [direction (atom 0)
         history   (atom '())
         modifiers (atom #{})]
-    #_(.addEventListener el "paste" (paste el))
+    (.addEventListener el "paste" (paste el direction history))
     (.addEventListener el "keydown" (keydown el direction history modifiers))
     (.addEventListener el "keyup" (keyup el modifiers))
     (.addEventListener el "mouseleave" (mouseleave el modifiers))))
