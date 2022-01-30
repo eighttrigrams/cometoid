@@ -9,12 +9,6 @@
   (case key
     nil
     (assoc state :dont-prevent-default true)
-    :restore
-    (if (seq (:history state))
-      (-> state
-          (merge (first (:history state)))
-          (assoc :do-pop-history true))
-      state)
 
     :caret-right
     ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/caret-right) state)

@@ -31,8 +31,7 @@
    :selection-end        (.-selectionEnd el)
    :direction            @direction
    :dont-prevent-default false
-   :do-track             false
-   :do-pop-history       false})
+   :do-track             false})
 
 (defn paste [el direction]
   (fn [e]
