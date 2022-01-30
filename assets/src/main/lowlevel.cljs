@@ -28,7 +28,7 @@
         (assoc :selection-start selection-start)
         (assoc :selection-end selection-end))))
 
-(defn word-part-right [{value :value selection-start :selection-start selection-end :selection-end :as state}]
+(defn word-part-right [{selection-start :selection-start selection-end :selection-end :as state}]
   (let [rest            (h/calc-rest state)
         selection-end (+ selection-end
                          (cond (h/starts-with-pattern? rest word-stop-pattern)
@@ -37,19 +37,20 @@
                                (h/index-of-substr-or-end rest "[^ ]")
                                :else
                                (h/index-of-substr-or-end rest word-stop-pattern-incl-whitespace)))]
-    {:value           value
-     :selection-start selection-start
-     :selection-end   selection-end}))
+    (-> state
+        (assoc :selection-start selection-start)
+        (assoc :selection-end selection-end))))
 
 (defn delete-right [fun]
   (fn [{value           :value
         selection-end :selection-end
         :as             state}]
     (let [{new-selection-end :selection-end} (fun state)]
-      {:value           (str (subs value 0 selection-end)
-                             (subs value new-selection-end (count value)))
-       :selection-start selection-end
-       :selection-end   selection-end})))
+      (-> state
+          (assoc :value (str (subs value 0 selection-end)
+                             (subs value new-selection-end (count value))))
+          (assoc :selection-start selection-end)
+          (assoc :selection-end selection-end)))))
 
 (def delete-character-right (delete-right caret-right))
 
@@ -70,8 +71,7 @@
 (def word-part-left (h/leftwards word-part-right))
 
 (defn sentence-part-right 
-  [{value           :value
-    selection-start :selection-start
+  [{selection-start :selection-start
     selection-end   :selection-end
     :as             state}]
   (let [rest          (h/calc-rest state)
@@ -81,9 +81,9 @@
                            (h/index-of-substr-or-end
                             rest
                             sentence-stop-pattern)))]
-    {:value           value
-     :selection-start selection-start
-     :selection-end   selection-end}))
+    (-> state
+        (assoc :selection-start selection-start)
+        (assoc :selection-end selection-end))))
 
 (def sentence-part-left (h/leftwards sentence-part-right))
 
