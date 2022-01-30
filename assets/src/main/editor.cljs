@@ -1,5 +1,6 @@
 (ns editor
   (:require lowlevel
+            machine
             time-machine
             bindings))
 
@@ -68,7 +69,7 @@
 (defn ^:export new [el]
   (let [direction (atom 0)
         modifiers (atom #{})
-        execute (time-machine/build)]
+        execute (time-machine/build machine/execute)]
     (.addEventListener el "paste" (paste el direction))
     (.addEventListener el "keydown" (keydown el direction modifiers execute))
     (.addEventListener el "keyup" (keyup el modifiers))
