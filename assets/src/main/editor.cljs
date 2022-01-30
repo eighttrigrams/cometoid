@@ -46,6 +46,7 @@
     (let [is-pressed? (is-pressed? e @modifiers)
           command     (bindings/get-command is-pressed?)
           state       (convert el)
+          #_(comment "TODO only execute if command not nil")
           new-state   (execute command state)]
       (set-values! el new-state)
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
