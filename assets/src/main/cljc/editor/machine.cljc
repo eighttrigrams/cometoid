@@ -4,9 +4,12 @@
 
 ;; TODO could be that we better put the direction atom directly
 
-(defn execute [key {direction       :direction
-                    :as             state}]
-  (case key
+(defn execute [command {direction :direction
+                        :as       state}]
+  (case command
+    :insert
+    (lowlevel/insert state)
+
     :caret-right
     ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/caret-right) state)
     :caret-left
@@ -55,7 +58,7 @@
     :delete (lowlevel/delete-character-left state)
     :delete-forward (lowlevel/delete-character-right state)
     :delete-with-selection-present (lowlevel/delete-selection state)
-    
+
     :delete-wordwise-backward
     (lowlevel/delete-word-part-left state)
     :delete-wordwise-forward
@@ -68,20 +71,6 @@
     (lowlevel/newline-after-current state)
     :alt-enter
     (lowlevel/newline-before-current state)
-
-    ;; TODO review these
-    :keyv-ctrl
-    (-> state
-        (assoc :dont-prevent-default true)
-        (assoc :direction 0))
-    :keyx-ctrl
-    (-> state
-        (assoc :dont-prevent-default true)
-        (assoc :direction 0))
-    :keyc-ctrl
-    (-> state
-        (assoc :dont-prevent-default true)
-        (assoc :direction 0))
 
     ;; TODO review this block
     (let [{selection-start :selection-start

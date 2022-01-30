@@ -93,29 +93,38 @@
 
 (def delete-sentence-part-left (h/leftwards delete-sentence-part-right))
 
-(defn newline-after-current [{value :value selection-start :selection-start :as state}]
+(defn newline-after-current [{value :value 
+                              selection-start :selection-start 
+                              :as state}]
   (if (= selection-start (count value))
-    (let [selection-start (inc selection-start)]
-      {:value           (str value "\n")
-       :selection-start selection-start
-       :selection-end   selection-start})
+    (let [selection-start (inc selection-start)
+          value (str value "\n")]
+      (-> state
+          (assoc :value value)
+          (assoc :selection-start selection-start)
+          (assoc :selection-end selection-start)))
     (let [rest (h/calc-rest state)
           i    (+ selection-start (h/index-of-substr-or-end rest "\\n"))
-          selection-start (inc i)]
-      {:selection-start selection-start
-       :selection-end   selection-start
-       :value           (str (subs value 0 i) "\n" (subs value i (count value)))})))
+          selection-start (inc i)
+          value (str (subs value 0 i) "\n" (subs value i (count value)))]
+      (-> state
+          ;; TODO remove duplication with the other block above
+          (assoc :value value)
+          (assoc :selection-start selection-start)
+          (assoc :selection-end selection-start)))))
 
 (def newline-before-current (h/leftwards newline-after-current))
 
-(defn insert [clipboard-data]
-  (fn [{value           :value
-        selection-start :selection-start
-        selection-end  :selection-end}]
-    (let [value           (str (subs value 0 selection-start)
-                               clipboard-data
-                               (subs value selection-end (count value)))
-          selection-start (+ selection-start (count clipboard-data))]
-      {:value           value
-       :selection-start selection-start
-       :selection-end   selection-start})))
+(defn insert [{value           :value
+               selection-start :selection-start
+               selection-end   :selection-end
+               clipboard-data  :clipboard-data 
+               :as state}]
+  (let [value           (str (subs value 0 selection-start)
+                             clipboard-data
+                             (subs value selection-end (count value)))
+        selection-start (+ selection-start (count clipboard-data))]
+    (-> state
+        (assoc :value value)
+        (assoc :selection-start selection-start)
+        (assoc :selection-end selection-start))))

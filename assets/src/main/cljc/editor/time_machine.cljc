@@ -4,7 +4,8 @@
                          :delete-wordwise-forward
                          :delete-wordwise-backward
                          :delete-sentence-wise-backward
-                         :delete-sentence-wise-forward})
+                         :delete-sentence-wise-forward
+                         :insert})
 
 (defn- clean [state]
   (select-keys state #{:value :selection-start :selection-end}))

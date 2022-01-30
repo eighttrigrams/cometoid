@@ -56,12 +56,16 @@
         :shift-enter
         (is-pressed? "Enter" #{:alt})
         :alt-enter
+
+        (is-pressed? "INSERT" #{:ctrl})
+        :insert
+        
         (is-pressed? "KeyV" #{:ctrl})
-        :keyv-ctrl
+        nil
         (is-pressed? "KeyX" #{:ctrl})
-        :keyx-ctrl
+        nil
         (is-pressed? "KeyC" #{:ctrl})
-        :keyc-ctrl))
+        nil))
 
 (defn build [execute]
   (fn _execute_ [[key-code modifiers] {selection-present? :selection-present? :as state}]

@@ -1,6 +1,5 @@
 (ns editor.editor
-  (:require [editor.lowlevel :as lowlevel]
-            [editor.machine :as machine]
+  (:require [editor.machine :as machine]
             [editor.director :as director]
             [editor.time-machine :as time-machine]
             [editor.bindings-resolver :as bindings-resolver]))
@@ -31,11 +30,12 @@
      :selection-present?   (not= selection-start selection-end)
      :dont-prevent-default false}))
 
-(defn paste [el]
+(defn paste [el modifiers execute]
   (fn [e]
     (.preventDefault e)
-    (let [clipboard-data (.getData (.-clipboardData e) "Text")
-          new-state      ((lowlevel/insert clipboard-data) (convert el))]
+    (let [new-state   (execute ["INSERT" @modifiers] 
+                               (assoc (convert el)
+                                      :clipboard-data (.getData (.-clipboardData e) "Text")))]
       (set-values! el new-state))))
 
 (defn keydown [el modifiers execute]
@@ -56,7 +56,7 @@
 (defn ^:export new [el]
   (let [modifiers (atom #{})
         execute (-> machine/execute director/build time-machine/build bindings-resolver/build)]
-    (.addEventListener el "paste" (paste el))
+    (.addEventListener el "paste" (paste el modifiers execute))
     (.addEventListener el "keydown" (keydown el modifiers execute))
     (.addEventListener el "keyup" (keyup el modifiers))
     (.addEventListener el "mouseleave" (mouseleave el modifiers))))
