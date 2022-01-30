@@ -1,6 +1,6 @@
 (ns editor
   (:require lowlevel
-            [lowlevel-helpers :as h]))
+            machine))
 
 (defn hey [s] (str s s))
 
@@ -44,96 +44,53 @@
             apply-action-and-track (apply-action-and-track el)]
         (apply-action-and-track (lowlevel/insert clipboard-data) (convert el)))))
 
-;; TODO factor out direct access to direction
-(defn handle-key [is-pressed? {direction :direction :as state}]
+(defn get-command [is-pressed?]
   (cond (is-pressed? "KeyY" #{:ctrl})
-        (if (seq (:history state))
-          (-> state
-              (merge (first (:history state)))
-              (assoc :do-pop-history true))
-          state)
-
+        :restore
         (is-pressed? "KeyL" #{:ctrl})
-        ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/caret-right) state)
+        :caret-left
         (is-pressed? "KeyJ" #{:ctrl})
-        ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/caret-left) state)
-
+        :caret-right
         (is-pressed? "KeyL" #{:shift :ctrl})
-        (if (= direction -1)
-          ((comp h/flip lowlevel/caret-right h/flip) state)
-          (assoc (lowlevel/caret-right state) :direction 1))
-
+        :caret-left-with-selection
         (is-pressed? "KeyJ" #{:shift :ctrl})
-        (if (= direction 1)
-          ((comp h/flip lowlevel/caret-left h/flip) state)
-          (assoc (lowlevel/caret-left state) :direction -1))
-
+        :caret-right-with-selection
         (is-pressed? "KeyL" #{:meta})
-        ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/word-part-right) state)
+        :word-part-left
         (is-pressed? "KeyJ" #{:meta})
-        ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/word-part-left) state)
-
+        :word-part-right
         (is-pressed? "KeyL" #{:shift :meta})
-        (if (= direction -1)
-          ((comp h/flip lowlevel/word-part-right h/flip) state)
-          (assoc (lowlevel/word-part-right state) :direction 1))
-
+        :word-part-right-with-selection
         (is-pressed? "KeyJ" #{:shift :meta})
-        (if (= direction 1)
-          ((comp h/flip lowlevel/word-part-left h/flip) state)
-          (assoc (lowlevel/word-part-left state) :direction -1))
-
+        :word-part-left-with-selection
         (is-pressed? "KeyL" #{:alt})
-        ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/sentence-part-right) state)
+        :sentence-right
         (is-pressed? "KeyJ" #{:alt})
-        ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/sentence-part-left) state)
-
+        :sentence-left
         (is-pressed? "KeyL" #{:shift :alt})
-        (if (= direction -1)
-          ((comp h/flip lowlevel/sentence-part-right h/flip) state)
-          (assoc (lowlevel/sentence-part-right state) :direction 1))
-
+        :sentence-right-with-selection
         (is-pressed? "KeyJ" #{:shift :alt})
-        (if (= direction 1)
-          ((comp h/flip lowlevel/sentence-part-left h/flip) state)
-          (assoc (lowlevel/sentence-part-left state) :direction -1))
-
+        :sentence-left-with-selection
         (is-pressed? "Backspace" #{:shift})
-        (lowlevel/delete-character-right state)
+        :shift-backspace
         (is-pressed? "Backspace" #{:meta})
-        (assoc (lowlevel/delete-word-part-left state) :do-track true)
+        :meta-backspace
         (is-pressed? "Backspace" #{:shift :meta})
-        (assoc (lowlevel/delete-word-part-right state) :do-track true)
+        :shift-meta-backspace
         (is-pressed? "Backspace" #{:alt})
-        (assoc (lowlevel/delete-sentence-part-left state) :do-track true)
+        :alt-backspace
         (is-pressed? "Backspace" #{:shift :alt})
-        (assoc (lowlevel/delete-sentence-part-right state) :do-track true)
+        :shift-alt-backspace
         (is-pressed? "Enter" #{:shift})
-        (lowlevel/newline-after-current state)
+        :shift-enter
         (is-pressed? "Enter" #{:alt})
-        (lowlevel/newline-before-current state)
-
+        :alt-enter
         (is-pressed? "KeyV" #{:ctrl})
-        (-> state
-            (assoc :dont-prevent-default true)
-            (assoc :direction 0))
-
+        :keyv-ctrl
         (is-pressed? "KeyX" #{:ctrl})
-        (-> state
-            (assoc :dont-prevent-default true)
-            (assoc :direction 0))
-
+        :keyx-ctrl
         (is-pressed? "KeyC" #{:ctrl})
-        (-> state
-            (assoc :dont-prevent-default true)
-            (assoc :direction 0))
-
-        :else
-        (let [{selection-start :selection-start
-               selection-end   :selection-end} state]
-          (if (= selection-start selection-end)
-            (assoc state :dont-prevent-default true)
-            state))))
+        :keyc-ctrl))
 
 (defn clean [{selection-start :selection-start selection-end :selection-end value :value}]
   {:value value :selection-start selection-start :selection-end selection-end})
@@ -142,8 +99,9 @@
   (fn [e]
     (set-modifiers! e true modifiers)
     (let [is-pressed? (is-pressed? e @modifiers)
+          key         (get-command is-pressed?)
           state       (convert el direction history)
-          {dir :direction :as new-state}      (handle-key is-pressed? state)]
+          {dir :direction :as new-state}      (machine/handle-key key state)]
 
       (set-values! el new-state)
       (reset! direction dir)
