@@ -32,10 +32,10 @@
 (defn paste [el modifiers execute]
   (fn [e]
     (.preventDefault e)
-    (let [new-state   (execute ["INSERT" @modifiers] 
-                               (assoc (convert el)
-                                      :clipboard-data (.getData (.-clipboardData e) "Text")))]
-      (set-values! el new-state))))
+    (->> (.getData (.-clipboardData e) "Text")
+         (assoc (convert el) :clipboard-data)
+         (execute ["INSERT" @modifiers])
+         (set-values! el))))
 
 (defn keydown [el modifiers execute]
   (fn [e]
