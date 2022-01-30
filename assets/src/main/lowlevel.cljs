@@ -7,21 +7,26 @@
 
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
-(defn caret-left [{value :value selection-start :selection-start selection-end :selection-end}]
+(defn caret-left [{selection-start :selection-start 
+                   selection-end :selection-end 
+                   :as state}]
   (let [selection-start  (if (> selection-start 0)
                            (- selection-start 1)
                            selection-start)]
-    {:selection-start selection-start
-     :selection-end   selection-end
-     :value           value}))
+    (-> state
+        (assoc :selection-start selection-start)
+        (assoc :selection-end selection-end))))
 
-(defn caret-right [{value :value selection-start :selection-start selection-end :selection-end}]
+(defn caret-right [{value :value 
+                    selection-start :selection-start 
+                    selection-end :selection-end 
+                    :as state}]
   (let [selection-end  (if (< selection-end (count value))
                            (+ selection-end 1)
                            selection-end)]
-    {:selection-start selection-start
-     :selection-end   selection-end
-     :value           value}))
+    (-> state
+        (assoc :selection-start selection-start)
+        (assoc :selection-end selection-end))))
 
 (defn word-part-right [{value :value selection-start :selection-start selection-end :selection-end :as state}]
   (let [rest            (h/calc-rest state)
