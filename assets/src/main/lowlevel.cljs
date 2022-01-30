@@ -53,9 +53,19 @@
 
 (def delete-character-right (delete-right caret-right))
 
+(def delete-character-left (h/leftwards delete-character-right))
+
 (def delete-word-part-right (delete-right word-part-right))
 
 (def delete-word-part-left (h/leftwards delete-word-part-right))
+
+(defn delete-selection [{value           :value
+                         selection-start :selection-start
+                         selection-end   :selection-end}]
+  {:value           (str (subs value 0 selection-start) (subs value selection-end ))
+   :selection-start selection-start
+   :selection-end   selection-start
+   :direction       0})
 
 (def word-part-left (h/leftwards word-part-right))
 

@@ -12,9 +12,9 @@
         (is-pressed? "KeyJ" #{:shift :ctrl})
         :caret-right-with-selection
         (is-pressed? "KeyL" #{:meta})
-        :word-part-left
-        (is-pressed? "KeyJ" #{:meta})
         :word-part-right
+        (is-pressed? "KeyJ" #{:meta})
+        :word-part-left
         (is-pressed? "KeyL" #{:shift :meta})
         :word-part-right-with-selection
         (is-pressed? "KeyJ" #{:shift :meta})
@@ -27,6 +27,8 @@
         :sentence-right-with-selection
         (is-pressed? "KeyJ" #{:shift :alt})
         :sentence-left-with-selection
+        (is-pressed? "Backspace" #{})
+        :delete
         (is-pressed? "Backspace" #{:shift})
         :shift-backspace
         (is-pressed? "Backspace" #{:meta})

@@ -2,7 +2,10 @@
   (:require lowlevel
             [lowlevel-helpers :as h]))
 
-(defn execute [key {direction :direction :as state}]
+(defn execute [key {direction       :direction 
+                    selection-start :selection-start
+                    selection-end   :selection-end
+                    :as             state}]
   (case key
     nil
     (assoc state :dont-prevent-default true)
@@ -28,9 +31,9 @@
       ((comp h/flip lowlevel/caret-left h/flip) state)
       (assoc (lowlevel/caret-left state) :direction -1))
 
-    :word-part-left
-    ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/word-part-right) state)
     :word-part-right
+    ((comp (if (= direction -1) h/pull-l h/pull-r) lowlevel/word-part-right) state)
+    :word-part-left
     ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/word-part-left) state)
 
     :word-part-right-with-selection
@@ -58,6 +61,11 @@
       ((comp h/flip lowlevel/sentence-part-left h/flip) state)
       (assoc (lowlevel/sentence-part-left state) :direction -1))
 
+    :delete
+    (assoc (if (= selection-start selection-end)
+             (lowlevel/delete-character-left state)
+             (lowlevel/delete-selection state)) :do-track true)
+    
     :shift-backspace
     (lowlevel/delete-character-right state)
     :meta-backspace
@@ -88,7 +96,6 @@
         (assoc :dont-prevent-default true)
         (assoc :direction 0))
 
-    :else
     (let [{selection-start :selection-start
            selection-end   :selection-end} state]
       (if (= selection-start selection-end)

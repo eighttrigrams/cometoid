@@ -45,10 +45,10 @@
             apply-action-and-track (apply-action-and-track el)]
         (apply-action-and-track (lowlevel/insert clipboard-data) (convert el)))))
 
-
-
 (defn clean [{selection-start :selection-start selection-end :selection-end value :value}]
   {:value value :selection-start selection-start :selection-end selection-end})
+
+;; TODO handle history completely outside of machine
 
 (defn keydown [el direction history modifiers]
   (fn [e]

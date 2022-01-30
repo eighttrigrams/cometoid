@@ -13,3 +13,15 @@
            :selection-start 2
            :selection-end   2
            :value           "abc"}))))
+
+(deftest delete-selection
+  (is (= {:selection-start 1
+          :selection-end   1
+          :value           "adef"
+          :do-track        true
+          :direction 0}
+         (machine/execute
+          :delete
+          {:selection-start 1
+           :selection-end 3
+           :value "abcdef"}))))
