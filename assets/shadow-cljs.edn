@@ -10,7 +10,7 @@
  :builds {:app {:output-dir "../priv/static/js/"
                 :asset-path "/js"
                 :target :browser
-                :modules {:app {:entries [editor]}}}
+                :modules {:app {:entries [editor.editor]}}}
           
            :test-all
             {:target    :node-test

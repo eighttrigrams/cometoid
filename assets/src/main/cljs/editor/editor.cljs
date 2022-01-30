@@ -1,4 +1,4 @@
-(ns editor
+(ns editor.editor
   (:require [editor.lowlevel :as lowlevel]
             [editor.machine :as machine]
             [editor.director :as director]
