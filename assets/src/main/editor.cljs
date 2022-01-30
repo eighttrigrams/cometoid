@@ -47,9 +47,6 @@
           command     (bindings/get-command is-pressed?)
           state       (convert el)
           new-state   (execute command state)]
-      
-      (prn "val" (:value new-state))
-
       (set-values! el new-state)
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
 
