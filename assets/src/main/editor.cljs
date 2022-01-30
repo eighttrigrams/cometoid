@@ -1,6 +1,7 @@
 (ns editor
   (:require lowlevel
             machine
+            director
             time-machine
             bindings))
 
@@ -26,36 +27,31 @@
     (and (= (.-code e) code)
          (= modifiers modifiers-expected))))
 
-(defn convert [el direction]
+(defn convert [el]
   {:value                (.-value el)
    :selection-start      (.-selectionStart el)
    :selection-end        (.-selectionEnd el)
-   :direction            @direction
    :dont-prevent-default false})
 
-(defn paste [el direction]
+(defn paste [el]
   (fn [e]
     (.preventDefault e)
     (let [clipboard-data (.getData (.-clipboardData e) "Text")
-          new-state      ((lowlevel/insert clipboard-data) (convert el direction))]
+          new-state      ((lowlevel/insert clipboard-data) (convert el))]
       (set-values! el new-state))))
 
-(defn keydown [el direction modifiers execute]
+(defn keydown [el modifiers execute]
   (fn [e]
     (set-modifiers! e true modifiers)
     (let [is-pressed? (is-pressed? e @modifiers)
-          key         (bindings/get-command is-pressed?)
-          state       (convert el direction)
-          {dir :direction :as new-state}      (execute key state)]
+          command     (bindings/get-command is-pressed?)
+          state       (convert el)
+          new-state   (execute command state)]
+      
+      (prn "val" (:value new-state))
 
       (set-values! el new-state)
-      (reset! direction dir)
-
-      (when (not= (:dont-prevent-default new-state) true) (.preventDefault e))
-
-      (let [{selection-start :selection-start
-             selection-end   :selection-end} (convert el direction)]
-        (when (= selection-start selection-end) (reset! direction 0))))))
+      (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
 
 (defn keyup [_el modifiers]
   (fn [e]
@@ -66,10 +62,9 @@
     (reset! modifiers #{})))
 
 (defn ^:export new [el]
-  (let [direction (atom 0)
-        modifiers (atom #{})
-        execute (time-machine/build machine/execute)]
-    (.addEventListener el "paste" (paste el direction))
-    (.addEventListener el "keydown" (keydown el direction modifiers execute))
+  (let [modifiers (atom #{})
+        execute (-> machine/execute director/build time-machine/build)]
+    (.addEventListener el "paste" (paste el))
+    (.addEventListener el "keydown" (keydown el modifiers execute))
     (.addEventListener el "keyup" (keyup el modifiers))
     (.addEventListener el "mouseleave" (mouseleave el modifiers))))
