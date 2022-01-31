@@ -1,76 +1,43 @@
 (ns editor.bindings-resolver)
 
-(defn is-pressed? [key-code modifiers]
-  (fn [key-code-expected modifiers-expected]
-    (and (= key-code key-code-expected)
-         (= modifiers modifiers-expected))))
-
-(defn get-command [is-pressed? selection-present?]
-  (cond (is-pressed? "KeyY" #{:ctrl})
-        :restore
-        (is-pressed? "KeyJ" #{:ctrl})
-        :caret-left
-        (is-pressed? "KeyL" #{:ctrl})
-        :caret-right
-        (is-pressed? "KeyL" #{:shift :ctrl})
-        :caret-left-with-selection
-        (is-pressed? "KeyJ" #{:shift :ctrl})
-        :caret-right-with-selection
-        (is-pressed? "KeyL" #{:meta})
-        :word-part-right
-        (is-pressed? "KeyJ" #{:meta})
-        :word-part-left
-        (is-pressed? "KeyL" #{:shift :meta})
-        :move-selection-wordwise-right
-        (is-pressed? "KeyJ" #{:shift :meta})
-        :move-selection-wordwise-left
-        (is-pressed? "KeyL" #{:alt})
-        :sentence-right
-        (is-pressed? "KeyJ" #{:alt})
-        :sentence-left
-        (is-pressed? "KeyL" #{:shift :alt})
-        :sentence-right-with-selection
-        (is-pressed? "KeyJ" #{:shift :alt})
-        :sentence-left-with-selection
-
-        (and selection-present? (is-pressed? "Backspace" #{}))
-        :delete-with-selection-present
-        (and selection-present? (is-pressed? "Backspace" #{:shift}))
-        :delete-with-selection-present
-
-        (is-pressed? "Backspace" #{})
-        :delete
-        (is-pressed? "Backspace" #{:shift})
-        :delete-forward
-
-        (is-pressed? "Backspace" #{:meta})
-        :delete-wordwise-backward
-        (is-pressed? "Backspace" #{:shift :meta})
-        :delete-wordwise-forward
-        (is-pressed? "Backspace" #{:alt})
-        :delete-sentence-wise-backward
-        (is-pressed? "Backspace" #{:shift :alt})
-        :delete-sentence-wise-forward
-        
-        (is-pressed? "Enter" #{:shift})
-        :shift-enter
-        (is-pressed? "Enter" #{:alt})
-        :alt-enter
-
-        (is-pressed? "INSERT" #{:ctrl})
-        :insert
-        
-        (is-pressed? "KeyV" #{:ctrl})
-        nil
-        (is-pressed? "KeyX" #{:ctrl})
-        nil
-        (is-pressed? "KeyC" #{:ctrl})
-        nil))
+(def commands
+  {#{"KeyY" #{:ctrl}}                          :restore
+   #{"KeyJ" #{:ctrl}}                          :caret-left
+   #{"KeyL" #{:ctrl}}                          :caret-right
+   #{"KeyL" #{:shift :ctrl}}                   :caret-left-with-selection
+   #{"KeyJ" #{:shift :ctrl}}                   :caret-right-with-selection
+   #{"KeyL" #{:meta}}                          :word-part-right
+   #{"KeyJ" #{:meta}}                          :word-part-left
+   #{"KeyL" #{:shift :meta}}                   :move-selection-wordwise-right
+   #{"KeyJ" #{:shift :meta}}                   :move-selection-wordwise-left
+   #{"KeyL" #{:alt}}                           :sentence-right
+   #{"KeyJ" #{:alt}}                           :sentence-left
+   #{"KeyL" #{:shift :alt}}                    :sentence-right-with-selection
+   #{"KeyJ" #{:shift :alt}}                    :sentence-left-with-selection
+   #{"Backspace" #{} :selection-present}       :delete-with-selection-present
+   #{"Backspace" #{:shift} :selection-present} :delete-with-selection-present
+   #{"Backspace" #{}}                          :delete
+   #{"Backspace" #{:shift}}                    :delete-forward
+   #{"Backspace" #{:meta}}                     :delete-wordwise-backward
+   #{"Backspace" #{:shift :meta}}              :delete-wordwise-forward
+   #{"Backspace" #{:alt}}                      :delete-sentence-wise-backward
+   #{"Backspace" #{:shift :alt}}               :delete-sentence-wise-forward
+   #{"Enter" #{:shift}}                        :shift-enter
+   #{"Enter" #{:alt}}                          :alt-enter
+   #{"INSERT" #{:ctrl}}                        :insert
+   #{"KeyV" #{:ctrl}}                          nil
+   #{"KeyX" #{:ctrl}}                          nil
+   #{"KeyC" #{:ctrl}}                          nil})
 
 (defn build [execute]
   (fn _execute_ [[key-code modifiers] {selection-present? :selection-present? :as state}]
-    (let [is-pressed? (is-pressed? key-code modifiers)
-          command (get-command is-pressed? selection-present?)]
+    (let [key #{key-code modifiers}
+          key (if (and selection-present? 
+                       (or (= key #{"Backspace" #{}})
+                           (= key #{"Backspace" #{:shift}})))
+                (conj key :selection-present)
+                key)
+          command (commands key)]
       (if command
         (execute command state)
         (assoc state :dont-prevent-default true)))))
