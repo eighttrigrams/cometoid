@@ -29,15 +29,27 @@
    #{"KeyX" #{:ctrl}}                          nil
    #{"KeyC" #{:ctrl}}                          nil})
 
+(defn- swap-modifiers-on-mac [modifiers]
+  (if (= (.indexOf (.-appVersion js/navigator) "Mac") -1)
+    modifiers
+    (if (and (modifiers :meta) (modifiers :alt))
+      modifiers
+      (if (not (or (modifiers :meta) (modifiers :alt)))
+        modifiers
+        (if (modifiers :meta)
+          (conj (disj modifiers :meta) :alt)
+          (conj (disj modifiers :alt) :meta))))))
+
 (defn build [execute]
   (fn _execute_ [[key-code modifiers] {selection-present? :selection-present? :as state}]
-    (let [key #{key-code modifiers}
-          key (if (and selection-present? 
-                       (or (= key #{"Backspace" #{}})
-                           (= key #{"Backspace" #{:shift}})))
-                (conj key :selection-present)
-                key)
-          command (commands key)]
+    (let [modifiers (swap-modifiers-on-mac modifiers)
+          key       #{key-code modifiers}
+          key       (if (and selection-present?
+                             (or (= key #{"Backspace" #{}})
+                                 (= key #{"Backspace" #{:shift}})))
+                      (conj key :selection-present)
+                      key)
+          command   (commands key)]
       (if command
         (execute command state)
         (assoc state :dont-prevent-default true)))))
