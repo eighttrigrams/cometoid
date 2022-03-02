@@ -29,6 +29,7 @@
    #{"KeyX" #{:ctrl}}                          nil
    #{"KeyC" #{:ctrl}}                          nil})
 
+;; TODO consider passing in environment via binding
 (defn- swap-modifiers-on-mac [modifiers]
   (if (= (.indexOf (.-appVersion js/navigator) "Mac") -1)
     modifiers
