@@ -51,14 +51,14 @@
     #issue-list-component-mask {
         position: absolute;
         z-index: 1000;
-        width: 67%;
+        width: calc(67% - 10px);
         top: $taskbar-height;
         height: 100%;
     }
     #context-list-component-mask {
         position: absolute;
         z-index: 1000;
-        width: calc(33% - 1px);
+        width: calc(33% + 9px);
         top: $taskbar-height;
         height: 100%;
     }
