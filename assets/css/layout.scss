@@ -17,14 +17,14 @@
 
             #context-list-component {
                 height: 100%;
-                width: calc(33% - 1px);
+                width: calc(33% + 9px);
                 float: left;
             }
             
             #issue-list-component {
                 
                 float: left;
-                width: 67%;
+                width: calc(67% - 10px);
                 height: 100%;
 
                 border-left-style: dotted;
