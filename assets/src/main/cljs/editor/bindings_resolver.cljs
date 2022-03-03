@@ -4,8 +4,8 @@
   {#{"KeyY" #{:ctrl}}                          :restore
    #{"KeyJ" #{:ctrl}}                          :caret-left
    #{"KeyL" #{:ctrl}}                          :caret-right
-   #{"KeyL" #{:shift :ctrl}}                   :caret-left-with-selection
-   #{"KeyJ" #{:shift :ctrl}}                   :caret-right-with-selection
+   #{"KeyL" #{:shift :ctrl}}                   :caret-right-with-selection
+   #{"KeyJ" #{:shift :ctrl}}                   :caret-left-with-selection
    #{"KeyL" #{:meta}}                          :word-part-right
    #{"KeyJ" #{:meta}}                          :word-part-left
    #{"KeyL" #{:shift :meta}}                   :move-selection-wordwise-right

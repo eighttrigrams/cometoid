@@ -12,12 +12,12 @@
     :caret-left
     ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/caret-left) state)
 
-    :caret-left-with-selection
+    :caret-right-with-selection
     (if (= direction -1)
       ((comp h/flip lowlevel/caret-right h/flip) state)
       (assoc (lowlevel/caret-right state) :direction 1))
 
-    :caret-right-with-selection
+    :caret-left-with-selection
     (if (= direction 1)
       ((comp h/flip lowlevel/caret-left h/flip) state)
       (assoc (lowlevel/caret-left state) :direction -1))
@@ -77,6 +77,6 @@
              selection-end   :selection-end
              dir             :direction
              :as             new-state} (_execute command state direction)]
-        (reset! direction-atom dir)
+        (when dir (reset! direction-atom dir))
         (when (= selection-start selection-end) (reset! direction-atom 0))
         new-state))))
