@@ -56,9 +56,12 @@
           (and (= key-code "KeyC")
                (= modifiers #{:alt}))
           ["KeyC" #{:ctrl}]
-          (and (= key-code "Keyx")
+          (and (= key-code "KeyX")
                (= modifiers #{:alt}))
           ["KeyX" #{:ctrl}]
+          (and (= key-code "KeyS")
+               (= modifiers #{:alt}))
+          ["KeyS" #{:ctrl}]
           :else [key-code modifiers])))
 
 (defn build [execute]
