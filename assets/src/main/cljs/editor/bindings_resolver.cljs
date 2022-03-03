@@ -41,16 +41,37 @@
           (conj (disj modifiers :meta) :alt)
           (conj (disj modifiers :alt) :meta))))))
 
+(defn- swap-for-mac [key-code modifiers]
+  (if (= (.indexOf (.-appVersion js/navigator) "Mac") -1)
+    [key-code modifiers]
+    (cond (and (= key-code "KeyY")
+               (= modifiers #{:alt}))
+          ["KeyY" #{:ctrl}]
+          (and (= key-code "KeyV")
+               (= modifiers #{:alt}))
+          ["KeyV" #{:ctrl}]
+          (and (= key-code "INSERT")
+               (= modifiers #{:alt}))
+          ["INSERT" #{:ctrl}]
+          (and (= key-code "KeyC")
+               (= modifiers #{:alt}))
+          ["KeyC" #{:ctrl}]
+          (and (= key-code "Keyx")
+               (= modifiers #{:alt}))
+          ["KeyX" #{:ctrl}]
+          :else [key-code modifiers])))
+
 (defn build [execute]
   (fn _execute_ [[key-code modifiers] {selection-present? :selection-present? :as state}]
-    (let [modifiers (swap-modifiers-on-mac modifiers)
-          key       #{key-code modifiers}
-          key       (if (and selection-present?
-                             (or (= key #{"Backspace" #{}})
-                                 (= key #{"Backspace" #{:shift}})))
-                      (conj key :selection-present)
-                      key)
-          command   (commands key)]
+    (let [modifiers            (swap-modifiers-on-mac modifiers)
+          [key-code modifiers] (swap-for-mac key-code modifiers)
+          key                  #{key-code modifiers}
+          key                  (if (and selection-present?
+                                        (or (= key #{"Backspace" #{}})
+                                            (= key #{"Backspace" #{:shift}})))
+                                 (conj key :selection-present)
+                                 key)
+          command              (commands key)]
       (if command
         (execute command state)
         (assoc state :dont-prevent-default true)))))
