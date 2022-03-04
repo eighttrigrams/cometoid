@@ -59,13 +59,15 @@ hooks.ContextSearchInputHook = {
     keyUpListener: undefined,
     keyDownListener: undefined,
     makeKeyUpListener: function(self) { return function(e) {
-      if (e.key === "Control") {
+      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+      if (e.key === ctrl) {
         self.controlPressed = false
       }
     }},
     makeKeyDownListener: function(self) { return function(e) {
   
-      if (e.key === "Control") {
+      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+      if (e.key === ctrl) {
         self.controlPressed = true
       }
   
@@ -102,14 +104,16 @@ hooks.ContextSearchInputHook = {
     keyUpListener: undefined,
     keyDownListener: undefined,
     makeKeyUpListener: function(self) { return function(e) {
-      if (e.key === "Control") {
+      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+      if (e.key === ctrl) {
         self.controlPressed = false
       }
     }},
     makeKeyDownListener: function(self) { return function(e) {
   
       if (e.key === "Enter") e.preventDefault()
-      if (e.key === "Control") self.controlPressed = true
+      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+      if (e.key === ctrl) self.controlPressed = true
       if (e.key === "s") {
         if (self.controlPressed) {
           e.preventDefault()
