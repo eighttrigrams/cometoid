@@ -4,16 +4,6 @@ defmodule CometoidWeb.IssueLive.Issue.ListItemComponent do
   use CometoidWeb, :live_component
   # use Phoenix.LiveComponent
 
-  def should_show_delete_button state, issue do
-    (is_nil state.selected_context)
-    or (num_non_tag_contexts state, issue) == 0
-  end
-
-  def should_show_unlink_button state, issue do
-    not (is_nil state.selected_context)
-    and (num_non_tag_contexts state, issue) > 0
-  end
-
   def contexts_to_show_as_badges state, issue do
     Enum.filter issue.contexts,
       fn ctx ->

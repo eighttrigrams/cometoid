@@ -153,26 +153,6 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     {:do_query, result}
   end
 
-  def unlink_issue state, id do
-    issue = id
-      |> Tracker.get_issue!
-      |> Tracker.remove_issue_relation(state.selected_context.id)
-
-    state = set_context_properties_and_keep_selected_context state
-
-    state = if has_one_non_tag_context? issue do
-      select_context state, (first_non_tag_context issue).id
-    else
-      %{
-        selected_context: nil
-      }
-    end
-
-    Map.merge state, %{
-      selected_issue: issue
-    }
-  end
-
   def archive_issue state, id do
     issue = Tracker.get_issue! id
     Tracker.update_issue2(issue, %{ "done" => true, "important" => false })

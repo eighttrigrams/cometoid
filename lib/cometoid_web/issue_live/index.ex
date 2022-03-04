@@ -160,16 +160,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
-  def handle_event "unlink_issue", %{ "target" => id }, socket do
-    {id, ""} = Integer.parse id
-    state = IssuesMachine.unlink_issue to_state(socket), id
-    socket
-    |> assign(state)
-    |> push_event(:issue_reprioritized, %{ id: id })
-    |> reprioritize_context
-    |> do_query
-  end
-
   def handle_event "link_issue", %{ "target" => id }, socket do
     socket
     |> assign(:selected_issue, Tracker.get_issue!(id))
