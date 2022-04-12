@@ -16,6 +16,7 @@ defmodule Cometoid.Model.Tracker.Context do
 
   schema "contexts" do
     field :title, :string
+    field :short_title, :string
     field :view, :string
     field :important, :boolean, default: false
     field :description, :string
@@ -46,7 +47,7 @@ defmodule Cometoid.Model.Tracker.Context do
   @doc false
   def changeset context, attrs do
     context
-    |> cast(attrs, [:title, :view, :important, :description, :is_tag?])
+    |> cast(attrs, [:title, :short_title, :view, :important, :description, :is_tag?])
     |> put_assoc_person(attrs)
     |> put_assoc_text(attrs)
     |> validate_required([:title, :view])

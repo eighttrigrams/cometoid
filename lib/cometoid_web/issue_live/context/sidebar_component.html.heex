@@ -2,6 +2,9 @@
   <div class="smaller-text">
     <h1 style="font-family: serif">
       <span style="float: left;">
+        <%= if @context.short_title do %>
+          <%= @context.short_title %> |
+        <% end %>
         <%= @context.title %>
       </span>
     </h1>
