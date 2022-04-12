@@ -2,7 +2,7 @@
   <div class="smaller-text">
     <h1 style="font-family: serif">
       <span style="float: left;">
-        <%= @issue.title %>
+        <%= Phoenix.HTML.raw(convert(@issue.title)) %>
       </span>
     </h1>
   </div>
