@@ -205,7 +205,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     query = %Tracker.Query{
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context,
-      selected_view: state.selected_view
+      selected_view: state.selected_view,
+      sort_issues_alphabetically: state.sort_issues_alphabetically
     }
     issues = Tracker.list_issues query # TODO review if passing state; or to use map take
     %{ issues: issues }

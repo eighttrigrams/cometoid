@@ -21,7 +21,8 @@
     <% end %>
 
     <%= text_input f, :title, class: 'background-color', phx_hook: "TextAreaHook" %>
-    <%= error_tag f, :title %>
+    
+    <%= text_input f, :short_title, class: 'background-color', style: "width: 33%" %>
 
     <%= submit "Save", phx_disable_with: "Saving..." %>
 

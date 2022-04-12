@@ -147,22 +147,32 @@ defmodule Cometoid.Repo.Tracker do
   defmodule Query do
     defstruct selected_context: nil, # required
       list_issues_done_instead_open: false,
-      selected_view: ""
+      selected_view: "",
+      sort_issues_alphabetically: false
   end
 
   def list_issues query do
-    query =
+    q =
       Issue
       |> join(:left, [i], context_relation in assoc(i, :contexts))
       |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
       |> where_type(query)
-      |> order_by([i, _context_relation, _context, _it],
-        [{:desc, i.important}, {:desc, i.updated_at}])
+      |> order_issues(query)
 
-    Repo.all(query)
+    Repo.all(q)
     |> Enum.uniq
     |> Repo.preload(contexts: :context)
     |> Repo.preload(:event)
+  end
+
+  defp order_issues(query, %{ sort_issues_alphabetically: sort_issues_alphabetically }) do
+    query = if sort_issues_alphabetically do
+      order_by(query, [i, _context_relation, _context, _it],
+        [{:desc, i.important}, {:asc, i.short_title}])
+    else
+      order_by(query, [i, _context_relation, _context, _it],
+        [{:desc, i.important}, {:desc, i.updated_at}])
+    end
   end
 
   defp where_type(query, %{

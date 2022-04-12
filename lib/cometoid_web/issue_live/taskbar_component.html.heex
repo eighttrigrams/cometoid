@@ -45,7 +45,7 @@
   <% end %>
 
   <%= unless TaskbarComponent.done_button_disabled? @state do %>
-                                                          
+
     <div class="form-block button right enabled-button-color">
       <%= if @state[:list_issues_done_instead_open] do %>
         <a phx-click="show_open_issues"><i class="bi bi-check-circle">
@@ -63,4 +63,11 @@
       </a>
     </div>
   <% end %>
+
+  <div class={"form-block button right enabled-button-color"}>
+    <a phx-click="toggle_sort">
+      <i class={"bi bi-sort-#{if @state.sort_issues_alphabetically, do: "alpha-down", else: "down-alt"}"}>
+      </i>
+    </a>
+  </div>
 </div>

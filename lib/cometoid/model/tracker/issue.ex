@@ -9,6 +9,7 @@ defmodule Cometoid.Model.Tracker.Issue do
     field :description, :string
     field :done, :boolean, default: false
     field :title, :string
+    field :short_title, :string
     field :important, :boolean, default: false
 
     has_many(
@@ -26,7 +27,7 @@ defmodule Cometoid.Model.Tracker.Issue do
   @doc false
   def changeset(issue, attrs) do
     issue
-    |> cast(attrs, [:title, :description, :done, :important])
+    |> cast(attrs, [:title, :short_title, :description, :done, :important])
     |> cast_assoc_event(attrs)
     |> validate_required([:title, :done])
   end

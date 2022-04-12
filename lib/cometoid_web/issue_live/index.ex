@@ -29,6 +29,7 @@ defmodule CometoidWeb.IssueLive.Index do
       context_search_active: false,
       issue_search_active: false,
       list_issues_done_instead_open: false,
+      sort_issues_alphabetically: false,
       selected_secondary_contexts: [],
       selected_view: selected_view
     }
@@ -312,6 +313,12 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign(IssuesMachine.set_context_properties_and_keep_selected_context(to_state(socket)))
     |> assign(:context_search_active, false)
     |> push_event(:context_reprioritized, %{ id: id })
+    |> do_query
+  end
+
+  def handle_event "toggle_sort", _params, socket do
+    socket
+    |> assign(:sort_issues_alphabetically, !socket.assigns.sort_issues_alphabetically)
     |> do_query
   end
 
