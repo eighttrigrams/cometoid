@@ -9,6 +9,6 @@
     phx-change="changes"
     phx-target={@myself}>
 
-    <%= text_input f, :title %>
+    <%= text_input f, :title, phx_hook: "TextAreaHook" %>
   </.form>
 </div>

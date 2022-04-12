@@ -20,7 +20,7 @@
       <br>
     <% end %>
 
-    <%= text_input f, :title, class: 'background-color' %>
+    <%= text_input f, :title, class: 'background-color', phx_hook: "TextAreaHook" %>
     <%= error_tag f, :title %>
 
     <%= submit "Save", phx_disable_with: "Saving..." %>

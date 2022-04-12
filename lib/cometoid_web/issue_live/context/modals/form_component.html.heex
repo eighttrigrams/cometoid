@@ -10,7 +10,7 @@
     phx-target={@myself}
     phx-submit="save">
 
-    <%= text_input f, :title, style: "width: 100%" %>
+    <%= text_input f, :title, style: "width: 100%", phx_hook: "TextAreaHook" %>
     
     <%= text_input f, :short_title, style: "width: 33%" %>
 
