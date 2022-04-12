@@ -93,6 +93,18 @@ defmodule CometoidWeb.IssueLive.Index do
         else
           socket
         end
+      "e" ->
+        cond do
+          not is_nil(socket.assigns.selected_issue) ->
+            id = socket.assigns.selected_issue.id
+            socket
+            |> assign(:issue, Tracker.get_issue!(id))
+            |> assign(:live_action, :edit)
+          not is_nil(socket.assigns.selected_context) ->
+            id = socket.assigns.selected_context.id
+            edit_context socket, id
+          true -> socket
+        end
       "Control" ->
         if socket.assigns.context_search_active do
           socket
@@ -254,17 +266,8 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "edit_context", id, socket do
 
     {id, ""} = Integer.parse id
-
-    context = Tracker.get_context! id
-    entity = case context.view do
-      "People" -> People.get_person! context.person.id
-      _ -> context
-    end
-
     socket
-    |> assign(:edit_selected_view, context.view)
-    |> assign(:edit_entity, entity)
-    |> assign(:live_action, :edit_context)
+    |> edit_context(id)
     |> return_noreply
   end
 
@@ -410,6 +413,19 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(:issue, Tracker.get_issue!(id))
     |> assign(:live_action, :describe)
+  end
+
+  defp edit_context socket, id do
+    context = Tracker.get_context! id
+    entity = case context.view do
+      "People" -> People.get_person! context.person.id
+      _ -> context
+    end
+
+    socket
+    |> assign(:edit_selected_view, context.view)
+    |> assign(:edit_entity, entity)
+    |> assign(:live_action, :edit_context)
   end
 
   defp edit_context_description socket, id do
