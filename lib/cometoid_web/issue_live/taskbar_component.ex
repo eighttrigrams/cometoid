@@ -26,9 +26,9 @@ defmodule CometoidWeb.IssueLive.TaskbarComponent do
       all_secondary_contexts = state.selected_context.secondary_contexts
 
       all_secondary_contexts
-      |> Enum.map(fn ctx -> {ctx.id, ctx.title} end)
-      |> Enum.filter(fn {_id, title} -> title != state.selected_context.title end)
-      |> Enum.sort_by(fn {id, _} -> id end)
+      |> Enum.map(fn ctx -> {ctx.id, ctx.title, ctx.short_title} end)
+      |> Enum.filter(fn {_id, title, _short_title} -> title != state.selected_context.title end)
+      |> Enum.sort_by(fn {id, _, _} -> id end)
       |> Enum.take(12)
     else
       []

@@ -29,7 +29,7 @@
                       phx-value-target_context_id={context.context.id}
                       phx-value-target_issue_id={@issue.id}
                       >
-                  <%= context.context.title %>
+                  <%= if context.context.short_title, do: context.context.short_title, else: context.context.title %>
                 </span>
               <% end %>
             </td>

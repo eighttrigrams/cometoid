@@ -1,12 +1,12 @@
 <div>
   <div class="form-block form-block-1 context-type-grid">
-    <%= for _context = {id, title} <- TaskbarComponent.get_contexts(@state) do %>
+    <%= for _context = {id, title, short_title} <- TaskbarComponent.get_contexts(@state) do %>
       <div phx-click="toggle_context"
         phx-value-id={id}
         phx-target={@myself}
         class={"#{if TaskbarComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
         >
-        <%= title %>
+        <%= if short_title, do: short_title, else: title %>
       </div>
     <% end %>
   </div>
