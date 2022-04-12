@@ -94,16 +94,20 @@ defmodule CometoidWeb.IssueLive.Index do
           socket
         end
       "e" ->
-        cond do
-          not is_nil(socket.assigns.selected_issue) ->
-            id = socket.assigns.selected_issue.id
-            socket
-            |> assign(:issue, Tracker.get_issue!(id))
-            |> assign(:live_action, :edit)
-          not is_nil(socket.assigns.selected_context) ->
-            id = socket.assigns.selected_context.id
-            edit_context socket, id
-          true -> socket
+        if socket.assigns.context_search_active or socket.assigns.issue_search_active do
+          socket
+        else
+          cond do
+            not is_nil(socket.assigns.selected_issue) ->
+              id = socket.assigns.selected_issue.id
+              socket
+              |> assign(:issue, Tracker.get_issue!(id))
+              |> assign(:live_action, :edit)
+            not is_nil(socket.assigns.selected_context) ->
+              id = socket.assigns.selected_context.id
+              edit_context socket, id
+            true -> socket
+          end
         end
       "Control" ->
         if socket.assigns.context_search_active do
