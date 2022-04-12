@@ -11,7 +11,7 @@
   <div>
     <%= unless is_nil(@context.description) or @context.description == "" do %>
       <div id="desc" phx-hook="DescHook">
-        <%= Phoenix.HTML.raw(CometoidWeb.IssueLive.Issue.SidebarComponent.convert(@context.description)) %>
+        <%= Phoenix.HTML.raw(convert(@context.description)) %>
       </div>
     <% end %>
   </div>

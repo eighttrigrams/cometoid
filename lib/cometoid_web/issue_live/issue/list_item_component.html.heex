@@ -10,7 +10,7 @@
     <td class="right border-background-color">
         <table><tr>
             <td class="heading" phx-click="select_issue" phx-value-target={@issue.id}>
-                <%= @issue.title %>
+                <%= Phoenix.HTML.raw(convert(@issue.title)) %>
             </td>
 
             <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>

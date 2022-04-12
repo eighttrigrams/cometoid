@@ -1,8 +1,6 @@
 defmodule CometoidWeb.IssueLive.Issue.ListItemComponent do
-  # If you generated an app with mix phx.new --live,
-  # the line below would be:
   use CometoidWeb, :live_component
-  # use Phoenix.LiveComponent
+  import CometoidWeb.Helpers
 
   def contexts_to_show_as_badges state, issue do
     Enum.filter issue.contexts,
