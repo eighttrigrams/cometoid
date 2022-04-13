@@ -167,22 +167,7 @@ defmodule Cometoid.Repo.Tracker do
     unless sort_issues_alphabetically do
       issues
     else
-
-      numeric =
-        issues
-        |> Enum.filter(fn i -> not is_nil(i.short_title) end) # TODO deduplicate with block below
-        |> Enum.map(fn i ->
-          x = case Integer.parse(i.short_title) do
-            :error -> {-1, ""}
-            x -> x
-          end
-          {x, i} end)
-        |> Enum.filter(fn {{_n, rest}, _i} -> rest == "" end)
-        |> Enum.sort_by(fn {{n, _rest}, _i} ->n end)
-        |> Enum.map(fn {{_s, _rest}, i} -> i end)
-
-      non_numeric =
-        issues
+      issues = issues
         |> Enum.filter(fn i -> not is_nil(i.short_title) end)
         |> Enum.map(fn i ->
           x = case Integer.parse(i.short_title) do
@@ -190,6 +175,15 @@ defmodule Cometoid.Repo.Tracker do
             x -> x
           end
           {x, i} end)
+
+      numeric =
+        issues
+        |> Enum.filter(fn {{_n, rest}, _i} -> rest == "" end)
+        |> Enum.sort_by(fn {{n, _rest}, _i} ->n end)
+        |> Enum.map(fn {{_s, _rest}, i} -> i end)
+
+      non_numeric =
+        issues
         |> Enum.filter(fn {{_s, rest}, _i} -> rest != "" end)
         |> Enum.sort_by(fn {{_s, _rest}, i} -> i.short_title end)
         |> Enum.map(fn {{_s, _rest}, i} -> i end)
