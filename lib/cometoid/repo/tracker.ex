@@ -151,7 +151,7 @@ defmodule Cometoid.Repo.Tracker do
       sort_issues_alphabetically: false
   end
 
-  def list_issues query do
+  def list_issues %{ sort_issues_alphabetically: sort_issues_alphabetically } = query do
     q =
       Issue
       |> join(:left, [i], context_relation in assoc(i, :contexts))
@@ -159,16 +159,48 @@ defmodule Cometoid.Repo.Tracker do
       |> where_type(query)
       |> order_issues(query)
 
-    Repo.all(q)
-    |> Enum.uniq
-    |> Repo.preload(contexts: :context)
-    |> Repo.preload(:event)
+    issues = Repo.all(q)
+      |> Enum.uniq
+      |> Repo.preload(contexts: :context)
+      |> Repo.preload(:event)
+
+    unless sort_issues_alphabetically do
+      issues
+    else
+
+      numeric =
+        issues
+        |> Enum.filter(fn i -> not is_nil(i.short_title) end) # TODO deduplicate with block below
+        |> Enum.map(fn i ->
+          x = case Integer.parse(i.short_title) do
+            :error -> {-1, ""}
+            x -> x
+          end
+          {x, i} end)
+        |> Enum.filter(fn {{_n, rest}, _i} -> rest == "" end)
+        |> Enum.sort_by(fn {{n, _rest}, _i} ->n end)
+        |> Enum.map(fn {{_s, _rest}, i} -> i end)
+
+      non_numeric =
+        issues
+        |> Enum.filter(fn i -> not is_nil(i.short_title) end)
+        |> Enum.map(fn i ->
+          x = case Integer.parse(i.short_title) do
+            :error -> {-1, ""}
+            x -> x
+          end
+          {x, i} end)
+        |> Enum.filter(fn {{_s, rest}, _i} -> rest != "" end)
+        |> Enum.sort_by(fn {{_s, _rest}, i} -> i.short_title end)
+        |> Enum.map(fn {{_s, _rest}, i} -> i end)
+
+      non_numeric ++ numeric
+    end
   end
 
   defp order_issues(query, %{ sort_issues_alphabetically: sort_issues_alphabetically }) do
     query = if sort_issues_alphabetically do
-      order_by(query, [i, _context_relation, _context, _it],
-        [{:desc, i.important}, {:asc, i.short_title}])
+      query
     else
       order_by(query, [i, _context_relation, _context, _it],
         [{:desc, i.important}, {:desc, i.updated_at}])
