@@ -64,10 +64,12 @@
     </div>
   <% end %>
 
-  <div class={"form-block button right enabled-button-color"}>
-    <a phx-click="toggle_sort">
-      <i class={"bi bi-sort-#{if @state.sort_issues_alphabetically, do: "alpha-down", else: "down-alt"}"}>
-      </i>
-    </a>
-  </div>
+  <%= if @state.selected_context do %>
+    <div class={"form-block button right enabled-button-color"}>
+      <a phx-click="toggle_sort">
+        <i class={"bi bi-sort-#{if @state.sort_issues_alphabetically, do: "alpha-down", else: "down-alt"}"}>
+        </i>
+      </a>
+    </div>
+  <% end %>
 </div>
