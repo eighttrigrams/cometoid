@@ -92,4 +92,13 @@
         contexts: nil %>
     </div>
   <% end %>
+
+  <%= if @state.live_action == :filter_secondary_contexts do %>
+    <div id="secondary-context-filter-modal-content" class="modal-content">
+      <%= live_modal CometoidWeb.IssueLive.Taskbar.FilterModalComponent,
+        id: "filtermodal",
+        title: "filtermodal",
+        state: @state %>
+    </div>
+  <% end %>
 <% end %>

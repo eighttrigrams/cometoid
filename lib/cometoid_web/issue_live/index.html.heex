@@ -1,7 +1,7 @@
 <div id="page-content" phx-window-keydown="keydown" phx-window-keyup="keyup">
   <div id="left-column">
     <div id="taskbar" class="taskbar border-color">
-      <%= live_component IssueLive.TaskbarComponent, id: "taskbar", state: assigns %>
+      <%= live_component IssueLive.Taskbar.TaskbarComponent, id: "taskbar", state: assigns %>
     </div>
     <div id="contexts-and-issues-row">
       <%= live_component IssueLive.Context.ListComponent, id: :contexts, state: assigns %>

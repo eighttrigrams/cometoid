@@ -83,7 +83,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   @impl true
-  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index } } = socket do
+  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index } = state } = socket do
     case key do
       "Escape" -> handle_escape socket
       "n" ->
@@ -91,6 +91,13 @@ defmodule CometoidWeb.IssueLive.Index do
           socket
           |> assign(:live_action, :new)
           |> assign(:issue, %Issue{})
+        else
+          socket
+        end
+      "h" ->
+        if state.selected_context do
+          socket
+          |> assign(:live_action, :filter_secondary_contexts)
         else
           socket
         end
@@ -148,10 +155,18 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "keyup", %{ "key" => key }, socket do
+    state = socket.assigns
     case key do
       "Control" ->
         socket
-          |> assign(:control_pressed, false)
+        |> assign(:control_pressed, false)
+      "h" ->
+        if state.selected_context && state.live_action == :filter_secondary_contexts do
+          socket
+          |> assign(:live_action, :index)
+        else
+          socket
+        end
       _ ->
         socket
     end
@@ -164,6 +179,12 @@ defmodule CometoidWeb.IssueLive.Index do
     state = IssuesMachine.delete_issue to_state(socket), id
     socket
     |> assign(state)
+    |> do_query
+  end
+
+  def handle_event "deselect_selected_contexts", _params, socket do
+    socket
+    |> assign(:selected_secondary_contexts, [])
     |> do_query
   end
 

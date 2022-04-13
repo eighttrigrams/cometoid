@@ -1,10 +1,8 @@
 <div>
   <div class="form-block form-block-1 context-type-grid">
-    <%= for _context = {id, title, short_title} <- TaskbarComponent.get_contexts(@state) do %>
-      <div phx-click="toggle_context"
-        phx-value-id={id}
-        phx-target={@myself}
-        class={"#{if TaskbarComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
+    <%= for {id, title, short_title} <- get_contexts @state do %>
+      <div 
+        class={"#{if FilterModalComponent.is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
         >
         <%= if short_title, do: short_title, else: title %>
       </div>
@@ -44,7 +42,7 @@
     </div>
   <% end %>
 
-  <%= unless TaskbarComponent.done_button_disabled? @state do %>
+  <%= unless done_button_disabled? @state do %>
 
     <div class="form-block button right enabled-button-color">
       <%= if @state[:list_issues_done_instead_open] do %>
@@ -68,6 +66,15 @@
     <div class={"form-block button right enabled-button-color"}>
       <a phx-click="toggle_sort">
         <i class={"bi bi-sort-#{if @state.sort_issues_alphabetically, do: "alpha-down", else: "down-alt"}"}>
+        </i>
+      </a>
+    </div>
+  <% end %>
+
+  <%= if @state.selected_context do %>
+    <div class={"form-block button right #{if length(@state.selected_secondary_contexts) > 0 do "enabled" else "disabled" end}-button-color"}>
+      <a phx-click="deselect_selected_contexts">
+        <i class={"bi bi-x-lg"}>
         </i>
       </a>
     </div>

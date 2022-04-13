@@ -1,0 +1,12 @@
+<div class="context-type-grid">
+    
+    <%= for _context = {id, title, short_title} <- get_contexts(@state) do %>
+      <div phx-click="toggle_context"
+        phx-value-id={id}
+        phx-target={@myself}
+        class={"#{if is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
+        >
+        <%= if short_title, do: short_title, else: title %>
+      </div>
+    <% end %>
+</div>
