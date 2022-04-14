@@ -4,5 +4,6 @@ defmodule CometoidWeb.IssueLive.Context.List.Component do
 
   def get_contexts state do
     state.selected_context.secondary_contexts
+    |> Enum.filter(&(!&1.is_tag?))
   end
 end
