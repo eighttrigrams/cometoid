@@ -1,0 +1,23 @@
+<tr id={"context-#{@context.id}"} class={"list-item #{if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end}"}>
+    <td class="left" phx-click="select_issue" phx-value-target={@context.id}>
+        <div class={"#{if @context.important do 'important-color' else 'regular-color' end} type"}><span class="text text-left">
+            <b><%= @context.id %>
+            </b>
+            </span>
+        </div>
+    </td>
+
+    <td class="right border-background-color">
+        <table><tr>
+            <td class="heading" phx-click="select_issue" phx-value-target={@context.id}>
+                <%= Phoenix.HTML.raw(convert(@context.title)) %>
+            </td>
+
+            <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
+            </td>
+
+            <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
+            </td>
+        </tr></table>
+    </td>
+</tr>

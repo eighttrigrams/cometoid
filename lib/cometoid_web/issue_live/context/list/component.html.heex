@@ -2,7 +2,11 @@
 
   <div class="list issues-list">
     <table class="list-table">
-      Hallo
+      <%= for context <- get_contexts @state do %>
+        <%= live_component ItemComponent, 
+          context: context,
+          state: @state %>
+      <% end %>
     </table>
   </div>
 </div>
