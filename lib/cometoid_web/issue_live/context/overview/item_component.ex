@@ -1,4 +1,4 @@
-defmodule CometoidWeb.IssueLive.Context.ListItemComponent do
+defmodule CometoidWeb.IssueLive.Context.Overview.ItemComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Model.Tracker.Context

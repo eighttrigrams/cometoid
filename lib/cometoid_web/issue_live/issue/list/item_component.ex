@@ -1,4 +1,4 @@
-defmodule CometoidWeb.IssueLive.Issue.ListItemComponent do
+defmodule CometoidWeb.IssueLive.Issue.List.ItemComponent do
   use CometoidWeb, :live_component
   import CometoidWeb.Helpers
 

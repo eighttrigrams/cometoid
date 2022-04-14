@@ -10,21 +10,42 @@
   </div>
 
   <%= if 1 < length @state.selected_contexts do %>
-    <div class="form-block button left enabled-button-color %>">
+    <div class="form-block button left enabled-button-color">
       <a phx-click="select_previous_context" phx-value-view={@state.selected_view}><i class="bi bi-arrow-left-circle">
       </i></a>
     </div>
   <% else %>
-    <div class="form-block button left disabled-button-color %>">
+    <div class="form-block button left disabled-button-color">
       <a><i class="bi bi-arrow-left-circle">
       </i></a>
     </div>
   <% end %>
 
-  <div class="form-block button left enabled-button-color %>">
+  <div class="form-block button left enabled-button-color">
+    <a><i class="bi bi-search">
+    </i></a>
+  </div>
+
+  <div class="form-block button left enabled-button-color">
     <a phx-click="create_new_context" phx-value-view={@state.selected_view}><i class="bi bi-plus-lg">
     </i></a>
   </div>
+
+  <%= if @state.selected_context do %>
+    <%= unless @state.show_secondary_contexts_instead_issues do %>
+      <div class="form-block button left enabled-button-color">
+        <a phx-click="toggle_show_secondary_contexts_instead_issues">
+          <i class="bi bi-square"></i>
+        </a>
+      </div>
+    <% else %>
+      <div class="form-block button left enabled-button-color">
+        <a phx-click="toggle_show_secondary_contexts_instead_issues">
+          <i class="bi bi-square-fill"></i>
+        </a>
+      </div>
+    <% end %>
+  <% end %>
 
   <%= unless is_nil(@state.selected_context) or @state.list_issues_done_instead_open do %>
     <div class="form-block button right enabled-button-color">
@@ -41,6 +62,11 @@
       </a>
     </div>
   <% end %>
+
+  <div class="form-block button right enabled-button-color">
+    <a><i class="bi bi-search">
+    </i></a>
+  </div>
 
   <%= unless done_button_disabled? @state do %>
 

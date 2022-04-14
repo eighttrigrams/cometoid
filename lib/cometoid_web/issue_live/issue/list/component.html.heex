@@ -1,4 +1,4 @@
-<div id="issue-list-component" class="border-color">
+<div id="issue-list-component" class="list-component border-color">
   <%= if @state.issue_search_active do %>
     <div id="issues-search-bar" class="border-color" phx-hook="IssueSearchInputHook">
       <.form let={f} for={:issue_search} phx-change="changes" phx-target={@myself} phx-submit="select">
@@ -7,10 +7,10 @@
     </div>
   <% end %>
 
-  <div id="issues-list" class="list">
+  <div class="list issues-list">
     <table class="list-table">
       <%= for issue <- @filtered_issues do %>
-        <%= live_component ListItemComponent, issue: issue, state: @state %>
+        <%= live_component ItemComponent, issue: issue, state: @state %>
       <% end %>
     </table>
   </div>

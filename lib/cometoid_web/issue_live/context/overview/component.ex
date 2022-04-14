@@ -1,7 +1,7 @@
-defmodule CometoidWeb.IssueLive.Context.ListComponent do
+defmodule CometoidWeb.IssueLive.Context.Overview.Component do
   use CometoidWeb, :live_component
 
-  alias CometoidWeb.IssueLive.Context.ListItemComponent
+  alias CometoidWeb.IssueLive.Context.Overview.ItemComponent
 
   @impl true
   def mount socket do

@@ -11,7 +11,7 @@ defmodule CometoidWeb.IssueLive.Taskbar.TaskbarComponent do
       |> Enum.map(fn ctx -> {ctx.id, ctx.title, ctx.short_title} end)
       |> Enum.filter(fn {id, _title, _short_title} -> id in state.selected_secondary_contexts end)
       |> Enum.sort_by(fn {id, _, _} -> id end)
-      |> Enum.take(12)
+      |> Enum.take(4)
     else
       []
     end

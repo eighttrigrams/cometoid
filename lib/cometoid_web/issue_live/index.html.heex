@@ -4,8 +4,12 @@
       <%= live_component IssueLive.Taskbar.TaskbarComponent, id: "taskbar", state: assigns %>
     </div>
     <div id="contexts-and-issues-row">
-      <%= live_component IssueLive.Context.ListComponent, id: :contexts, state: assigns %>
-      <%= live_component IssueLive.Issue.ListComponent, id: :issues, state: assigns %>
+      <%= live_component IssueLive.Context.Overview.Component, id: :contexts, state: assigns %>
+      <%= if not assigns.show_secondary_contexts_instead_issues do %>
+        <%= live_component IssueLive.Issue.List.Component, id: :issues, state: assigns %>
+      <% else %>
+        <%= live_component IssueLive.Context.List.Component, id: :issues1, state: assigns %>
+      <% end %>
     </div>
   </div>
   

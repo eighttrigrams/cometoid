@@ -15,13 +15,13 @@
             
             height: calc(100% - #{$taskbar-height});
 
-            #context-list-component {
+            #overview-component {
                 height: 100%;
                 width: calc(33% + 9px);
                 float: left;
             }
             
-            #issue-list-component {
+            .list-component {
                 
                 float: left;
                 width: calc(67% - 10px);

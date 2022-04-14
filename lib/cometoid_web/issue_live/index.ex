@@ -30,6 +30,7 @@ defmodule CometoidWeb.IssueLive.Index do
       issue_search_active: false,
       list_issues_done_instead_open: false,
       sort_issues_alphabetically: false,
+      show_secondary_contexts_instead_issues: false,
       selected_secondary_contexts: [],
       selected_view: selected_view
     }
@@ -186,6 +187,13 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(:selected_secondary_contexts, [])
     |> do_query
+  end
+
+  def handle_event "toggle_show_secondary_contexts_instead_issues", _params, socket do
+    socket
+    |> assign(:show_secondary_contexts_instead_issues,
+      !socket.assigns.show_secondary_contexts_instead_issues)
+    |> return_noreply
   end
 
   def handle_event "edit_issue", id, socket do
