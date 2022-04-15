@@ -1,0 +1,20 @@
+<td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
+
+    <%= if @issue.event do %>
+    <span class="contexts-background-color regular-color">
+        <%= "#{@issue.event.date.day}.#{@issue.event.date.month}.#{@issue.event.date.year}" %>
+    </span>
+    <% end %>
+
+    <%= for context <- contexts_to_show_as_badges @state, @issue do %>
+    <span class="contexts-background-color regular-color"
+            phx-hook="SecondaryContextBadgeHook"
+            id={"secondary-context-badge-hook_#{context.context.id}:#{@issue.id}"}
+            phx-click="jump_to_context" 
+            phx-value-target_context_id={context.context.id}
+            phx-value-target_issue_id={@issue.id}
+            >
+        <%= if context.context.short_title, do: context.context.short_title, else: context.context.title %>
+    </span>
+    <% end %>
+</td>
