@@ -21,7 +21,7 @@
     </div>
   <% end %>
 
-  <div class="form-block button left enabled-button-color">
+  <div class="form-block button left disabled-button-color">
     <a><i class="bi bi-search">
     </i></a>
   </div>
@@ -31,20 +31,27 @@
     </i></a>
   </div>
 
-  <%= if @state.selected_context do %>
-    <%= unless @state.show_secondary_contexts_instead_issues do %>
+  
+  <%= unless @state.show_secondary_contexts_instead_issues do %>
+    <%= if @state.selected_context do %>
       <div class="form-block button left enabled-button-color">
         <a phx-click="toggle_show_secondary_contexts_instead_issues">
           <i class="bi bi-square"></i>
         </a>
       </div>
     <% else %>
-      <div class="form-block button left enabled-button-color">
-        <a phx-click="toggle_show_secondary_contexts_instead_issues">
-          <i class="bi bi-square-fill"></i>
+      <div class="form-block button left disabled-button-color">
+        <a>
+          <i class="bi bi-square"></i>
         </a>
       </div>
     <% end %>
+  <% else %>
+    <div class="form-block button left enabled-button-color">
+      <a phx-click="toggle_show_secondary_contexts_instead_issues">
+        <i class="bi bi-square-fill"></i>
+      </a>
+    </div>
   <% end %>
 
   <%= unless is_nil(@state.selected_context) or @state.list_issues_done_instead_open do %>
@@ -63,7 +70,7 @@
     </div>
   <% end %>
 
-  <div class="form-block button right enabled-button-color">
+  <div class="form-block button right disabled-button-color">
     <a><i class="bi bi-search">
     </i></a>
   </div>
@@ -95,11 +102,25 @@
         </i>
       </a>
     </div>
+  <% else %>
+    <div class={"form-block button right disabled-button-color"}>
+      <a>
+        <i class={"bi bi-sort-alpha-down"}>
+        </i>
+      </a>
+    </div>
   <% end %>
 
-  <%= if @state.selected_context do %>
-    <div class={"form-block button right #{if length(@state.selected_secondary_contexts) > 0 do "enabled" else "disabled" end}-button-color"}>
+  <%= if @state.selected_context && length(@state.selected_secondary_contexts) > 0 do %>
+    <div class={"form-block button right enabled-button-color"}>
       <a phx-click="deselect_selected_contexts">
+        <i class={"bi bi-x-lg"}>
+        </i>
+      </a>
+    </div>
+  <% else %>
+    <div class={"form-block button right disabled-button-color"}>
+      <a>
         <i class={"bi bi-x-lg"}>
         </i>
       </a>
