@@ -7,7 +7,7 @@
         </div>
     </td>
 
-    <td class="right border-background-color">
+    <td class="right border-background-color" phx-click="select_issue" phx-value-target={@issue.id}>
         <table class="contexts-background-color"><tr>
             <td class="heading">
                 <%= Phoenix.HTML.raw(convert(@issue.title)) %> 
