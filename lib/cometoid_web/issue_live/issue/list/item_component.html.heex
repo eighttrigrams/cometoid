@@ -8,15 +8,16 @@
     </td>
 
     <td class="right border-background-color">
-        <table><tr>
-            <td class="heading" phx-click="select_issue" phx-value-target={@issue.id}>
-                <%= Phoenix.HTML.raw(convert(@issue.title)) %>
+        <table class="contexts-background-color"><tr>
+            <td class="heading">
+                <%= Phoenix.HTML.raw(convert(@issue.title)) %> 
             </td>
-
+            <td>&nbsp;</td>
+        </tr></table>
+        <table><tr>
+            <td class="buffer"></td>
             <%= live_component BadgesComponent, issue: @issue, state: @state %>
-
             <%= live_component ActionsComponent, issue: @issue, state: @state %>
-            
         </tr></table>
     </td>
 </tr>

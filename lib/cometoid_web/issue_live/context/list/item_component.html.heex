@@ -8,14 +8,16 @@
     </td>
 
     <td class="right border-background-color">
-        <table><tr>
-            <td class="heading" phx-click="select_issue" phx-value-target={@context.id}>
-                <%= Phoenix.HTML.raw(convert(@context.title)) %>
+        <table class="contexts-background-color"><tr>
+            <td class="heading">
+                <%= Phoenix.HTML.raw(convert(@context.title)) %> 
             </td>
-
+            <td>&nbsp;</td>
+        </tr></table>
+        <table><tr>
+            <td class="buffer"></td>
             <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
             </td>
-
             <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
             </td>
         </tr></table>

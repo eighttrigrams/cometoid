@@ -205,12 +205,10 @@ $list-item-height: $taskbar-height;
                 border-left-style: solid;
                 border-left-width: 2px;
 
-                padding-left: 20px;
                 right: 0;
                 padding-top: 0;
                 padding-bottom: 0;
                 width: 100%;
-                text-align: left;
             }
             
             border-bottom-width: 1px;
@@ -228,11 +226,18 @@ $list-item-height: $taskbar-height;
             .heading {
                 width: 100%;
                 max-width: 1px;
+                padding-left: 14px;
                 padding-right: 6px;
-                overflow: hidden;
-                text-overflow: ellipsis;
                 height: $list-item-height;
                 font-family: sans-serif;
+                p {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+            .buffer {
+                width: 100%;
+                max-width: 1px;
             }
             .contexts {
 
@@ -267,9 +272,6 @@ $list-item-height: $taskbar-height;
                         text-transform: uppercase;
                     }
                 }
-            }
-            &:hover .heading {
-                padding-right: 20px;
             }
             &:hover .actions.control-not-pressed {
                 width: unset;
