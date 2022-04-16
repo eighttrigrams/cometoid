@@ -42,6 +42,7 @@ defmodule Cometoid.Repo.Tracker do
     end
     {:ok, context} = create_context %{
       "title" => issue.title,
+      "description" => issue.description,
       "view" => view }
     {:ok, context} = context
       |> do_context_preload
