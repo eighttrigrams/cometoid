@@ -206,7 +206,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     end
   end
 
-  def do_query state do
+  def do_query state do # TODO rename to refresh_issues or something or at least document that it refreshes issues - and only issues
     do_the_query state
   end
 
