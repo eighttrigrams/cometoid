@@ -213,6 +213,16 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
+  def handle_event "convert_issue_to_context", %{ "id" => id }, socket do
+
+    {id, ""} = Integer.parse id
+    state = IssuesMachine.convert_issue_to_context(socket.assigns, id)
+
+    socket
+    |> assign(state)
+    |> return_noreply
+  end
+
   def handle_event "edit_issue_description", _, socket do
     socket
     |> edit_issue_description(socket.assigns.selected_issue.id)

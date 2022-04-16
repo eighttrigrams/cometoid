@@ -77,7 +77,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
     selected_context = Enum.find(state.contexts, &(&1.id == id))
     Tracker.update_context_updated_at selected_context
-    contexts = load_contexts_for_view state # TODO review duplication with init_context_properties
+    contexts = load_contexts_for_view state
 
     %{
       selected_context: selected_context,
@@ -151,6 +151,15 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       [_|_] -> %{}
     end
     {:do_query, result}
+  end
+
+  def convert_issue_to_context state, id do
+    context = Tracker.convert_issue_to_context id, state.selected_view
+    contexts = load_contexts_for_view state
+    {:do_query, %{
+      selected_context: context,
+      contexts: contexts
+    }}
   end
 
   def archive_issue state, id do

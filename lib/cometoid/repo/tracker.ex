@@ -35,6 +35,32 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:secondary_contexts)
   end
 
+  def convert_issue_to_context id, view do
+    issue = get_issue! id
+    secondary_contexts_ids = Enum.map issue.contexts, fn r ->
+      r.context.id
+    end
+    {:ok, context} = create_context %{
+      "title" => issue.title,
+      "view" => view }
+    {:ok, context} = context
+      |> do_context_preload
+      |> link_contexts(secondary_contexts_ids)
+
+    delete_issue issue
+    context
+  end
+
+  @doc """
+
+  Does not link secondary_contexts.
+  Use `link_contexts` instead
+
+  ## Examples
+
+    iex> create_context %{ "title" => title, "view" => view }
+
+  """
   def create_context attrs do
     %Context{}
     |> Context.changeset(attrs)
@@ -53,6 +79,10 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.update(force: true)
   end
 
+  @doc """
+  Requires the primary_context's secondary_contexts to be preloaded
+  Returns {:ok, context}
+  """
   def link_contexts primary_context, secondary_contexts_ids do
 
     secondary_contexts = get_contexts_by_ids secondary_contexts_ids
