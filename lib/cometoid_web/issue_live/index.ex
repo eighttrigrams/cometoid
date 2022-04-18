@@ -85,65 +85,52 @@ defmodule CometoidWeb.IssueLive.Index do
 
   @impl true
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index } = state } = socket do
-    case key do
-      "Escape" -> handle_escape socket
-      "n" ->
-        if not socket.assigns.context_search_active and socket.assigns.selected_context  do
-          socket
-          |> assign(:live_action, :new)
-          |> assign(:issue, %Issue{})
-        else
-          socket
+    cond do
+      key == "Control" && !socket.assigns.context_search_active ->
+        assign(socket, :control_pressed, true)
+      socket.assigns.issue_search_active or socket.assigns.context_search_active ->
+        case key do
+          "Escape" ->
+            socket
+            |> assign(:context_search_active, false)
+            |> assign(:issue_search_active, false)
+          _ -> socket
         end
-      "h" ->
-        if state.selected_context do
-          socket
-          |> assign(:live_action, :filter_secondary_contexts)
-        else
-          socket
-        end
-      "e" ->
-        if socket.assigns.context_search_active or socket.assigns.issue_search_active do
-          socket
-        else
-          cond do
-            not is_nil(socket.assigns.selected_issue) ->
-              id = socket.assigns.selected_issue.id
+      true ->
+        case key do
+          "Escape" -> handle_escape socket
+          "n" ->
+            socket
+            |> assign(:live_action, :new)
+            |> assign(:issue, %Issue{})
+          "h" ->
+            if state.selected_context do
               socket
-              |> assign(:issue, Tracker.get_issue!(id))
-              |> assign(:live_action, :edit)
-            not is_nil(socket.assigns.selected_context) ->
-              id = socket.assigns.selected_context.id
-              edit_context socket, id
-            true -> socket
-          end
+              |> assign(:live_action, :filter_secondary_contexts)
+            else
+              socket
+            end
+          "e" ->
+            cond do
+              not is_nil(socket.assigns.selected_issue) ->
+                id = socket.assigns.selected_issue.id
+                socket
+                |> assign(:issue, Tracker.get_issue!(id))
+                |> assign(:live_action, :edit)
+              not is_nil(socket.assigns.selected_context) ->
+                id = socket.assigns.selected_context.id
+                edit_context socket, id
+              true -> socket
+            end
+          "c" ->
+            socket |> assign(:context_search_active, true)
+          "i" ->
+            socket |> assign(:issue_search_active, true)
+          "d" ->
+            handle_describe socket
+          _ ->
+            socket
         end
-      "Control" ->
-        if socket.assigns.context_search_active do
-          socket
-        else
-          socket |> assign(:control_pressed, true)
-        end
-      "c" ->
-        unless socket.assigns.issue_search_active or socket.assigns.context_search_active do
-          socket |> assign(:context_search_active, true)
-        else
-          socket
-        end
-      "i" ->
-        unless socket.assigns.issue_search_active or socket.assigns.context_search_active do
-          socket |> assign(:issue_search_active, true)
-        else
-          socket
-        end
-      "d" ->
-        unless socket.assigns.context_search_active or socket.assigns.issue_search_active do
-          handle_describe socket
-        else
-          socket
-        end
-      _ ->
-        socket
     end
     |> return_noreply
   end
@@ -521,24 +508,18 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp handle_escape socket do
-    if socket.assigns.context_search_active or socket.assigns.issue_search_active do
+    unless socket.assigns.selected_secondary_contexts == [] do
       socket
-      |> assign(:context_search_active, false)
-      |> assign(:issue_search_active, false)
+      |> assign(:selected_secondary_contexts, [])
     else
-      unless socket.assigns.selected_secondary_contexts == [] do
+      unless (is_nil socket.assigns.selected_context) do
         socket
-        |> assign(:selected_secondary_contexts, [])
+        |> assign(:selected_context, nil)
+        |> assign(:selected_contexts, [])
+        |> do_query(true)
       else
-        unless (is_nil socket.assigns.selected_context) do
-          socket
-          |> assign(:selected_context, nil)
-          |> assign(:selected_contexts, [])
-          |> do_query(true)
-        else
-          socket
-          |> assign(:selected_issue, nil)
-        end
+        socket
+        |> assign(:selected_issue, nil)
       end
     end
   end
