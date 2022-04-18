@@ -1,9 +1,9 @@
 (ns editor.lowlevel
   (:require [editor.helpers :as h]))
 
-(def word-stop-pattern "[,;.-_\\n]")
+(def word-stop-pattern "[,;.\\-_\\n]")
 
-(def word-stop-pattern-incl-whitespace "[,;.-_\\s]")
+(def word-stop-pattern-incl-whitespace "[,;.\\-_\\s]")
 
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
