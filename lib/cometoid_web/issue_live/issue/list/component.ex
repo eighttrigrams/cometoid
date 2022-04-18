@@ -1,6 +1,7 @@
 defmodule CometoidWeb.IssueLive.Issue.List.Component do
   use CometoidWeb, :live_component
 
+  alias CometoidWeb.Helpers
   alias CometoidWeb.IssueLive.Issue.List.ItemComponent
 
   @impl true
@@ -53,6 +54,7 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
     tokenized =
       (
         title
+        |> Helpers.demarkdownify
         |> String.downcase
         |> String.split(" ")
       )
