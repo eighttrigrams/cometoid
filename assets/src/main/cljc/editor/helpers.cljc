@@ -3,7 +3,12 @@
 (defn starts-with-pattern? [s pattern]
   (not (nil? (re-find (re-pattern (str "^" pattern)) s))))
 
-(defn index-of-substr-or-end [s pattern]
+(defn index-of-substr-or-end 
+  "Returns 
+     the index of `pattern` in `s` - if it has been found
+     the length of s               - if `pattern` could not be found in `s`
+  " 
+  [s pattern]
   (loop [rst s
          i 0]
     (if (= i (count s))
