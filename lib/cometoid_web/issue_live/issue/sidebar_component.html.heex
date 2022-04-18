@@ -2,7 +2,7 @@
   <div class="smaller-text">
     <h1 style="font-family: serif">
       <span style="float: left;">
-        <%= Phoenix.HTML.raw(convert(@issue.title)) %>
+        <%= demarkdownify(@issue.title) %>
       </span>
     </h1>
   </div>
