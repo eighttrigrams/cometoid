@@ -41,7 +41,7 @@ $border-color-1: lighten(black, 50%);
     .enabled-button-color { &:hover { background-color: lighten(black, 40%); } }
     .disabled-button-color { a i { color: lighten(black, 10%); } }
     .regular-color { color: lighten(black, 60%); }
-    .important-color { color: green; }
+    .important-color { color: #fdfdfd; }
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: lighten(black, 45%); }
     .opacity { background-color: rgba(0,0,0,0.7); }
