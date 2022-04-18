@@ -50,9 +50,9 @@ For running single tests during development of the editor, run,
 a) if `mix phx.server` is running
 
     $ ./add_testing.sh 
-    run-tests=> (require 'editor-test)
-    run-tests=> (run-test editor-test/base-case) ;; Hot-code-reloading works. Just edit a file, save and re-run this expression. 
-    run-tests=> (run-tests 'editor-test)
+    run-tests=> (require 'editor.machine-test)
+    run-tests=> (run-test editor.machine-test/base-case) ;; Hot-code-reloading works. Just edit a file, save and re-run this expression. 
+    run-tests=> (run-tests 'editor.machine-test)
     run-tests=> ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
     
 b) otherwise
