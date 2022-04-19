@@ -44,14 +44,17 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def list_selectable_contexts state do
-    [{state.selected_context.title, Integer.to_string(state.selected_context.id)}] ++
+    contexts = [{state.selected_context.title, Integer.to_string(state.selected_context.id)}] ++
       Enum.map state.selected_context.secondary_contexts,
         fn context -> {context.title, Integer.to_string(context.id)} end
+
+    Enum.sort_by(contexts, fn {title, _} -> String.downcase(title) end)
   end
 
   def list_contexts view do
-    contexts = Tracker.list_contexts view
-    Enum.map contexts, fn context -> {context.title, Integer.to_string(context.id)} end
+    contexts = view
+      |> Tracker.list_contexts
+      |> Enum.map(fn context -> {context.title, Integer.to_string(context.id)} end)
   end
 
   def is_checked issue, context_id do

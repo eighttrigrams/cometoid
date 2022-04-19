@@ -15,7 +15,7 @@
     <%= for {title, id} <- list_selectable_contexts(@state) do %>
       <div>
         <%= checkbox f, id, value: @links[id] %>
-        <%= label f, title %>
+        <%= label f, :title, title %>
         <hr>
       </div>
     <% end  %>
