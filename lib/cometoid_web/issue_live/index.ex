@@ -100,9 +100,13 @@ defmodule CometoidWeb.IssueLive.Index do
         case key do
           "Escape" -> handle_escape socket
           "n" ->
-            socket
-            |> assign(:live_action, :new)
-            |> assign(:issue, %Issue{})
+            if state.selected_context do
+              socket
+              |> assign(:live_action, :new)
+              |> assign(:issue, %Issue{})
+            else
+              socket
+            end
           "h" ->
             if state.selected_context do
               socket
@@ -112,20 +116,20 @@ defmodule CometoidWeb.IssueLive.Index do
             end
           "e" ->
             cond do
-              not is_nil(socket.assigns.selected_issue) ->
-                id = socket.assigns.selected_issue.id
+              not is_nil(state.selected_issue) ->
+                id = state.selected_issue.id
                 socket
                 |> assign(:issue, Tracker.get_issue!(id))
                 |> assign(:live_action, :edit)
-              not is_nil(socket.assigns.selected_context) ->
-                id = socket.assigns.selected_context.id
+              not is_nil(state.selected_context) ->
+                id = state.selected_context.id
                 edit_context socket, id
               true -> socket
             end
           "c" ->
             socket |> assign(:context_search_active, true)
           "i" ->
-            socket |> assign(:issue_search_active, true)
+            assign(socket, :issue_search_active, true)
           "d" ->
             handle_describe socket
           _ ->
