@@ -20,7 +20,7 @@
                nil)]
     (when code (swap! modifiers (if b conj disj) code))))
 
-(defn convert [el]
+(defn construct-state [el]
   (let [selection-start (.-selectionStart el)
         selection-end (.-selectionEnd el)]
     {:value                (.-value el)
@@ -33,14 +33,14 @@
   (fn [e]
     (.preventDefault e)
     (->> (.getData (.-clipboardData e) "Text")
-         (assoc (convert el) :clipboard-data)
+         (assoc (construct-state el) :clipboard-data)
          (execute ["INSERT" @modifiers])
          (set-values! el))))
 
 (defn keydown [el modifiers execute]
   (fn [e]
     (set-modifiers! e true modifiers)
-    (let [new-state   (execute [(.-code e) @modifiers] (convert el))]
+    (let [new-state   (execute [(.-code e) @modifiers] (construct-state el))]
       (set-values! el new-state)
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
 
