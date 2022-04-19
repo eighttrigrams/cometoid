@@ -36,6 +36,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
     end
     contexts
     |> Enum.filter(fn ctx -> ctx.id != state.selected_context.id end)
+    |> Enum.sort_by(fn ctx -> String.downcase(ctx.title) end)
     |> Enum.map(fn ctx -> {ctx.title, ctx.id} end)
   end
 end
