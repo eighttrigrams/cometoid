@@ -2,7 +2,7 @@
   (:require [editor.lowlevel :as lowlevel]
             [editor.helpers :as h]))
 
-(defn- _execute [command state direction]
+(defn- _transform-state [command state direction]
   (case command
     :insert
     (lowlevel/insert state)
@@ -71,12 +71,12 @@
 
 (defn build [] 
   (let [direction-atom (atom 0)]
-    (fn execute [command state]
+    (fn transform-state [command state]
       (let [direction @direction-atom
             {selection-start :selection-start
              selection-end   :selection-end
              dir             :direction
-             :as             new-state} (_execute command state direction)]
+             :as             new-state} (_transform-state command state direction)]
         (when dir (reset! direction-atom dir))
         (when (= selection-start selection-end) (reset! direction-atom 0))
         new-state))))

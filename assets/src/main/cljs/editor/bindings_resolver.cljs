@@ -61,8 +61,8 @@
           ["KeyX" #{:ctrl}]
           :else [key-code modifiers])))
 
-(defn build [execute]
-  (fn _execute_ [[key-code modifiers] {selection-present? :selection-present? :as state}]
+(defn build [transform-state]
+  (fn _transform-state_ [[key-code modifiers] {selection-present? :selection-present? :as state}]
     (let [modifiers            (swap-modifiers-on-mac modifiers)
           [key-code modifiers] (swap-for-mac key-code modifiers)
           key                  #{key-code modifiers}
@@ -73,5 +73,5 @@
                                  key)
           command              (commands key)]
       (if command
-        (execute command state)
+        (transform-state command state)
         (assoc state :dont-prevent-default true)))))

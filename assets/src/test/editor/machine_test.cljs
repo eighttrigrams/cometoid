@@ -2,13 +2,13 @@
   (:require [cljs.test :refer (deftest is)]
             [editor.machine :as machine]))
 
-(def execute (machine/build))
+(def transform-state (machine/build))
 
 (deftest base-case
   (is (= {:selection-start 1
           :selection-end   1
           :value           "abc"}
-         (execute
+         (transform-state
           :caret-left
           {:selection-start 2
            :selection-end   2
@@ -19,7 +19,7 @@
           :selection-start 1
           :selection-end   1
           :value           "adef"}
-         (execute
+         (transform-state
           :delete-with-selection-present
           {:selection-start 1
            :selection-end 3
@@ -30,7 +30,7 @@
           :selection-start 2
           :selection-end   3
           :value           "abcdef"}
-         (execute
+         (transform-state
           :caret-left-with-selection
           {:selection-start 3
            :selection-end 3
@@ -45,6 +45,6 @@
          (->> {:selection-start 3
                :selection-end 3
                :value "abcdef"}
-              (execute :caret-left-with-selection)
-              (execute :caret-left-with-selection)
-              (execute :caret-right-with-selection)))))
+              (transform-state :caret-left-with-selection)
+              (transform-state :caret-left-with-selection)
+              (transform-state :caret-right-with-selection)))))

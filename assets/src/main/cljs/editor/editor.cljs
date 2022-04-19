@@ -29,18 +29,18 @@
      :selection-present?   (not= selection-start selection-end)
      :dont-prevent-default false}))
 
-(defn paste [el modifiers execute]
+(defn paste [el modifiers transform-state]
   (fn [e]
     (.preventDefault e)
     (->> (.getData (.-clipboardData e) "Text")
          (assoc (construct-state el) :clipboard-data)
-         (execute ["INSERT" @modifiers])
+         (transform-state ["INSERT" @modifiers])
          (set-values! el))))
 
-(defn keydown [el modifiers execute]
+(defn keydown [el modifiers transform-state]
   (fn [e]
     (set-modifiers! e true modifiers)
-    (let [new-state   (execute [(.-code e) @modifiers] (construct-state el))]
+    (let [new-state   (transform-state [(.-code e) @modifiers] (construct-state el))]
       (set-values! el new-state)
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
 
@@ -54,8 +54,8 @@
 
 (defn ^:export new [el]
   (let [modifiers (atom #{})
-        execute (-> (machine/build) time-machine/build bindings-resolver/build)]
-    (.addEventListener el "paste" (paste el modifiers execute))
-    (.addEventListener el "keydown" (keydown el modifiers execute))
+        transform-state (-> (machine/build) time-machine/build bindings-resolver/build)]
+    (.addEventListener el "paste" (paste el modifiers transform-state))
+    (.addEventListener el "keydown" (keydown el modifiers transform-state))
     (.addEventListener el "keyup" (keyup el modifiers))
     (.addEventListener el "mouseleave" (mouseleave el modifiers))))

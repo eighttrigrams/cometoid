@@ -10,9 +10,9 @@
 (defn- clean [state]
   (select-keys state #{:value :selection-start :selection-end}))
 
-(defn build [execute]
+(defn build [transform-state]
   (let [history (atom '())]
-    (fn _execute_ [command state]
+    (fn _transform-state_ [command state]
       (if (= command :restore)
 
         (if (seq @history)
@@ -21,7 +21,7 @@
             (merge state first))
           state)
 
-        (let [new-state (execute command (assoc state :history @history))]
+        (let [new-state (transform-state command (assoc state :history @history))]
           (when (and (not= nil command (comment "TODO review"))
                      (command commands-to-track))
             (swap! history conj (clean state)))
