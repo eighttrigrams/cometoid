@@ -43,222 +43,222 @@ hooks.ContentsHook = {
 }
 
 hooks.ContextSearchInputHook = {
-    mounted() {
-      document.getElementById("context_search_q").focus()
+  mounted() {
+    document.getElementById("context_search_q").focus()
+  }
+}
+hooks.IssueSearchInputHook = {
+  mounted() {
+    document.getElementById("issue_search_q").focus()
+  }
+}
+
+hooks.DescriptionSaveHook = {
+  myTarget: undefined,
+  controlPressed: false,
+  keyUpListener: undefined,
+  keyDownListener: undefined,
+  makeKeyUpListener: function(self) { return function(e) {
+    const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+    if (e.key === ctrl) {
+      self.controlPressed = false
     }
-  }
-  hooks.IssueSearchInputHook = {
-    mounted() {
-      document.getElementById("issue_search_q").focus()
+  }},
+  makeKeyDownListener: function(self) { return function(e) {
+
+    const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+    if (e.key === ctrl) {
+      self.controlPressed = true
     }
+
+    if (e.key === "s") {
+      if (self.controlPressed) {
+        e.preventDefault()
+        self.pushEventTo(self.myTarget, "save", 
+          { description: self.el.querySelector("#text-area").value }
+        )
+      }
+    }}
+  },
+  mounted() {
+    const el = this.el.getElementsByTagName("textarea")[0]
+    el.focus()
+    el.selectionStart = el.selectionEnd = el.value.length
+
+    this.myTarget = this.el.getAttribute("phx-my-target")
+    
+    this.keyUpListener = this.makeKeyUpListener(this)
+    this.keyDownListener = this.makeKeyDownListener(this)
+
+    document.addEventListener("keyup", this.keyUpListener)
+    document.addEventListener("keydown", this.keyDownListener)
+  },
+  destroyed() {
+    document.removeEventListener("keyup", this.keyUpListener)
+    document.removeEventListener("keydown", this.keyDownListener)
   }
-  
-  hooks.DescriptionSaveHook = {
-    myTarget: undefined,
-    controlPressed: false,
-    keyUpListener: undefined,
-    keyDownListener: undefined,
-    makeKeyUpListener: function(self) { return function(e) {
-      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
-      if (e.key === ctrl) {
-        self.controlPressed = false
-      }
-    }},
-    makeKeyDownListener: function(self) { return function(e) {
-  
-      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
-      if (e.key === ctrl) {
-        self.controlPressed = true
-      }
-  
-      if (e.key === "s") {
-        if (self.controlPressed) {
-          e.preventDefault()
-          self.pushEventTo(self.myTarget, "save", 
-            { description: self.el.querySelector("#text-area").value }
-          )
-        }
-      }}
-    },
-    mounted() {
-      const el = this.el.getElementsByTagName("textarea")[0]
-      el.focus()
-      el.selectionStart = el.selectionEnd = el.value.length
-  
-      this.myTarget = this.el.getAttribute("phx-my-target")
-      
-      this.keyUpListener = this.makeKeyUpListener(this)
-      this.keyDownListener = this.makeKeyDownListener(this)
-  
-      document.addEventListener("keyup", this.keyUpListener)
-      document.addEventListener("keydown", this.keyDownListener)
-    },
-    destroyed() {
-      document.removeEventListener("keyup", this.keyUpListener)
-      document.removeEventListener("keydown", this.keyDownListener)
+}
+hooks.SaveHook = {
+  myTarget: undefined,
+  controlPressed: false,
+  keyUpListener: undefined,
+  keyDownListener: undefined,
+  makeKeyUpListener: function(self) { return function(e) {
+    const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+    if (e.key === ctrl) {
+      self.controlPressed = false
     }
-  }
-  hooks.SaveHook = {
-    myTarget: undefined,
-    controlPressed: false,
-    keyUpListener: undefined,
-    keyDownListener: undefined,
-    makeKeyUpListener: function(self) { return function(e) {
-      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
-      if (e.key === ctrl) {
-        self.controlPressed = false
+  }},
+  makeKeyDownListener: function(self) { return function(e) {
+
+    if (e.key === "Enter") e.preventDefault()
+    const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
+    if (e.key === ctrl) self.controlPressed = true
+    if (e.key === "s") {
+      if (self.controlPressed) {
+        e.preventDefault()
+        self.pushEventTo(self.myTarget, "save")
       }
-    }},
-    makeKeyDownListener: function(self) { return function(e) {
-  
-      if (e.key === "Enter") e.preventDefault()
-      const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
-      if (e.key === ctrl) self.controlPressed = true
-      if (e.key === "s") {
-        if (self.controlPressed) {
-          e.preventDefault()
-          self.pushEventTo(self.myTarget, "save")
-        }
-      }}
-    },
-    mounted() {
-      for (const inputField of this.el.getElementsByTagName("input")) {
-        if (inputField.type === "text") {
-          inputField.focus()
-          inputField.selectionStart = inputField.selectionEnd = inputField.value.length
-          break
-        }
+    }}
+  },
+  mounted() {
+    for (const inputField of this.el.getElementsByTagName("input")) {
+      if (inputField.type === "text") {
+        inputField.focus()
+        inputField.selectionStart = inputField.selectionEnd = inputField.value.length
+        break
       }
-  
-      this.myTarget = this.el.getAttribute("phx-my-target")
-      
-      this.keyUpListener = this.makeKeyUpListener(this)
-      this.keyDownListener = this.makeKeyDownListener(this)
-  
-      document.addEventListener("keyup", this.keyUpListener)
-      document.addEventListener("keydown", this.keyDownListener)
-    },
-    destroyed() {
-      document.removeEventListener("keyup", this.keyUpListener)
-      document.removeEventListener("keydown", this.keyDownListener)
     }
+
+    this.myTarget = this.el.getAttribute("phx-my-target")
+    
+    this.keyUpListener = this.makeKeyUpListener(this)
+    this.keyDownListener = this.makeKeyDownListener(this)
+
+    document.addEventListener("keyup", this.keyUpListener)
+    document.addEventListener("keydown", this.keyDownListener)
+  },
+  destroyed() {
+    document.removeEventListener("keyup", this.keyUpListener)
+    document.removeEventListener("keydown", this.keyDownListener)
   }
-  
-  
-  
-  
-  hooks.SecondaryContextBadgeHook = {
-      context_id: "",
-      issue_id: "",
-      mounted() {
-          const [context_id, issue_id] = this.el.id.split("_")[1].split(":")
-          this.context_id = context_id
-          this.issue_id = issue_id
-          this.el.addEventListener("mouseup", e => { 
-              this.pushEvent("jump_to_context", 
-                  { target_context_id: context_id, target_issue_id: issue_id })
-          })
-      }
-  }
-  hooks.IssueEventHook = {
-    inpStored: '',
+}
+
+
+
+
+hooks.SecondaryContextBadgeHook = {
+    context_id: "",
+    issue_id: "",
     mounted() {
-        const inp = document.getElementById("issue-form_title")
-        this.inpStored = inp.value
-        inp.addEventListener("input", e => { this.inpStored = inp.value })
-    },
-    updated() {
-        const inp = document.getElementById("issue-form_title");
-        inp.value = this.inpStored
+        const [context_id, issue_id] = this.el.id.split("_")[1].split(":")
+        this.context_id = context_id
+        this.issue_id = issue_id
+        this.el.addEventListener("mouseup", e => { 
+            this.pushEvent("jump_to_context", 
+                { target_context_id: context_id, target_issue_id: issue_id })
+        })
     }
+}
+hooks.IssueEventHook = {
+  inpStored: '',
+  mounted() {
+      const inp = document.getElementById("issue-form_title")
+      this.inpStored = inp.value
+      inp.addEventListener("input", e => { this.inpStored = inp.value })
+  },
+  updated() {
+      const inp = document.getElementById("issue-form_title");
+      inp.value = this.inpStored
   }
-  hooks.ContextItemHook = {
-      id: '',
-      mounted() {
-          this.handleEvent("context_reprioritized", ({ id: id }) => {
-            if (this.id == id) this.el.scrollIntoView(false)
-          })
-          this.id = this.el.id.replace("context-", "")
-          document.addEventListener("mousedown", function (event) {
-              if (event.detail > 1) {
-              event.preventDefault()
-            }
-          }, false);
-           this.el.addEventListener("dblclick", e => {
-               this.pushEvent("edit_context", this.id);
-           }, false);  
-      }
-  }
-  hooks.IssueItemHook = {
-      id: '',
-      mounted() {
-          this.handleEvent("issue_reprioritized", ({ id: id }) => {
-              if (this.id == id) this.el.scrollIntoView(false)
-          })
-          this.id = this.el.id.replace("issue-", "");
-          document.addEventListener('mousedown', function (event) {
-              if (event.detail > 1) {
-              event.preventDefault()
-            }
-          }, false)
-          this.el.addEventListener('dblclick', e => {
-              this.pushEvent("edit_issue", this.id)
-          }, false)  
-      }
-  }
-  hooks.EventItemHook = {
+}
+hooks.ContextItemHook = {
     id: '',
     mounted() {
-        this.id = this.el.id.replace("event-", "");
+        this.handleEvent("context_reprioritized", ({ id: id }) => {
+          if (this.id == id) this.el.scrollIntoView(false)
+        })
+        this.id = this.el.id.replace("context-", "")
+        document.addEventListener("mousedown", function (event) {
+            if (event.detail > 1) {
+            event.preventDefault()
+          }
+        }, false);
+          this.el.addEventListener("dblclick", e => {
+              this.pushEvent("edit_context", this.id);
+          }, false);  
+    }
+}
+hooks.IssueItemHook = {
+    id: '',
+    mounted() {
+        this.handleEvent("issue_reprioritized", ({ id: id }) => {
+            if (this.id == id) this.el.scrollIntoView(false)
+        })
+        this.id = this.el.id.replace("issue-", "");
         document.addEventListener('mousedown', function (event) {
             if (event.detail > 1) {
             event.preventDefault()
           }
         }, false)
         this.el.addEventListener('dblclick', e => {
-            this.pushEvent("edit_event", this.id)
+            this.pushEvent("edit_issue", this.id)
         }, false)  
     }
+}
+hooks.EventItemHook = {
+  id: '',
+  mounted() {
+      this.id = this.el.id.replace("event-", "");
+      document.addEventListener('mousedown', function (event) {
+          if (event.detail > 1) {
+          event.preventDefault()
+        }
+      }, false)
+      this.el.addEventListener('dblclick', e => {
+          this.pushEvent("edit_event", this.id)
+      }, false)  
   }
-  hooks.IssueDescriptionHook = {
-      mounted() {
-        document.addEventListener('mousedown', function (event) {
+}
+hooks.IssueDescriptionHook = {
+    mounted() {
+      document.addEventListener('mousedown', function (event) {
+        if (event.detail > 1) {
+          event.preventDefault();
+        }
+      }, false);
+        this.el.addEventListener('dblclick', e => {
+            this.pushEvent("edit_issue_description");
+        }, false);
+    }
+}
+hooks.ContextDescriptionHook = {
+    mounted() {
+        // https://stackoverflow.com/a/43321596
+      document.addEventListener('mousedown', function (event) {
           if (event.detail > 1) {
             event.preventDefault();
           }
-        }, false);
-         this.el.addEventListener('dblclick', e => {
-             this.pushEvent("edit_issue_description");
-         }, false);
-      }
+      }, false);
+      this.el.addEventListener('dblclick', e => {
+          this.pushEvent("edit_context_description");
+      }, false);
+    }, 
   }
-  hooks.ContextDescriptionHook = {
-      mounted() {
-         // https://stackoverflow.com/a/43321596
-        document.addEventListener('mousedown', function (event) {
-           if (event.detail > 1) {
-             event.preventDefault();
-           }
-        }, false);
-        this.el.addEventListener('dblclick', e => {
-            this.pushEvent("edit_context_description");
-        }, false);
-      }, 
-   }
-  hooks.DescHook = {
-    mounted() {
-      const elements = this.el.getElementsByTagName('a');
-      for (const element of elements) {
-        element.tabIndex = -1;
-      }
-    },
-    updated() {
-      const elements = this.el.getElementsByTagName('a');
-      for (const element of elements) {
-        element.tabIndex = -1;
-      }
+hooks.DescHook = {
+  mounted() {
+    const elements = this.el.getElementsByTagName('a');
+    for (const element of elements) {
+      element.tabIndex = -1;
+    }
+  },
+  updated() {
+    const elements = this.el.getElementsByTagName('a');
+    for (const element of elements) {
+      element.tabIndex = -1;
     }
   }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
