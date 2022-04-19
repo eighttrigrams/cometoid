@@ -8,7 +8,8 @@ defmodule CometoidWeb.Helpers do
   end
 
   def demarkdownify md do
-    with [_, nil] <- ["**", (Regex.run ~r/(\*\*.+?\*\*)/, md)],
+    with [_, nil] <- ["***", (Regex.run ~r/(\*\*\*.+?\*\*\*)/, md)],
+         [_, nil] <- ["**", (Regex.run ~r/(\*\*.+?\*\*)/, md)],
          [_, nil] <- ["*", (Regex.run ~r/(\*.+?\*)/, md)],
          [_, nil] <- ["`", (Regex.run ~r/(`.+?`)/, md)] do
       md
