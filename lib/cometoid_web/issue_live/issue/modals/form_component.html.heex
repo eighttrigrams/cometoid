@@ -20,7 +20,7 @@
       <br>
     <% end %>
 
-    <%= text_input f, :title, class: 'background-color', phx_hook: "TextAreaHook" %>
+    <%= text_input f, :title, class: 'background-color', phx_hook: "TextAreaHook", target: @myself %>
     
     <%= text_input f, :short_title, class: 'background-color', style: "width: 33%" %>
 

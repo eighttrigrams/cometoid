@@ -21,7 +21,13 @@ let hooks = {};
 
 const editorHook = {
     mounted() {
-        editor.editor.new$(this.el)
+        const target = this.el.getAttribute("target")
+        if (target) {
+          editor.editor.new$(this.el, title => {
+            this.pushEventTo(this.el.getAttribute("target"), "change_title", title)})
+        } else {
+          editor.editor.new$(this.el)
+        }
     }
 }
 hooks.TextAreaHook = editorHook;

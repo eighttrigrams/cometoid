@@ -10,6 +10,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:title, nil)
      |> assign(:context_params, %{})
      |> assign(:changeset, changeset)}
   end
@@ -22,8 +23,21 @@ defmodule CometoidWeb.IssueLive.Context.Modals.FormComponent do
     {:noreply, socket}
   end
 
+  # TODO review duplication with issue form component
+  def handle_event "change_title", %{ "value" => title }, socket do
+    if title == socket.assigns.title do
+      {:noreply, socket}
+    else
+      socket =
+        socket
+        |> assign(:title, title)
+      {:noreply, socket}
+    end
+  end
+
   def handle_event("save", _, socket) do
-    save_context(socket, socket.assigns.action, socket.assigns.context_params)
+    context_params = Map.put socket.assigns.context_params, "title", socket.assigns.title
+    save_context(socket, socket.assigns.action, context_params)
   end
 
   defp save_context(socket, :edit_context, context_params) do
