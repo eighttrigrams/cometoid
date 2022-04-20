@@ -37,12 +37,10 @@
          (transform-state ["INSERT" @modifiers])
          (set-values! el))))
 
-(defn keydown [el modifiers transform-state notify-state-transformed]
+(defn keydown [el modifiers transform-state]
   (fn [e]
     (set-modifiers! e true modifiers)
     (let [new-state   (transform-state [(.-code e) @modifiers] (construct-state el))]
-      (when notify-state-transformed 
-        (notify-state-transformed (clj->js {:value (:value new-state)})))
       (set-values! el new-state)
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
 
@@ -54,10 +52,10 @@
   (fn [_e]
     (reset! modifiers #{})))
 
-(defn ^:export new [el notify-state-transformed]
+(defn ^:export new [el]
   (let [modifiers (atom #{})
         transform-state (-> (machine/build) time-machine/build bindings-resolver/build)]
     (.addEventListener el "paste" (paste el modifiers transform-state))
-    (.addEventListener el "keydown" (keydown el modifiers transform-state notify-state-transformed))
+    (.addEventListener el "keydown" (keydown el modifiers transform-state))
     (.addEventListener el "keyup" (keyup el modifiers))
     (.addEventListener el "mouseleave" (mouseleave el modifiers))))

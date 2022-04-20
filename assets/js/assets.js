@@ -21,13 +21,7 @@ let hooks = {};
 
 const editorHook = {
     mounted() {
-        const target = this.el.getAttribute("target")
-        if (target) {
-          editor.editor.new$(this.el, title => {
-            this.pushEventTo(this.el.getAttribute("target"), "change_title", title)})
-        } else {
-          editor.editor.new$(this.el)
-        }
+        editor.editor.new$(this.el)
     }
 }
 hooks.TextAreaHook = editorHook;
@@ -104,8 +98,15 @@ hooks.DescriptionSaveHook = {
     document.removeEventListener("keydown", this.keyDownListener)
   }
 }
+/*
+ * Used in 
+ * - Issue.Modals.FormComponent
+ * - Issue.Modals.NewComponent
+ * - Context.Modals.FormComponent
+ */
 hooks.SaveHook = {
-  myTarget: undefined,
+  targetComponent: undefined,
+  saveHookTargetEl: undefined,
   controlPressed: false,
   keyUpListener: undefined,
   keyDownListener: undefined,
@@ -123,7 +124,8 @@ hooks.SaveHook = {
     if (e.key === "s") {
       if (self.controlPressed) {
         e.preventDefault()
-        self.pushEventTo(self.myTarget, "save")
+        console.log(self.saveHookTargetEl.value)
+        self.pushEventTo(self.targetComponent, "save", self.saveHookTargetEl.value)
       }
     }}
   },
@@ -136,8 +138,9 @@ hooks.SaveHook = {
       }
     }
 
-    this.myTarget = this.el.getAttribute("phx-my-target")
-    
+    this.targetComponent = this.el.getAttribute("target")
+    this.saveHookTargetEl = document.getElementById(this.el.getAttribute("save-hook-target-el-id"))
+
     this.keyUpListener = this.makeKeyUpListener(this)
     this.keyDownListener = this.makeKeyDownListener(this)
 

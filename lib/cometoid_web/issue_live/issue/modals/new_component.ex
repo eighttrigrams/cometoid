@@ -9,7 +9,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:title, "new issue")
      |> assign(:changeset, changeset)}
   end
 
@@ -21,21 +20,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
     {:noreply, socket}
   end
 
-  # TODO review duplication with issue form component
-  def handle_event "change_title", %{ "value" => title }, socket do
-    if title == socket.assigns.title do
-      {:noreply, socket}
-    else
-      socket =
-        socket
-        |> assign(:title, title)
-      {:noreply, socket}
-    end
-  end
-
-  def handle_event("save", _, socket) do
-    IO.inspect socket.assigns.title
-    save_issue(socket, socket.assigns.action, %{ "title" => socket.assigns.title })
+  def handle_event("save", title, socket) do
+    save_issue(socket, socket.assigns.action, %{ "title" => title })
   end
 
   defp save_issue(socket, :new, %{ "title" => title }) do
