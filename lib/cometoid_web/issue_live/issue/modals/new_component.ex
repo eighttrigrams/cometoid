@@ -21,11 +21,20 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
   end
 
   def handle_event("save", title, socket) do
-    save_issue(socket, socket.assigns.action, %{ "title" => title })
+
+    [short_title, title] = case String.split(title, "|") do
+      [title] -> [nil, title]
+      [short_title, title] -> [short_title, title]
+    end
+    short_title = if short_title do String.trim(short_title) end
+    title = String.trim(title)
+
+    save_issue(socket, socket.assigns.action, %{
+      "title" => title, "short_title" => short_title })
   end
 
-  defp save_issue(socket, :new, %{ "title" => title }) do
-    case create_new_issue(socket, title) do
+  defp save_issue(socket, :new, %{ "title" => title, "short_title" => short_title }) do
+    case create_new_issue(socket, title, short_title) do
       {:ok, issue} ->
         send self(), {:after_edit_form_save, issue}
         {:noreply, socket}
@@ -35,11 +44,11 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
     end
   end
 
-  defp create_new_issue(socket, title) do
+  defp create_new_issue(socket, title, short_title) do
     secondary_contexts =
       Enum.map socket.assigns.state.selected_secondary_contexts,
       &(Tracker.get_context!(&1))
     contexts = [socket.assigns.state.selected_context|secondary_contexts]
-    Tracker.create_issue title, contexts
+    Tracker.create_issue title, short_title, contexts
   end
 end
