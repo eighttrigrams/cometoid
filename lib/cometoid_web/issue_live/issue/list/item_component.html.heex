@@ -1,7 +1,7 @@
 <tr id={"issue-#{@issue.id}"} phx-hook="IssueItemHook" class={"list-item #{if not is_nil(@state[:selected_issue]) and @state.selected_issue.id == @issue.id do 'selected-item-color' end}"}>
     <td class="left" phx-click="select_issue" phx-value-target={@issue.id}>
         <div class={"#{if @issue.important do 'important-color' else 'regular-color' end} type"}><span class="text text-left">
-            <b><%= if @state.sort_issues_alphabetically, do: @issue.short_title, else: @issue.id %>
+            <b><%= if not is_nil(@state.selected_context) and not is_nil(@state.selected_context.search_mode) and @state.selected_context.search_mode > 0 , do: @issue.short_title, else: @issue.id %>
             </b>
             </span>
         </div>

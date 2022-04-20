@@ -351,7 +351,7 @@ defmodule CometoidWeb.IssueLive.Index do
       socket.assigns.selected_context
 
     new_search_mode = unless is_nil(selected_context.search_mode) do
-      rem(selected_context.search_mode + 1, 2)
+      rem(selected_context.search_mode + 1, 3)
     else
       1
     end

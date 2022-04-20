@@ -210,16 +210,20 @@ defmodule Cometoid.Repo.Tracker do
       numeric =
         issues
         |> Enum.filter(fn {{_n, rest}, _i} -> rest == "" end)
-        |> Enum.sort_by(fn {{n, _rest}, _i} ->n end)
+        |> Enum.sort_by(fn {{n, _rest}, _i} -> n end, if query.selected_context.search_mode == 1 do :asc else :desc end)
         |> Enum.map(fn {{_s, _rest}, i} -> i end)
 
       non_numeric =
         issues
         |> Enum.filter(fn {{_s, rest}, _i} -> rest != "" end)
-        |> Enum.sort_by(fn {{_s, _rest}, i} -> i.short_title end)
+        |> Enum.sort_by(fn {{_s, _rest}, i} -> i.short_title end, if query.selected_context.search_mode == 1 do :asc else :desc end)
         |> Enum.map(fn {{_s, _rest}, i} -> i end)
 
-      non_numeric ++ numeric
+      if query.selected_context.search_mode == 1 do
+        non_numeric ++ numeric
+      else
+        numeric ++ non_numeric
+      end
     end
   end
 

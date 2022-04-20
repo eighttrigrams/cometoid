@@ -25,4 +25,12 @@ defmodule CometoidWeb.IssueLive.Taskbar.TaskbarComponent do
         not is_nil(state.selected_context)
         and length(Enum.filter(state.selected_context.issues, &(&1.issue.done))) == 0
   end
+
+  def get_sort_symbol state do
+    cond do
+      is_nil(state.selected_context.search_mode) or state.selected_context.search_mode == 0 -> "down-alt"
+      state.selected_context.search_mode == 1 -> "alpha-down"
+      state.selected_context.search_mode == 2 -> "alpha-up-alt"
+    end
+  end
 end

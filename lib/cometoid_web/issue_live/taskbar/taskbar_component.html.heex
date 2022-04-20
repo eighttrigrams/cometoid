@@ -98,7 +98,7 @@
   <%= if @state.selected_context do %>
     <div class={"form-block button right enabled-button-color"}>
       <a phx-click="toggle_sort">
-        <i class={"bi bi-sort-#{if (is_nil(@state.selected_context.search_mode) or @state.selected_context.search_mode == 0), do: "down-alt", else: "alpha-down"}"}>
+        <i class={"bi bi-sort-#{get_sort_symbol(@state)}"}>
         </i>
       </a>
     </div>
