@@ -347,8 +347,17 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "toggle_sort", _params, socket do
+    selected_context =
+      socket.assigns.selected_context
+
+    new_search_mode = unless is_nil(selected_context.search_mode) do
+      rem(selected_context.search_mode + 1, 2)
+    else
+      1
+    end
+    {:ok, selected_context} = Tracker.update_context selected_context, %{ "search_mode" => new_search_mode }
     socket
-    |> assign(:sort_issues_alphabetically, !socket.assigns.sort_issues_alphabetically)
+    |> assign(:selected_context, selected_context)
     |> do_query
   end
 

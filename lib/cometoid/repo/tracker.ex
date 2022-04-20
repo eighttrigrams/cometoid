@@ -182,7 +182,7 @@ defmodule Cometoid.Repo.Tracker do
       sort_issues_alphabetically: false
   end
 
-  def list_issues %{ sort_issues_alphabetically: sort_issues_alphabetically } = query do
+  def list_issues query do
     q =
       Issue
       |> join(:left, [i], context_relation in assoc(i, :contexts))
@@ -195,7 +195,7 @@ defmodule Cometoid.Repo.Tracker do
       |> Repo.preload(contexts: :context)
       |> Repo.preload(:event)
 
-    unless sort_issues_alphabetically do
+    if is_nil(query.selected_context) or is_nil(query.selected_context.search_mode) or query.selected_context.search_mode == 0 do
       issues
     else
       issues = issues
