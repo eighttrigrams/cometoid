@@ -42,8 +42,8 @@
 
           <br>
           <%= label e, :date %>
-          <%= date_select e, :date, 
-            default: :calendar.local_time(), 
+          <%= date_select e, :date,
+            value: {@year, @month, @day},
             year: [options: @year_options], 
             month: [options: @month_options],
             day: [options: @day_options] %>
