@@ -23,7 +23,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
         |> assign(:month, month)
         |> assign(:day, day)
         |> assign(:day_options, 1..day_options)
-        |> assign(:issue_params, %{})
+        |> assign(:issue_params, %{}) # TODO I think this maybe can be removed, since we have changeset
         |> assign(:changed?, false)
         |> assign(:changeset, Tracker.change_issue(issue))
     }
