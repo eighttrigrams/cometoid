@@ -6,7 +6,6 @@
     for={@changeset}
     phx-target={@myself}
     phx-change="changes"
-    phx-submit="save"
     phx-hook="IssueEventHook"
     id="issue-form">
 
@@ -26,8 +25,6 @@
     
     <%= text_input f, :short_title, class: 'background-color', style: "width: 33%" %>
 
-    <%= submit "Save", phx_disable_with: "Saving..." %>
-
     <div id="content">
       <br>
 
@@ -45,7 +42,11 @@
 
           <br>
           <%= label e, :date %>
-          <%= date_select e, :date, [default: :calendar.local_time()] %>
+          <%= date_select e, :date, 
+            default: :calendar.local_time(), 
+            year: [options: @year_options], 
+            month: [options: @month_options],
+            day: [options: @day_options] %>
           <%= error_tag e, :date %>
 
           <br>

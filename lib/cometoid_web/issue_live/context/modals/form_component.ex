@@ -22,6 +22,9 @@ defmodule CometoidWeb.IssueLive.Context.Modals.FormComponent do
     {:noreply, socket}
   end
 
+  @doc """
+  called from SaveHook via pushEventTo()
+  """
   def handle_event("save", title, socket) do
     context_params = Map.put socket.assigns.context_params, "title", title
     save_context(socket, socket.assigns.action, context_params)

@@ -8,8 +8,7 @@
     id="context-form"
     phx-change="changes"
     class="alternative-inputs"
-    phx-target={@myself}
-    phx-submit="save">
+    phx-target={@myself}>
 
     <%= text_input f, :title, style: "width: 100%", phx_hook: "TextAreaHook", target: @myself %>
     
@@ -21,9 +20,6 @@
     <br>
     <%= checkbox f, :is_tag?, value: @context.is_tag? %>
     <br>
-    <br>
-
-    <%= submit "Save", phx_disable_with: "Saving..." %>
     <br>
 
     <%= if @id == :new do %>

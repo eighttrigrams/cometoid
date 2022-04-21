@@ -124,7 +124,6 @@ hooks.SaveHook = {
     if (e.key === "s") {
       if (self.controlPressed) {
         e.preventDefault()
-        console.log(self.saveHookTargetEl.value)
         self.pushEventTo(self.targetComponent, "save", self.saveHookTargetEl.value)
       }
     }}
