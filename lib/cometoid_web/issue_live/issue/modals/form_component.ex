@@ -85,7 +85,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   """
   def handle_event "save", title, socket do
     issue_params = Map.put socket.assigns.issue_params, "title", title
-    IO.inspect issue_params
     if socket.assigns.changed? or socket.assigns.issue.title != title do
       save_issue socket, socket.assigns.action, issue_params
     else
