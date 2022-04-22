@@ -39,7 +39,6 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
   def handle_event "changes", %{ "person" => person_params }, socket do
 
     person_params = put_back_event person_params, socket.assigns.person_params, "birthday"
-    IO.inspect person_params
 
     socket
     |> assign(:person_params, person_params)
