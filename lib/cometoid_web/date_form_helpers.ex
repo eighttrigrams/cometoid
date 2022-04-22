@@ -10,6 +10,14 @@ defmodule CometoidWeb.DateFormHelpers do
     }
   end
 
+  def clean_event params do
+    if has_event? params do
+      params
+    else
+      Map.delete params, "event"
+    end
+  end
+
   def to_date_map date_sigil do
     %{
       "year" => Integer.to_string(date_sigil.year),
