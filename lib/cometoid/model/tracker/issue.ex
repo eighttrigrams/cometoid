@@ -45,7 +45,7 @@ defmodule Cometoid.Model.Tracker.Issue do
 
   def delete_event_changeset(issue, attrs) do
     issue
-    |> cast(attrs, [:title, :description, :done, :important])
+    |> cast(attrs, [:title, :short_title,:description, :done, :important])
     |> put_assoc_contexts(attrs)
     |> put_assoc(:event,
       %{ Calendar.Event.date_changeset(issue.event, %{}) | action: :delete })

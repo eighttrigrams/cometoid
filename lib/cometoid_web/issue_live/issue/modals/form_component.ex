@@ -26,7 +26,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       "_target" => ["issue", "event", "date", field],
       "issue" => issue_params }, socket do
 
-    {issue_params, day_options} = adjust_date issue_params
+    {event, day_options} = adjust_date issue_params["event"]
+    issue_params = put_in issue_params["event"], event
 
     socket
     |> assign(:day_options, day_options)
@@ -36,7 +37,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
   def handle_event "changes", %{ "issue" => issue_params }, socket do
 
-    issue_params = put_back_event issue_params, socket.assigns.issue_params
+    issue_params = put_back_event issue_params, socket.assigns.issue_params, "event"
 
     socket
     |> assign(:issue_params, issue_params)
@@ -60,5 +61,41 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+  end
+
+  def init_params _event = nil do
+    params = %{
+      "has_event?" => "false",
+      "event" => %{
+        "archived" => "false",
+        "date" => local_time()
+      }
+    }
+    day_options = get_day_options params["event"]
+    {params, day_options}
+  end
+
+  def init_params event do
+    params = %{
+      "has_event?" => "true",
+      "event" => %{
+        "archived" => to_string(event.archived),
+        "date" => to_date_map(event.date)
+      }
+    }
+    day_options = get_day_options params["event"]
+    {params, day_options}
+  end
+
+  def clean_event params do
+    if has_event? params do
+      params
+    else
+      Map.delete params, "event"
+    end
+  end
+
+  defp has_event? %{ "has_event?" => has_event? } do
+    has_event? == "true"
   end
 end

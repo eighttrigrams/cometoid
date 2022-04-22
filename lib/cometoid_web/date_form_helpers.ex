@@ -1,62 +1,31 @@
 defmodule CometoidWeb.DateFormHelpers do
 
-  def init_params _event = nil do
-    params = %{
-      "has_event?" => "false",
-      "event" => %{
-        "archived" => "false",
-        "date" => local_time()
-      }
-    }
-    day_options = get_day_options params
-    {params, day_options}
-  end
-
-  def init_params event do
-    params = %{
-      "has_event?" => "true",
-      "event" => %{
-        "archived" => to_string(event.archived),
-        "date" => to_date_map(event.date)
-      }
-    }
-    day_options = get_day_options params
-    {params, day_options}
-  end
-
-  def put_back_event params, previous_params do
-    if not Map.has_key? params, "event" do
-      Map.put params, "event", previous_params["event"]
+  def put_back_event params, previous_params, key do
+    if not Map.has_key? params, key do
+      Map.put params, key, previous_params[key]
     else
       params
     end
   end
 
-  def clean_event params do
-    if has_event? params do
-      params
-    else
-      Map.delete params, "event"
-    end
-  end
-
-  def adjust_date %{ "event" => %{ "date" => %{ "day" => day }}} = params do
-    day_options = get_day_options params
+  def adjust_date %{ "date" => %{ "day" => day }} = event do
+    day_options = get_day_options event
     {day_i, ""} = Integer.parse day
     day = unless day_i in day_options do
       Integer.to_string List.last Enum.to_list day_options
     else
       day
     end
-    params = put_in params["event"]["date"]["day"], day
-    {params, day_options}
+    event = put_in event["date"]["day"], day
+    IO.inspect event
+    {event, day_options}
   end
 
-  def date_tuple_from %{ "event" => %{ "date" => %{ "year" => year, "month" => month, "day" => day }}} do
+  def date_tuple_from %{ "date" => %{ "year" => year, "month" => month, "day" => day }} do
     { year, month, day }
   end
 
-  defp to_date_map date_sigil do
+  def to_date_map date_sigil do
     %{
       "year" => Integer.to_string(date_sigil.year),
       "month" => Integer.to_string(date_sigil.month),
@@ -70,7 +39,7 @@ defmodule CometoidWeb.DateFormHelpers do
     Date.from_iso8601! year <> "-" <> month <> "-" <> "01"
   end
 
-  defp local_time do
+  def local_time do
     {{year, month, day}, _} = :calendar.local_time()
     day = Integer.to_string(day)
     month = Integer.to_string(month)
@@ -78,16 +47,12 @@ defmodule CometoidWeb.DateFormHelpers do
     %{"day" => day, "month" => month, "year" => year }
   end
 
-  defp get_day_options %{ "event" => %{ "date" => date }} do
+  def get_day_options %{ "date" => date } do
     date = to_sigil date
     1..Date.days_in_month date
   end
 
-  defp get_day_options date do
+  def get_day_options date do
     1..Date.days_in_month date
-  end
-
-  defp has_event? %{ "has_event?" => has_event? } do
-    has_event? == "true"
   end
 end

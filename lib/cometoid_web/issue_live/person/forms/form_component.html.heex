@@ -19,18 +19,25 @@
     <br>
 
     <%= label f, :use_birthday %>
-    <%= checkbox f, :use_birthday %>
+    <%= checkbox f, :use_birthday, value: @person_params["use_birthday"] == "true" %>
 
     <br>
     <br>
 
-    <%= inputs_for f, :birthday, fn b -> %>
-      <%= label b, :next_birthday %>
-      <%= date_select b, :date %>
-      <%= error_tag b, :date %>
+    <%= if @person_params["use_birthday"] == "true" do %>
+
+      <%= inputs_for f, :birthday, fn b -> %>
+        <%= label b, :next_birthday %>
+        <%= date_select b, :date,
+          value: date_tuple_from(@person_params["birthday"]),
+          year: [options: @year_options],
+          month: [options: 1..12],
+          day: [options: @day_options] %>
+        <%= error_tag b, :date %>
+      <% end %>
+
+      <br>
     <% end %>
-
-    <br>
     <br>
 
     <%= label f, :original_birthday %>

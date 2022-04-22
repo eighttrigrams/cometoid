@@ -47,10 +47,11 @@ defmodule Cometoid.Repo.People do
     attrs = put_in(attrs["context"],
       %{ "title" => attrs["name"], "id" => person.context.id })
 
-    {
-      :ok,
-      person
-      |> Person.update_changeset(attrs)
+    {:ok, if not is_nil(person.birthday) and is_nil(attrs["birthday"]) do
+        Person.delete_birthday_changeset(person, attrs)
+      else
+        Person.update_changeset(person, attrs)
+      end
       |> Repo.update!
       |> Repo.preload(:context)
       |> Repo.preload(:birthday)
