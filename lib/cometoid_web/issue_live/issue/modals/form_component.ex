@@ -3,7 +3,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
   alias Cometoid.Repo.Tracker
   import CometoidWeb.LiveHelpers
-  import CometoidWeb.DateHelpers
+  import CometoidWeb.DateFormHelpers
 
   @impl true
   def update(%{issue: issue} = assigns, socket) do

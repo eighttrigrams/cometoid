@@ -1,4 +1,4 @@
-defmodule CometoidWeb.DateHelpers do
+defmodule CometoidWeb.DateFormHelpers do
 
   def init_params existing do
     %{
