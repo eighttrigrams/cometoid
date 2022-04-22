@@ -29,6 +29,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       "_target" => ["issue", "event", "date", field],
       "issue" => %{ "event" => %{ "date" => date = %{ "day" => day, "month" => month, "year" => year }}} = issue_params }, socket do
 
+    # TODO extract this block to DateFormHelpers
     day_options = get_day_options(date)
     {day_i, ""} = Integer.parse day
     day = unless day_i in day_options do
