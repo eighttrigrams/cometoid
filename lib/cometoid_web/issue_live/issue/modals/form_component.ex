@@ -16,7 +16,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       socket
         |> assign(assigns)
         |> assign(:year_options, 1900..2050)
-        |> assign(:month_options, 1..12)
         |> assign(:day_options, day_options)
         |> assign(:issue_params, issue_params)
         |> assign(:changed?, false)
