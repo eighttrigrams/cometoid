@@ -30,8 +30,9 @@ defmodule CometoidWeb.DateFormHelpers do
     {params, day_options}
   end
 
-  def set_has_event params, has_event? do
-    Map.put params, "has_event?", has_event?
+  def update_params %{ "has_event?" => has_event? } = params, previous_params do
+    params = Map.put params, "has_event?", has_event?
+    Map.put params, "event", previous_params["event"]
   end
 
   def to_date_map date_sigil do
