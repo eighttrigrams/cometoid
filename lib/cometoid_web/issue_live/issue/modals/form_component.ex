@@ -42,9 +42,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
     socket
     |> assign(:day_options, day_options)
     |> assign(:issue_params, issue_params)
-    |> assign(:day, day)
-    |> assign(:month, month)
-    |> assign(:year, year)
     |> assign(:changed?, true) # TODO review, do we need this? if yes, can we make it that it is only assigned if something has actually changed?
     |> return_noreply
   end
