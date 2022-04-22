@@ -18,7 +18,7 @@ defmodule CometoidWeb.DateFormHelpers do
     end
   end
 
-  def adjust_date %{ "day" => day } = date do
+  def adjust_date %{ "event" => %{ "date" => %{ "day" => day } = date }} = params do
     day_options = get_day_options(date)
     {day_i, ""} = Integer.parse day
     day = unless day_i in day_options do
@@ -26,7 +26,12 @@ defmodule CometoidWeb.DateFormHelpers do
     else
       day
     end
-    {day_options, day}
+    params = put_in params["event"]["date"]["day"], day
+    {params, day_options}
+  end
+
+  def set_has_event params, has_event? do
+    Map.put params, "has_event?", has_event?
   end
 
   def to_date_map date_sigil do

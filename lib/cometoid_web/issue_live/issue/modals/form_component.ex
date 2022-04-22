@@ -26,10 +26,9 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   @impl true
   def handle_event "changes", %{
       "_target" => ["issue", "event", "date", field],
-      "issue" => %{ "event" => %{ "date" => date }} = issue_params }, socket do
+      "issue" => issue_params }, socket do
 
-    {day_options, day} = adjust_date date
-    issue_params = put_in issue_params["event"]["date"]["day"], day
+    {issue_params, day_options} = adjust_date issue_params
 
     socket
     |> assign(:day_options, day_options)
@@ -41,7 +40,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   def handle_event "changes", %{
       "issue" => %{ "has_event?" => has_event? }}, socket do
 
-    issue_params = Map.put socket.assigns.issue_params, "has_event?", has_event?
+    issue_params = set_has_event socket.assigns.issue_params, has_event?
+
     socket
     |> assign(:issue_params, issue_params)
     |> assign(:changed?, true)
