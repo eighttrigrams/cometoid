@@ -1,13 +1,17 @@
 defmodule CometoidWeb.DateFormHelpers do
 
+  # TODO make some functions private
+
   def init_params existing do
-    %{
+    params = %{
       "has_event?" => (if existing do "true" else "false" end),
       "event" => %{
         "archived" => "false",
         "date" => (if existing do to_date_map(existing) else local_time() end)
       }
     }
+    day_options = get_day_options params["event"]["date"] # TODO add version which takes params
+    {params, day_options}
   end
 
   def clean_event params do

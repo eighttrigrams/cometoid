@@ -8,8 +8,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   @impl true
   def update(%{issue: issue} = assigns, socket) do
 
-    issue_params = init_params(if issue.event do issue.event.date end)
-    day_options = get_day_options issue_params["event"]["date"] # TODO add version which takes params
+    {issue_params, day_options} = init_params(if issue.event do issue.event.date end)
 
     {
       :ok,
