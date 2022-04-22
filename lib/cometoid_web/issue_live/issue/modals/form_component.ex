@@ -26,17 +26,9 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   @impl true
   def handle_event "changes", %{
       "_target" => ["issue", "event", "date", field],
-      "issue" => %{ "event" => %{ "date" => date = %{ "day" => day, "month" => month, "year" => year }}} = issue_params }, socket do
+      "issue" => %{ "event" => %{ "date" => date }} = issue_params }, socket do
 
-    # TODO extract this block to DateFormHelpers
-    day_options = get_day_options(date)
-    {day_i, ""} = Integer.parse day
-    day = unless day_i in day_options do
-        Integer.to_string List.last Enum.to_list day_options
-      else
-        day
-      end
-
+    {day_options, day} = adjust_date date
     issue_params = put_in issue_params["event"]["date"]["day"], day
 
     socket

@@ -18,6 +18,17 @@ defmodule CometoidWeb.DateFormHelpers do
     end
   end
 
+  def adjust_date %{ "day" => day } = date do
+    day_options = get_day_options(date)
+    {day_i, ""} = Integer.parse day
+    day = unless day_i in day_options do
+      Integer.to_string List.last Enum.to_list day_options
+    else
+      day
+    end
+    {day_options, day}
+  end
+
   def to_date_map date_sigil do
     %{
       "year" => Integer.to_string(date_sigil.year),
