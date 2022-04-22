@@ -8,7 +8,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   @impl true
   def update(%{issue: issue} = assigns, socket) do
 
-    {issue_params, day_options} = init_params(if issue.event do issue.event.date end)
+    {issue_params, day_options} = init_params issue.event
 
     {
       :ok,
@@ -36,7 +36,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
   def handle_event "changes", %{ "issue" => issue_params }, socket do
 
-    issue_params = update_params issue_params, socket.assigns.issue_params
+    issue_params = put_back_event issue_params, socket.assigns.issue_params
 
     socket
     |> assign(:issue_params, issue_params)

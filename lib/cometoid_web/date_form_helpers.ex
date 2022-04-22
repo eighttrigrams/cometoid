@@ -1,15 +1,35 @@
 defmodule CometoidWeb.DateFormHelpers do
 
-  def init_params existing do
+  def init_params _event = nil do
     params = %{
-      "has_event?" => (if existing do "true" else "false" end),
+      "has_event?" => "false",
       "event" => %{
         "archived" => "false",
-        "date" => (if existing do to_date_map(existing) else local_time() end)
+        "date" => local_time()
       }
     }
     day_options = get_day_options params
     {params, day_options}
+  end
+
+  def init_params event do
+    params = %{
+      "has_event?" => "true",
+      "event" => %{
+        "archived" => to_string(event.archived),
+        "date" => to_date_map(event.date)
+      }
+    }
+    day_options = get_day_options params
+    {params, day_options}
+  end
+
+  def put_back_event params, previous_params do
+    if not Map.has_key? params, "event" do
+      Map.put params, "event", previous_params["event"]
+    else
+      params
+    end
   end
 
   def clean_event params do
@@ -30,11 +50,6 @@ defmodule CometoidWeb.DateFormHelpers do
     end
     params = put_in params["event"]["date"]["day"], day
     {params, day_options}
-  end
-
-  def update_params %{ "has_event?" => has_event? } = params, previous_params do
-    params = Map.put params, "has_event?", has_event?
-    Map.put params, "event", previous_params["event"]
   end
 
   def date_tuple_from %{ "event" => %{ "date" => %{ "year" => year, "month" => month, "day" => day }}} do
