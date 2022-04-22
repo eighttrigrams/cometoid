@@ -8,7 +8,7 @@ defmodule CometoidWeb.DateFormHelpers do
         "date" => (if existing do to_date_map(existing) else local_time() end)
       }
     }
-    day_options = get_day_options params["event"]["date"] # TODO add version which takes params
+    day_options = get_day_options params
     {params, day_options}
   end
 
@@ -20,8 +20,8 @@ defmodule CometoidWeb.DateFormHelpers do
     end
   end
 
-  def adjust_date %{ "event" => %{ "date" => %{ "day" => day } = date }} = params do
-    day_options = get_day_options(date)
+  def adjust_date %{ "event" => %{ "date" => %{ "day" => day }}} = params do
+    day_options = get_day_options params
     {day_i, ""} = Integer.parse day
     day = unless day_i in day_options do
       Integer.to_string List.last Enum.to_list day_options
@@ -63,7 +63,7 @@ defmodule CometoidWeb.DateFormHelpers do
     %{"day" => day, "month" => month, "year" => year }
   end
 
-  defp get_day_options %{ "year" => _year } = date do
+  defp get_day_options %{ "event" => %{ "date" => date }} do
     date = to_sigil date
     1..Date.days_in_month date
   end
