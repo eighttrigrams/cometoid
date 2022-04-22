@@ -35,15 +35,15 @@
       <br>
       <br>
 
-      <%= checkbox f, :has_event, value: @has_event %>
+      <%= checkbox f, :has_event?, value: @issue_params["has_event?"] == "true" %>
 
-      <%= if @has_event  do %>
+      <%= if @issue_params["has_event?"] == "true" do %>
         <%= inputs_for f, :event, fn e -> %>
 
           <br>
           <%= label e, :date %>
           <%= date_select e, :date,
-            value: {@year, @month, @day},
+            value: date_tuple_from(@issue_params),
             year: [options: @year_options], 
             month: [options: @month_options],
             day: [options: @day_options] %>
