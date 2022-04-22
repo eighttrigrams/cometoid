@@ -53,16 +53,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       |> clean_event
       |> Map.put("title", String.trim(title))
 
-    # if socket.assigns.changed? or socket.assigns.issue.title != title do
-    save_issue socket, socket.assigns.action, issue_params
-    # else
-      # send self(), {:modal_closed}
-      # {:noreply, socket}
-    # end
-  end
-
-  defp save_issue socket, :edit, issue_params do
-
     case Tracker.update_issue(socket.assigns.issue, issue_params, []) do
       {:ok, issue} ->
         send self(), {:after_edit_form_save, issue}
