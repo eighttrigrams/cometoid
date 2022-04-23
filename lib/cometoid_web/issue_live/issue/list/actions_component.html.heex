@@ -8,7 +8,9 @@
         </span>
     <% end %>
 
-    <%= unless @state.sort_issues_alphabetically do %>
+    <%= if (is_nil(@state.selected_context) 
+          or is_nil(@state.selected_context.search_mode)
+          or @state.selected_context.search_mode == 0) do %>
         <span class="btn">
         <a phx-click="reprioritize_issue" phx-value-id={@issue.id}>
             <i class="bi bi-arrow-up"></i>
