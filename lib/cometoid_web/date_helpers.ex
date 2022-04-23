@@ -1,13 +1,5 @@
 defmodule CometoidWeb.DateHelpers do
 
-  def put_back_event params, previous_params, key do
-    if not Map.has_key? params, key do
-      Map.put params, key, previous_params[key]
-    else
-      params
-    end
-  end
-
   def adjust_date %{ "day" => day } = date do
     day_options = get_day_options date
     {day_i, ""} = Integer.parse day

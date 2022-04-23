@@ -4,6 +4,7 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.People
   import CometoidWeb.DateHelpers
+  import CometoidWeb.DateFormHelpers
 
   @impl true
   def update %{ person: person } = assigns, socket do
