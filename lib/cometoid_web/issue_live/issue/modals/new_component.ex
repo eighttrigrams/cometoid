@@ -24,7 +24,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.NewComponent do
 
     [short_title, title] = case String.split(title, "|") do
       [title] -> [nil, title]
-      [short_title, title] -> [short_title, title]
+      [short_title | title] -> [short_title, Enum.join(title, "|")]
     end
     short_title = if short_title do String.trim(short_title) end
     title = String.trim(title)
