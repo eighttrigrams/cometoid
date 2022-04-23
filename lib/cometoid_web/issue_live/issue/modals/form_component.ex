@@ -3,7 +3,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
   alias Cometoid.Repo.Tracker
   import CometoidWeb.LiveHelpers
-  import CometoidWeb.DateFormHelpers
+  import CometoidWeb.DateHelpers
 
   @impl true
   def update(%{issue: issue} = assigns, socket) do
@@ -26,8 +26,8 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       "_target" => ["issue", "event", "date", field],
       "issue" => issue_params }, socket do
 
-    {event, day_options} = adjust_date issue_params["event"]
-    issue_params = put_in issue_params["event"], event
+    {day, day_options} = adjust_date issue_params["event"]["date"]
+    issue_params = put_in issue_params["event"]["date"]["day"], day
 
     socket
     |> assign(:day_options, day_options)
@@ -71,7 +71,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
         "date" => local_time()
       }
     }
-    day_options = get_day_options params["event"]
+    day_options = get_day_options params["event"]["date"]
     {params, day_options}
   end
 
@@ -83,7 +83,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
         "date" => to_date_map(event.date)
       }
     }
-    day_options = get_day_options params["event"]
+    day_options = get_day_options params["event"]["date"]
     {params, day_options}
   end
 

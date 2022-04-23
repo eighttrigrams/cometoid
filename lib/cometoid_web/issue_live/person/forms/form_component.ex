@@ -3,14 +3,22 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
 
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.People
-  import CometoidWeb.DateFormHelpers
+  import CometoidWeb.DateHelpers
 
   @impl true
   def update %{ person: person } = assigns, socket do
 
-    changeset = People.change_person(person)
-    [birthday, use_birthday] = (if Ecto.assoc_loaded?(person.birthday) do [person.birthday, person.use_birthday] else [nil, false] end) # TODO simplify
+    changeset = People.change_person person
+    [birthday, use_birthday] = (if Ecto.assoc_loaded?(person.birthday) do
+      [person.birthday, person.use_birthday] else [nil, false]
+    end)
     {person_params, day_options} = init_params birthday, use_birthday
+
+    person_params = Map.put person_params, "original_birthday", (if person.original_birthday do
+      to_date_map(person.original_birthday)
+    else
+      local_time()
+    end)
 
     {:ok,
      socket
@@ -18,17 +26,17 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
      |> assign(:person_params, person_params)
      |> assign(:year_options, 1900..2050)
      |> assign(:day_options, day_options)
-     |> assign(:changed?, false) # TODO get rid of
+     |> assign(:day_options_original_birthday, 1..31)
      |> assign(:changeset, changeset)}
   end
 
   @impl true
   def handle_event "changes", %{
-      "_target" => ["person", "birthday", "date", field],
+      "_target" => ["person", "birthday", "date", _field],
       "person" => person_params }, socket do
 
-    {event, day_options} = adjust_date person_params["birthday"]
-    person_params = put_in person_params["birthday"], event
+    {day, day_options} = adjust_date person_params["birthday"]["date"]
+    person_params = put_in person_params["birthday"]["date"]["day"], day
 
     socket
     |> assign(:day_options, day_options)
@@ -36,13 +44,25 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
     |> return_noreply
   end
 
+  def handle_event "changes", %{
+    "_target" => ["person", "original_birthday", _field],
+    "person" => person_params }, socket do
+
+  {day, day_options} = adjust_date person_params["original_birthday"]
+  person_params = put_in person_params["original_birthday"]["day"], day
+
+  socket
+  |> assign(:day_options, day_options)
+  |> assign(:person_params, person_params)
+  |> return_noreply
+end
+
   def handle_event "changes", %{ "person" => person_params }, socket do
 
     person_params = put_back_event person_params, socket.assigns.person_params, "birthday"
 
     socket
     |> assign(:person_params, person_params)
-    |> assign(:changed?, true)
     |> return_noreply
   end
 
@@ -84,7 +104,7 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
         "date" => local_time()
       }
     }
-    day_options = get_day_options params["birthday"]
+    day_options = get_day_options params["birthday"]["date"]
     {params, day_options}
   end
 
@@ -95,11 +115,10 @@ defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
         "date" => to_date_map(event.date)
       }
     }
-    day_options = get_day_options params["birthday"]
+    day_options = get_day_options params["birthday"]["date"]
     {params, day_options}
   end
 
-  # TODO deduplicate with Issue.Modals.FormComponent
   defp clean_birthday params do
     if use_birthday? params do
       params

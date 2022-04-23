@@ -1,4 +1,4 @@
-defmodule CometoidWeb.DateFormHelpers do
+defmodule CometoidWeb.DateHelpers do
 
   def put_back_event params, previous_params, key do
     if not Map.has_key? params, key do
@@ -8,20 +8,18 @@ defmodule CometoidWeb.DateFormHelpers do
     end
   end
 
-  def adjust_date %{ "date" => %{ "day" => day }} = event do
-    day_options = get_day_options event
+  def adjust_date %{ "day" => day } = date do
+    day_options = get_day_options date
     {day_i, ""} = Integer.parse day
     day = unless day_i in day_options do
       Integer.to_string List.last Enum.to_list day_options
     else
       day
     end
-    event = put_in event["date"]["day"], day
-    IO.inspect event
-    {event, day_options}
+    {day, day_options}
   end
 
-  def date_tuple_from %{ "date" => %{ "year" => year, "month" => month, "day" => day }} do
+  def date_tuple_from %{ "year" => year, "month" => month, "day" => day } do
     { year, month, day }
   end
 
@@ -47,9 +45,8 @@ defmodule CometoidWeb.DateFormHelpers do
     %{"day" => day, "month" => month, "year" => year }
   end
 
-  def get_day_options %{ "date" => date } do
-    date = to_sigil date
-    1..Date.days_in_month date
+  def get_day_options %{ "year" => _year } = date do
+    1..Date.days_in_month to_sigil date
   end
 
   def get_day_options date do

@@ -29,7 +29,7 @@
       <%= inputs_for f, :birthday, fn b -> %>
         <%= label b, :next_birthday %>
         <%= date_select b, :date,
-          value: date_tuple_from(@person_params["birthday"]),
+          value: date_tuple_from(@person_params["birthday"]["date"]),
           year: [options: @year_options],
           month: [options: 1..12],
           day: [options: @day_options] %>
@@ -41,7 +41,12 @@
     <br>
 
     <%= label f, :original_birthday %>
-    <%= date_select f, :original_birthday, [default: :calendar.local_time()] %>
+    <%= date_select f, :original_birthday, 
+      value: date_tuple_from(@person_params["original_birthday"]),
+      year: [options: @year_options],
+      month: [options: 1..12],
+      day: [options: @day_options_original_birthday]
+    %>
     <%= error_tag f, :original_birthday %>
   </.form>
 </div>

@@ -43,7 +43,7 @@
           <br>
           <%= label e, :date %>
           <%= date_select e, :date,
-            value: date_tuple_from(@issue_params["event"]),
+            value: date_tuple_from(@issue_params["event"]["date"]),
             year: [options: @year_options], 
             month: [options: 1..12],
             day: [options: @day_options] %>
