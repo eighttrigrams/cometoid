@@ -12,6 +12,9 @@
     :caret-left
     ((comp (if (= direction 1) h/pull-r h/pull-l) lowlevel/caret-left) state)
 
+    :caret-up
+    ((comp h/pull-l lowlevel/same-position-previous-line) state)
+    
     :caret-right-with-selection
     (if (= direction -1)
       ((comp h/flip lowlevel/caret-right h/flip) state)

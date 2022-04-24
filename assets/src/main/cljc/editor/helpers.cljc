@@ -3,6 +3,21 @@
 (defn starts-with-pattern? [s pattern]
   (not (nil? (re-find (re-pattern (str "^" pattern)) s))))
 
+(defn cursor-position-in-line
+  "Returns [idx-of-selection-start-cursor-from-start-of-current-line 
+            index-of-start-of-current-line-in-context-of-value]
+  "
+  [{value           :value
+    selection-start :selection-start}]
+  (loop [i -1
+         selection-start selection-start]
+    (if (or (= selection-start -1)
+            (and (not (= i -1))
+                 (= (get value selection-start) \newline)))
+      [i (+ selection-start 1)]
+      (recur (+ i 1)
+             (- selection-start 1)))))
+
 (defn index-of-substr-or-end 
   "Returns 
      the index of `pattern` in `s` - if it has been found

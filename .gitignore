@@ -40,3 +40,4 @@ npm-debug.log
 assets/.shadow-cljs
 assets/test-main.js
 assets/.calva
+.cpcache
