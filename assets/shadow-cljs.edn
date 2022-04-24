@@ -2,8 +2,7 @@
  ["src/main/cljs" "src/main/cljc" "src/test"]
 
  :dependencies
- [[org.clojars.knubie/cljs-run-test "1.0.1"]
-  [binaryage/devtools               "0.9.10"]]
+ [[binaryage/devtools               "0.9.10"]]
 
  :dev-http {9080 "../priv/static/js/"}
 
