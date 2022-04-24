@@ -40,4 +40,5 @@ npm-debug.log
 assets/.shadow-cljs
 assets/test-main.js
 assets/.calva
+assets/.nrepl-port
 .cpcache

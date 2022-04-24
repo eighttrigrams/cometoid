@@ -3,7 +3,7 @@
   "description": " ",
   "license": "MIT",
   "scripts": {
-    "test": "npx shadow-cljs compile test-all && node test-main.js",
+    "test": "clj -Xtest :dirs '[\"src/test/cljc\"]'",
     "deploy": "webpack --mode production",
     "watch": "webpack --mode development --watch"
   },

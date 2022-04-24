@@ -36,30 +36,13 @@ An alert should pop up in the browser. Here as well, new code is compiled and av
 
 ### Tests
 
-Run
+Phoenix App Tests
 
     $ mix test
 
-To run all tests for the editor, run
+Clojure Editor tests
 
-    $ cd assets
-    $ npm t
-
-For running single tests during development of the editor, run,
-
-a) if `mix phx.server` is running
-
-    $ ./add_testing.sh 
-    run-tests=> (require 'editor.machine-test)
-    run-tests=> (run-test editor.machine-test/base-case) ;; Hot-code-reloading works. Just edit a file, save and re-run this expression. 
-    run-tests=> (run-tests 'editor.machine-test)
-    run-tests=> ;; Quit with Ctrl-C, then after "Worker shutdown." appears, press Enter
-    
-b) otherwise
-
-    $ ./start_testing.sh
-
-Note that hot-code-reloading does not work for both `./start_testing.sh` and `mix phx.server` at the same time, which is why `add_testing.sh` should be used in case both should run.
+    $ cd assets; npm test
 
 ## Deployment for Production
 

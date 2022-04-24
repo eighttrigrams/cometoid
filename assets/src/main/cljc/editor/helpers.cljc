@@ -22,7 +22,7 @@
   "Returns 
      the index of `pattern` in `s` - if it has been found
      the length of s               - if `pattern` could not be found in `s`
-  " 
+  "
   [s pattern]
   (loop [rst s
          i 0]

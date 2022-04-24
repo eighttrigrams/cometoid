@@ -1,5 +1,5 @@
 (ns editor.machine-test
-  (:require [cljs.test :refer (deftest is)]
+  (:require [clojure.test :refer (deftest is)]
             [editor.machine :as machine]))
 
 (def transform-state (machine/build))

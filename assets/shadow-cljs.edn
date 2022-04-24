@@ -10,16 +10,4 @@
  :builds {:app {:output-dir "../priv/static/js/"
                 :asset-path "/js"
                 :target :browser
-                :modules {:app {:entries [editor.editor]}}}
-          
-           :test-all
-            {:target    :node-test
-             :output-to "test-main.js"
-             :ns-regexp "-test$"
-             :autorun   true}
-
-          :test {:target :node-script
-                 :output-to "test-main.js"
-                 :main      run-tests/init
-                 :devtools  {:repl-init-ns run-tests
-                             :preloads [devtools.preload]}}}}
+                :modules {:app {:entries [editor.editor]}}}}}

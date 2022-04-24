@@ -7,8 +7,8 @@
 
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
-(defn caret-left [{selection-start :selection-start 
-                   selection-end :selection-end 
+(defn caret-left [{selection-start :selection-start
+                   selection-end :selection-end
                    :as state}]
   (let [selection-start  (if (> selection-start 0)
                            (- selection-start 1)

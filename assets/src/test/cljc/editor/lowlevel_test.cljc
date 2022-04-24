@@ -1,5 +1,5 @@
 (ns editor.lowlevel-test
-  (:require [cljs.test :refer (deftest is)]
+  (:require [clojure.test :refer (deftest is)]
             [test-helpers :as th]
             [editor.lowlevel :as lowlevel]
             [editor.helpers :as h] ))
