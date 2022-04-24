@@ -4,19 +4,23 @@
   (not (nil? (re-find (re-pattern (str "^" pattern)) s))))
 
 (defn cursor-position-in-line
-  "Returns [idx-of-selection-start-cursor-from-start-of-current-line 
-            index-of-start-of-current-line-in-context-of-value]
+  "Returns [position-within-current-line
+            position-of-current-line
+            previous-line-exists?]
   "
   [{value           :value
     selection-start :selection-start}]
-  (loop [i -1
-         selection-start selection-start]
-    (if (or (= selection-start -1)
-            (and (not (= i -1))
-                 (= (get value selection-start) \newline)))
-      [i (+ selection-start 1)]
-      (recur (+ i 1)
-             (- selection-start 1)))))
+  (let [start-i -1]
+    (loop [i               start-i
+           selection-start selection-start]
+      (let [has-reached-beginning-of-file? (= selection-start start-i)
+            has-encountered-newline?       (and (not (= i start-i))
+                                                (= (get value selection-start) \newline))]
+        (if (or has-reached-beginning-of-file?
+                has-encountered-newline?)
+          [i (inc selection-start) (not has-reached-beginning-of-file?)]
+          (recur (inc i)
+                 (dec selection-start)))))))
 
 (defn index-of-substr-or-end 
   "Returns 

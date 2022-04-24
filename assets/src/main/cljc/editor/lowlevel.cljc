@@ -132,12 +132,13 @@
 (defn same-position-previous-line [{selection-start :selection-start
              :as state}]
   (assoc state :selection-start 
-         (let [[position-in-current-line new-selection-start] (h/cursor-position-in-line state)
-               has-previous-line?                             (>= (- selection-start position-in-current-line 1) 0)]
-           (if has-previous-line?
+         (let [[position-within-current-line
+                new-selection-start
+                previous-line-exists?] (h/cursor-position-in-line state)]
+           (if previous-line-exists?
              (let [[length-of-previous-line i-beginning-of-line] (h/cursor-position-in-line (assoc state :selection-start (- new-selection-start 1)))
-                   line-is-long-enough?    (>= length-of-previous-line position-in-current-line)]
+                   line-is-long-enough?    (>= length-of-previous-line position-within-current-line)]
                (if line-is-long-enough?
-                 (+ i-beginning-of-line position-in-current-line)
+                 (+ i-beginning-of-line position-within-current-line)
                  selection-start))
              selection-start))))
