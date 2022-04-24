@@ -4,5 +4,4 @@
                                    :sha "cc75980b43011773162b485f46f939dc5fba91e4"}}
  :paths ["src/dev/clj" "src/main/cljc" "src/test/cljc"]
  :aliases {:test {:main-opts ["-m" "cognitect.test-runner"]
-                  :exec-fn cognitect.test-runner.api/test}
-           :develop-with-reload {:exec-fn develop-with-reload/go}}}
+                  :exec-fn cognitect.test-runner.api/test}}}
