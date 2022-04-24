@@ -14,6 +14,8 @@
                            (- selection-start 1)
                            selection-start)]
     (-> state
+        ;; TODO remove next line as soon as dont-adjust-position-in-line is implemented
+        (assoc :position-in-line selection-start)
         (assoc :selection-start selection-start)
         (assoc :selection-end selection-end))))
 
@@ -25,6 +27,8 @@
                            (+ selection-end 1)
                            selection-end)]
     (-> state
+        ;; TODO remove next line as soon as dont-adjust-position-in-line is implemented
+        (assoc :position-in-line selection-start)
         (assoc :selection-start selection-start)
         (assoc :selection-end selection-end))))
 
@@ -129,10 +133,13 @@
         (assoc :selection-start selection-start)
         (assoc :selection-end selection-start))))
 
-(defn same-position-previous-line [{selection-start :selection-start
-             :as state}]
-  (assoc state :selection-start 
-         (let [[position-within-current-line
+(defn same-position-previous-line [{selection-start  :selection-start ;; TODO remove
+                                    position-in-line :position-in-line
+                                    :as              state}]
+  (-> state
+      (assoc :prevent-adjust-position-in-line true)
+      (assoc :selection-start 
+         (let [[_position-within-current-line
                 position-of-current-line
                 previous-line-exists?] (h/cursor-position-in-line state)]
            (if-not previous-line-exists?
@@ -141,6 +148,6 @@
                    [length-of-previous-line
                     position-of-previous-line
                     _] (h/cursor-position-in-line state)]
-               (if (<= position-within-current-line length-of-previous-line)
-                 (+ position-of-previous-line position-within-current-line)
-                 (dec position-of-current-line)))))))
+               (if (<= position-in-line length-of-previous-line)
+                 (+ position-of-previous-line position-in-line)
+                 (dec position-of-current-line))))))))

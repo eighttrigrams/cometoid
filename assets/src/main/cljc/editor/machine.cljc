@@ -72,6 +72,14 @@
     :alt-enter
     (lowlevel/newline-before-current state)))
 
+(defn adjust-position-in-line 
+  [{prevent-adjust-position-in-line :prevent-adjust-position-in-line
+    :as                             state}]
+  (if prevent-adjust-position-in-line
+    state
+    (let [[pos-in-line] (h/cursor-position-in-line state)]
+      (assoc state :position-in-line pos-in-line))))
+
 (defn build [] 
   (let [direction-atom (atom 0)]
     (fn transform-state [command state]
@@ -79,7 +87,9 @@
             {selection-start :selection-start
              selection-end   :selection-end
              dir             :direction
-             :as             new-state} (_transform-state command state direction)]
+             :as             new-state} (_transform-state command state direction)
+            new-state (adjust-position-in-line new-state)]
         (when dir (reset! direction-atom dir))
         (when (= selection-start selection-end) (reset! direction-atom 0))
+        #_(prn new-state)
         new-state))))
