@@ -162,22 +162,22 @@
   [{value :value
     position-in-line :position-in-line}
    position-of-line]
-  (let [[line-length] (h/next-line-position value position-of-line)]
-    (prn "." position-of-line position-in-line line-length)
+  (let [[line-length next-line-position] (h/next-line-position value position-of-line)]
     (if (< position-in-line line-length)
       (+ position-of-line position-in-line)
-      (+ position-of-line line-length -1))))
+      (+ position-of-line line-length (if (= (count value) next-line-position) 0 -1)))))
 
 (defn same-position-next-line
   [{value :value
-    selection-start :selection-start
+    selection-end :selection-end
     :as state}]
-  (-> state
-      (assoc :prevent-adjust-position-in-line true)
-      (assoc :selection-start
-             (let [[_ next-line-position] (h/next-line-position value selection-start)]
-               (if (= next-line-position (count value))
-                 selection-start
-                 (find-position-in-line-starting-from-beginning-of-line
-                  state
-                  next-line-position))))))
+  (let [state (-> state
+                  (assoc :prevent-adjust-position-in-line true)
+                  (assoc :selection-end
+                         (let [[_ next-line-position] (h/next-line-position value selection-end)]
+                           (if (= next-line-position (count value))
+                             selection-end
+                             (find-position-in-line-starting-from-beginning-of-line
+                              state
+                              next-line-position)))))]
+    #_(prn state) state))

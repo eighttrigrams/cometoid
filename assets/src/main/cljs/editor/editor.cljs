@@ -52,9 +52,8 @@
 
 (defn keydown [el modifiers transform-state position-in-line:atom]
   (fn [e]
-    (prn "atm" @position-in-line:atom)
     (set-modifiers! e true modifiers)
-    (let [new-state   (transform-state [(.-code e) @modifiers] 
+    (let [new-state   (transform-state [(.-code e) @modifiers]
                                        (construct-state el position-in-line:atom))]
       (set-values! el new-state)
       ;; TODO review

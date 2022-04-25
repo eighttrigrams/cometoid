@@ -3,6 +3,7 @@
             [editor.helpers :as h]))
 
 (defn- _transform-state [command state direction]
+  (prn direction)
   (case command
     :insert
     (lowlevel/insert state)
@@ -15,7 +16,17 @@
     :caret-up
     ((comp h/pull-l lowlevel/same-position-previous-line) state)
     :caret-down
-    ((comp h/pull-l lowlevel/same-position-next-line) state)
+    ((comp h/pull-r lowlevel/same-position-next-line) state)
+
+    :caret-down-with-selection
+    (if (= direction -1)
+      ((comp h/flip lowlevel/same-position-next-line h/flip) state)
+      (assoc (lowlevel/same-position-next-line state) :direction 1))
+    
+    :caret-up-with-selection
+    (if (= direction 1)
+      ((comp h/flip lowlevel/same-position-previous-line h/flip) state)
+      (assoc (lowlevel/same-position-previous-line state) :direction -1))
 
     :caret-right-with-selection
     (if (= direction -1)

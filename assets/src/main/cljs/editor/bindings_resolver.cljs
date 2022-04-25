@@ -8,6 +8,8 @@
    #{"KeyK" #{:ctrl}}                          :caret-down
    #{"KeyL" #{:shift :ctrl}}                   :caret-right-with-selection
    #{"KeyJ" #{:shift :ctrl}}                   :caret-left-with-selection
+   #{"KeyK" #{:shift :ctrl}}                   :caret-down-with-selection
+   #{"KeyI" #{:shift :ctrl}}                   :caret-up-with-selection
    #{"KeyL" #{:meta}}                          :word-part-right
    #{"KeyJ" #{:meta}}                          :word-part-left
    #{"KeyL" #{:shift :meta}}                   :move-selection-wordwise-right
