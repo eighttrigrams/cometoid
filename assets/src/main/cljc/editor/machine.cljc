@@ -74,10 +74,12 @@
 
 (defn adjust-position-in-line 
   [{prevent-adjust-position-in-line :prevent-adjust-position-in-line
+    value                           :value
+    selection-start                 :selection-start
     :as                             state}]
   (if prevent-adjust-position-in-line
     state
-    (let [[pos-in-line] (h/cursor-position-in-line state)]
+    (let [[pos-in-line] (h/cursor-position-in-line value selection-start)]
       (assoc state :position-in-line pos-in-line))))
 
 (defn build [] 

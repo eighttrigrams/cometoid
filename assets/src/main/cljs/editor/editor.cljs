@@ -25,8 +25,7 @@
   (let [selection-start (.-selectionStart el)
         selection-end (.-selectionEnd el)
         ;; TODO simplify
-        [pos-in-line] (helpers/cursor-position-in-line
-                       {:value (.-value el) :selection-start selection-start})]
+        [pos-in-line] (helpers/cursor-position-in-line (.-value el) selection-start)]
     {:value                           (.-value el)
      :selection-start                 selection-start
      :selection-end                   selection-end

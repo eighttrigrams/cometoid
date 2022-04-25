@@ -8,19 +8,18 @@
             position-of-current-line
             previous-line-exists?]
   "
-  [{value           :value
-    selection-start :selection-start}]
+  [value position]
   (let [start-i -1]
     (loop [i               start-i
-           selection-start selection-start]
-      (let [has-reached-beginning-of-file? (= selection-start start-i)
+           position position]
+      (let [has-reached-beginning-of-file? (= position start-i)
             has-encountered-newline?       (and (not (= i start-i))
-                                                (= (get value selection-start) \newline))]
+                                                (= (get value position) \newline))]
         (if (or has-reached-beginning-of-file?
                 has-encountered-newline?)
-          [i (inc selection-start) (not has-reached-beginning-of-file?)]
+          [i (inc position) (not has-reached-beginning-of-file?)]
           (recur (inc i)
-                 (dec selection-start)))))))
+                 (dec position)))))))
 
 (defn index-of-substr-or-end 
   "Returns 

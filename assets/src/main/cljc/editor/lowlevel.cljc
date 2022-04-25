@@ -133,21 +133,27 @@
         (assoc :selection-start selection-start)
         (assoc :selection-end selection-start))))
 
-(defn same-position-previous-line [{selection-start  :selection-start ;; TODO remove
-                                    position-in-line :position-in-line
-                                    :as              state}]
+(defn find-position-in-line-starting-from-end-of-line
+  [{value :value
+    position-in-line :position-in-line}
+   position-of-linebreak]
+  (let [[line-length line-position] (h/cursor-position-in-line value position-of-linebreak)]
+    (if (<= position-in-line line-length)
+      (+ line-position position-in-line)
+      position-of-linebreak)))
+
+(defn same-position-previous-line 
+  [{value :value
+    selection-start :selection-start
+    :as state}]
   (-> state
       (assoc :prevent-adjust-position-in-line true)
       (assoc :selection-start 
-         (let [[_position-within-current-line
-                position-of-current-line
-                previous-line-exists?] (h/cursor-position-in-line state)]
+         (let [[_
+                line-position
+                previous-line-exists?] (h/cursor-position-in-line value selection-start)]
            (if-not previous-line-exists?
              selection-start
-             (let [state (assoc state :selection-start (dec position-of-current-line))
-                   [length-of-previous-line
-                    position-of-previous-line
-                    _] (h/cursor-position-in-line state)]
-               (if (<= position-in-line length-of-previous-line)
-                 (+ position-of-previous-line position-in-line)
-                 (dec position-of-current-line))))))))
+             (find-position-in-line-starting-from-end-of-line
+              state
+              (dec line-position)))))))
