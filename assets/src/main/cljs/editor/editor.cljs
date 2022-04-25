@@ -60,6 +60,13 @@
       (reset! position-in-line:atom (:position-in-line new-state))
       (when (not= (:dont-prevent-default new-state) true) (.preventDefault e)))))
 
+(defn- click [el position-in-line:atom]
+  (fn [_e]
+    (let [[position-in-line] (helpers/cursor-position-in-line
+                              (.-value el)
+                              (.-selectionStart el))]
+      (reset! position-in-line:atom position-in-line))))
+
 (defn keyup [_el modifiers]
   (fn [e]
     (set-modifiers! e false modifiers)))
@@ -75,4 +82,5 @@
     (.addEventListener el "paste" (paste el modifiers transform-state position-in-line))
     (.addEventListener el "keydown" (keydown el modifiers transform-state position-in-line))
     (.addEventListener el "keyup" (keyup el modifiers))
-    (.addEventListener el "mouseleave" (mouseleave el modifiers))))
+    (.addEventListener el "mouseleave" (mouseleave el modifiers))
+    (.addEventListener el "click" (click el position-in-line))))
