@@ -5,6 +5,7 @@
    #{"KeyJ" #{:ctrl}}                          :caret-left
    #{"KeyL" #{:ctrl}}                          :caret-right
    #{"KeyI" #{:ctrl}}                          :caret-up
+   #{"KeyK" #{:ctrl}}                          :caret-down
    #{"KeyL" #{:shift :ctrl}}                   :caret-right-with-selection
    #{"KeyJ" #{:shift :ctrl}}                   :caret-left-with-selection
    #{"KeyL" #{:meta}}                          :word-part-right

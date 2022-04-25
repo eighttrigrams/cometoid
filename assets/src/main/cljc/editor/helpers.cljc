@@ -3,6 +3,22 @@
 (defn starts-with-pattern? [s pattern]
   (not (nil? (re-find (re-pattern (str "^" pattern)) s))))
 
+(defn next-line-position
+  "Returns the position of the next-line (possibly the length of value, if there is no next value)
+   as well as the chars encountered up to that line, starting from position (in value)"
+  [value position]
+  (loop [i 0
+         pos position]
+    (let [has-reached-end-of-file? (= pos (count value))
+          has-encountered-newline? (= (get value pos) \newline)]
+      (if (or has-reached-end-of-file?
+              has-encountered-newline?)
+        (if has-reached-end-of-file?
+          [i pos]
+          [(inc i) (inc pos)])
+        (recur (inc i) (inc pos))))))
+
+;; TODO return only two values, because if position-of-current-line is 0, it means that previous a previous line does not exist
 (defn cursor-position-in-line
   "Returns [position-within-current-line
             position-of-current-line

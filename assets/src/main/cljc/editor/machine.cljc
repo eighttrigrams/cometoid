@@ -14,7 +14,9 @@
 
     :caret-up
     ((comp h/pull-l lowlevel/same-position-previous-line) state)
-    
+    :caret-down
+    ((comp h/pull-l lowlevel/same-position-next-line) state)
+
     :caret-right-with-selection
     (if (= direction -1)
       ((comp h/flip lowlevel/caret-right h/flip) state) ;; TODO add wrap-flip function or macro

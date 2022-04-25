@@ -133,7 +133,7 @@
         (assoc :selection-start selection-start)
         (assoc :selection-end selection-start))))
 
-(defn find-position-in-line-starting-from-end-of-line
+(defn- find-position-in-line-starting-from-end-of-line
   [{value :value
     position-in-line :position-in-line}
    position-of-linebreak]
@@ -157,3 +157,26 @@
              (find-position-in-line-starting-from-end-of-line
               state
               (dec line-position)))))))
+
+(defn find-position-in-line-starting-from-beginning-of-line
+  [{value :value
+    position-in-line :position-in-line}
+   position-of-line]
+  (let [[line-length] (h/next-line-position value position-of-line)]
+    (if (< position-in-line line-length)
+      (+ position-of-line position-in-line)
+      (+ position-of-line line-length))))
+
+(defn same-position-next-line
+  [{value :value
+    selection-start :selection-start
+    :as state}]
+  (-> state
+      (assoc :prevent-adjust-position-in-line true)
+      (assoc :selection-start
+             (let [[_ next-line-position] (h/next-line-position value selection-start)]
+               (if (= next-line-position (count value))
+                 selection-start
+                 (find-position-in-line-starting-from-beginning-of-line
+                  state
+                  next-line-position))))))
