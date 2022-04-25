@@ -17,7 +17,7 @@
     
     :caret-right-with-selection
     (if (= direction -1)
-      ((comp h/flip lowlevel/caret-right h/flip) state)
+      ((comp h/flip lowlevel/caret-right h/flip) state) ;; TODO add wrap-flip function or macro
       (assoc (lowlevel/caret-right state) :direction 1))
 
     :caret-left-with-selection
