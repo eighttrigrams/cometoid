@@ -163,9 +163,10 @@
     position-in-line :position-in-line}
    position-of-line]
   (let [[line-length] (h/next-line-position value position-of-line)]
+    (prn "." position-of-line position-in-line line-length)
     (if (< position-in-line line-length)
       (+ position-of-line position-in-line)
-      (+ position-of-line line-length))))
+      (+ position-of-line line-length -1))))
 
 (defn same-position-next-line
   [{value :value
