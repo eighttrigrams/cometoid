@@ -81,15 +81,20 @@
       (assoc state :position-in-line pos-in-line))))
 
 (defn build [] 
-  (let [direction-atom (atom 0)]
+  (comment "direction-atom: 
+            0 if selection-start = selection-end
+            1 if selection-end is being moved
+            -1 if selection-start is being moved
+            ")
+  (let [direction:atom (atom 0)]
     (fn transform-state [command state]
-      (let [direction @direction-atom
+      (let [direction @direction:atom
             {selection-start :selection-start
              selection-end   :selection-end
              dir             :direction
              :as             new-state} (_transform-state command state direction)
             new-state (adjust-position-in-line new-state)]
-        (when dir (reset! direction-atom dir))
-        (when (= selection-start selection-end) (reset! direction-atom 0))
+        (when dir (reset! direction:atom dir))
+        (when (= selection-start selection-end) (reset! direction:atom 0))
         #_(prn new-state)
         new-state))))
