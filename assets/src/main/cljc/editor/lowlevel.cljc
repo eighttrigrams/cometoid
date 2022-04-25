@@ -17,7 +17,7 @@
         ;; TODO remove next line as soon as dont-adjust-position-in-line is implemented
         (assoc :position-in-line selection-start)
         (assoc :selection-start selection-start)
-        (assoc :selection-end selection-end))))
+        (assoc :selection-end selection-end)))) ;; TODO remove line
 
 (defn caret-right [{value :value 
                     selection-start :selection-start 
@@ -29,7 +29,7 @@
     (-> state
         ;; TODO remove next line as soon as dont-adjust-position-in-line is implemented
         (assoc :position-in-line selection-start)
-        (assoc :selection-start selection-start)
+        (assoc :selection-start selection-start) ;; TODO remove line
         (assoc :selection-end selection-end))))
 
 (defn word-part-right [{selection-start :selection-start 
