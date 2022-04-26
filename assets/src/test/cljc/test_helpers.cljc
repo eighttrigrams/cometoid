@@ -1,15 +1,18 @@
 (ns test-helpers
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clojure.set :refer [subset?]]))
 
-(defn equal [map1 map2]
-  (let [cmp (fn [map1 map2]
-              (reduce (fn [acc [key val]]
-                        (and acc 
-                             (or 
-                              (not (contains? map2 key))
-                              (= val (key map2))))) true map1))]
-    (and (cmp map1 map2)
-         (cmp map2 map1))))
+(defn equal
+  "Tests if map1 has al the keys the model has,
+   and then tests if those keys have the corresponding values.
+   map1 may have additional values not specified in model"
+  [map1 model]
+  (let [map1 (reduce (fn [map1 [key]]
+                          (if (not (contains? model key))
+                            (dissoc map1 key)
+                            map1))
+                        map1 map1)]
+    (subset? (set map1) (set model))))
 
 (defn convert [s]
   (let [pipe            (.indexOf s "|")]
