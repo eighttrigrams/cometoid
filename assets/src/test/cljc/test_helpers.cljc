@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.set :refer [subset?]]))
 
-(defn equal
+(defn matches-model
   "Tests if map1 has al the keys the model has,
    and then tests if those keys have the corresponding values.
    map1 may have additional values not specified in model"
