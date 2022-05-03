@@ -335,6 +335,7 @@ defmodule Cometoid.Repo.Tracker do
     |> Repo.preload(:issues)
   end
 
+  # TODO review, also see if we disallow creating with empty contexts
   def create_issue title, short_title, contexts do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
