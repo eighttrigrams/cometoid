@@ -7,6 +7,19 @@
     </h1>
   </div>
 </div>
+
+<%= if length(@issue.issues) > 0 do %>
+  <div>
+    <ul>
+      <%= for issue <- @issue.issues do %>
+        <li class="contexts-background-color" style="padding: 5px; height: 20px">
+          <%= issue.title %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <div class="inner smaller-text" id="issue-description" phx-hook="IssueDescriptionHook">
   <div>
     <%= unless is_nil(@issue.description) or @issue.description == "" do %>

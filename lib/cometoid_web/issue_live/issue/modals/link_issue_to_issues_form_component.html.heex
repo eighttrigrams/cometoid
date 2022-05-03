@@ -1,0 +1,20 @@
+<div>
+  <h1>Link "<%= @state.selected_issue.title %>"</h1>
+
+  <%= if length(@issues) > 0 do %>
+    <div>
+      <ul>
+        <%= for issue <- @issues do %>
+          <li class="contexts-background-color" style="padding: 5px; height: 20px">
+            <%= issue.title %>
+            <span class="btn">
+              <a phx-click="unlink_issue" phx-target={@myself} phx-value-target={issue.id}>
+                <i class="bi bi-x-lg"></i>
+              </a>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>

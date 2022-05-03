@@ -204,6 +204,13 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
+  def handle_event "link_issue_to_issues", %{ "target" => id }, socket do
+    socket
+    |> assign(:selected_issue, Tracker.get_issue!(id))
+    |> assign(:live_action, :link_issue_to_issues)
+    |> return_noreply
+  end
+
   def handle_event "convert_issue_to_context", %{ "id" => id }, socket do
 
     {id, ""} = Integer.parse id

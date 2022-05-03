@@ -1,7 +1,16 @@
 <%= unless is_nil(@state.live_action) do %>
   <div id="link-modal-content" class="modal-content">
-    <%= if @state.live_action in [:link] do %>
+    <%= if @state.live_action == :link do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent,
+        id: @state.selected_issue.id,
+        state: @state
+      %>
+    <% end %>
+  </div>
+
+  <div id="link-issue-to-issues-modal-content" class="modal-content">
+    <%= if @state.live_action == :link_issue_to_issues do %>
+      <%= live_modal CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent,
         id: @state.selected_issue.id,
         state: @state
       %>
