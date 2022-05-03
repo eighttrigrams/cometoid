@@ -21,6 +21,13 @@ defmodule Cometoid.Model.Tracker.Issue do
 
     has_one :event, Calendar.Event, on_replace: :delete, on_delete: :delete_all
 
+    many_to_many :issues,
+      Cometoid.Model.Tracker.Issue,
+      join_through: "issue_issue",
+      join_keys: [left_id: :id, right_id: :id],
+      on_replace: :delete,
+      on_delete: :delete_all
+
     timestamps()
   end
 
@@ -51,6 +58,15 @@ defmodule Cometoid.Model.Tracker.Issue do
       %{ Calendar.Event.date_changeset(issue.event, %{}) | action: :delete })
     |> validate_required([:title, :done])
   end
+
+  def link_issues_changeset issue, attrs do
+    issue
+    |> cast(attrs, [])
+    |> put_assoc_issues(attrs)
+  end
+
+  defp put_assoc_issues(issue, %{ "issues" => issues }), do: put_assoc(issue, :issues, issues)
+  defp put_assoc_issues(issue, _), do: issue
 
   defp put_assoc_contexts(issue, %{ "contexts" => contexts }), do: put_assoc(issue, :contexts, contexts)
   defp put_assoc_contexts(issue, _), do: issue

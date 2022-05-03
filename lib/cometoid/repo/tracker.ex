@@ -103,6 +103,30 @@ defmodule Cometoid.Repo.Tracker do
     result
   end
 
+  # TODO deduplicate
+  @doc """
+  Requires the primary_context's secondary_contexts to be preloaded
+  Returns {:ok, context}
+  """
+  def link_issues primary_context, secondary_contexts_ids do
+
+    secondary_contexts = get_issues_by_ids secondary_contexts_ids
+    result =
+      primary_context
+      |> Issue.link_issues_changeset(%{ "issues" => secondary_contexts})
+      |> Repo.update()
+
+    link_issues2 secondary_contexts, primary_context
+
+    ids_of_contexts_where_links_should_be_removed
+      = Enum.map(primary_context.issues, &(&1.id))
+      -- secondary_contexts_ids
+
+    unlink_issues ids_of_contexts_where_links_should_be_removed, primary_context.id
+
+    result
+  end
+
   def delete_context %Context{} = context do
 
     issue_ids = Enum.map context.issues, &(&1.issue.id)
@@ -149,6 +173,29 @@ defmodule Cometoid.Repo.Tracker do
     end
   end
 
+  # TODO deduplicate
+  defp unlink_issues ids_of_contexts_where_links_should_be_removed, primary_context_id do
+    contexts_where_links_should_be_removed
+      = get_issues_by_ids ids_of_contexts_where_links_should_be_removed
+
+    Enum.map contexts_where_links_should_be_removed, fn context_where_links_should_be_removed ->
+
+      context_where_links_should_be_removed
+        = Repo.preload context_where_links_should_be_removed, :issues
+
+      contexts = Enum.filter context_where_links_should_be_removed.issues,
+        &(&1.id != primary_context_id)
+
+      context_where_links_should_be_removed
+        |> Issue.link_issues_changeset(
+          %{ "issues" =>
+            contexts
+          }
+        )
+        |> Repo.update()
+    end
+  end
+
   defp link_secondary_contexts secondary_contexts, primary_context do
     Enum.map secondary_contexts, fn secondary_context ->
       secondary_context = Repo.preload secondary_context, :secondary_contexts
@@ -165,8 +212,31 @@ defmodule Cometoid.Repo.Tracker do
     end
   end
 
+  # TODO deduplicate
+  defp link_issues2 secondary_contexts, primary_context do
+    Enum.map secondary_contexts, fn secondary_context ->
+      secondary_context = Repo.preload secondary_context, :issues
+      secondary_contexts_reverse_ids = Enum.map secondary_context.issues, &(&1.id)
+      unless primary_context.id in secondary_contexts_reverse_ids do
+        secondary_context
+        |> Issue.link_issues_changeset(
+          %{ "issues" =>
+            [primary_context|secondary_context.issues]
+          }
+        )
+        |> Repo.update()
+      end
+    end
+  end
+
   defp get_contexts_by_ids ids do
     Context
+    |> where([c], c.id in ^ids)
+    |> Repo.all
+  end
+
+  defp get_issues_by_ids ids do
+    Issue
     |> where([c], c.id in ^ids)
     |> Repo.all
   end
@@ -194,6 +264,7 @@ defmodule Cometoid.Repo.Tracker do
       |> Enum.uniq
       |> Repo.preload(contexts: :context)
       |> Repo.preload(:event)
+      |> Repo.preload(:issues)
 
     if is_nil(query.selected_context) or is_nil(query.selected_context.search_mode) or query.selected_context.search_mode == 0 do
       issues
@@ -261,6 +332,7 @@ defmodule Cometoid.Repo.Tracker do
     Repo.get!(Issue, id)
     |> Repo.preload(contexts: :context)
     |> Repo.preload(:event)
+    |> Repo.preload(:issues)
   end
 
   def create_issue title, short_title, contexts do
