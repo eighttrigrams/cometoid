@@ -62,7 +62,7 @@ defmodule Cometoid.Repo.Tracker do
     iex> create_context %{ "title" => title, "view" => view }
 
   """
-  def create_context attrs do # TODO refactor to take title and view, possible short_title
+  def create_context attrs do
     {:ok, context} = %Context{}
       |> Context.changeset(attrs)
       |> Repo.insert
@@ -233,7 +233,6 @@ defmodule Cometoid.Repo.Tracker do
     |> do_issues_preload
   end
 
-  # TODO review, also see if we disallow creating with empty contexts
   def create_issue title, short_title, contexts do
     {:ok, issue} = Repo.insert(%Issue{
       title: title,
@@ -258,7 +257,7 @@ defmodule Cometoid.Repo.Tracker do
 
   def update_issue_relations issue, ids_of_selected_contexts do
 
-    context_from =  fn id -> Enum.find list_contexts(), &(&1.id == id) end # TODO use get_context! instead
+    context_from =  fn id -> Enum.find list_contexts(), &(&1.id == id) end
     contexts =
       ids_of_selected_contexts
       |> Enum.map(context_from)
