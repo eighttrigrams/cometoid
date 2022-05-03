@@ -37,6 +37,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       selected_view: "Software",
+      sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false # TODO why do I need this?
     }
     assert 2 == length Tracker.list_contexts "Software"
@@ -64,6 +65,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       selected_view: "Software",
+      sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
     IssuesMachine.delete_context state, context.id
@@ -84,6 +86,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       selected_view: "Software",
+      sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
 
@@ -115,6 +118,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       selected_view: "Software",
+      sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
     IssuesMachine.delete_context state, tag_context.id
@@ -139,6 +143,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       selected_view: "Software",
+      sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
     assert 1 == length Tracker.list_issues %Tracker.Query {
@@ -175,6 +180,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       selected_view: "Software",
+      sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
 
@@ -201,6 +207,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     state = %{
       selected_view: "Software",
       selected_issue: nil,
+      sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
     state =
