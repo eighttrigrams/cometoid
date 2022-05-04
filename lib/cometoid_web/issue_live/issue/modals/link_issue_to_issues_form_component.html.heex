@@ -1,4 +1,5 @@
-<div>
+<div phx-hook="IssuesToIssuesSaveHook" 
+     target={@myself}>
   <h1>Link "<%= @state.selected_issue.title %>"</h1>
 
   <%= if length(@issues) > 0 do %>
@@ -17,4 +18,17 @@
       </ul>
     </div>
   <% end %>
+
+  <.form
+    for={:links}
+    let={f}
+    id="link-issues-to-issues-form"
+    phx-target={@myself}
+    phx-submit="add">
+
+    <br>
+    <%= select f, :issue, convert_for_select(@available_issues, @issues) %>
+    <%= submit "Add", phx_disable_with: "Saving..." %>
+
+  </.form>
 </div>
