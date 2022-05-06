@@ -234,6 +234,18 @@ defmodule CometoidWeb.IssueLive.Index do
     |> return_noreply
   end
 
+  def handle_event "jump_to_issue", %{ "target_issue_id" => target_issue_id }, socket do
+    
+    {target_issue_id, ""} = Integer.parse target_issue_id
+    issue = Tracker.get_issue! target_issue_id
+
+    socket
+    |> assign(:selected_context, nil)
+    |> assign(:selected_issue, issue)
+    |> push_event(:issue_reprioritized, %{ id: target_issue_id })
+    |> do_query
+  end
+
   def handle_event "jump_to_context",
       %{
         "target_context_id" => target_context_id,

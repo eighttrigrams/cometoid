@@ -12,7 +12,8 @@
   <div>
     <ul>
       <%= for issue <- @issue.issues do %>
-        <li class="contexts-background-color" style="padding: 5px; height: 20px">
+        <li class="contexts-background-color" style="padding: 5px; height: 20px"
+            phx-click="jump_to_issue" phx-value-target_issue_id={issue.id}>
           <%= issue.title %>
         </li>
       <% end %>
