@@ -189,7 +189,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "edit_issue", id, socket do
 
-    {id, ""} = Integer.parse id
+    id = to_int id
 
     socket
     |> assign(:issue, Tracker.get_issue!(id))
@@ -213,7 +213,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "convert_issue_to_context", %{ "id" => id }, socket do
 
-    {id, ""} = Integer.parse id
+    id = to_int id
     state = IssuesMachine.convert_issue_to_context(socket.assigns, id)
 
     socket
@@ -236,7 +236,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "jump_to_issue", %{ "target_issue_id" => target_issue_id }, socket do
     
-    {target_issue_id, ""} = Integer.parse target_issue_id
+    target_issue_id = to_int target_issue_id
     issue = Tracker.get_issue! target_issue_id
 
     socket
@@ -253,8 +253,8 @@ defmodule CometoidWeb.IssueLive.Index do
       },
       socket do
 
-    {target_context_id, ""} = Integer.parse target_context_id
-    {target_issue_id, ""} = Integer.parse target_issue_id
+    target_context_id = to_int target_context_id
+    target_issue_id = to_int target_issue_id
 
     state = IssuesMachine.jump_to_context socket.assigns,
       target_context_id, target_issue_id
@@ -319,19 +319,21 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "edit_context", id, socket do
 
-    {id, ""} = Integer.parse id
+    id = to_int id
     socket
     |> edit_context(id)
     |> return_noreply
   end
 
   def handle_event "select_context", %{ "id" => id }, socket do
-    {id, ""} = Integer.parse id
+
+    id = to_int id
     select_context socket, id
   end
 
   def handle_event "link_context", %{ "id" => id }, socket do
-    {id, ""} = Integer.parse id
+    
+    id = to_int id
     state = IssuesMachine.select_context to_state(socket), id
     socket
     |> assign(state)
@@ -340,7 +342,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "reprioritize_context", %{ "id" => id }, socket do
-    {id, ""} = Integer.parse id
+
+    id = to_int id
     state =
       socket.assigns
       |> IssuesMachine.select_context!(id)

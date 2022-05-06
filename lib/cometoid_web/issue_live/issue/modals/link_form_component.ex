@@ -58,7 +58,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def is_checked issue, context_id do
-    {context_id, ""} = Integer.parse context_id
+    context_id = to_int context_id
     context_ids = Enum.map issue.contexts, &(&1.context.id)
     if not (is_nil Enum.find context_ids, &(&1 == context_id)) do "true" else "false" end
   end
@@ -76,7 +76,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   defp get_ids_of_selected_contexts socket do
     selected_contexts = extract_from socket.assigns.links
     Enum.map selected_contexts,
-      fn c -> {id, ""} = Integer.parse(c); id end
+      fn c -> to_int(c) end
   end
 
   defp extract_from params do

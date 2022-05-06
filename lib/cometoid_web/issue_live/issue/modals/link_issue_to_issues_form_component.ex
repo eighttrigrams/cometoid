@@ -28,7 +28,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
   @impl true
   def handle_event "add", %{ "links" => %{ "issue" => issue } }, socket do
 
-    {id, ""} = Integer.parse issue
+    id = to_int issue
     issue = Enum.find socket.assigns.available_issues, &(&1.id == id)
 
     issues = [issue|socket.assigns.issues]
@@ -58,7 +58,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
 
   def handle_event "unlink_issue", %{ "target" => target }, socket do
 
-    {id, ""} = Integer.parse target
+    id = to_int target
 
     issues = Enum.filter socket.assigns.issues, fn issue -> issue.id != id end
     socket

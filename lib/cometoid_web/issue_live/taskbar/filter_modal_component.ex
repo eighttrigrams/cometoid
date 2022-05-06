@@ -4,7 +4,7 @@ defmodule CometoidWeb.IssueLive.Taskbar.FilterModalComponent do
 
   def handle_event "toggle_context", %{ "id" => id }, socket do
 
-    {id, ""} = Integer.parse id
+    id = to_int id
     selected_secondary_contexts = socket.assigns.state.selected_secondary_contexts
 
     selected_secondary_contexts = if Enum.member?(selected_secondary_contexts, id) do

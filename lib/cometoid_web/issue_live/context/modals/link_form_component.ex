@@ -11,10 +11,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
   def handle_event "save", params , socket do
     secondary_contexts_ids = case params do
       %{ "links" => %{ "secondary_contexts" => ids }} ->
-        Enum.map(ids, fn id ->
-          {result_id, ""} = Integer.parse(id);
-          result_id
-        end)
+        Enum.map(ids, fn id -> to_int id end)
       _ -> []
     end
     primary_context = socket.assigns.state.selected_context

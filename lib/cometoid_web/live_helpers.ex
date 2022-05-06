@@ -9,4 +9,9 @@ defmodule CometoidWeb.LiveHelpers do
   def return_noreply(socket), do: {:noreply, socket |> Map.delete(:flash) } # TODO review flash
 
   def return_ok(socket), do: {:ok, socket}
+
+  def to_int s do
+    {int, ""} = Integer.parse s
+    int
+  end
 end
