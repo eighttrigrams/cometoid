@@ -25,7 +25,7 @@
   <div>
     <%= unless is_nil(@issue.description) or @issue.description == "" do %>
       <div id="desc" phx-hook="DescHook">
-        <%= Phoenix.HTML.raw(convert(@issue.description)) %>
+        <%= Phoenix.HTML.raw(markdownify(@issue.description)) %>
       </div>
     <% end %>
   </div>

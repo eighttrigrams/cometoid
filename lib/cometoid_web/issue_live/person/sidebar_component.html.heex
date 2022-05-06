@@ -15,7 +15,7 @@
 <div class="inner smaller-text" id="context-description" phx-hook="ContextDescriptionHook">
   <div>
     <%= unless is_nil(@context.person.description) or @context.person.description == "" do %>
-      <%= Phoenix.HTML.raw(convert(@context.person.description)) %>
+      <%= Phoenix.HTML.raw(markdownify(@context.person.description)) %>
     <% end %>
   </div>
 </div>

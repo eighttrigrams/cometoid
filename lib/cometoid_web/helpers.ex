@@ -1,9 +1,9 @@
 defmodule CometoidWeb.Helpers do
 
-  def convert nil do
+  def markdownify nil do
     ""
   end
-  def convert raw do # TODO put this somewhere else
+  def markdownify raw do # TODO put this somewhere else
     case Earmark.as_html raw do
       {:ok, html, _} -> html
       _ -> raw

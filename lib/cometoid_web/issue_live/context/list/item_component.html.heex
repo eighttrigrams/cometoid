@@ -10,7 +10,7 @@
     <td class="right border-background-color">
         <table class="contexts-background-color"><tr>
             <td class="heading">
-                <%= Phoenix.HTML.raw(convert(@context.title)) %> 
+                <%= Phoenix.HTML.raw(markdownify(@context.title)) %> 
             </td>
             <td>&nbsp;</td>
         </tr></table>
