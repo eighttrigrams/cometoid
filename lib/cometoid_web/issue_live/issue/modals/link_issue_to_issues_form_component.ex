@@ -45,9 +45,10 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
 
     issues_to_display = Enum.filter available_issues, fn i ->
       elements = String.split(i.title, " ")
-      Enum.reduce elements, true, fn v, a -> 
-        a or (String.starts_with? (String.downcase a), filter)
+      a = Enum.reduce elements, 0, fn v, a -> 
+        a + if (String.starts_with? (String.downcase v), filter) do 1 else 0 end
       end
+      a > 0
     end
 
     socket
