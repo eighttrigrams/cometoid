@@ -24,11 +24,15 @@
     let={f}
     id="link-issues-to-issues-form"
     phx-target={@myself}
+    phx-change="change"
     phx-submit="add">
 
+    <%= text_input f, :filter, autocomplete: "off" %>
     <br>
-    <%= select f, :issue, convert_for_select(@available_issues, @issues) %>
-    <%= submit "Add", phx_disable_with: "Saving..." %>
+    <%= if length(@issues_to_display) > 0 do %>
+      <%= select f, :issue, convert_for_select(@issues_to_display, @issues) %>
+      <%= submit "Add", phx_disable_with: "Saving..." %>
+    <% end %>
 
   </.form>
 </div>

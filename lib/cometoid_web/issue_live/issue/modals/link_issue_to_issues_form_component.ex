@@ -20,6 +20,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
       socket
       |> assign(:issues, state.selected_issue.issues)
       |> assign(:available_issues, available_issues)
+      |> assign(:issues_to_display, available_issues)
       |> assign(:state, state)
     }
   end
@@ -37,12 +38,31 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
     |> return_noreply
   end
 
+  def handle_event "change", %{ "links" => %{ "filter" => filter }}, 
+      %{ assigns: %{ available_issues: available_issues } } = socket do
+
+    filter = String.downcase filter
+
+    issues_to_display = Enum.filter available_issues, fn i ->
+      elements = String.split(i.title, " ")
+      Enum.reduce elements, true, fn v, a -> 
+        a or (String.starts_with? (String.downcase a), filter)
+      end
+    end
+
+    socket
+    |> assign(:issues_to_display, issues_to_display)
+    |> return_noreply
+  end
+
   def handle_event "unlink_issue", %{ "target" => target }, socket do
 
     {id, ""} = Integer.parse target
 
     issues = Enum.filter socket.assigns.issues, fn issue -> issue.id != id end
-    {:noreply, socket |> assign(:issues, issues)}
+    socket
+    |> assign(:issues, issues)
+    |> return_noreply
   end
 
   def handle_event "save", _, socket do
