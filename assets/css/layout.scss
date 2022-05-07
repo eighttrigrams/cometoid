@@ -1,3 +1,6 @@
+$lists-width: 56%;
+$description-width: 44%;
+
 #page-content {
     position: fixed;
     top: calc(#{$navbar-height} + #{$navbar-padding} - 4px);
@@ -7,7 +10,7 @@
     #left-column {
 
         position: absolute;
-        width: 66%;
+        width: $lists-width;
         top: 0;
         height: 100%;
 
@@ -36,8 +39,8 @@
     #right-column {
 
         position: absolute;
-        left: 66%;
-        width: 34%;
+        left: $lists-width;
+        width: $description-width;
         height: 100%;
     }
 
@@ -67,11 +70,11 @@
         z-index: 1000;
         top: $taskbar-height;
         bottom: 0;
-        left: 66%;
-        width: 34%;
+        left: $lists-width;
+        width: $description-width;
     }
     #context-search-mask-right.in-issue-search {
-        left: calc(66% + 1px);
-        width: calc(34% - 1px);
+        left: calc(#{$lists-width} + 1px);
+        width: calc(#{$description-width} - 1px);
     }
 }

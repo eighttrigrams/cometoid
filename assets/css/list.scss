@@ -92,7 +92,7 @@ $list-item-height: $taskbar-height;
             
             i {
                 position: absolute;
-                padding: 23px;
+                padding: 18px;
             }
         }
     }
@@ -133,12 +133,13 @@ $list-item-height: $taskbar-height;
             }
             .right {
                 float: right;
+                visibility: hidden;
                 .actions {
                     position: relative;
                     top: 0px;
                     width: 100%;
                     height: $list-item-height;
-                    visibility: visible;
+                    visibility: hidden;
                 }
             }
         }
@@ -147,11 +148,14 @@ $list-item-height: $taskbar-height;
             visibility: hidden;
             height: 1px;
         }
-        &:hover .actions {
+        &:hover .right {
             height: $list-item-height;
             visibility: visible;
-            .btn {
-                width: $list-item-height;
+            .actions {
+                visibility: visible;
+                .btn {
+                    width: $list-item-height;
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 <div class="upper border-color" style="padding-top: 0px;">
-  <div class="smaller-text">
+  <div>
     <h1 style="font-family: serif">
       <span style="float: left;">
         <%= if @context.short_title do %>
@@ -10,7 +10,7 @@
     </h1>
   </div>
 </div>
-<div class="inner smaller-text" id="context-description" phx-hook="ContextDescriptionHook">
+<div class="inner" id="context-description" phx-hook="ContextDescriptionHook">
   <div>
     <%= unless is_nil(@context.description) or @context.description == "" do %>
       <div id="desc" phx-hook="DescHook">
