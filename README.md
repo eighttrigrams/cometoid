@@ -16,6 +16,7 @@ In its current state, it is designed to run in a desktop environment, supporting
     $ vim config/dev.secret.exs # Edit settings
     $ mix deps.get
     $ npm i --prefix=./assets
+    $ mkdir -p priv/static/css
     $ cp -r assets/node_modules/bootstrap-icons/font/fonts priv/static/css
     $ mix ecto.setup
 
