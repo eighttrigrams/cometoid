@@ -1,5 +1,5 @@
 {:source-paths
- ["src/main/cljs" "src/main/cljc" "src/test"]
+ ["src/cljs" "src/cljc" "test"]
 
  :dependencies
  [[binaryage/devtools               "0.9.10"]]

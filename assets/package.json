@@ -3,7 +3,7 @@
   "description": " ",
   "license": "MIT",
   "scripts": {
-    "test": "clj -Xtest :dirs '[\"src/test/cljc\"]'",
+    "test": "clj -Xtest :dirs '[\"test/cljc\"]'",
     "deploy": "webpack --mode production",
     "watch": "webpack --mode development --watch"
   },

@@ -1,0 +1,1 @@
+This dir contains the **Cometoid text editor** as well as Phoenix assets.
