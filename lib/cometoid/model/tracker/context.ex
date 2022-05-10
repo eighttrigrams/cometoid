@@ -22,6 +22,7 @@ defmodule Cometoid.Model.Tracker.Context do
     field :description, :string
     field :is_tag?, :boolean, [source: :is_tag]
     field :search_mode, :integer, default: 0 # 0 = most recently changed, 1 = alphanumerically ascending, 2 = alphanumerically descending
+    field :tags, :string, default: ""
 
     has_many(
       :issues,
@@ -48,7 +49,7 @@ defmodule Cometoid.Model.Tracker.Context do
   @doc false
   def changeset context, attrs do
     context
-    |> cast(attrs, [:title, :short_title, :search_mode, :view, :important, :description, :is_tag?])
+    |> cast(attrs, [:title, :short_title, :search_mode, :view, :important, :description, :is_tag?, :tags])
     |> put_assoc_person(attrs)
     |> put_assoc_text(attrs)
     |> validate_required([:title, :view])

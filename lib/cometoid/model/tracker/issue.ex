@@ -11,6 +11,7 @@ defmodule Cometoid.Model.Tracker.Issue do
     field :title, :string
     field :short_title, :string
     field :important, :boolean, default: false
+    field :tags, :string, default: ""
 
     has_many(
       :contexts,
@@ -34,7 +35,7 @@ defmodule Cometoid.Model.Tracker.Issue do
   @doc false
   def changeset(issue, attrs) do
     issue
-    |> cast(attrs, [:title, :short_title, :description, :done, :important])
+    |> cast(attrs, [:title, :short_title, :description, :done, :important, :tags])
     |> cast_assoc_event(attrs)
     |> validate_required([:title, :done])
   end
@@ -52,7 +53,7 @@ defmodule Cometoid.Model.Tracker.Issue do
 
   def delete_event_changeset(issue, attrs) do
     issue
-    |> cast(attrs, [:title, :short_title,:description, :done, :important])
+    |> cast(attrs, [:title, :short_title,:description, :done, :important, :tags])
     |> put_assoc_contexts(attrs)
     |> put_assoc(:event,
       %{ Calendar.Event.date_changeset(issue.event, %{}) | action: :delete })
