@@ -3,6 +3,8 @@
 An issue management system, based on a very simple data model which makes it very versatile. 
 In its current state, it is designed to run in a desktop environment, supporting a single user.
 
+Another issue tracker, Dan, really? [Rationale](./rationale.md)
+
 ## Getting started
 
 ### Prerequisites
