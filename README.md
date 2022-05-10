@@ -8,6 +8,8 @@ Another issue tracker, Dan, really? [Rationale](./rationale.md)
 
 In its current state, Cometoid is designed to run in a desktop environment, supporting a single user.
 
+![](./img.png)
+
 ## Getting started
 
 ### Prerequisites
