@@ -6,7 +6,7 @@
         phx-target={@myself}
         class={"#{if is_selected?(@state, id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
         >
-        <%= if short_title, do: short_title, else: title %>
+        <%= title %>
       </div>
     <% end %>
 </div>

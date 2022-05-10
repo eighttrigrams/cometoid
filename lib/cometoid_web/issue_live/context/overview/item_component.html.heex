@@ -10,7 +10,7 @@
               "People" -> "P#{@context.person.id}"
               _ -> "C#{@context.id}"
           end
-      %> | <%= if @context.short_title, do: @context.short_title, else: @context.title %></b>
+      %> | <%= @context.title %></b>
       <br>
 
       <%
