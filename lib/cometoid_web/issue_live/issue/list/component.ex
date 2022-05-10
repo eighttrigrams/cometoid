@@ -50,7 +50,7 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
     end and (q == "" or search_matches? issue, q)
   end
 
-  defp search_matches? %{title: title, short_title: short_title, tags: tags}, q do
+  def search_matches? %{title: title, short_title: short_title, tags: tags}, q do
     short_title = String.downcase(short_title || "")
     tags = String.downcase(tags)
     

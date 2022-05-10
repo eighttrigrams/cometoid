@@ -37,6 +37,6 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
   end
 
   defp should_show? context, q do
-    String.starts_with? (String.downcase context.title), (String.downcase q)
+    CometoidWeb.IssueLive.Issue.List.Component.search_matches? context, q
   end
 end
