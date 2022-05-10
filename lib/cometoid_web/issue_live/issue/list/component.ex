@@ -47,17 +47,22 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
       issues_contexts = Enum.map issue.contexts, &(&1.context.id)
       diff = selected_secondary_contexts -- issues_contexts
       length(diff) == 0
-    end and (q == "" or search_matches? issue.title, q)
+    end and (q == "" or search_matches? issue, q)
   end
 
-  defp search_matches? title, q do
+  defp search_matches? %{title: title, short_title: short_title, tags: tags}, q do
+    short_title = String.downcase(short_title || "")
+    tags = String.downcase(tags)
+    
     tokenized =
       (
         title
         |> Helpers.demarkdownify
         |> String.downcase
         |> String.split(" ")
-      )
+      ) 
+      ++ String.split(short_title, " ")
+      ++ String.split(tags, " ")
 
     q = String.downcase q
     not is_nil Enum.find tokenized, &(String.starts_with? &1, q)
