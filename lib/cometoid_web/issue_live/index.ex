@@ -396,8 +396,10 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "select_issue", %{ "target" => id }, socket do
+    IO.inspect id
     selected_issue = Tracker.get_issue! id
     socket
+    |> push_event(:issue_reprioritized, %{ id: id})
     |> assign(:selected_issue, selected_issue)
     |> assign(:issue_search_active, false)
     |> return_noreply
