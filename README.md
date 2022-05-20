@@ -1,5 +1,5 @@
 # Cometoid
-   
+      
 An issue management system, written in **Elixir**, based on a very simple data model which makes it very versatile. 
 It comes with a text editor written in **ClojureScript** which was aimed at giving me some of the keyboard shortcuts
 (wordwise navigation and such things) I have in VSCode.
