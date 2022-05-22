@@ -31,10 +31,6 @@ hooks.ContentsHook = {
         this.el.addEventListener("mouseleave", e => { 
             this.pushEvent("mouse_leave");
         });
-        this.el.addEventListener("contextmenu", e => {
-            this.pushEvent("right_click")
-            e.preventDefault()
-        })
         this.el.addEventListener("mouseup", e => {
             this.pushEvent("mouse_leave")
             e.preventDefault()
@@ -229,6 +225,14 @@ hooks.IssueItemHook = {
         }, false)  
     }
 }
+hooks.IssueActionsHook = {
+  mounted() {
+    this.el.addEventListener("contextmenu", e => {
+      this.pushEvent("right_click")
+      e.preventDefault()
+    })
+  }
+}
 hooks.EventItemHook = {
   id: '',
   mounted() {
@@ -238,36 +242,11 @@ hooks.EventItemHook = {
           event.preventDefault()
         }
       }, false)
-      this.el.addEventListener('dblclick', e => {
+      this.el.addEventListener("dblclick", e => {
           this.pushEvent("edit_event", this.id)
       }, false)  
   }
 }
-hooks.IssueDescriptionHook = {
-    mounted() {
-      document.addEventListener('mousedown', function (event) {
-        if (event.detail > 1) {
-          event.preventDefault();
-        }
-      }, false);
-        this.el.addEventListener('dblclick', e => {
-            this.pushEvent("edit_issue_description");
-        }, false);
-    }
-}
-hooks.ContextDescriptionHook = {
-    mounted() {
-        // https://stackoverflow.com/a/43321596
-      document.addEventListener('mousedown', function (event) {
-          if (event.detail > 1) {
-            event.preventDefault();
-          }
-      }, false);
-      this.el.addEventListener('dblclick', e => {
-          this.pushEvent("edit_context_description");
-      }, false);
-    }, 
-  }
 hooks.DescHook = {
   mounted() {
     const elements = this.el.getElementsByTagName('a');

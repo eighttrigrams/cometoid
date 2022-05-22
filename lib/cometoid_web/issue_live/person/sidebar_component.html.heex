@@ -12,7 +12,7 @@
     </h1>
   </div>
 </div>
-<div class="inner" id="context-description" phx-hook="ContextDescriptionHook">
+<div class="inner" id="context-description">
   <div>
     <%= unless is_nil(@context.person.description) or @context.person.description == "" do %>
       <%= Phoenix.HTML.raw(markdownify(@context.person.description)) %>

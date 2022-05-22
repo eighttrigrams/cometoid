@@ -21,7 +21,7 @@
   </div>
 <% end %>
 
-<div class="inner" id="issue-description" phx-hook="IssueDescriptionHook">
+<div class="inner" id="issue-description">
   <div>
     <%= unless is_nil(@issue.description) or @issue.description == "" do %>
       <div id="desc" phx-hook="DescHook">
