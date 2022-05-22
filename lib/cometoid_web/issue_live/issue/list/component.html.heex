@@ -10,7 +10,7 @@
   <div class="list issues-list">
     <table class="list-table">
       <%= for issue <- @filtered_issues do %>
-        <%= live_component ItemComponent, issue: issue, state: @state %>
+        <%= live_component ItemComponent, issue: issue, filtered_issues: @filtered_issues, state: @state %>
       <% end %>
     </table>
   </div>

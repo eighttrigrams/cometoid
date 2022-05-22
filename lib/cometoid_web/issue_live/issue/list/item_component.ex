@@ -5,7 +5,7 @@ defmodule CometoidWeb.IssueLive.Issue.List.ItemComponent do
   alias CometoidWeb.IssueLive.Issue.List.ActionsComponent
   alias CometoidWeb.IssueLive.Issue.List.BadgesComponent
 
-  defp num_non_tag_contexts state, issue do
-    length Enum.filter issue.contexts, &(not &1.context.is_tag? and &1.context.id != state.selected_context.id)
+  def get_highlight issue, filtered_issues, state do
+    if state.issue_search_active and 1 == length filtered_issues do 'selected-item-color' end
   end
 end

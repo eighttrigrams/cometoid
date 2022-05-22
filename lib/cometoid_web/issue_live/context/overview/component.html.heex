@@ -13,8 +13,7 @@
       <%= live_component ItemComponent, 
         context: context, 
         filtered_contexts: @filtered_contexts, 
-        selected_context: @state.selected_context,
-        context_search_active: @state.context_search_active %>
+        state: @state %>
     <% end %>
   </div>
 

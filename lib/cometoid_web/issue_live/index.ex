@@ -57,6 +57,10 @@ defmodule CometoidWeb.IssueLive.Index do
     select_context socket, id
   end
 
+  def handle_info {:select_issue, id}, socket do
+    select_issue socket, id
+  end
+
   def handle_info {:select_secondary_contexts, selected_secondary_contexts}, socket do
     socket
     |> assign(:selected_secondary_contexts, selected_secondary_contexts)
@@ -397,19 +401,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "select_issue", %{ "target" => id }, socket do
-    selected_issue = Tracker.get_issue! id
-    
-    socket = if socket.assigns.issue_search_active do 
-      socket
-      |> push_event(:issue_reprioritized, %{ id: id})  
-    else
-      socket
-    end
-    
-    socket
-    |> assign(:selected_issue, selected_issue)
-    |> assign(:issue_search_active, false)
-    |> return_noreply
+    select_issue socket, id
   end
 
   def handle_event "reprioritize_issue", %{ "id" => id }, socket do
@@ -518,6 +510,22 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(:edit_entity, entity)
     |> assign(:live_action, :describe_context)
+  end
+
+  defp select_issue socket, id do
+    selected_issue = Tracker.get_issue! id
+    
+    socket = if socket.assigns.issue_search_active do 
+      socket
+      |> push_event(:issue_reprioritized, %{ id: id })  
+    else
+      socket
+    end
+    
+    socket
+    |> assign(:selected_issue, selected_issue)
+    |> assign(:issue_search_active, false)
+    |> return_noreply
   end
 
   defp select_context socket, id do
