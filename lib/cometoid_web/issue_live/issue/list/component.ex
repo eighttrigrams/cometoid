@@ -64,7 +64,13 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
       ++ String.split(short_title, " ")
       ++ String.split(tags, " ")
 
-    q = String.downcase q
-    not is_nil Enum.find tokenized, &(String.starts_with? &1, q)
+    qs = q
+      |> String.downcase
+      |> String.split(" ")
+      |> Enum.filter(&(&1 != ""))
+
+    Enum.reduce qs, true, fn q, acc ->
+      acc && !is_nil(Enum.find tokenized, &(String.starts_with? &1, q))
+    end
   end
 end
