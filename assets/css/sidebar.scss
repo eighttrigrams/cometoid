@@ -22,6 +22,15 @@ $pad: 20px;
         padding: 0 $pad $pad $pad;
         flex: 2;
         overflow: auto;
+
+        pre {
+            position: relative;
+            left: -20px;
+            width: calc(100% + 20px);
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 20px;
+        }
     }
 
     border-left-width: 1px;

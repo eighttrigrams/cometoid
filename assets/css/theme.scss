@@ -45,6 +45,10 @@ $border-color-1: lighten(black, 50%);
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: lighten(black, 45%); }
     .opacity { background-color: rgba(0,0,0,0.7); }
+    #sidebar { 
+        pre { background-color: $contexts-background-color-1; }
+        code.inline { background-color: $contexts-background-color-1; }
+    }
 }
 
 
@@ -94,4 +98,8 @@ $border-color-2: lighten(black, 10%);
     .selected-issue-color { color: lighten(black, 95%); }
     .deselected-issue-color { color: darkgray; }
     .opacity { background-color: rgba(0,0,0,0.2); }
+    #sidebar { 
+        pre { background-color: $contexts-background-color-2; }
+        code.inline { background-color: $contexts-background-color-2; }
+    }
 }
