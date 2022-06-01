@@ -23,8 +23,9 @@ In its current state, Cometoid is designed to run in a desktop environment, supp
     $ vim config/dev.secret.exs # Edit settings
     $ mix deps.get
     $ npm i --prefix=./assets
-    $ mkdir -p priv/static/css
-    $ cp -r assets/node_modules/bootstrap-icons/font/fonts priv/static/css
+    $ mkdir -p priv/static/assets
+    $ cp -r assets/node_modules/bootstrap-icons/font/fonts priv/static/assets
+    $ cp -r assets/node_modules/bootstrap-icons/font/bootstrap-icons.css priv/static/assets
     $ mix ecto.setup
 
 ### Start

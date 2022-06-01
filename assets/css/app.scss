@@ -1,10 +1,10 @@
 /* This file is for your main application css. */
- @import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+ @import '/assets/bootstrap-icons.css';
 
 @font-face {
   font-family: 'bootstrap-icons';
-  src: font-url('../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2') format('woff2'),
-    font-url('../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff') format('woff');
+  src: font-url('/assets/bootstrap-icons.woff2') format('woff2'),
+    font-url('/assets/bootstrap-icons.woff') format('woff');
 }
 
 @import "./cometoid.scss";

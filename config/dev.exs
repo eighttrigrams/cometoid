@@ -12,12 +12,12 @@ config :cometoid, CometoidWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
+      "sass-watch.js",
+      cd: Path.expand("../assets", __DIR__),
+      into: IO.stream(:stdio, :line),
+      stderr_to_stdout: true
     ],
     bash: [
       "cljs-start.sh",

@@ -18,6 +18,14 @@ config :cometoid, CometoidWeb.Endpoint,
   pubsub_server: Cometoid.PubSub,
   live_view: [signing_salt: "Fkwuc1Jo"]
 
+config :esbuild,
+  version: "0.14.29",
+  default: [
+    args: ~w(js/assets.js --bundle --target=es2017 --outdir=../priv/static/assets),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
