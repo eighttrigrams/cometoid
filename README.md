@@ -21,11 +21,7 @@ In its current state, Cometoid is designed to run in a desktop environment, supp
 
     $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ vim config/dev.secret.exs # Edit settings
-    $ mix deps.get
-    $ npm i --prefix=./assets
-    $ mkdir -p priv/static/assets
-    $ cp -r assets/node_modules/bootstrap-icons/font/fonts priv/static/assets
-    $ cp -r assets/node_modules/bootstrap-icons/font/bootstrap-icons.css priv/static/assets
+    $ ./init.sh
     $ mix ecto.setup
 
 ### Start
@@ -58,11 +54,8 @@ Clojure Editor tests
     $ cp config/dev.secret.template.exs config/dev.secret.exs
     $ cp config/prod.secret.template.exs config/prod.secret.exs
     $ vim config/prod.secret.exs # Edit settings
-    $ mix deps.get
-    $ cd assets
-    $ npm i
+    $ ./init.sh
     $ npx shadow-cljs release app
-    $ cp -r node_modules/bootstrap-icons/font/fonts ../priv/static/css
     $ npm run deploy
     $ cd ..
     $ mix phx.digest
