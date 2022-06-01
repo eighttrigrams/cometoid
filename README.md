@@ -58,6 +58,7 @@ Clojure Editor tests
     $ cd assets
     $ npx shadow-cljs release app
     $ cd ..
+    $ mix assets.deploy
     $ export SECRET_KEY_BASE=SOMESECRETKEYBASE
     $ MIX_ENV=prod mix ecto.setup # or ecto.migrate
     $ MIX_ENV=prod mix phx.server
