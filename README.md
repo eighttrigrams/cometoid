@@ -4,7 +4,7 @@ An issue management system, written in **Elixir**, based on a very simple data m
 It comes with a text editor written in **ClojureScript** which was aimed at giving me some of the keyboard shortcuts
 (wordwise navigation and such things) I have in VSCode.
 
-Another issue tracker, Dan, really? [Rationale](./rationale.md)
+Another issue tracker, Dan, really? Yes, I think it's sufficiently different. Here's [why](./rationale.md)
 
 In its current state, Cometoid is designed to run in a desktop environment, supporting a single user.
 
