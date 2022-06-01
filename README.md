@@ -55,10 +55,9 @@ Clojure Editor tests
     $ cp config/prod.secret.template.exs config/prod.secret.exs
     $ vim config/prod.secret.exs # Edit settings
     $ ./init.sh
+    $ cd assets
     $ npx shadow-cljs release app
-    $ npm run deploy
     $ cd ..
-    $ mix phx.digest
     $ export SECRET_KEY_BASE=SOMESECRETKEYBASE
     $ MIX_ENV=prod mix ecto.setup # or ecto.migrate
     $ MIX_ENV=prod mix phx.server
