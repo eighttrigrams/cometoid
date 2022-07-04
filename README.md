@@ -33,7 +33,8 @@ Also provides the hot-code-reload for the editor which is written in ClojureScri
 
 For a repl into the running editor environment, run 
 
-    2$ cd assets && npx shadow-cljs cljs-repl app
+    2$ cd assets
+    2$ npx shadow-cljs cljs-repl app
     cljs.user=> (js/alert "Hi")
     nil
 
@@ -47,7 +48,26 @@ Phoenix App Tests
 
 Clojure Editor tests
 
-    $ cd assets; npm test
+    $ cd assets
+    $ clj -Xtest :dirs '["test/cljc"]'
+
+To develop tests, use
+
+    1$ npx shadow-cljs server    # shows nrepl port
+    2$ npx shadow-cljs watch app
+
+Then jack-in. With VSCode, use
+
+- REPL
+    - Connect to a running REPL in your project
+        - .../cometoid/assets
+            - ClojureScript nREPL Server
+                - localhost:\<port\>
+
+```clojure
+(require '[editor.lowlevel-test :as llt])
+(llt/caret-left-base-case)
+```
 
 ## Deployment for Production
 
