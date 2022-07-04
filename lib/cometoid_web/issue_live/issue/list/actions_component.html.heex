@@ -1,6 +1,6 @@
 <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"} 
     phx-hook="IssueActionsHook"
-    id="actions-component-el">
+    id={"issue-list-actions-component-el-#{@issue.id}"}>
 
     <%= unless @state.list_issues_done_instead_open do %>
         <span class="btn">
