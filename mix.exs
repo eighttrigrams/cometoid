@@ -33,12 +33,12 @@ defmodule Cometoid.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.6.2"},
-      {:phoenix_html, "~> 3.0"},
+      {:phoenix, "~> 1.6.10"},
+      {:phoenix_html, "~> 3.2.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.17.4"},
-      {:phoenix_ecto, "~> 4.1"},
-      {:ecto_sql, "~> 3.7.1"},
+      {:phoenix_live_view, "~> 0.17.10"},
+      {:phoenix_ecto, "~> 4.4.0"},
+      {:ecto_sql, "~> 3.8.3"},
       {:postgrex, ">= 0.0.0"},
       {:floki, ">= 0.30.0", only: :test},
       {:telemetry_metrics, "~> 0.4"},
@@ -47,7 +47,7 @@ defmodule Cometoid.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:earmark, ">= 1.4.14"},
-      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev}
+      {:esbuild, "~> 0.5.0", runtime: Mix.env() == :dev}
     ]
   end
 
