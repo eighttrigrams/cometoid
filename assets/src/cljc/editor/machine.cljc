@@ -4,6 +4,8 @@
 
 (defn- _transform-state [command state direction]
   (case command
+    :nop state
+
     :insert
     (lowlevel/insert state)
 

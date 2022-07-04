@@ -31,7 +31,8 @@
    #{"INSERT" #{:ctrl}}                        :insert
    #{"KeyV" #{:ctrl}}                          nil
    #{"KeyX" #{:ctrl}}                          nil
-   #{"KeyC" #{:ctrl}}                          nil})
+   #{"KeyC" #{:ctrl}}                          nil
+   #{"Tab"  #{}}                               :nop})
 
 ;; TODO consider passing in environment via binding
 (defn- swap-modifiers-on-mac [modifiers]
