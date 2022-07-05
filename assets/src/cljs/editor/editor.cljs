@@ -2,7 +2,8 @@
   (:require [editor.helpers :as helpers]
             [editor.machine :as machine]
             [editor.time-machine :as time-machine]
-            [editor.bindings-resolver :as bindings-resolver]))
+            [editor.bindings-resolver :as bindings-resolver]
+            [editor.bindings :as bindings]))
 
 (defn set-values! [el {selection-start :selection-start
                        selection-end :selection-end
@@ -78,7 +79,8 @@
 (defn ^:export new [el]
   (let [modifiers (atom #{})
         position-in-line (atom nil)
-        transform-state (-> (machine/build) time-machine/build bindings-resolver/build)]
+        resolve-bindings (bindings-resolver/build bindings/commands)
+        transform-state (-> (machine/build) time-machine/build resolve-bindings)]
     (.addEventListener el "paste" (paste el modifiers transform-state position-in-line))
     (.addEventListener el "keydown" (keydown el modifiers transform-state position-in-line))
     (.addEventListener el "keyup" (keyup el modifiers))

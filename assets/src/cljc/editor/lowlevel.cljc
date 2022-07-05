@@ -1,11 +1,11 @@
 (ns editor.lowlevel
   (:require [editor.helpers :as h]))
 
-(def word-stop-pattern "[,;.\\-_\\n]")
+(def word-stop-pattern "[,;.\\-_\\n\\t]")
 
-(def word-stop-pattern-incl-whitespace "[,;.\\-_\\s]")
+(def word-stop-pattern-incl-whitespace "[,;.\\-_\\s]") ;; TODO \\t?
 
-(def sentence-stop-pattern "([\\n][\\n]|[,;.])")
+(def sentence-stop-pattern "([\\n][\\n]|[,;.\\t])")
 
 (defn insert-tab [{value :value
                    selection-start :selection-start
