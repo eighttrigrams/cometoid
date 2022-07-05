@@ -7,6 +7,17 @@
 
 (def sentence-stop-pattern "([\\n][\\n]|[,;.])")
 
+(defn insert-tab [{value :value
+                   selection-start :selection-start
+                   :as state}] 
+  (-> state
+      (assoc :value
+             (str (subs value 0 selection-start)
+                  "\t"
+                  (subs value selection-start (count value))))
+      (assoc :selection-start (inc selection-start))
+      (assoc :selection-end (inc selection-start))))
+
 (defn caret-left [{selection-start :selection-start
                    selection-end :selection-end
                    :as state}]

@@ -5,6 +5,13 @@
 
 (def transform-state (machine/build))
 
+(deftest insert-tab
+  (is (th/matches-model
+       (transform-state
+        :insert-tab
+        (th/convert "|abc"))
+       (th/convert "\t|abc"))))
+
 (deftest base-case
   (is (th/matches-model 
        (transform-state

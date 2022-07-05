@@ -4,6 +4,11 @@
             [editor.lowlevel :as lowlevel]
             [editor.helpers :as h] ))
 
+(deftest insert-tab 
+  (is (th/matches-model
+       (lowlevel/insert-tab (th/convert "|abc"))
+       (th/convert "\t|abc"))))
+
 (deftest caret-left-base-case
   (is (th/matches-model 
        (h/pull-l (lowlevel/caret-left (th/convert "abc|")))

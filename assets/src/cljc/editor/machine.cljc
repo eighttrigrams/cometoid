@@ -4,7 +4,10 @@
 
 (defn- _transform-state [command state direction]
   (case command
-    :nop state
+    :nop state ;; to just prevent default
+
+    :insert-tab 
+    (lowlevel/insert-tab state)
 
     :insert
     (lowlevel/insert state)

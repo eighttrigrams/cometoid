@@ -826,6 +826,13 @@ a {
   font-family: serif;
 }
 
+textarea,
+pre {
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+}
+
 select {
   background-color: gray;
   color: #cccccc;
