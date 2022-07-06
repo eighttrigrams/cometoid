@@ -409,7 +409,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> Tracker.update_issue_updated_at
     selected_issue = Tracker.get_issue! id
     socket
-    |> push_event(:issue_reprioritized, %{ id: id })
     |> assign(:issue_search_active, false)
     |> assign(:selected_issue, selected_issue)
     |> do_query
