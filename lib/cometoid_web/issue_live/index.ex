@@ -1,5 +1,6 @@
 defmodule CometoidWeb.IssueLive.Index do
   use CometoidWeb, :live_view
+  use CometoidWeb.IssueLive.WrapHandle
 
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.People
@@ -32,7 +33,8 @@ defmodule CometoidWeb.IssueLive.Index do
       sort_issues_alphabetically: false,
       show_secondary_contexts_instead_issues: false,
       selected_secondary_contexts: [],
-      selected_view: selected_view
+      selected_view: selected_view,
+      action: nil
     }
     state = Map.merge socket.assigns, state
     state = IssuesMachine.init_context_properties state
