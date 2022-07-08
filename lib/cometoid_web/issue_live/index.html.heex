@@ -1,30 +1,30 @@
 <div id="page-content" phx-window-keydown="keydown" phx-window-keyup="keyup">
   <div id="left-column">
     <div id="taskbar" class="taskbar border-color">
-      <%= live_component IssueLive.Taskbar.TaskbarComponent, id: "taskbar", state: assigns %>
+      <%= live_component IssueLive.Taskbar.TaskbarComponent, id: "taskbar", state: assigns.state %>
     </div>
     <div id="contexts-and-issues-row">
-      <%= live_component IssueLive.Context.Overview.Component, id: :contexts, state: assigns %>
-      <%= if not assigns.show_secondary_contexts_instead_issues do %>
-        <%= live_component IssueLive.Issue.List.Component, id: :issues, state: assigns %>
+      <%= live_component IssueLive.Context.Overview.Component, id: :contexts, state: assigns.state %>
+      <%= if not assigns.state.show_secondary_contexts_instead_issues do %>
+        <%= live_component IssueLive.Issue.List.Component, id: :issues, state: assigns.state %>
       <% else %>
-        <%= live_component IssueLive.Context.List.Component, id: :issues1, state: assigns %>
+        <%= live_component IssueLive.Context.List.Component, id: :issues1, state: assigns.state %>
       <% end %>
     </div>
   </div>
   
   <div id="right-column" class="border-color">
-    <%= live_component IssueLive.SidebarComponent, state: assigns %>
+    <%= live_component IssueLive.SidebarComponent, state: assigns.state %>
   </div>
 
-  <%= if @context_search_active or @issue_search_active do %>
+  <%= if @state.context_search_active or @state.issue_search_active do %>
     <div id="context-search-mask-top" 
          class="opacity">
     </div>
     <div id="context-search-mask-right" 
-         class={"opacity #{if @issue_search_active do "in-issue-search" end}"}>
+         class={"opacity #{if @state.issue_search_active do "in-issue-search" end}"}>
     </div>
   <% end %>
 
-  <%= live_component CometoidWeb.ModalsComponent, state: assigns %>
+  <%= live_component CometoidWeb.ModalsComponent, state: assigns.state %>
 </div>
