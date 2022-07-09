@@ -180,7 +180,7 @@ hooks.IssueEventHook = {
 hooks.ContextItemHook = {
     id: '',
     mounted() {
-        this.handleEvent("context_reprioritized", ({ id: id }) => {
+        this.handleEvent("context_refocus", ({ id: id }) => {
           if (this.id == id) this.el.scrollIntoView(false)
         })
         this.id = this.el.id.replace("context-", "")
@@ -197,7 +197,7 @@ hooks.ContextItemHook = {
 hooks.IssueItemHook = {
     id: '',
     mounted() {
-        this.handleEvent("issue_reprioritized", ({ id: id }) => {
+        this.handleEvent("issue_refocus", ({ id: id }) => {
             if (this.id == id) this.el.scrollIntoView(false)
         })
         this.id = this.el.id.replace("issue-", "");

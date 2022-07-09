@@ -35,7 +35,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     {:ok, _} = Tracker.delete_context(context)
 
     {
-      :do_query,
+      :refresh_issues,
       state
       |> init_context_properties
       |> set_issue_properties
@@ -86,6 +86,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   @doc """
+  Makes the context fetched by id the new selected_context.
+  Pushes the id to the stack of recently selected_contexts.
+  Deselects selected_issue.
 
   ## Examples
 
@@ -108,14 +111,16 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     %{
       selected_context: selected_context,
       selected_contexts: selected_contexts,
-      selected_issue: nil
+      selected_issue: nil,
+      context_search_active: false,
+      selected_secondary_contexts: []
     }
   end
 
   @doc """
   TODO rename: it is used for jumping to context with (!) an issue
 
-  Call do_query after this, to reload all issues for the current context                TODO
+  Call refresh_issues after this, to reload all issues for the current context                TODO
   """
   def jump_to_context state, target_context_id, target_issue_id do
     target_issue = Tracker.get_issue! target_issue_id
@@ -126,7 +131,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     else
       state.contexts
     end
-    {:do_query, %{
+    {:refresh_issues, %{
         contexts: contexts,
         selected_context: target_context,
         selected_contexts: selected_contexts,
@@ -151,13 +156,13 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       [] -> %{}
       [_|_] -> %{}
     end
-    {:do_query, result}
+    {:refresh_issues, result}
   end
 
   def convert_issue_to_context state, id do
     context = Tracker.convert_issue_to_context id, state.selected_view
     contexts = load_contexts_for_view state
-    {:do_query, %{
+    {:refresh_issues, %{
       selected_context: context,
       contexts: contexts
     }}
@@ -172,7 +177,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       (set_context_properties_and_keep_selected_context state),
       %{ selected_issue: selected_issue })
 
-    {:do_query, new_state}
+    {:refresh_issues, new_state}
   end
 
   def unarchive_issue state, id do
@@ -186,7 +191,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
         selected_issue: issue
       })
 
-    {:do_query, new_state}
+    {:refresh_issues, new_state}
   end
 
   def delete_issue state, id do
@@ -207,7 +212,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     end
   end
 
-  def do_query state do # TODO rename to refresh_issues or something or at least document that it refreshes issues - and only issues
+  def refresh_issues state do # TODO rename to refresh_issues or something or at least document that it refreshes issues - and only issues
     do_the_query state
   end
 

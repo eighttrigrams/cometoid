@@ -45,9 +45,11 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign(:view, params["view"])
     |> assign_state(:view, params["view"]) # TODO review
-    |> do_query
+    |> refresh_issues
     |> apply_action(socket.assigns.live_action, params) # TODO review
   end
+
+  ## HANDLE_INFO
 
   @impl true
   def handle_info {:modal_closed}, socket do
@@ -57,7 +59,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_info {:select_context, id}, socket do
-    select_context socket, id
+    select_context_and_refocus socket, id
   end
 
   def handle_info {:select_issue, id}, socket do
@@ -73,8 +75,8 @@ defmodule CometoidWeb.IssueLive.Index do
     state = IssuesMachine.reload_changed_context (to_state socket), context_id
     socket
     |> assign_state(state)
-    |> push_event(:context_reprioritized, %{ id: context_id })
-    |> do_query
+    |> push_event(:context_refocus, %{ id: context_id })
+    |> refresh_issues
   end
 
   def handle_info {:after_edit_form_save, issue}, socket do
@@ -85,8 +87,10 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(state)
     |> assign_state(:selected_issue, issue)
-    |> do_query
+    |> refresh_issues
   end
+
+  ## HANDLE_EVENT
 
   @impl true
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index, state: state } } = socket do
@@ -175,13 +179,13 @@ defmodule CometoidWeb.IssueLive.Index do
     state = IssuesMachine.delete_issue (to_state socket), id
     socket
     |> assign_state(state)
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "deselect_selected_contexts", _params, socket do
     socket
     |> assign_state(:selected_secondary_contexts, [])
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "toggle_show_secondary_contexts_instead_issues", _params, socket do
@@ -239,8 +243,8 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(:selected_context, nil)
     |> assign_state(:selected_issue, issue)
-    |> push_event(:issue_reprioritized, %{ id: target_issue_id })
-    |> do_query
+    |> push_event(:issue_refocus, %{ id: target_issue_id })
+    |> refresh_issues
   end
 
   def handle_event "jump_to_context",
@@ -259,9 +263,9 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(state)
     |> assign_state(:issue_search_active, false)
-    |> push_event(:issue_reprioritized, %{ id: target_issue_id })
-    |> push_event(:context_reprioritized, %{ id: target_context_id })
-    |> do_query
+    |> push_event(:issue_refocus, %{ id: target_issue_id })
+    |> push_event(:context_refocus, %{ id: target_context_id })
+    |> refresh_issues
   end
 
   def handle_event "select_previous_context", _, socket do
@@ -270,7 +274,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign_state(state)
-    |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
+    |> push_event(:context_refocus, %{ id: state.selected_context.id })
   end
 
   def handle_event "create_new_context", %{ "view" => view }, socket do # TODO why is view passed?
@@ -318,15 +322,13 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "select_context", %{ "id" => id }, socket do
 
     id = to_int id
-    select_context socket, id
+    select_context_and_refocus socket, id
   end
 
   def handle_event "link_context", %{ "id" => id }, socket do
     
-    id = to_int id
-    state = IssuesMachine.select_context (to_state socket), id
     socket
-    |> assign_state(state)
+    |> select_context(to_int id)
     |> assign(:live_action, :link_context)
   end
 
@@ -340,8 +342,8 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(state)
     |> assign_state(:context_search_active, false)
-    |> push_event(:context_reprioritized, %{ id: state.selected_context.id })
-    |> do_query
+    |> push_event(:context_refocus, %{ id: state.selected_context.id })
+    |> refresh_issues
   end
 
   def handle_event "toggle_context_important", %{ "target" => id }, socket do
@@ -353,8 +355,8 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
     |> assign_state(:context_search_active, false)
-    |> push_event(:context_reprioritized, %{ id: id })
-    |> do_query
+    |> push_event(:context_refocus, %{ id: id })
+    |> refresh_issues
   end
 
   def handle_event "toggle_sort", _params, socket do
@@ -369,19 +371,19 @@ defmodule CometoidWeb.IssueLive.Index do
     {:ok, selected_context} = Tracker.update_context selected_context, %{ "search_mode" => new_search_mode }
     socket
     |> assign_state(:selected_context, selected_context)
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "show_open_issues", _params, socket do
     socket
     |> assign_state(:list_issues_done_instead_open, false)
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "show_closed_issues", _params, socket do
     socket
     |> assign_state(:list_issues_done_instead_open, true)
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "select_issue", %{ "target" => id }, socket do
@@ -395,7 +397,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(:issue_search_active, false)
     |> assign_state(:selected_issue, selected_issue)
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "toggle_issue_important", %{ "target" => id }, socket do
@@ -407,35 +409,25 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
     |> assign_state(:selected_issue, selected_issue)
     |> assign_state(:issue_search_active, false)
-    |> push_event(:issue_reprioritized, %{ id: id })
-    |> do_query
+    |> push_event(:issue_refocus, %{ id: id })
+    |> refresh_issues
   end
 
   def handle_event "unarchive", %{ "target" => id }, socket do
     socket
-    |> assign_state(IssuesMachine.unarchive_issue(to_state(socket), id))
-    |> push_event(:issue_reprioritized, %{ id: id })
+    |> assign_state(IssuesMachine.unarchive_issue((to_state socket), id))
+    |> push_event(:issue_refocus, %{ id: id })
   end
 
   def handle_event "archive", %{ "target" => id }, socket do
     socket
-    |> assign_state(IssuesMachine.archive_issue(to_state(socket), id))
+    |> assign_state(IssuesMachine.archive_issue((to_state socket), id))
   end
+
+  ## PUBLIC - functions called from templates
 
   def was_last_called_handler_select_context? assigns do
     assigns.action == "select_context"
-  end
-
-  defp do_query socket do
-    socket
-    |> assign_state(IssuesMachine.do_query(to_state socket))
-    |> assign(:live_action, :index)
-  end
-
-  defp get_selected_view params do
-    if Map.has_key?(params, "view") do
-      params["view"]
-    end
   end
 
   # def should_show_issues_list_in_contexts_view nil, _ do
@@ -452,10 +444,75 @@ defmodule CometoidWeb.IssueLive.Index do
     # length(issues) > 0
   # end
 
-  defp apply_action(socket, :index, _params) do # ?
-    socket
-    |> assign_state(:issue, nil)
+  ## PRIVATE
+
+  defp handle_describe socket do
+    state = to_state
+    if state.selected_issue do
+      edit_issue_description socket, state.selected_issue.id
+    else
+      if state.selected_context do
+        edit_context_description socket, state.selected_context.id
+      else
+        socket
+      end
+    end
   end
+
+  defp handle_escape socket do
+    state = to_state
+    unless state.selected_secondary_contexts == [] do
+      socket
+      |> assign_state(:selected_secondary_contexts, [])
+    else
+      unless (is_nil state.selected_context) do
+        socket
+        |> assign_state(:selected_context, nil)
+        |> assign_state(:selected_contexts, [])
+        |> refresh_issues
+      else
+        socket
+        |> assign_state(:selected_issue, nil)
+      end
+    end
+  end
+
+  ## ISSUES_MACHINE - wraps and decorates calls to IssuesMachine
+
+  defp refresh_issues socket do
+    socket
+    |> assign_state(IssuesMachine.refresh_issues(to_state socket))
+    |> assign(:live_action, :index)
+  end
+
+  defp select_context socket, id do
+    state = to_state socket
+    socket
+    |> assign_state(IssuesMachine.select_context state, id)
+  end
+
+  defp select_context_and_refocus socket, id do
+    state = to_state socket
+    (if state.context_search_active do
+      socket
+      |> push_event(:context_refocus, %{ id: state.selected_context.id })
+    else
+      socket
+    end)
+    |> assign_state(IssuesMachine.select_context state, id)
+  end
+
+  # defp reprioritize_context socket do
+    # state = to_state socket
+    # unless is_nil state.selected_context do
+      # socket
+      # |> push_event(:context_refocus, %{ id: state.selected_context.id })
+    # else
+      # socket
+    # end
+  # end
+
+  ## ECTO
 
   defp edit_issue_description socket, id do
     socket
@@ -492,7 +549,7 @@ defmodule CometoidWeb.IssueLive.Index do
     
     socket = if socket.assigns.state.issue_search_active do 
       socket
-      |> push_event(:issue_reprioritized, %{ id: id })  
+      |> push_event(:issue_refocus, %{ id: id })  
     else
       socket
     end
@@ -502,60 +559,17 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(:issue_search_active, false)
   end
 
-  defp select_context socket, id do
-    state = IssuesMachine.select_context to_state(socket), id
+  ## HELPER
 
-    context_search_active = socket.assigns.state.context_search_active
-
-    socket =
-      socket
-      |> assign_state(state)
-      |> assign_state(:context_search_active, false)
-      |> assign_state(:selected_secondary_contexts, [])
-
-    if context_search_active do
-      push_event(socket, :context_reprioritized, %{ id: state.selected_context.id })
-    else
-      socket
-    end
-    |> do_query
-  end
-
-  defp handle_describe socket do
-    if socket.assigns.state.selected_issue do
-      edit_issue_description socket, socket.assigns.state.selected_issue.id
-    else
-      if socket.assigns.state.selected_context do
-        edit_context_description socket, socket.assigns.state.selected_context.id
-      else
-        socket
-      end
+  defp get_selected_view params do
+    if Map.has_key?(params, "view") do
+      params["view"]
     end
   end
 
-  defp handle_escape socket do
-    unless socket.assigns.state.selected_secondary_contexts == [] do
-      socket
-      |> assign_state(:selected_secondary_contexts, [])
-    else
-      unless (is_nil socket.assigns.state.selected_context) do
-        socket
-        |> assign_state(:selected_context, nil)
-        |> assign_state(:selected_contexts, [])
-        |> do_query
-      else
-        socket
-        |> assign_state(:selected_issue, nil)
-      end
-    end
-  end
-
-  defp reprioritize_context socket do
-    unless is_nil socket.assigns.state.selected_context do
-      push_event(socket, :context_reprioritized, %{ id: socket.assigns.state.selected_context.id })
-    else
-      socket
-    end
+  defp apply_action(socket, :index, _params) do # ?
+    socket
+    |> assign_state(:issue, nil)
   end
 
   defp to_state(socket), do: socket.assigns.state
