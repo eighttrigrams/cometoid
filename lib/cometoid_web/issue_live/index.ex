@@ -424,7 +424,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def was_last_called_handler_select_context? assigns do
-    true
+    assigns.action == "select_context"
   end
 
   defp do_query socket do

@@ -18,6 +18,7 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
     |> assign(assigns)
     |> assign(:q, "")
     |> filter_issues
+    |> maybe_focus_first_issue
     |> return_ok
   end
 
@@ -67,6 +68,15 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
       (Enum.filter socket.assigns.state.issues,
         &(should_show? socket.assigns.state, &1, socket.assigns.q))
     )
+  end
+
+  defp maybe_focus_first_issue socket do
+    if socket.assigns.was_last_called_handler_select_context? and length(socket.assigns.filtered_issues) > 0 do
+      socket
+      |> push_event(:issue_reprioritized, %{ id: List.first(socket.assigns.filtered_issues).id })
+    else
+      socket
+    end
   end
 
   defp should_show? state, issue, q do
