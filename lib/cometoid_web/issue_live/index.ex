@@ -93,7 +93,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index, state: state } } = socket do
     cond do
       key == "Control" && !state.context_search_active ->
-        assign_state(socket, :control_pressed, true)
+        assign_state(socket, :control_pressed, true) # TODO do save in assigns, not in state
       state.issue_search_active or state.context_search_active ->
         case key do
           "Escape" ->
