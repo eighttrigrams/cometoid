@@ -96,6 +96,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   def select_context state, id do
 
     selected_context = Tracker.get_context! id
+
     selected_contexts = case state.selected_contexts do
       [previous_context_id|_] -> if previous_context_id == selected_context.id do
         state.selected_contexts
