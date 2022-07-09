@@ -3,7 +3,7 @@
     <div id="taskbar" class="taskbar border-color">
       <div class="form-block button right enabled">
         <a phx-click="toggle_show_archived">
-          <%= if @show_archived do %>
+          <%= if @state.show_archived do %>
             <i class="bi bi-check-circle"></i>
           <% else %>
             <i class="bi bi-circle"></i>
@@ -16,8 +16,8 @@
       <div id="list-container">
         <div class="list">
           <table class="list-table">
-            <%= for event <- get_events_to_display(@events) do %>
-              <%= live_component CometoidWeb.EventLive.ListItemComponent, event: event, state: assigns %>
+            <%= for event <- get_events_to_display(@state.events) do %>
+              <%= live_component CometoidWeb.EventLive.ListItemComponent, event: event, state: @state %>
             <% end %>
           </table>
         </div>
@@ -26,17 +26,19 @@
   </div>
   <div id="right-column">
     <div id="sidebar" class="border-color">
-      <%= if assigns[:selected_event] do %>
+      <%= if assigns.state[:selected_event] do %>
         <%= cond do
-          not is_nil(@selected_event.issue) ->
-            live_component CometoidWeb.IssueLive.Issue.SidebarComponent, issue: Tracker.get_issue!(@selected_event.issue.id)
-          not is_nil(@selected_event.person) ->
-            live_component Person.SidebarComponent, context: Tracker.get_context!((People.get_person!(@selected_event.person.id)).context.id)
-          true -> live_component CometoidWeb.EventLive.SidebarComponent, event: @selected_event
+          not is_nil(@state.selected_event.issue) ->
+            live_component CometoidWeb.IssueLive.Issue.SidebarComponent, issue: Tracker.get_issue!(@state.selected_event.issue.id)
+          not is_nil(@state.selected_event.person) ->
+            live_component Person.SidebarComponent, context: Tracker.get_context!((People.get_person!(@state.selected_event.person.id)).context.id)
+          true -> live_component CometoidWeb.EventLive.SidebarComponent, event: @state.selected_event
             end %>
       <% end %>
     </div>
   </div>
 </div>
 
-<%= live_component CometoidWeb.ModalsComponent, state: assigns %>
+<%= live_component CometoidWeb.ModalsComponent, 
+      state: @state,
+      live_action: @live_action %>
