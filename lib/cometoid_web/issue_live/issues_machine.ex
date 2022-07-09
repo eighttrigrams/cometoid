@@ -108,13 +108,13 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       end
       [] -> [selected_context.id]
     end
-    %{
+    {:refresh_issues, %{
       selected_context: selected_context,
       selected_contexts: selected_contexts,
       selected_issue: nil,
       context_search_active: false,
       selected_secondary_contexts: []
-    }
+    }}
   end
 
   @doc """
@@ -212,18 +212,18 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     end
   end
 
-  def refresh_issues state do # TODO rename to refresh_issues or something or at least document that it refreshes issues - and only issues
-    do_the_query state
+  def refresh_issues state do
+    do_query_refresh_issues state
   end
 
-  defp do_the_query state do
+  defp do_query_refresh_issues state do
     query = %Tracker.Query{
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context,
       selected_view: state.selected_view,
       sort_issues_alphabetically: state.sort_issues_alphabetically
     }
-    issues = Tracker.list_issues query # TODO review if passing state; or to use map take
+    issues = Tracker.list_issues query
     %{ issues: issues }
   end
 

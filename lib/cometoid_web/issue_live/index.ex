@@ -21,7 +21,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   @impl true
-  def handle_params params, _url, socket do
+  def handle_params params, _url, %{ assigns: %{ live_action: live_action }} = socket do
 
     selected_view = get_selected_view params
 
@@ -36,26 +36,25 @@ defmodule CometoidWeb.IssueLive.Index do
       selected_view: selected_view
     }
     state = IssuesMachine.init_context_properties state
-    state = IssuesMachine.set_issue_properties state # TODO necessary? If yes, use at least the pipe operator
+    state = IssuesMachine.set_issue_properties state 
 
     socket = socket
       |> assign_state(state)
-      |> assign(:live_action, socket.assigns.live_action) # TODO review
+      |> assign(:live_action, live_action)
 
     socket
     |> assign(:view, params["view"])
     |> assign_state(:view, params["view"]) # TODO review
     |> refresh_issues
-    |> apply_action(socket.assigns.live_action, params) # TODO review
+    |> apply_action(live_action, params) 
   end
 
   ## HANDLE_INFO
 
   @impl true
   def handle_info {:modal_closed}, socket do
-    socket = socket
-    |> assign(:live_action, :index) # TODO assign to assigns directly, not to state
     socket
+    |> assign(:live_action, :index) # TODO review if that can be automatically set in WrapHandle, whenever :live_action is not set (compare state before and after function call)
   end
 
   def handle_info {:select_context, id}, socket do
@@ -72,20 +71,15 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_info {:after_edit_form_save, %{ context_id: context_id }}, socket do
-    state = IssuesMachine.reload_changed_context (to_state socket), context_id
     socket
-    |> assign_state(state)
+    |> reload_changed_context(context_id)
     |> push_event(:context_refocus, %{ id: context_id })
     |> refresh_issues
   end
 
   def handle_info {:after_edit_form_save, issue}, socket do
-
-    state =
-      IssuesMachine.set_context_properties_and_keep_selected_context socket.assigns.state
-
     socket
-    |> assign_state(state)
+    |> set_context_properties_and_keep_selected_context
     |> assign_state(:selected_issue, issue)
     |> refresh_issues
   end
@@ -150,14 +144,15 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event("keydown", _params, socket), do: socket
 
-  def handle_event "keyup", %{ "key" => key }, socket do
-    state = socket.assigns.state
+  def handle_event "keyup", %{ "key" => key }, 
+    %{ assigns: %{ live_action: live_action, state: state }} = socket do
+      
     case key do
       "Control" ->
         socket
         |> assign_state(:control_pressed, false)
       "h" ->
-        if state.selected_context && socket.assigns.live_action == :filter_secondary_contexts do
+        if state.selected_context && live_action == :filter_secondary_contexts do
           socket
           |> assign(:live_action, :index)
         else
@@ -176,9 +171,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "delete_issue", %{ "id" => id }, socket do
-    state = IssuesMachine.delete_issue (to_state socket), id
     socket
-    |> assign_state(state)
+    |> delete_issue(id)
     |> refresh_issues
   end
 
@@ -188,31 +182,26 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
-  def handle_event "toggle_show_secondary_contexts_instead_issues", _params, socket do
+  def handle_event "toggle_show_secondary_contexts_instead_issues", _params, %{ assigns: %{ state: state }} = socket do
     socket
     |> assign_state(:show_secondary_contexts_instead_issues,
-      !socket.assigns.state.show_secondary_contexts_instead_issues)
+      !state.show_secondary_contexts_instead_issues)
   end
 
   def handle_event "edit_issue", id, socket do
-
     id = to_int id
-
     socket
     |> assign_state(:issue, Tracker.get_issue!(id))
-    |> assign(:live_action, :edit)
   end
 
   def handle_event "link_issue", %{ "target" => id }, socket do
     socket
-    |> assign_state(:selected_issue, Tracker.get_issue!(id))
-    |> assign(:live_action, :link)
+    |> set_selected_issue(id)
   end
 
   def handle_event "link_issue_to_issues", %{ "target" => id }, socket do
     socket
-    |> assign_state(:selected_issue, Tracker.get_issue!(id))
-    |> assign(:live_action, :link_issue_to_issues)
+    |> set_selected_issue(id)
   end
 
   def handle_event "convert_issue_to_context", %{ "id" => id }, socket do
@@ -427,7 +416,7 @@ defmodule CometoidWeb.IssueLive.Index do
   ## PUBLIC - functions called from templates
 
   def was_last_called_handler_select_context? assigns do
-    assigns.action == "select_context"
+    assigns.handler == "select_context"
   end
 
   # def should_show_issues_list_in_contexts_view nil, _ do
@@ -447,7 +436,7 @@ defmodule CometoidWeb.IssueLive.Index do
   ## PRIVATE
 
   defp handle_describe socket do
-    state = to_state
+    state = to_state socket
     if state.selected_issue do
       edit_issue_description socket, state.selected_issue.id
     else
@@ -460,7 +449,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp handle_escape socket do
-    state = to_state
+    state = to_state socket
     unless state.selected_secondary_contexts == [] do
       socket
       |> assign_state(:selected_secondary_contexts, [])
@@ -485,21 +474,44 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign(:live_action, :index)
   end
 
-  defp select_context socket, id do
-    state = to_state socket
+  defp select_context %{ assigns: %{ state: state }} = socket, id do
     socket
     |> assign_state(IssuesMachine.select_context state, id)
   end
 
-  defp select_context_and_refocus socket, id do
-    state = to_state socket
-    (if state.context_search_active do
+  defp select_context_and_refocus %{ assigns: %{ state: state }} = socket, id do
+    socket = (if state.context_search_active do
       socket
       |> push_event(:context_refocus, %{ id: state.selected_context.id })
     else
       socket
     end)
     |> assign_state(IssuesMachine.select_context state, id)
+  end
+
+  defp reload_changed_context %{ assigns: %{ state: state }} = socket, context_id do
+    state = IssuesMachine.reload_changed_context state, context_id
+    socket
+    |> assign_state(state)
+  end
+
+  defp set_context_properties_and_keep_selected_context %{ 
+    assigns: %{ state: state }} = socket do
+
+    state = to_state socket
+    state = IssuesMachine.set_context_properties_and_keep_selected_context state
+    socket
+    |> assign_state(state)
+  end
+
+  defp set_selected_issue socket, id do
+    socket
+    |> assign_state(:issue, Tracker.get_issue!(id))
+  end
+
+  defp delete_issue %{ assigns: %{ state: state }} = socket, id do
+    state = IssuesMachine.delete_issue state, id
+    socket
   end
 
   # defp reprioritize_context socket do

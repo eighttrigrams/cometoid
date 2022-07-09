@@ -21,15 +21,13 @@ defmodule CometoidWeb.IssueLive.Machine do
         result = unquote(code)
 
         case result do
-          {:do_query, new_state} ->
+          {:refresh_issues, new_state} ->
             state
             |> Map.merge(new_state)
-            |> Map.delete(:flash)
-            |> do_query
+            |> refresh_issues
           new_state ->
             state
             |> Map.merge(new_state)
-            |> Map.delete(:flash)
         end
       end
     end

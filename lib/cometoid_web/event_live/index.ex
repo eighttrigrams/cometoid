@@ -16,7 +16,7 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign_state(:show_archived, false)
     |> assign(:view, "Events")
     |> assign_state(:control_pressed, false)
-    |> do_query
+    |> refresh_issues
     |> return_ok
   end
 
@@ -36,7 +36,7 @@ defmodule CometoidWeb.EventLive.Index do
     selected_event = if event do Calendar.get_event! event.id else nil end
     socket
     |> assign_state(:selected_event, selected_event)
-    |> do_query
+    |> refresh_issues
     |> assign(:live_action, nil)
     |> assign_state(:edit_event, nil)
   end
@@ -48,7 +48,7 @@ defmodule CometoidWeb.EventLive.Index do
     selected_event = Calendar.get_event! person.birthday.id
     socket
     |> assign_state(:selected_event, selected_event)
-    |> do_query
+    |> refresh_issues
     |> assign(:live_action, nil)
     |> assign_state(:edit_event, nil)
   end
@@ -92,20 +92,20 @@ defmodule CometoidWeb.EventLive.Index do
     event = Calendar.get_event! id
     Calendar.update_event(event, %{ "archived" => false })
     socket
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "archive", %{ "target" => id }, socket do
     event = Calendar.get_event! id
     Calendar.update_event(event, %{ "archived" => true })
     socket
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event "toggle_show_archived", _params, socket do
     socket
     |> assign_state(:show_archived, !socket.assigns.state.show_archived)
-    |> do_query
+    |> refresh_issues
   end
 
   def handle_event("select_event", %{ "target" => id }, socket) do
@@ -129,7 +129,7 @@ defmodule CometoidWeb.EventLive.Index do
     end
   end
 
-  defp do_query(socket) do
+  defp refresh_issues(socket) do
     socket
     |> assign_state(:events, Calendar.list_events(socket.assigns.state.show_archived))
   end

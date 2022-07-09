@@ -1,6 +1,6 @@
 <%= unless is_nil(@live_action) do %>
   <div id="link-modal-content" class="modal-content">
-    <%= if @live_action == :link do %>
+    <%= if @handler == "link" do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent,
         id: @state.selected_issue.id,
         state: @state
@@ -9,7 +9,7 @@
   </div>
 
   <div id="link-issue-to-issues-modal-content" class="modal-content">
-    <%= if @live_action == :link_issue_to_issues do %>
+    <%= if @handler == "link_issue_to_issues" do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent,
         id: @state.selected_issue.id,
         state: @state
@@ -18,7 +18,7 @@
   </div>
 
   <div id="issue-modal-content" class="modal-content">
-    <%= if @live_action in [:edit] do %>
+    <%= if @handler == "edit_issue" or @live_action == :edit do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.FormComponent,
         id: @state.issue.id || :new,
         action: @live_action,

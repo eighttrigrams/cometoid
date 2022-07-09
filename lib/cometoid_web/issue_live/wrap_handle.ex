@@ -22,7 +22,7 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
       def unquote(name_and_args) do
         socket = unquote(code)
         socket
-        |> assign(:action, :handle_params)
+        |> assign(:handler, :handle_params)
         |> return_noreply
       end
     end
@@ -34,7 +34,7 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
       def unquote(name_and_args) do
         socket = unquote(code)
         socket
-        |> assign(:action, unquote(name))
+        |> assign(:handler, unquote(name))
         |> return_noreply
       end
     end
