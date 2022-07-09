@@ -1,5 +1,4 @@
 defmodule CometoidWeb.EventLive.Index do
-  use CometoidWeb, :live_view
   use CometoidWeb.IssueLive.WrapHandle
 
   alias CometoidWeb.IssueLive.Person
@@ -133,15 +132,5 @@ defmodule CometoidWeb.EventLive.Index do
   defp do_query(socket) do
     socket
     |> assign_state(:events, Calendar.list_events(socket.assigns.state.show_archived))
-  end
-
-  # TODO remove duplication with issue.ex
-  defp assign_state socket, state do
-    assign(socket, :state, state)
-  end
-  defp assign_state socket, key, value do
-    state = socket.assigns.state
-    state = put_in state[key], value
-    assign(socket, :state, state)
   end
 end

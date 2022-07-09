@@ -1,8 +1,19 @@
 defmodule CometoidWeb.IssueLive.WrapHandle do
   defmacro __using__([]) do
     quote do
+      use CometoidWeb, :live_view
+      
       import CometoidWeb.IssueLive.WrapHandle
       import Kernel, except: [def: 2]
+
+      defp assign_state socket, state do
+        assign(socket, :state, state)
+      end
+      defp assign_state socket, key, value do
+        state = socket.assigns.state
+        state = put_in state[key], value
+        assign(socket, :state, state)
+      end
     end
   end
 

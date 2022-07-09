@@ -1,5 +1,4 @@
 defmodule CometoidWeb.IssueLive.Index do
-  use CometoidWeb, :live_view
   use CometoidWeb.IssueLive.WrapHandle
 
   alias Cometoid.Repo.Tracker
@@ -549,15 +548,6 @@ defmodule CometoidWeb.IssueLive.Index do
         |> assign_state(:selected_issue, nil)
       end
     end
-  end
-
-  defp assign_state socket, state do
-    assign(socket, :state, state)
-  end
-  defp assign_state socket, key, value do
-    state = socket.assigns.state
-    state = put_in state[key], value
-    assign(socket, :state, state)
   end
 
   defp reprioritize_context socket do
