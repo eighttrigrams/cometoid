@@ -10,6 +10,8 @@ defmodule CometoidWeb.IssueLive.Index do
   alias CometoidWeb.IssueLive
   alias CometoidWeb.IssueLive.IssuesMachine
 
+  # TODO remove :modal :index ?
+
   @impl true
   def mount _params, _session, socket do
     {
@@ -17,11 +19,12 @@ defmodule CometoidWeb.IssueLive.Index do
       socket
       |> assign(Theme.get)
       |> assign(:state, %{})
+      |> assign(:handler, nil)
     }
   end
 
   @impl true
-  def handle_params params, _url, %{ assigns: %{ live_action: live_action }} = socket do
+  def handle_params params, _url, socket do
 
     selected_view = get_selected_view params
 
@@ -38,15 +41,11 @@ defmodule CometoidWeb.IssueLive.Index do
     state = IssuesMachine.init_context_properties state
     state = IssuesMachine.set_issue_properties state 
 
-    socket = socket
-      |> assign_state(state)
-      |> assign(:live_action, live_action)
-
     socket
+    |> assign_state(state)
     |> assign(:view, params["view"])
     |> assign_state(:view, params["view"]) # TODO review
     |> refresh_issues
-    |> apply_action(live_action, params) 
   end
 
   ## HANDLE_INFO
@@ -54,7 +53,7 @@ defmodule CometoidWeb.IssueLive.Index do
   @impl true
   def handle_info {:modal_closed}, socket do
     socket
-    |> assign(:live_action, :index) # TODO review if that can be automatically set in WrapHandle, whenever :live_action is not set (compare state before and after function call)
+    |> assign(:modal, :index) # TODO review if that can be automatically set in WrapHandle, whenever :modal is not set (compare state before and after function call)
   end
 
   def handle_info {:select_context, id}, socket do
@@ -87,7 +86,7 @@ defmodule CometoidWeb.IssueLive.Index do
   ## HANDLE_EVENT
 
   @impl true
-  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ live_action: :index, state: state } } = socket do
+  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: :index, state: state } } = socket do
     cond do
       key == "Control" && !state.context_search_active ->
         assign_state(socket, :control_pressed, true) # TODO do save in assigns, not in state
@@ -105,7 +104,7 @@ defmodule CometoidWeb.IssueLive.Index do
           "n" ->
             if state.selected_context do
               socket
-              |> assign(:live_action, :new)
+              |> assign(:modal, :new)
               |> assign_state(:issue, %Issue{})
             else
               socket
@@ -113,7 +112,7 @@ defmodule CometoidWeb.IssueLive.Index do
           "h" ->
             if state.selected_context do
               socket
-              |> assign(:live_action, :filter_secondary_contexts)
+              |> assign(:modal, :filter_secondary_contexts)
             else
               socket
             end
@@ -123,7 +122,7 @@ defmodule CometoidWeb.IssueLive.Index do
                 id = state.selected_issue.id
                 socket
                 |> assign_state(:issue, Tracker.get_issue!(id))
-                |> assign(:live_action, :edit)
+                |> assign(:modal, :edit_issue)
               not is_nil(state.selected_context) ->
                 id = state.selected_context.id
                 edit_context socket, id
@@ -145,16 +144,16 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event("keydown", _params, socket), do: socket
 
   def handle_event "keyup", %{ "key" => key }, 
-    %{ assigns: %{ live_action: live_action, state: state }} = socket do
+    %{ assigns: %{ modal: modal, state: state }} = socket do
       
     case key do
       "Control" ->
         socket
         |> assign_state(:control_pressed, false)
       "h" ->
-        if state.selected_context && live_action == :filter_secondary_contexts do
+        if state.selected_context && modal == :filter_secondary_contexts do
           socket
-          |> assign(:live_action, :index)
+          |> assign(:modal, :index)
         else
           socket
         end
@@ -192,16 +191,19 @@ defmodule CometoidWeb.IssueLive.Index do
     id = to_int id
     socket
     |> assign_state(:issue, Tracker.get_issue!(id))
+    |> assign(:modal, :edit_issue)
   end
 
   def handle_event "link_issue", %{ "target" => id }, socket do
     socket
     |> set_selected_issue(id)
+    |> assign(:modal, :link_issue)
   end
 
   def handle_event "link_issue_to_issues", %{ "target" => id }, socket do
     socket
     |> set_selected_issue(id)
+    |> assign(:modal, :link_issue_to_issues)
   end
 
   def handle_event "convert_issue_to_context", %{ "id" => id }, socket do
@@ -221,7 +223,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "create_new_issue", _params, socket do
     socket
     |> assign_state(:issue, %Issue{})
-    |> assign(:live_action, :new)
+    |> assign(:modal, :new)
   end
 
   def handle_event "jump_to_issue", %{ "target_issue_id" => target_issue_id }, socket do
@@ -275,7 +277,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign_state(:edit_entity, entity)
-    |> assign(:live_action, :new_context)
+    |> assign(:modal, :new_context)
     |> assign_state(:edit_selected_view, view)
   end
 
@@ -318,7 +320,7 @@ defmodule CometoidWeb.IssueLive.Index do
     
     socket
     |> select_context(to_int id)
-    |> assign(:live_action, :link_context)
+    |> assign(:modal, :link_context)
   end
 
   def handle_event "reprioritize_context", %{ "id" => id }, socket do
@@ -433,7 +435,7 @@ defmodule CometoidWeb.IssueLive.Index do
     # length(issues) > 0
   # end
 
-  ## PRIVATE
+  ## KEY_HANDLERS
 
   defp handle_describe socket do
     state = to_state socket
@@ -468,10 +470,10 @@ defmodule CometoidWeb.IssueLive.Index do
 
   ## ISSUES_MACHINE - wraps and decorates calls to IssuesMachine
 
-  defp refresh_issues socket do
+  defp refresh_issues %{ assigns: %{ state: state }} = socket do
     socket
-    |> assign_state(IssuesMachine.refresh_issues(to_state socket))
-    |> assign(:live_action, :index)
+    |> assign_state(IssuesMachine.refresh_issues state)
+    |> assign(:modal, :index)
   end
 
   defp select_context %{ assigns: %{ state: state }} = socket, id do
@@ -506,7 +508,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   defp set_selected_issue socket, id do
     socket
-    |> assign_state(:issue, Tracker.get_issue!(id))
+    |> assign_state(:selected_issue, Tracker.get_issue!(id))
   end
 
   defp delete_issue %{ assigns: %{ state: state }} = socket, id do
@@ -529,7 +531,7 @@ defmodule CometoidWeb.IssueLive.Index do
   defp edit_issue_description socket, id do
     socket
     |> assign_state(:issue, Tracker.get_issue!(id))
-    |> assign(:live_action, :describe)
+    |> assign(:modal, :describe)
   end
 
   defp edit_context socket, id do
@@ -542,7 +544,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(:edit_selected_view, context.view)
     |> assign_state(:edit_entity, entity)
-    |> assign(:live_action, :edit_context)
+    |> assign(:modal, :edit_context)
   end
 
   defp edit_context_description socket, id do
@@ -553,7 +555,7 @@ defmodule CometoidWeb.IssueLive.Index do
     end
     socket
     |> assign_state(:edit_entity, entity)
-    |> assign(:live_action, :describe_context)
+    |> assign(:modal, :describe_context)
   end
 
   defp select_issue socket, id do
@@ -577,11 +579,6 @@ defmodule CometoidWeb.IssueLive.Index do
     if Map.has_key?(params, "view") do
       params["view"]
     end
-  end
-
-  defp apply_action(socket, :index, _params) do # ?
-    socket
-    |> assign_state(:issue, nil)
   end
 
   defp to_state(socket), do: socket.assigns.state

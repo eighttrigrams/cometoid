@@ -1,6 +1,6 @@
-<%= unless is_nil(@live_action) do %>
+<%= unless is_nil(@modal) do %>
   <div id="link-modal-content" class="modal-content">
-    <%= if @handler == "link" do %>
+    <%= if @modal == :link_issue do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent,
         id: @state.selected_issue.id,
         state: @state
@@ -9,7 +9,7 @@
   </div>
 
   <div id="link-issue-to-issues-modal-content" class="modal-content">
-    <%= if @handler == "link_issue_to_issues" do %>
+    <%= if @modal == :link_issue_to_issues do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent,
         id: @state.selected_issue.id,
         state: @state
@@ -18,10 +18,10 @@
   </div>
 
   <div id="issue-modal-content" class="modal-content">
-    <%= if @handler == "edit_issue" or @live_action == :edit do %>
+    <%= if @modal == :edit_issue do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.FormComponent,
         id: @state.issue.id || :new,
-        action: @live_action,
+        action: @modal,
         issue: @state.issue,
         has_event: @state.issue.event != nil,
         event_archived: @state.issue.event != nil and @state.issue.event.archived == true,
@@ -30,7 +30,7 @@
   </div>
 
   <div id="context-link-modal-content" class="modal-content">
-    <%= if @live_action == :link_context do %>
+    <%= if @modal == :link_context do %>
       <%= live_modal CometoidWeb.IssueLive.Context.Modals.LinkFormComponent,
         id: @state.selected_context.id,
         state: @state
@@ -39,57 +39,57 @@
   </div>
 
   <div id="context-description-modal-content" class="modal-content">
-    <%= if @live_action in [:describe_context] do %>
+    <%= if @modal == :describe_context do %>
       <%= live_modal CometoidWeb.IssueLive.Context.Modals.DescriptionFormComponent,
         id: (@state[:selected_context] && @state.selected_context.id)
             || @state.selected_event.person.id
             || :new,
-        action: @live_action,
+        action: @modal,
         context: @state.edit_entity
         %>
     <% end %>
   </div>
 
   <div id="issue-description-modal-content" class="modal-content">
-    <%= if @live_action in [:describe] do %>
+    <%= if @modal == :describe do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.DescriptionFormComponent,
         id: @state.issue.id || :new,
-        action: @live_action,
+        action: @modal,
         issue: @state.issue
         %>
     <% end %>
   </div>
 
   <div id="new-issue-modal-content" class="modal-content">
-    <%= if @live_action in [:new] do %>
+    <%= if @modal in [:new] do %>
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.NewComponent,
         id: :new,
-        action: @live_action,
+        action: @modal,
         state: @state
         %>
     <% end %>
   </div>
 
   <div id="context-modal-content" class="modal-content">
-    <%= if @live_action in [:new_context, :edit_context] do %>
+    <%= if @modal in [:new_context, :edit_context] do %>
       <%= case @state.edit_selected_view do
         "People" -> live_modal CometoidWeb.IssueLive.Person.Modals.FormComponent,
             id: @state.edit_entity.id || :new,
-            title: (if @live_action == :new_context do "New " else "Edit " end) <> "Person",
-            action: @live_action,
+            title: (if @modal == :new_context do "New " else "Edit " end) <> "Person",
+            action: @modal,
             selected_view: "People",
             person: @state.edit_entity
         _ -> live_modal CometoidWeb.IssueLive.Context.Modals.FormComponent,
             id: @state.edit_entity.id || :new,
-            title: (if @live_action == :new_context do "New " else "Edit " end) <> "Context",
-            action: @live_action,
+            title: (if @modal == :new_context do "New " else "Edit " end) <> "Context",
+            action: @modal,
             selected_view: @state.edit_selected_view,
             context: @state.edit_entity
       end %>
     <% end %>
   </div>
 
-  <%= if @live_action == :edit_event and not is_nil(@state.edit_event.issue) do %>
+  <%= if @modal == :edit_event and not is_nil(@state.edit_event.issue) do %>
     <div id="issue-modal-content" class="modal-content">
       <%= live_modal CometoidWeb.IssueLive.Issue.Modals.FormComponent,
         id: @state.edit_event.id,
@@ -102,7 +102,7 @@
     </div>
   <% end %>
 
-  <%= if @live_action == :filter_secondary_contexts do %>
+  <%= if @modal == :filter_secondary_contexts do %>
     <div id="secondary-context-filter-modal-content" class="modal-content">
       <%= live_modal CometoidWeb.IssueLive.Taskbar.FilterModalComponent,
         id: "filtermodal",
