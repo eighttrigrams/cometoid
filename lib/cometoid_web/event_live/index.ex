@@ -12,6 +12,7 @@ defmodule CometoidWeb.EventLive.Index do
   def mount(_params, _session, socket) do
     socket
     |> assign(:state, %{})
+    |> assign(:modal, nil)
     |> assign(Theme.get)
     |> assign_state(:show_archived, false)
     |> assign(:view, "Events")
@@ -22,13 +23,14 @@ defmodule CometoidWeb.EventLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    apply_action(socket, socket.assigns.live_action, params)
+    # apply_action(socket, socket.assigns.modal, params) TODO review
+    socket
   end
 
   @impl true
   def handle_info {:modal_closed}, socket do
     socket
-    |> assign(:live_action, nil)
+    |> assign(:modal, nil)
   end
 
   def handle_info {:after_edit_form_save, %{ event: event }} = _issue, socket do
@@ -37,7 +39,7 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
-    |> assign(:live_action, nil)
+    |> assign(:modal, nil)
     |> assign_state(:edit_event, nil)
   end
 
@@ -49,7 +51,7 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
-    |> assign(:live_action, nil)
+    |> assign(:modal, nil)
     |> assign_state(:edit_event, nil)
   end
 
@@ -73,19 +75,19 @@ defmodule CometoidWeb.EventLive.Index do
   def handle_event("edit_event", id, socket) do
     socket
     |> assign_state(:edit_event, Calendar.get_event!(id))
-    |> assign(:live_action, :edit_event)
+    |> assign(:modal, :edit_event)
   end
 
   def handle_event "edit_issue_description", _, socket do
     socket
     |> assign_state(:issue, Tracker.get_issue!(socket.assigns.state.selected_event.issue.id))
-    |> assign(:live_action, :describe)
+    |> assign(:modal, :describe)
   end
 
   def handle_event "edit_context_description", _, socket do
     socket
     |> assign_state(:edit_entity, socket.assigns.state.selected_event.person)
-    |> assign(:live_action, :describe_context)
+    |> assign(:modal, :describe_context)
   end
 
   def handle_event "unarchive", %{ "target" => id }, socket do
