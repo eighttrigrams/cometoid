@@ -14,6 +14,17 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
         state = put_in state[key], value
         assign(socket, :state, state)
       end
+      defp handle result, name do
+        case result do
+          {:nop, socket} ->
+            socket
+            |> return_noreply
+          socket -> 
+            socket
+            |> assign(:handler, name)
+            |> return_noreply
+        end
+      end
     end
   end
 
@@ -31,10 +42,7 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
     [name|_] = Tuple.to_list r
     quote do
       def unquote(name_and_args) do
-        socket = unquote(code)
-        socket
-        |> assign(:handler, unquote(name))
-        |> return_noreply
+        handle (unquote code), (unquote name)
       end
     end
   end
@@ -42,10 +50,7 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
   defmacro def({:handle_event, _, [name|_]} = name_and_args, do: code) do
     quote do
       def unquote(name_and_args) do
-        socket = unquote(code)
-        socket
-        |> assign(:handler, unquote(name))
-        |> return_noreply
+        handle (unquote code), (unquote name)
       end
     end
   end

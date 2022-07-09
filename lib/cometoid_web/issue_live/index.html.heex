@@ -9,7 +9,7 @@
         <%= live_component IssueLive.Issue.List.Component, 
               id: :issues, 
               state: @state,
-              was_last_called_handler_select_context?: (was_last_called_handler_select_context? assigns) %>
+              was_last_called_handler_select_context?: (was_last_called_handler_select_context? @handler) %>
       <% else %>
         <%= live_component IssueLive.Context.List.Component, id: :issues1, state: @state %>
       <% end %>

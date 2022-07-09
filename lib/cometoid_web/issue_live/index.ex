@@ -89,14 +89,15 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: :index, state: state } } = socket do
     cond do
       key == "Control" && !state.context_search_active ->
-        assign_state(socket, :control_pressed, true) # TODO do save in assigns, not in state
+        assign_state(socket, :control_pressed, true)
       state.issue_search_active or state.context_search_active ->
         case key do
           "Escape" ->
             socket
             |> assign_state(:context_search_active, false)
             |> assign_state(:issue_search_active, false)
-          _ -> socket
+          _ -> 
+            socket
         end
       not state.control_pressed ->
         case key do
@@ -121,7 +122,7 @@ defmodule CometoidWeb.IssueLive.Index do
               not is_nil(state.selected_issue) ->
                 id = state.selected_issue.id
                 socket
-                |> assign_state(:issue, Tracker.get_issue!(id))
+                |> assign_state(:issue, (Tracker.get_issue! id))
                 |> assign(:modal, :edit_issue)
               not is_nil(state.selected_context) ->
                 id = state.selected_context.id
@@ -145,7 +146,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "keyup", %{ "key" => key }, 
     %{ assigns: %{ modal: modal, state: state }} = socket do
-      
+
     case key do
       "Control" ->
         socket
@@ -158,9 +159,8 @@ defmodule CometoidWeb.IssueLive.Index do
           socket
         end
       _ ->
-        socket
+        {:nop, socket}
     end
-    socket
   end
 
   def handle_event "switch-theme", %{ "name" => _name }, socket do
@@ -417,8 +417,8 @@ defmodule CometoidWeb.IssueLive.Index do
 
   ## PUBLIC - functions called from templates
 
-  def was_last_called_handler_select_context? assigns do
-    assigns.handler == "select_context"
+  def was_last_called_handler_select_context? handler do
+    handler == "select_context"
   end
 
   # def should_show_issues_list_in_contexts_view nil, _ do

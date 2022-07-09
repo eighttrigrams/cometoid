@@ -73,7 +73,7 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
   defp maybe_focus_first_issue socket do
     if socket.assigns.was_last_called_handler_select_context? and length(socket.assigns.filtered_issues) > 0 do
       socket
-      |> push_event(:issue_reprioritized, %{ id: List.first(socket.assigns.filtered_issues).id })
+      |> push_event(:issue_refocus, %{ id: List.first(socket.assigns.filtered_issues).id })
     else
       socket
     end
