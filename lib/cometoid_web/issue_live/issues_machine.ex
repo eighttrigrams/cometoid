@@ -9,6 +9,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       %{ selected_context: selected_context } = state,
       selected_issue) when not is_nil(selected_context) do
 
+    _get_rid_of_warning = selected_context
+
     Map.merge state, %{
       selected_issue: selected_issue
     }
@@ -245,14 +247,5 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   defp load_contexts_for_view %{ selected_view: selected_view } = _state do
     Tracker.list_contexts()
     |> Enum.filter(&(&1.view == selected_view))
-  end
-
-  defp has_one_non_tag_context? issue do
-    1 == length Enum.filter issue.contexts, &(!&1.context.is_tag?)
-  end
-
-  # Expects there to be at least one.
-  defp first_non_tag_context issue do
-    (Enum.find issue.contexts, &(!&1.context.is_tag?)).context
   end
 end

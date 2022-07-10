@@ -15,7 +15,8 @@ defmodule CometoidWeb.IssueLive.Machine do
   end
 
   defp create(name_and_args, state, code) do
-    quote do
+    # https://stackoverflow.com/a/51981669
+    quote location: :keep, generated: true do
       def unquote(name_and_args) do
         state = unquote(state)
         result = unquote(code)

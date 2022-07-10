@@ -1,7 +1,6 @@
 defmodule CometoidWeb.IssueLive.Person.Modals.FormComponent do
   use CometoidWeb, :live_component
 
-  alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.People
   import CometoidWeb.DateHelpers
   import CometoidWeb.DateFormHelpers
@@ -69,7 +68,7 @@ end
 
   def handle_event "save", title, socket do
 
-    person_params = socket.assigns.person_params
+    socket.assigns.person_params
       |> clean_birthday
       |> Map.put("title", String.trim(title))
 

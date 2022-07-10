@@ -1,6 +1,6 @@
 <div class="context-type-grid">
     
-    <%= for _context = {id, title, short_title} <- get_contexts(@state) do %>
+    <%= for _context = {id, title, _short_title} <- get_contexts(@state) do %>
       <div phx-click="toggle_context"
         phx-value-id={id}
         phx-target={@myself}

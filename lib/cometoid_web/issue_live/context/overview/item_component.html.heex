@@ -15,7 +15,7 @@
 
       <%
       view = @context.view
-      view = if String.contains?(view, ":") do Enum.at(String.split(view,":"),1) else view end
+      if String.contains?(view, ":") do Enum.at(String.split(view,":"),1) else view end
       %>
     </div>
   </div>

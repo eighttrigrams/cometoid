@@ -1,9 +1,9 @@
 defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
   use CometoidWeb, :live_component
 
-  import CometoidWeb.Helpers
   alias Cometoid.Repo.Tracker
 
+  @impl true
   def update assigns, socket do
 
     state = assigns.state

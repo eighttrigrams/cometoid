@@ -365,7 +365,7 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   defp order_issues(query, %{ sort_issues_alphabetically: sort_issues_alphabetically }) do
-    query = if sort_issues_alphabetically do
+    if sort_issues_alphabetically do
       query
     else
       order_by(query, [i, _context_relation, _context, _it],

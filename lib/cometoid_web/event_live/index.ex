@@ -22,7 +22,7 @@ defmodule CometoidWeb.EventLive.Index do
   end
 
   @impl true
-  def handle_params(params, _url, socket) do
+  def handle_params(_params, _url, socket) do
     # apply_action(socket, socket.assigns.modal, params) TODO review
     socket
   end
@@ -116,10 +116,10 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign_state(:selected_event, selected_event)
   end
 
-  defp apply_action(socket, :index, _params) do # ?
-    socket
-    |> assign_state(:edit_event, nil)
-  end
+  # defp apply_action(socket, :index, _params) do # TODO ?
+    # socket
+    # |> assign_state(:edit_event, nil)
+  # end
 
   def get_events_to_display events do
     Enum.filter events, fn event ->

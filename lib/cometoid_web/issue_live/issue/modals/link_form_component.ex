@@ -25,7 +25,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
       {:noreply, socket}
     else
       issue = socket.assigns.state.selected_issue
-      views = get_views socket.assigns.state
 
       case Tracker.update_issue_relations issue, ids_of_selected_contexts do
         {:ok, issue} ->
@@ -52,7 +51,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   end
 
   def list_contexts view do
-    contexts = view
+    view
       |> Tracker.list_contexts
       |> Enum.map(fn context -> {context.title, Integer.to_string(context.id)} end)
   end

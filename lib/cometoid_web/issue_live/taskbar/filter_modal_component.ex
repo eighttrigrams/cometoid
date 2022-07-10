@@ -1,6 +1,5 @@
 defmodule CometoidWeb.IssueLive.Taskbar.FilterModalComponent do
   use CometoidWeb, :live_component
-  alias CometoidWeb.IssueLive.Taskbar.TaskbarComponent
 
   def handle_event "toggle_context", %{ "id" => id }, socket do
 

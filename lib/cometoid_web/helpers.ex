@@ -17,7 +17,7 @@ defmodule CometoidWeb.Helpers do
          [_, nil] <- ["`", (Regex.run ~r/(`.+?`)/, md)] do
       md
     else
-      [char, [_, inner | _]] = m ->
+      [char, [_, inner | _]] ->
         md = String.replace md, inner, (String.replace inner, char, ""), global: false
         demarkdownify md
     end

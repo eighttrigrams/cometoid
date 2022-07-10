@@ -24,7 +24,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
   @impl true
   def handle_event "changes", %{
-      "_target" => ["issue", "event", "date", field],
+      "_target" => ["issue", "event", "date", _field],
       "issue" => issue_params }, socket do
 
     {day, day_options} = adjust_date issue_params["event"]["date"]

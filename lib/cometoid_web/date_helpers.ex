@@ -23,8 +23,7 @@ defmodule CometoidWeb.DateHelpers do
     }
   end
 
-  defp to_sigil %{ "year" => year, "month" => month, "day" => day } do
-    date = year
+  defp to_sigil %{ "year" => year, "month" => month, "day" => _day } do
     month = if String.length(month) == 1 do "0" <> month else month end
     Date.from_iso8601! year <> "-" <> month <> "-" <> "01"
   end

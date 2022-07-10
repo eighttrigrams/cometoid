@@ -475,12 +475,12 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp select_context_and_refocus %{ assigns: %{ state: state }} = socket, id do
-    socket = (if state.context_search_active do
+    if state.context_search_active do
       socket
       |> push_event(:context_refocus, %{ id: state.selected_context.id })
     else
       socket
-    end)
+    end
     |> assign_state(IssuesMachine.select_context state, id)
   end
 
@@ -493,7 +493,6 @@ defmodule CometoidWeb.IssueLive.Index do
   defp set_context_properties_and_keep_selected_context %{ 
     assigns: %{ state: state }} = socket do
 
-    state = to_state socket
     state = IssuesMachine.set_context_properties_and_keep_selected_context state
     socket
     |> assign_state(state)
@@ -505,7 +504,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp delete_issue %{ assigns: %{ state: state }} = socket, id do
-    state = IssuesMachine.delete_issue state, id
+    IssuesMachine.delete_issue state, id
     socket
   end
 

@@ -19,7 +19,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
       {:ok, context} ->
         send self(), {:after_edit_form_save, %{ context_id: context.id }}
         {:noreply, socket}
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, %Ecto.Changeset{}} ->
         {:noreply, socket}
     end
     {:noreply, socket}
