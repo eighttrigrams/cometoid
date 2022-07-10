@@ -5,14 +5,10 @@
     </div>
     <div id="contexts-and-issues-row">
       <%= live_component IssueLive.Context.Overview.Component, id: :contexts, state: @state %>
-      <%= if not @state.show_secondary_contexts_instead_issues do %>
-        <%= live_component IssueLive.Issue.List.Component, 
-              id: :issues, 
-              state: @state,
-              was_last_called_handler_select_context?: (was_last_called_handler_select_context? @handler) %>
-      <% else %>
-        <%= live_component IssueLive.Context.List.Component, id: :issues1, state: @state %>
-      <% end %>
+      <%= live_component IssueLive.Issue.List.Component, 
+            id: :issues, 
+            state: @state,
+            was_last_called_handler_select_context?: (was_last_called_handler_select_context? @handler) %>
     </div>
   </div>
   

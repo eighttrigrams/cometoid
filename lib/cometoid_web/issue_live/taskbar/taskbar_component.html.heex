@@ -31,29 +31,6 @@
     </i></a>
   </div>
 
-  
-  <%= unless @state.show_secondary_contexts_instead_issues do %>
-    <%= if @state.selected_context do %>
-      <div class="form-block button left enabled-button-color">
-        <a phx-click="toggle_show_secondary_contexts_instead_issues">
-          <i class="bi bi-square"></i>
-        </a>
-      </div>
-    <% else %>
-      <div class="form-block button left disabled-button-color">
-        <a>
-          <i class="bi bi-square"></i>
-        </a>
-      </div>
-    <% end %>
-  <% else %>
-    <div class="form-block button left enabled-button-color">
-      <a phx-click="toggle_show_secondary_contexts_instead_issues">
-        <i class="bi bi-square-fill"></i>
-      </a>
-    </div>
-  <% end %>
-
   <%= unless is_nil(@state.selected_context) or @state.list_issues_done_instead_open do %>
     <div class="form-block button right enabled-button-color">
       <a phx-click="create_new_issue">
