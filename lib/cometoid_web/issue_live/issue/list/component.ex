@@ -9,16 +9,23 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
     socket
     |> assign(:q, "")
     |> assign(:filtered_issues, [])
+    |> assign(:state, %{})
     |> return_ok
   end
 
   @impl true
   def update assigns, socket do
-    socket
-    |> assign(assigns)
-    |> assign(:q, "")
-    |> filter_issues
-    |> maybe_focus_first_issue
+    if socket.assigns.state != assigns.state 
+      or assigns.was_last_called_handler_select_context? do
+
+      socket
+      |> assign(assigns)
+      |> assign(:q, "")
+      |> filter_issues
+      |> maybe_focus_first_issue
+    else
+      socket 
+    end
     |> return_ok
   end
 

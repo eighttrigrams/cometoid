@@ -14,16 +14,10 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
         state = put_in state[key], value
         assign(socket, :state, state)
       end
-      defp handle result, name do
-        case result do
-          {:nop, socket} ->
-            socket
-            |> return_noreply
-          socket -> 
-            socket
-            |> assign(:handler, name)
-            |> return_noreply
-        end
+      defp handle socket, name do
+        socket
+        |> assign(:handler, name)
+        |> return_noreply
       end
     end
   end

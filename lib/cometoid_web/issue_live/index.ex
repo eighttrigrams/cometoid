@@ -159,7 +159,7 @@ defmodule CometoidWeb.IssueLive.Index do
           socket
         end
       _ ->
-        {:nop, socket}
+        socket
     end
   end
 
