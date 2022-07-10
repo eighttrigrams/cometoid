@@ -90,26 +90,6 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign(:modal, :describe_context)
   end
 
-  def handle_event "unarchive", %{ "target" => id }, socket do
-    event = Calendar.get_event! id
-    Calendar.update_event(event, %{ "archived" => false })
-    socket
-    |> refresh_issues
-  end
-
-  def handle_event "archive", %{ "target" => id }, socket do
-    event = Calendar.get_event! id
-    Calendar.update_event(event, %{ "archived" => true })
-    socket
-    |> refresh_issues
-  end
-
-  def handle_event "toggle_show_archived", _params, socket do
-    socket
-    |> assign_state(:show_archived, !socket.assigns.state.show_archived)
-    |> refresh_issues
-  end
-
   def handle_event("select_event", %{ "target" => id }, socket) do
     selected_event = Calendar.get_event!(id)
     socket

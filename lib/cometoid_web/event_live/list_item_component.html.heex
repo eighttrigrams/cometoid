@@ -38,23 +38,7 @@
       </td>
 
       <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
-        <%= if is_nil(@event.person) do %>
-          <%= if @state.show_archived do %>
-              <span class="btn">
-                  <a phx-click="unarchive" phx-value-target={@event.id}>
-                      <i class="bi bi-envelope-open"></i>
-                  </a>
-              </span>
-          <% else %>
-              <span class="btn">
-                  <a phx-click="archive" phx-value-target={@event.id}>
-                      <i class="bi bi-archive"></i>
-                  </a>
-              </span>
-          <% end %>
-        <% else %>
           <div style="min-width: 1px;"/>
-        <% end %>
       </td>
 
     </tr></table>
