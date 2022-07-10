@@ -22,7 +22,7 @@
         %>
       </td>
 
-      <td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
+      <td class={"contexts control-not-pressed"}>
         <%= if @event.issue do %>
           <%= for context <- get_contexts_to_show @event.issue do %>
             <span class="contexts-background-color regular-color">
@@ -37,7 +37,7 @@
         <% end %>
       </td>
 
-      <td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
+      <td class={"actions control-not-pressed"}>
           <div style="min-width: 1px;"/>
       </td>
 

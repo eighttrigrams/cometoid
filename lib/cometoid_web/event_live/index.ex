@@ -16,7 +16,6 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign(Theme.get)
     |> assign_state(:show_archived, false)
     |> assign(:view, "Events")
-    |> assign_state(:control_pressed, false)
     |> refresh_issues
     |> return_ok
   end
@@ -56,14 +55,20 @@ defmodule CometoidWeb.EventLive.Index do
   end
 
   @impl true
-  def handle_event "right_click", _, socket do
-    socket
-    |> assign_state(:control_pressed, true)
-  end
-
-  def handle_event "mouse_leave", _, socket do
-    socket
-    |> assign_state(:control_pressed, false)
+  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ state: state } } = socket do
+    case key do
+      "d" ->
+        if state.selected_event && state.selected_event.issue do
+          issue = Tracker.get_issue! state.selected_event.issue.id
+          socket
+          |> assign_state(:issue, issue)
+          |> assign(:modal, :describe)
+        else
+          socket
+        end
+      _ ->
+        socket
+    end
   end
 
   def handle_event "switch-theme", %{ "name" => _name }, socket do
@@ -94,6 +99,10 @@ defmodule CometoidWeb.EventLive.Index do
     selected_event = Calendar.get_event!(id)
     socket
     |> assign_state(:selected_event, selected_event)
+  end
+
+  def handle_event "mouse_leave", _, socket do
+    socket
   end
 
   # defp apply_action(socket, :index, _params) do # TODO ?

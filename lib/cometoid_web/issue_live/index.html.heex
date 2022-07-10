@@ -1,4 +1,7 @@
-<div id="page-content" phx-window-keydown="keydown" phx-window-keyup="keyup">
+<div id="page-content" 
+     phx-window-keydown="keydown" 
+     phx-window-keyup="keyup">
+     
   <div id="left-column">
     <div id="taskbar" class="taskbar border-color">
       <%= live_component IssueLive.Taskbar.TaskbarComponent, id: "taskbar", state: @state %>
