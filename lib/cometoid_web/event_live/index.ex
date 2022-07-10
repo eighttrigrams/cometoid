@@ -22,7 +22,6 @@ defmodule CometoidWeb.EventLive.Index do
 
   @impl true
   def handle_params(_params, _url, socket) do
-    # apply_action(socket, socket.assigns.modal, params) TODO review
     socket
   end
 
@@ -104,11 +103,6 @@ defmodule CometoidWeb.EventLive.Index do
   def handle_event "mouse_leave", _, socket do
     socket
   end
-
-  # defp apply_action(socket, :index, _params) do # TODO ?
-    # socket
-    # |> assign_state(:edit_event, nil)
-  # end
 
   def get_events_to_display events do
     Enum.filter events, fn event ->
