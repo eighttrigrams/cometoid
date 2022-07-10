@@ -76,10 +76,20 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign(Theme.get)
   end
 
-  def handle_event("edit_event", id, socket) do
+  def handle_event "edit_event", id, socket do
     socket
     |> assign_state(:edit_event, Calendar.get_event!(id))
     |> assign(:modal, :edit_event)
+  end
+
+  def handle_event "delete_issue", %{ "id" => id }, socket do
+
+    id = to_int id
+    issue = Tracker.get_issue! id
+    {:ok, _} = Tracker.delete_issue issue
+
+    socket
+    |> refresh_issues
   end
 
   def handle_event "edit_issue_description", _, socket do

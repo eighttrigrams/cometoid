@@ -38,7 +38,19 @@
       </td>
 
       <td class={"actions control-not-pressed"}>
+        <%= if @event.issue do %>
+          <span class="btn">
+            <%= link to: "#",
+              phx_click: "delete_issue",
+              phx_value_id: @event.issue.id, data: [confirm: "Are you sure?"],
+              tabindex: -1
+              do %>
+              <i class="bi bi-trash"></i>
+            <% end %>
+          </span>
+        <% else %>
           <div style="min-width: 1px;"/>
+        <% end %>
       </td>
 
     </tr></table>
