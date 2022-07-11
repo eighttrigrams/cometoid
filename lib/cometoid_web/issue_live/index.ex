@@ -42,8 +42,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign_state(state)
-    |> assign(:view, params["view"])
-    |> assign_state(:view, params["view"]) # TODO review
+    |> assign_state(:view, params["view"])
     |> refresh_issues
   end
 
@@ -52,7 +51,7 @@ defmodule CometoidWeb.IssueLive.Index do
   @impl true
   def handle_info {:modal_closed}, socket do
     socket
-    |> assign(:modal, :index) # TODO review if that can be automatically set in WrapHandle, whenever :modal is not set (compare state before and after function call)
+    |> assign(:modal, :index)
   end
 
   def handle_info {:select_context, id}, socket do
