@@ -44,7 +44,7 @@ defmodule CometoidWeb.EventLive.Index do
   def handle_info {:after_edit_form_save, %{ context_id: id }}, socket do
 
     context = Tracker.get_context! id
-    person = People.get_person! context.id
+    person = People.get_person! context.person.id
     selected_event = Calendar.get_event! person.birthday.id
     socket
     |> assign_state(:selected_event, selected_event)
@@ -57,11 +57,22 @@ defmodule CometoidWeb.EventLive.Index do
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ state: state } } = socket do
     case key do
       "d" ->
-        if state.selected_event && state.selected_event.issue do
-          issue = Tracker.get_issue! state.selected_event.issue.id
-          socket
-          |> assign_state(:issue, issue)
-          |> assign(:modal, :describe)
+        if state.selected_event do
+          if state.selected_event.issue do
+            issue = Tracker.get_issue! state.selected_event.issue.id
+            socket
+            |> assign_state(:issue, issue)
+            |> assign(:modal, :describe)
+          else 
+            if state.selected_event.person do
+              person = People.get_person! state.selected_event.person.id
+              socket
+              |> assign_state(:edit_entity, person)
+              |> assign(:modal, :describe_context)
+            else
+              socket
+            end
+          end
         else
           socket
         end
