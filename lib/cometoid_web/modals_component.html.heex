@@ -89,19 +89,6 @@
     <% end %>
   </div>
 
-  <%= if @modal == :edit_event and not is_nil(@state.edit_event.issue) do %>
-    <div id="issue-modal-content" class="modal-content">
-      <%= live_modal CometoidWeb.IssueLive.Issue.Modals.FormComponent,
-        id: @state.edit_event.id,
-        action: :edit,
-        issue: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id),
-        is_important: Cometoid.Repo.Tracker.get_issue!(@state.edit_event.issue.id).important,
-        has_event: true,
-        event_archived: @state.edit_event.archived,
-        contexts: nil %>
-    </div>
-  <% end %>
-
   <%= if @modal == :filter_secondary_contexts do %>
     <div id="secondary-context-filter-modal-content" class="modal-content">
       <%= live_modal CometoidWeb.IssueLive.Taskbar.FilterModalComponent,

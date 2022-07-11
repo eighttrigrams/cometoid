@@ -38,7 +38,8 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
     |> assign(:modal, nil)
-    |> assign_state(:edit_event, nil)
+    |> assign_state(:edit_context, nil)
+    |> assign_state(:edit_issue, nil)
   end
 
   def handle_info {:after_edit_form_save, %{ context_id: id }}, socket do
@@ -50,12 +51,23 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
     |> assign(:modal, nil)
-    |> assign_state(:edit_event, nil)
+    |> assign_state(:edit_context, nil)
+    |> assign_state(:edit_issue, nil)
   end
 
   @impl true
   def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ state: state } } = socket do
     case key do
+      "e" ->
+        if state.selected_event do
+          if state.selected_event.issue do
+            edit_issue socket, state.selected_event.issue.id
+          else # Person
+            edit_person socket, state.selected_event.person.id
+          end
+        else
+          socket
+        end
       "d" ->
         if state.selected_event do
           if state.selected_event.issue do
@@ -63,15 +75,11 @@ defmodule CometoidWeb.EventLive.Index do
             socket
             |> assign_state(:issue, issue)
             |> assign(:modal, :describe)
-          else 
-            if state.selected_event.person do
-              person = People.get_person! state.selected_event.person.id
-              socket
-              |> assign_state(:edit_entity, person)
-              |> assign(:modal, :describe_context)
-            else
-              socket
-            end
+          else # Person
+            person = People.get_person! state.selected_event.person.id
+            socket
+            |> assign_state(:edit_entity, person)
+            |> assign(:modal, :describe_context)
           end
         else
           socket
@@ -88,9 +96,13 @@ defmodule CometoidWeb.EventLive.Index do
   end
 
   def handle_event "edit_event", id, socket do
-    socket
-    |> assign_state(:edit_event, Calendar.get_event!(id))
-    |> assign(:modal, :edit_event)
+
+    event = Calendar.get_event!(id)
+    if event.issue do 
+      edit_issue socket, event.issue.id
+    else # Person
+      edit_person socket, event.person.id
+    end
   end
 
   def handle_event "delete_issue", %{ "id" => id }, socket do
@@ -135,7 +147,22 @@ defmodule CometoidWeb.EventLive.Index do
     end
   end
 
-  defp refresh_issues(socket) do
+  defp edit_person socket, id do
+    person = People.get_person! id
+    socket
+    |> assign_state(:edit_entity, person)
+    |> assign_state(:edit_selected_view, person.context.view)
+    |> assign(:modal, :edit_context)
+  end
+
+  defp edit_issue socket, id do
+    issue = Tracker.get_issue! id
+    socket
+    |> assign_state(:issue, issue)
+    |> assign(:modal, :edit_issue)
+  end
+
+  defp refresh_issues socket do
     socket
     |> assign_state(:events, Calendar.list_events(socket.assigns.state.show_archived))
   end
