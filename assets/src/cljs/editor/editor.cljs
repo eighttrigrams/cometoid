@@ -1,9 +1,9 @@
 (ns editor.editor
-  (:require [editor.helpers :as helpers]
-            [editor.machine :as machine]
-            [editor.time-machine :as time-machine]
-            [editor.bindings-resolver :as bindings-resolver]
-            [editor.bindings :as bindings]))
+  (:require [net.eighttrigrams.cljs-text-editor.helpers :as helpers]
+            [net.eighttrigrams.cljs-text-editor.machine :as machine]
+            [net.eighttrigrams.cljs-text-editor.bindings :as bindings]
+            [net.eighttrigrams.cljs-text-editor.bindings-resolver :as bindings-resolver]
+            [editor.time-machine :as time-machine]))
 
 (defn set-values! [el {selection-start :selection-start
                        selection-end :selection-end
