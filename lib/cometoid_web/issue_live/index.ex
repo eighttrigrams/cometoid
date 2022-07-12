@@ -476,7 +476,7 @@ defmodule CometoidWeb.IssueLive.Index do
   defp select_context_and_refocus %{ assigns: %{ state: state }} = socket, id do
     if state.context_search_active do
       socket
-      |> push_event(:context_refocus, %{ id: state.selected_context.id })
+      |> push_event(:context_refocus, %{ id: id })
     else
       socket
     end
