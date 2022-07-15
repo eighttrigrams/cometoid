@@ -10,8 +10,6 @@ defmodule CometoidWeb.IssueLive.Index do
   alias CometoidWeb.IssueLive
   alias CometoidWeb.IssueLive.IssuesMachine
 
-  # TODO remove :modal :index ?
-
   @impl true
   def mount _params, _session, socket do
     {
@@ -19,6 +17,7 @@ defmodule CometoidWeb.IssueLive.Index do
       socket
       |> assign(Theme.get)
       |> assign(:state, %{})
+      |> assign(:modal, :index)
       |> assign(:handler, nil)
     }
   end
@@ -51,7 +50,6 @@ defmodule CometoidWeb.IssueLive.Index do
   @impl true
   def handle_info {:modal_closed}, socket do
     socket
-    |> assign(:modal, :index)
   end
 
   def handle_info {:select_context, id}, socket do
@@ -152,7 +150,6 @@ defmodule CometoidWeb.IssueLive.Index do
       "h" ->
         if state.selected_context && modal == :filter_secondary_contexts do
           socket
-          |> assign(:modal, :index)
         else
           socket
         end
@@ -412,20 +409,6 @@ defmodule CometoidWeb.IssueLive.Index do
   def was_last_called_handler_select_context? handler do
     handler == "select_context"
   end
-
-  # def should_show_issues_list_in_contexts_view nil, _ do
-    # false
-  # end
-
-  # TODO only used in contexts view, so should be placed there
-  # def should_show_issues_list_in_contexts_view selected_context, list_issues_done_instead_open do
-    # issues = if list_issues_done_instead_open do
-      # Enum.filter selected_context.issues, &(&1.issue.done)
-    # else
-      # Enum.filter selected_context.issues, &(!&1.issue.done)
-    # end
-    # length(issues) > 0
-  # end
 
   ## KEY_HANDLERS
 

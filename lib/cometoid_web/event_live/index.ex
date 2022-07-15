@@ -28,7 +28,6 @@ defmodule CometoidWeb.EventLive.Index do
   @impl true
   def handle_info {:modal_closed}, socket do
     socket
-    |> assign(:modal, :index)
   end
 
   def handle_info {:after_edit_form_save, %{ event: event }} = _issue, socket do
@@ -37,7 +36,6 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
-    |> assign(:modal, :index)
     |> assign_state(:edit_context, nil)
     |> assign_state(:edit_issue, nil)
   end
@@ -50,7 +48,6 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
-    |> assign(:modal, :index)
     |> assign_state(:edit_context, nil)
     |> assign_state(:edit_issue, nil)
   end
