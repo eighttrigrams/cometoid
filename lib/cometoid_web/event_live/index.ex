@@ -12,7 +12,7 @@ defmodule CometoidWeb.EventLive.Index do
   def mount(_params, _session, socket) do
     socket
     |> assign(:state, %{})
-    |> assign(:modal, nil)
+    |> assign(:modal, :index)
     |> assign(Theme.get)
     |> assign_state(:show_archived, false)
     |> assign_state(:view, "Events")
@@ -28,7 +28,7 @@ defmodule CometoidWeb.EventLive.Index do
   @impl true
   def handle_info {:modal_closed}, socket do
     socket
-    |> assign(:modal, nil)
+    |> assign(:modal, :index)
   end
 
   def handle_info {:after_edit_form_save, %{ event: event }} = _issue, socket do
@@ -37,7 +37,7 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
-    |> assign(:modal, nil)
+    |> assign(:modal, :index)
     |> assign_state(:edit_context, nil)
     |> assign_state(:edit_issue, nil)
   end
@@ -50,13 +50,13 @@ defmodule CometoidWeb.EventLive.Index do
     socket
     |> assign_state(:selected_event, selected_event)
     |> refresh_issues
-    |> assign(:modal, nil)
+    |> assign(:modal, :index)
     |> assign_state(:edit_context, nil)
     |> assign_state(:edit_issue, nil)
   end
 
   @impl true
-  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ state: state } } = socket do
+  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: :index, state: state } } = socket do
     case key do
       "e" ->
         if state.selected_event do
@@ -88,6 +88,8 @@ defmodule CometoidWeb.EventLive.Index do
         socket
     end
   end
+
+  def handle_event("keydown", _params, socket), do: socket
 
   def handle_event "switch-theme", %{ "name" => _name }, socket do
     Theme.toggle!
@@ -165,5 +167,6 @@ defmodule CometoidWeb.EventLive.Index do
   defp refresh_issues socket do
     socket
     |> assign_state(:events, Calendar.list_events(socket.assigns.state.show_archived))
+    |> assign(:modal, :index)
   end
 end
