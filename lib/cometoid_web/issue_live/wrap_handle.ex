@@ -32,7 +32,7 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
     end
   end
 
-  defmacro def({:handle_info, _, [r, socket|_]} = name_and_args, do: code) do
+  defmacro def({:handle_info, _, [r, socket| _]} = name_and_args, do: code) do
     [name|_] = Tuple.to_list r
     quote do
       def unquote(name_and_args) do
