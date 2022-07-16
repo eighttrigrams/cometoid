@@ -24,8 +24,8 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
 
   defmacro def({:handle_params, _, _} = name_and_args, do: code) do
     quote do
-      def unquote(name_and_args) do
-        socket = unquote(code)
+      def unquote name_and_args do
+        socket = unquote code
         socket
         |> return_noreply
       end
@@ -35,14 +35,14 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
   defmacro def({:handle_info, _, [r, socket| _]} = name_and_args, do: code) do
     [name|_] = Tuple.to_list r
     quote do
-      def unquote(name_and_args) do
+      def unquote name_and_args do
         socket = unquote socket
         modal = socket.assigns.modal
         {:noreply, socket } = result = handle (unquote code), (unquote name)
-        if modal == socket.assigns.modal do
-          {:noreply, socket |> assign(:modal, nil)}
-        else
-          result
+        case socket.assigns.modal do
+          :keep -> {:noreply, socket |> assign(:modal, modal)}
+          modal -> {:noreply, socket |> assign(:modal, nil)}
+          _ -> socket
         end
       end
     end
@@ -50,7 +50,7 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
 
   defmacro def({:handle_event, _, [name|_]} = name_and_args, do: code) do
     quote do
-      def unquote(name_and_args) do
+      def unquote name_and_args do
         handle (unquote code), (unquote name)
       end
     end
@@ -58,8 +58,8 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
 
   defmacro def(name_and_args, do: code) do
     quote do
-      def unquote(name_and_args) do
-        unquote(code)
+      def unquote name_and_args do
+        unquote code
       end
     end
   end

@@ -63,6 +63,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_info {:select_secondary_contexts, selected_secondary_contexts}, socket do
     socket
     |> assign_state(:selected_secondary_contexts, selected_secondary_contexts)
+    |> assign(:modal, :keep)
   end
 
   def handle_info {:after_edit_form_save, %{ context_id: context_id }}, socket do
@@ -143,23 +144,20 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "keyup", %{ "key" => key }, 
     %{ assigns: %{ modal: modal, state: state }} = socket do
 
-    if modal == :filter_secondary_contexts do
-      socket
-      |> assign(:modal, nil)
-    else
-      case key do
-        "Control" ->
+    case key do
+      "Control" ->
+        socket
+        |> assign_state(:control_pressed, false)
+      "h" ->
+        if state.selected_context && modal == :filter_secondary_contexts do
+          IO.puts "yoh"
           socket
-          |> assign_state(:control_pressed, false)
-        "h" ->
-          if state.selected_context && modal == :filter_secondary_contexts do
-            socket
-          else
-            socket
-          end
-        _ ->
+          |> assign(:modal, nil)
+        else
           socket
-      end
+        end
+      _ ->
+        socket
     end
   end
 
