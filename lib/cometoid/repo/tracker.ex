@@ -380,10 +380,8 @@ defmodule Cometoid.Repo.Tracker do
     }) do
 
     query
-    |> where([i, _context_relation, context], (context.view == ^selected_view
-      and context.important == true
+    |> where([i, _context_relation, context], context.view == ^selected_view
       and i.done == ^list_issues_done_instead_open)
-      or i.important == true)
   end
 
   defp where_type(query, %{
