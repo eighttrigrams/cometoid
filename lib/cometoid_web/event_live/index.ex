@@ -12,7 +12,7 @@ defmodule CometoidWeb.EventLive.Index do
   def mount(_params, _session, socket) do
     socket
     |> assign(:state, %{})
-    |> assign(:modal, :index)
+    |> assign(:modal, nil)
     |> assign(Theme.get)
     |> assign_state(:show_archived, false)
     |> assign_state(:view, "Events")
@@ -53,7 +53,7 @@ defmodule CometoidWeb.EventLive.Index do
   end
 
   @impl true
-  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: :index, state: state } } = socket do
+  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: nil, state: state } } = socket do
     case key do
       "e" ->
         if state.selected_event do
@@ -164,6 +164,6 @@ defmodule CometoidWeb.EventLive.Index do
   defp refresh_issues socket do
     socket
     |> assign_state(:events, Calendar.list_events(socket.assigns.state.show_archived))
-    |> assign(:modal, :index)
+    |> assign(:modal, nil)
   end
 end

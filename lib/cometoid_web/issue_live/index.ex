@@ -17,7 +17,7 @@ defmodule CometoidWeb.IssueLive.Index do
       socket
       |> assign(Theme.get)
       |> assign(:state, %{})
-      |> assign(:modal, :index)
+      |> assign(:modal, nil)
       |> assign(:handler, nil)
     }
   end
@@ -82,7 +82,7 @@ defmodule CometoidWeb.IssueLive.Index do
   ## HANDLE_EVENT
 
   @impl true
-  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: :index, state: state } } = socket do
+  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: nil, state: state } } = socket do
     cond do
       key == "Control" && !state.context_search_active ->
         assign_state(socket, :control_pressed, true)
@@ -143,18 +143,23 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "keyup", %{ "key" => key }, 
     %{ assigns: %{ modal: modal, state: state }} = socket do
 
-    case key do
-      "Control" ->
-        socket
-        |> assign_state(:control_pressed, false)
-      "h" ->
-        if state.selected_context && modal == :filter_secondary_contexts do
+    if modal == :filter_secondary_contexts do
+      socket
+      |> assign(:modal, nil)
+    else
+      case key do
+        "Control" ->
           socket
-        else
+          |> assign_state(:control_pressed, false)
+        "h" ->
+          if state.selected_context && modal == :filter_secondary_contexts do
+            socket
+          else
+            socket
+          end
+        _ ->
           socket
-        end
-      _ ->
-        socket
+      end
     end
   end
 
@@ -448,7 +453,7 @@ defmodule CometoidWeb.IssueLive.Index do
   defp refresh_issues %{ assigns: %{ state: state }} = socket do
     socket
     |> assign_state(IssuesMachine.refresh_issues state)
-    |> assign(:modal, :index)
+    |> assign(:modal, nil)
   end
 
   defp select_context %{ assigns: %{ state: state }} = socket, id do

@@ -40,7 +40,7 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
         modal = socket.assigns.modal
         {:noreply, socket } = result = handle (unquote code), (unquote name)
         if modal == socket.assigns.modal do
-          {:noreply, socket |> assign(:modal, :index)}
+          {:noreply, socket |> assign(:modal, nil)}
         else
           result
         end
