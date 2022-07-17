@@ -184,6 +184,16 @@ defmodule Cometoid.Repo.Tracker do
       sort_issues_alphabetically: false
   end
 
+  def search_issues do
+    search_terms = "iss:* & 3"
+    Issue
+    |> where(
+      [i],
+      fragment("? @@ to_tsquery('simple', ?)",
+        i.searchable, ^search_terms)
+    )
+  end
+
   def list_issues query do
     q =
       Issue
