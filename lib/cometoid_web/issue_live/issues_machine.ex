@@ -220,6 +220,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   defp do_query_refresh_issues state do
     query = %Tracker.Query{
+      q: state.q,
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context,
       selected_view: state.selected_view,

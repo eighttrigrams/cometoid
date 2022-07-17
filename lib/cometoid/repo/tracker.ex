@@ -181,31 +181,38 @@ defmodule Cometoid.Repo.Tracker do
     defstruct selected_context: nil, # required
       list_issues_done_instead_open: false,
       selected_view: "",
-      sort_issues_alphabetically: false
+      sort_issues_alphabetically: false,
+      q: ""
   end
 
-  def search_issues do
-    search_terms = "iss:* & 3"
-    Issue
-    |> where(
-      [i],
-      fragment("? @@ to_tsquery('simple', ?)",
-        i.searchable, ^search_terms)
-    )
+  def search que, query do
+
+    if query.q == "" do
+      que
+    else
+      q = "#{query.q}:*"
+      que
+        |> where(
+          [i,_,_],
+          fragment("? @@ to_tsquery('simple', ?)",
+            i.searchable, ^q))
+    end
   end
 
   def list_issues query do
+
     q =
       Issue
       |> join(:left, [i], context_relation in assoc(i, :contexts))
       |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
       |> where_type(query)
+      |> search(query)
       |> order_issues(query)
 
     issues = Repo.all(q)
-      |> Enum.uniq
+      |> Enum.uniq #?
       |> do_issues_preload
-
+      
     if is_nil(query.selected_context) or is_nil(query.selected_context.search_mode) or query.selected_context.search_mode == 0 do
       issues
     else
@@ -384,14 +391,23 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   defp where_type(query, %{
+    q: q,
     selected_context: nil,
     selected_view: selected_view,
     list_issues_done_instead_open: list_issues_done_instead_open
     }) do
-
-    query
-    |> where([i, _context_relation, context], context.view == ^selected_view
-      and i.done == ^list_issues_done_instead_open)
+ 
+    if q == "" do
+      query
+      |> where([i, _context_relation, context], (context.view == ^selected_view
+        and context.important == true
+        and i.done == ^list_issues_done_instead_open)
+        or i.important == true)
+    else
+      query
+      |> where([i, _context_relation, context], (context.view == ^selected_view
+        and i.done == ^list_issues_done_instead_open))
+    end
   end
 
   defp where_type(query, %{
