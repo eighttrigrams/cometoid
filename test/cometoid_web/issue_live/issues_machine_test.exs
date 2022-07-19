@@ -242,4 +242,51 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       |> IssuesMachine.select_previous_context
     assert "Project2" == state.selected_context.title
   end
+
+  ## ISSUES SHOWN IN ISSUES LIST
+
+  test "important issues shown when not in issue search search" do
+    important_context = Repo.insert! %Context {
+      title: "Important Context",
+      view: "Software",
+      important: true
+    }
+    context_with_important_issue = Repo.insert! %Context {
+      title: "Important Context",
+      view: "Software"
+    }
+    context = Repo.insert! %Context {
+      title: "Context",
+      view: "Software",
+      important: false
+    }
+    Repo.insert! %Issue {
+      title: "Issue 1",
+      contexts: [%{ context: important_context }]
+    }
+    Repo.insert! %Issue {
+      title: "Issue 2",
+      important: true,
+      contexts: [%{ context: context_with_important_issue }]
+    }
+    Repo.insert! %Issue {
+      title: "Issue 3",
+      contexts: [%{ context: context_with_important_issue }]
+    }
+    Repo.insert! %Issue {
+      title: "Issue 4",
+      contexts: [%{ context: context }]
+    }
+    state = %{
+      q: "",
+      selected_context: nil,
+      selected_view: "Software",
+      sort_issues_alphabetically: 0,
+      list_issues_done_instead_open: false
+    }
+    state = IssuesMachine.refresh_issues state
+
+    assert (MapSet.new ["Issue 1", "Issue 2"]) 
+      == MapSet.new Enum.map state.issues, &(&1.title)
+  end
 end

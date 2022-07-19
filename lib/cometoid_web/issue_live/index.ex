@@ -62,7 +62,6 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_info {:q, q}, socket do
-    IO.puts "in index #{q}"
     socket
     |> assign_state(:q, q)
     |> refresh_issues
