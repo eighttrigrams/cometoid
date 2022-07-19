@@ -55,4 +55,23 @@ defmodule Cometoid.TrackerTest do
     assert (MapSet.new ["abc", "abd"]) 
       == MapSet.new Enum.map issues, &(&1.title)
   end 
+
+  test "prefix search issues on short_title, too" do
+    {:ok, c1} = Tracker.create_context %{ "title" => "context1", "view" => "view1" }    
+    Tracker.create_issue "abc", "short title 1", [c1]
+    Tracker.create_issue "aaa", "abd", [c1]
+    Tracker.create_issue "acd", "ace", [c1]
+
+    query = %{
+      selected_context: nil,
+      list_issues_done_instead_open: false,
+      sort_issues_alphabetically: false,
+      selected_view: "view1",
+      q: "ab"
+    }
+
+    issues = Tracker.list_issues query
+    assert (MapSet.new ["abc", "aaa"]) 
+      == MapSet.new Enum.map issues, &(&1.title)
+  end 
 end
