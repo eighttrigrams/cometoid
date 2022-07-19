@@ -36,6 +36,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: other_context }]
     }
     state = %{
+      q: "",
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false # TODO why do I need this?
@@ -64,6 +65,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: tag_context }]
     }
     state = %{
+      q: "",
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
@@ -78,24 +80,28 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     tag_context = Repo.insert! %Context {
       title: "Task",
       view: "Software",
-      is_tag?: true
+      is_tag?: true,
+      important: true
     }
     Repo.insert! %Issue {
       title: "Issue",
       contexts: [%{ context: tag_context }]
     }
     state = %{
+      q: "",
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
 
     assert 1 = length Tracker.list_issues %Tracker.Query {
+      q: "",
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }
     IssuesMachine.delete_context state, tag_context.id
     assert 0 = length Tracker.list_issues %Tracker.Query {
+      q: "",
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }
@@ -117,6 +123,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: tag_context }]
     }
     state = %{
+      q: "",
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
@@ -129,12 +136,14 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     tag_context = Repo.insert! %Context {
       title: "Task1",
       view: "Software",
-      is_tag?: true
+      is_tag?: true,
+      important: true
     }
     other_tag_context = Repo.insert! %Context {
       title: "Task2",
       view: "Software",
-      is_tag?: true
+      is_tag?: true,
+      important: true
     }
     Repo.insert! %Issue {
       title: "Issue",
@@ -142,11 +151,13 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: other_tag_context }]
     }
     state = %{
+      q: "",
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
     assert 1 == length Tracker.list_issues %Tracker.Query {
+      q: "",
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }
@@ -160,17 +171,20 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
   test "delete tag_context when there is also another tag_context, but leave issue in yet another context" do
     context = Repo.insert! %Context {
       title: "Project",
-      view: "Software"
+      view: "Software",
+      important: true
     }
     tag_context = Repo.insert! %Context {
       title: "Task1",
       view: "Software",
-      is_tag?: true
+      is_tag?: true,
+      important: true
     }
     other_tag_context = Repo.insert! %Context {
       title: "Task2",
       view: "Software",
-      is_tag?: true
+      is_tag?: true,
+      important: true
     }
     Repo.insert! %Issue {
       title: "Issue",
@@ -179,6 +193,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: other_tag_context }]
     }
     state = %{
+      q: "",
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
@@ -205,6 +220,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       view: "Software"
     }
     state = %{
+      q: "",
       selected_view: "Software",
       selected_issue: nil,
       sort_issues_alphabetically: 0,
