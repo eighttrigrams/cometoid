@@ -28,6 +28,7 @@ defmodule CometoidWeb.IssueLive.Index do
     selected_view = get_selected_view params
 
     state = %{
+      q: "",
       control_pressed: false,
       context_search_active: false,
       issue_search_active: false,
@@ -58,6 +59,12 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_info {:select_issue, id}, socket do
     select_issue socket, id
+  end
+
+  def handle_info {:q, q}, socket do
+    socket
+    |> assign_state(:q, q)
+    |> refresh_issues
   end
 
   def handle_info {:select_secondary_contexts, selected_secondary_contexts}, socket do
@@ -93,6 +100,8 @@ defmodule CometoidWeb.IssueLive.Index do
             socket
             |> assign_state(:context_search_active, false)
             |> assign_state(:issue_search_active, false)
+            |> assign_state(:q, "")
+            |> refresh_issues
           _ -> 
             socket
         end
