@@ -12,7 +12,6 @@
       <%= for issue <- @state.issues do %>
         <%= live_component ItemComponent, 
           issue: issue, 
-          filtered_issues: @state.issues, 
           state: @state %>
       <% end %>
     </table>
