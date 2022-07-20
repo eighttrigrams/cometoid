@@ -2,6 +2,7 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
   use CometoidWeb, :live_component
 
   alias CometoidWeb.IssueLive.Context.Overview.ItemComponent
+  alias CometoidWeb.Helpers
 
   @impl true
   def mount socket do
@@ -37,6 +38,30 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
   end
 
   defp should_show? context, q do
-    CometoidWeb.IssueLive.Issue.List.Component.search_matches? context, q
+    search_matches? context, q
+  end
+
+  defp search_matches? %{title: title, short_title: short_title, tags: tags}, q do
+    short_title = String.downcase(short_title || "")
+    tags = String.downcase(tags)
+
+    tokenized =
+      (
+        title
+        |> Helpers.demarkdownify
+        |> String.downcase
+        |> String.split(" ")
+      ) 
+      ++ String.split(short_title, " ")
+      ++ String.split(tags, " ")
+
+    qs = q
+      |> String.downcase
+      |> String.split(" ")
+      |> Enum.filter(&(&1 != ""))
+
+    Enum.reduce qs, true, fn q, acc ->
+      acc && !is_nil(Enum.find tokenized, &(String.starts_with? &1, q))
+    end
   end
 end
