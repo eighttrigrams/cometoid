@@ -212,7 +212,7 @@ defmodule Cometoid.Repo.Tracker do
     issues = Repo.all(q)
       |> Enum.uniq #?
       |> do_issues_preload
-      
+
     if is_nil(query.selected_context) or is_nil(query.selected_context.search_mode) or query.selected_context.search_mode == 0 do
       issues
     else
@@ -399,10 +399,12 @@ defmodule Cometoid.Repo.Tracker do
  
     if q == "" do
       query
-      |> where([i, _context_relation, context], (context.view == ^selected_view
-        and context.important == true
-        and i.done == ^list_issues_done_instead_open)
-        or i.important == true)
+      |> where([i, _context_relation, context], (context.view == ^selected_view and
+        (
+          (context.important == true and i.done == ^list_issues_done_instead_open)
+          or i.important == true
+        )
+      ))
     else
       query
       |> where([i, _context_relation, context], (context.view == ^selected_view
