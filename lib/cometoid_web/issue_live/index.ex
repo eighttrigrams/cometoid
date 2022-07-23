@@ -451,6 +451,8 @@ defmodule CometoidWeb.IssueLive.Index do
         socket
         |> assign_state(:selected_issue, nil)
       end
+      |> refresh_issues
+      |> assign_state(:q, "")
     end
   end
 
@@ -557,6 +559,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(:selected_issue, selected_issue)
     |> assign_state(:issue_search_active, false)
     |> assign_state(:q, "")
+    |> refresh_issues
   end
 
   ## HELPER
