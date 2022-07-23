@@ -556,6 +556,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(:selected_issue, selected_issue)
     |> assign_state(:issue_search_active, false)
+    |> assign_state(:q, "")
   end
 
   ## HELPER
