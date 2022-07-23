@@ -159,7 +159,6 @@ defmodule CometoidWeb.IssueLive.Index do
         |> assign_state(:control_pressed, false)
       "h" ->
         if state.selected_context && modal == :filter_secondary_contexts do
-          IO.puts "yoh"
           socket
           |> assign(:modal, nil)
         else

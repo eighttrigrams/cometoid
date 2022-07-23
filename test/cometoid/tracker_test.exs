@@ -74,4 +74,23 @@ defmodule Cometoid.TrackerTest do
     assert (MapSet.new ["abc", "aaa"]) 
       == MapSet.new Enum.map issues, &(&1.title)
   end 
+
+  test "multiple search terms (AND search)" do
+    {:ok, c1} = Tracker.create_context %{ "title" => "context1", "view" => "view1" }    
+    Tracker.create_issue "abc aaa", "", [c1]
+    Tracker.create_issue "aaa", "", [c1]
+    Tracker.create_issue "ccc", "", [c1]
+
+    query = %{
+      selected_context: nil,
+      list_issues_done_instead_open: false,
+      sort_issues_alphabetically: false,
+      selected_view: "view1",
+      q: "ab aa"
+    }
+
+    issues = Tracker.list_issues query
+    assert (MapSet.new ["abc aaa"]) 
+      == MapSet.new Enum.map issues, &(&1.title)
+  end
 end

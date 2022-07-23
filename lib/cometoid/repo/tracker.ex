@@ -185,13 +185,17 @@ defmodule Cometoid.Repo.Tracker do
       q: ""
   end
 
-  def search que, query do
+  def search issues_query, query do
 
     if query.q == "" do
-      que
+      issues_query
     else
-      q = "#{query.q}:*"
-      que
+      q = query.q 
+        |> String.split(" ")
+        |> Enum.filter(&(&1 != ""))
+        |> Enum.map(&("#{&1}:*"))
+        |> Enum.join(" & ")
+      issues_query
         |> where(
           [i,_,_],
           fragment("? @@ to_tsquery('simple', ?)",
@@ -199,9 +203,8 @@ defmodule Cometoid.Repo.Tracker do
     end
   end
 
-  def list_issues query do
-
-    q =
+  def load_issues query do
+    issues_query =
       Issue
       |> join(:left, [i], context_relation in assoc(i, :contexts))
       |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
@@ -209,14 +212,13 @@ defmodule Cometoid.Repo.Tracker do
       |> search(query)
       |> order_issues(query)
 
-    issues = Repo.all(q)
+    Repo.all(issues_query)
       |> Enum.uniq #?
       |> do_issues_preload
+  end
 
-    if is_nil(query.selected_context) or is_nil(query.selected_context.search_mode) or query.selected_context.search_mode == 0 do
-      issues
-    else
-      issues = issues
+  def sort_issues issues, query do
+    issues = issues
         |> Enum.filter(fn i -> not is_nil(i.short_title) end)
         |> Enum.map(fn i ->
           x = case Integer.parse(i.short_title) do
@@ -225,23 +227,36 @@ defmodule Cometoid.Repo.Tracker do
           end
           {x, i} end)
 
-      numeric =
-        issues
-        |> Enum.filter(fn {{_n, rest}, _i} -> rest == "" end)
-        |> Enum.sort_by(fn {{n, _rest}, _i} -> n end, if query.selected_context.search_mode == 1 do :asc else :desc end)
-        |> Enum.map(fn {{_s, _rest}, i} -> i end)
+    numeric =
+      issues
+      |> Enum.filter(fn {{_n, rest}, _i} -> rest == "" end)
+      |> Enum.sort_by(fn {{n, _rest}, _i} -> n end, if query.selected_context.search_mode == 1 do :asc else :desc end)
+      |> Enum.map(fn {{_s, _rest}, i} -> i end)
 
-      non_numeric =
-        issues
-        |> Enum.filter(fn {{_s, rest}, _i} -> rest != "" end)
-        |> Enum.sort_by(fn {{_s, _rest}, i} -> i.short_title end, if query.selected_context.search_mode == 1 do :asc else :desc end)
-        |> Enum.map(fn {{_s, _rest}, i} -> i end)
+    non_numeric =
+      issues
+      |> Enum.filter(fn {{_s, rest}, _i} -> rest != "" end)
+      |> Enum.sort_by(fn {{_s, _rest}, i} -> i.short_title end, if query.selected_context.search_mode == 1 do :asc else :desc end)
+      |> Enum.map(fn {{_s, _rest}, i} -> i end)
 
-      if query.selected_context.search_mode == 1 do
-        non_numeric ++ numeric
-      else
-        numeric ++ non_numeric
-      end
+    if query.selected_context.search_mode == 1 do
+      non_numeric ++ numeric
+    else
+      numeric ++ non_numeric
+    end
+  end
+
+  def list_issues query do
+
+    issues = load_issues query
+
+    if is_nil(query.selected_context) 
+      or is_nil(query.selected_context.search_mode) 
+      or query.selected_context.search_mode == 0 do
+
+      issues
+    else
+      sort_issues issues, query
     end
   end
 
