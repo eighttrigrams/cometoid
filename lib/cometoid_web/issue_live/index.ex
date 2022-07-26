@@ -57,8 +57,14 @@ defmodule CometoidWeb.IssueLive.Index do
     select_context_and_refocus socket, id
   end
 
-  def handle_info {:select_issue, id}, socket do
-    select_issue socket, id
+  def handle_info {:select_issue}, socket do
+    if (length socket.assigns.state.issues) == 1 do
+      socket
+      |> assign_state(:selected_issue, List.first socket.assigns.state.issues)
+    else
+      socket
+    end
+    |> assign_state(:issue_search_active, false)
   end
 
   def handle_info {:q, q}, socket do
@@ -90,7 +96,16 @@ defmodule CometoidWeb.IssueLive.Index do
   ## HANDLE_EVENT
 
   @impl true
-  def handle_event "keydown", %{ "key" => key }, %{ assigns: %{ modal: nil, state: state } } = socket do
+  def handle_event "keydown", %{ "key" => key }, 
+    %{ assigns: 
+      %{ 
+        modal: nil, 
+        state: %{
+          control_pressed: control_pressed
+        } = state
+      }
+    } = socket do
+
     cond do
       key == "Control" && !state.context_search_active ->
         assign_state(socket, :control_pressed, true)
@@ -102,6 +117,18 @@ defmodule CometoidWeb.IssueLive.Index do
             |> assign_state(:issue_search_active, false)
             |> assign_state(:q, "")
             |> refresh_issues
+          "," -> 
+            if control_pressed do
+              handle_suggestion_back socket, state
+            else
+              socket
+            end
+          "." -> 
+            if control_pressed do
+              handle_suggestion_forward socket, state
+            else
+              socket
+            end
           _ -> 
             socket
         end
@@ -454,6 +481,45 @@ defmodule CometoidWeb.IssueLive.Index do
       |> refresh_issues
       |> assign_state(:q, "")
     end
+  end
+
+  defp handle_suggestion_back socket, state do
+    selected_issue = if state.selected_issue do
+      {_item, index} = state.issues
+        |> Enum.with_index()
+        |> Enum.find(fn {%{id: id}, _index} -> id == state.selected_issue.id end)
+
+      if index - 1 >= 0 do
+        Enum.at state.issues, index - 1
+      else
+        state.selected_issue
+      end
+    else
+      nil
+    end
+    socket
+    |> assign_state(:selected_issue, selected_issue)
+  end
+
+  defp handle_suggestion_forward socket, state do
+    selected_issue = if is_nil(state.selected_issue) 
+      or (state.selected_issue.id not in (Enum.map state.issues, &(&1.id))) do
+
+        List.first state.issues
+      else
+        {_item, index} = state.issues
+          |> Enum.with_index()
+          |> Enum.find(fn {%{id: id}, _index} -> id == state.selected_issue.id end)
+
+        if index + 1 < length state.issues do
+          IO.puts "here"
+          Enum.at state.issues, index + 1
+        else
+          state.selected_issue
+        end
+      end
+    socket
+    |> assign_state(:selected_issue, selected_issue)
   end
 
   ## ISSUES_MACHINE - wraps and decorates calls to IssuesMachine

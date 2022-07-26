@@ -38,9 +38,9 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
   end
 
   def handle_event "select", _, socket do
-    if 1 == length socket.assigns.state.issues do
-      send self(), {:select_issue, (List.first socket.assigns.state.issues).id}
-    end
+    
+    send self(), {:select_issue}
+    
     socket
     |> return_noreply
   end
