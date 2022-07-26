@@ -58,13 +58,22 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_info {:select_issue}, socket do
-    if (length socket.assigns.state.issues) == 1 do
+    if (length socket.assigns.state.issues) != 0 do
+      selected_issue = case (length socket.assigns.state.issues) do
+          0 -> nil
+          1 -> List.first socket.assigns.state.issues
+          _ -> socket.assigns.state.selected_issue
+        end
+
       socket
-      |> assign_state(:selected_issue, List.first socket.assigns.state.issues)
+      |> assign_state(:selected_issue, selected_issue)
+      |> push_event(:issue_refocus, %{ id: selected_issue.id })
     else
       socket
     end
     |> assign_state(:issue_search_active, false)
+    |> assign_state(:q, "")
+    |> refresh_issues
   end
 
   def handle_info {:q, q}, socket do

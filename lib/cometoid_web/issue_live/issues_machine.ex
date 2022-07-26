@@ -223,6 +223,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       q: state.q,
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context,
+      selected_issue: state.selected_issue,
       selected_view: state.selected_view,
       sort_issues_alphabetically: state.sort_issues_alphabetically
     }

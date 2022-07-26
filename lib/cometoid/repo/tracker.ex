@@ -179,6 +179,7 @@ defmodule Cometoid.Repo.Tracker do
 
   defmodule Query do
     defstruct selected_context: nil, # required
+      selected_issue: nil,
       list_issues_done_instead_open: false,
       selected_view: "",
       sort_issues_alphabetically: false,
@@ -408,16 +409,20 @@ defmodule Cometoid.Repo.Tracker do
   defp where_type(query, %{
     q: q,
     selected_context: nil,
+    selected_issue: selected_issue,
     selected_view: selected_view,
     list_issues_done_instead_open: list_issues_done_instead_open
     }) do
  
+    selected_issue_id = if selected_issue do selected_issue.id else -1 end
+
     if q == "" do
       query
       |> where([i, _context_relation, context], (context.view == ^selected_view and
         (
           (context.important == true and i.done == ^list_issues_done_instead_open)
           or i.important == true
+          or ^selected_issue_id == i.id
         )
       ))
     else
