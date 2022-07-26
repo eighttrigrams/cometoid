@@ -512,7 +512,6 @@ defmodule CometoidWeb.IssueLive.Index do
           |> Enum.find(fn {%{id: id}, _index} -> id == state.selected_issue.id end)
 
         if index + 1 < length state.issues do
-          IO.puts "here"
           Enum.at state.issues, index + 1
         else
           state.selected_issue
