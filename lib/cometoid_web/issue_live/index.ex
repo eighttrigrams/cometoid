@@ -128,6 +128,7 @@ defmodule CometoidWeb.IssueLive.Index do
             |> assign_state([:search, :context_search_active], false)
             |> assign_state([:search, :issue_search_active], false)
             |> assign_state([:search, :q], "")
+            |> assign_state(:selected_issue, state.search.previously_selected_issue)
             |> refresh_issues
           "," -> 
             if control_pressed do
@@ -177,7 +178,9 @@ defmodule CometoidWeb.IssueLive.Index do
           "c" ->
             socket |> assign_state([:search, :context_search_active], true)
           "i" ->
-            socket = assign_state(socket, [:search, :issue_search_active], true)
+            socket
+            |> assign_state([:search, :issue_search_active], true)
+            |> assign_state([:search, :previously_selected_issue], state.selected_issue)
           "d" ->
             handle_describe socket
           _ ->
