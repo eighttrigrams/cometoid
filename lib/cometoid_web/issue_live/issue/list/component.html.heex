@@ -1,5 +1,5 @@
 <div id="issue-list-component" class="list-component border-color">
-  <%= if @state.issue_search_active do %>
+  <%= if @state.search.issue_search_active do %>
     <div id="issues-search-bar" class="border-color" phx-hook="IssueSearchInputHook">
       <.form let={f} for={:issue_search} phx-change="changes" phx-target={@myself} phx-submit="select">
         <%= text_input f, :q, autocomplete: :off %>
@@ -17,7 +17,7 @@
     </table>
   </div>
 
-  <%= if @state.context_search_active do %>
+  <%= if @state.search.context_search_active do %>
     <div id="issue-list-component-mask"
          class="opacity">
     </div>

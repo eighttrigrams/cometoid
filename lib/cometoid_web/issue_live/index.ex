@@ -28,10 +28,13 @@ defmodule CometoidWeb.IssueLive.Index do
     selected_view = get_selected_view params
 
     state = %{
-      q: "",
-      control_pressed: false,
-      context_search_active: false,
-      issue_search_active: false,
+      search: %{
+        q: "",
+        context_search_active: false,
+        issue_search_active: false,
+        previously_selected_issue: nil
+      },
+      control_pressed: false, # TODO pull up to assigns
       list_issues_done_instead_open: false,
       sort_issues_alphabetically: false,
       selected_secondary_contexts: [],
@@ -71,14 +74,14 @@ defmodule CometoidWeb.IssueLive.Index do
     else
       socket
     end
-    |> assign_state(:issue_search_active, false)
-    |> assign_state(:q, "")
+    |> assign_state([:search, :issue_search_active], false)
+    |> assign_state([:search, :q], "")
     |> refresh_issues
   end
 
   def handle_info {:q, q}, socket do
     socket
-    |> assign_state(:q, q)
+    |> assign_state([:search, :q], q)
     |> refresh_issues
   end
 
@@ -116,25 +119,25 @@ defmodule CometoidWeb.IssueLive.Index do
     } = socket do
 
     cond do
-      key == "Control" && !state.context_search_active ->
+      key == "Control" && !state.search.context_search_active ->
         assign_state(socket, :control_pressed, true)
-      state.issue_search_active or state.context_search_active ->
+      state.search.issue_search_active or state.search.context_search_active ->
         case key do
           "Escape" ->
             socket
-            |> assign_state(:context_search_active, false)
-            |> assign_state(:issue_search_active, false)
-            |> assign_state(:q, "")
+            |> assign_state([:search, :context_search_active], false)
+            |> assign_state([:search, :issue_search_active], false)
+            |> assign_state([:search, :q], "")
             |> refresh_issues
           "," -> 
             if control_pressed do
-              handle_suggestion_back socket, state
+              handle_suggestion_back socket
             else
               socket
             end
           "." -> 
             if control_pressed do
-              handle_suggestion_forward socket, state
+              handle_suggestion_forward socket
             else
               socket
             end
@@ -172,9 +175,9 @@ defmodule CometoidWeb.IssueLive.Index do
               true -> socket
             end
           "c" ->
-            socket |> assign_state(:context_search_active, true)
+            socket |> assign_state([:search, :context_search_active], true)
           "i" ->
-            assign_state(socket, :issue_search_active, true)
+            socket = assign_state(socket, [:search, :issue_search_active], true)
           "d" ->
             handle_describe socket
           _ ->
@@ -289,7 +292,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign_state(state)
-    |> assign_state(:issue_search_active, false)
+    |> assign_state([:search, :issue_search_active], false)
     |> push_event(:issue_refocus, %{ id: target_issue_id })
     |> push_event(:context_refocus, %{ id: target_context_id })
     |> refresh_issues
@@ -368,7 +371,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign_state(state)
-    |> assign_state(:context_search_active, false)
+    |> assign_state([:search, :context_search_active], false)
     |> push_event(:context_refocus, %{ id: state.selected_context.id })
     |> refresh_issues
   end
@@ -381,7 +384,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
     socket
     |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
-    |> assign_state(:context_search_active, false)
+    |> assign_state([:search, :context_search_active], false)
     |> push_event(:context_refocus, %{ id: id })
     |> refresh_issues
   end
@@ -422,7 +425,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> Tracker.update_issue_updated_at
     selected_issue = Tracker.get_issue! id
     socket
-    |> assign_state(:issue_search_active, false)
+    |> assign_state([:search, :issue_search_active], false)
     |> assign_state(:selected_issue, selected_issue)
     |> refresh_issues
   end
@@ -435,7 +438,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
     |> assign_state(:selected_issue, selected_issue)
-    |> assign_state(:issue_search_active, false)
+    |> assign_state([:search, :issue_search_active], false)
     |> push_event(:issue_refocus, %{ id: id })
     |> refresh_issues
   end
@@ -492,7 +495,7 @@ defmodule CometoidWeb.IssueLive.Index do
     end
   end
 
-  defp handle_suggestion_back socket, state do
+  defp handle_suggestion_back %{ assigns: %{ state: state }} = socket do
     selected_issue = if state.selected_issue do
       {_item, index} = state.issues
         |> Enum.with_index()
@@ -510,7 +513,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(:selected_issue, selected_issue)
   end
 
-  defp handle_suggestion_forward socket, state do
+  defp handle_suggestion_forward %{ assigns: %{ state: state }} = socket do
     selected_issue = if is_nil(state.selected_issue) 
       or (state.selected_issue.id not in (Enum.map state.issues, &(&1.id))) do
 
@@ -544,7 +547,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp select_context_and_refocus %{ assigns: %{ state: state }} = socket, id do
-    if state.context_search_active do
+    if state.search.context_search_active do
       socket
       |> push_event(:context_refocus, %{ id: id })
     else
@@ -622,7 +625,7 @@ defmodule CometoidWeb.IssueLive.Index do
   defp select_issue socket, id do
     selected_issue = Tracker.get_issue! id
     
-    socket = if socket.assigns.state.issue_search_active do 
+    socket = if socket.assigns.state.search.issue_search_active do 
       socket
       |> push_event(:issue_refocus, %{ id: id })  
     else
@@ -631,8 +634,8 @@ defmodule CometoidWeb.IssueLive.Index do
     
     socket
     |> assign_state(:selected_issue, selected_issue)
-    |> assign_state(:issue_search_active, false)
-    |> assign_state(:q, "")
+    |> assign_state([:search, :issue_search_active], false)
+    |> assign_state([:search, :q], "")
     |> refresh_issues
   end
 

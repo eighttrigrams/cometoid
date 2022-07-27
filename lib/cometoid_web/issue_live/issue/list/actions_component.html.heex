@@ -20,7 +20,7 @@
         </span>
     <% end %>
 
-    <%= unless @state.issue_search_active do %>
+    <%= unless @state.search.issue_search_active do %>
         <%= if @state.list_issues_done_instead_open do %>
           <span class="btn">
             <a phx-click="unarchive" phx-value-target={@issue.id}>

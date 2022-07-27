@@ -19,12 +19,12 @@
     <%= live_component IssueLive.SidebarComponent, state: @state %>
   </div>
 
-  <%= if @state.context_search_active or @state.issue_search_active do %>
+  <%= if @state.search.context_search_active or @state.search.issue_search_active do %>
     <div id="context-search-mask-top" 
          class="opacity">
     </div>
     <div id="context-search-mask-right" 
-         class={"opacity #{if @state.issue_search_active do "in-issue-search" end}"}>
+         class={"opacity #{if @state.search.issue_search_active do "in-issue-search" end}"}>
     </div>
   <% end %>
 

@@ -9,6 +9,11 @@ defmodule CometoidWeb.IssueLive.WrapHandle do
       defp assign_state socket, state do
         assign(socket, :state, state)
       end
+      defp assign_state(socket, keys, value) when (is_list keys) do
+        state = socket.assigns.state
+        state = put_in state, keys, value
+        assign(socket, :state, state)
+      end
       defp assign_state socket, key, value do
         state = socket.assigns.state
         state = put_in state[key], value

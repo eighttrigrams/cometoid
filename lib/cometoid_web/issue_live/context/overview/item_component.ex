@@ -5,7 +5,7 @@ defmodule CometoidWeb.IssueLive.Context.Overview.ItemComponent do
 
   def get_highlight context, filtered_contexts, state do
     if (not is_nil(state.selected_context) and state.selected_context.id == context.id)
-    or (state.context_search_active and 1 == length filtered_contexts)
+    or (state.search.context_search_active and 1 == length filtered_contexts)
     do 'selected-item-color' end
   end
 

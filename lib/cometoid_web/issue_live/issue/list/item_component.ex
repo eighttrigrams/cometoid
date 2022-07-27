@@ -6,6 +6,6 @@ defmodule CometoidWeb.IssueLive.Issue.List.ItemComponent do
   alias CometoidWeb.IssueLive.Issue.List.BadgesComponent
 
   def get_highlight _issue, state do
-    if state.issue_search_active and 1 == length state.issues do 'selected-item-color' end
+    if state.search.issue_search_active and 1 == length state.issues do 'selected-item-color' end
   end
 end

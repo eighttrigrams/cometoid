@@ -114,7 +114,12 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       selected_context: selected_context,
       selected_contexts: selected_contexts,
       selected_issue: nil,
-      context_search_active: false,
+      search: %{
+        q: "",
+        context_search_active: false,
+        issue_search_active: false,
+        previously_selected_issue: nil,
+      },
       selected_secondary_contexts: []
     }}
   end
@@ -165,7 +170,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     context = Tracker.convert_issue_to_context id, state.selected_view
     contexts = load_contexts_for_view state
     {:refresh_issues, %{
-      selected_context: context,
+      # selected_context: context,
       contexts: contexts
     }}
   end
@@ -220,7 +225,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
 
   defp do_query_refresh_issues state do
     query = %Tracker.Query{
-      q: state.q,
+      search: %{
+        q: state.search.q
+      },
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context,
       selected_issue: state.selected_issue,

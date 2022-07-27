@@ -183,15 +183,17 @@ defmodule Cometoid.Repo.Tracker do
       list_issues_done_instead_open: false,
       selected_view: "",
       sort_issues_alphabetically: false,
-      q: ""
+      search: %{
+        q: ""
+      }
   end
 
   def search issues_query, query do
 
-    if query.q == "" do
+    if query.search.q == "" do
       issues_query
     else
-      q = query.q 
+      q = query.search.q 
         |> String.split(" ")
         |> Enum.filter(&(&1 != ""))
         |> Enum.map(&("#{&1}:*"))
@@ -407,7 +409,9 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   defp where_type(query, %{
-    q: q,
+    search: %{
+      q: q
+    },
     selected_context: nil,
     selected_issue: selected_issue,
     selected_view: selected_view,
