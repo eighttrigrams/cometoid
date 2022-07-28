@@ -500,39 +500,49 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
-  defp handle_suggestion_back %{ assigns: %{ state: state }} = socket do
-    selected_issue = if state.selected_issue do
-      {_item, index} = state.issues
-        |> Enum.with_index()
-        |> Enum.find(fn {%{id: id}, _index} -> id == state.selected_issue.id end)
+  defp selected_issue_index %{ selected_issue: selected_issue, issues: issues } do
+    {_item, index} = issues
+      |> Enum.with_index()
+      |> Enum.find(fn {%{id: id}, _index} -> id == selected_issue.id end)
+    index
+  end
 
-      if index - 1 >= 0 do
-        Enum.at state.issues, index - 1
-      else
-        state.selected_issue
-      end
+  defp get_previous_issue %{ selected_issue: selected_issue, issues: issues }, index do
+    if index - 1 >= 0 do
+      Enum.at issues, index - 1
     else
-      nil
+      selected_issue
     end
+  end
+
+  defp get_next_issue %{ selected_issue: selected_issue, issues: issues }, index do
+    if index + 1 < length issues do
+      Enum.at issues, index + 1
+    else
+      selected_issue
+    end
+  end
+  
+  defp is_selected_issue_in_issues? %{ selected_issue: selected_issue, issues: issues } do
+    not (is_nil(selected_issue) 
+      or (selected_issue.id not in (Enum.map issues, &(&1.id))))
+  end
+
+  defp handle_suggestion_back %{ assigns: %{ state: state }} = socket do
+    selected_issue = if is_selected_issue_in_issues? state do
+        get_previous_issue state, selected_issue_index state
+      else
+        nil
+      end
     socket
     |> assign_state(:selected_issue, selected_issue)
   end
 
   defp handle_suggestion_forward %{ assigns: %{ state: state }} = socket do
-    selected_issue = if is_nil(state.selected_issue) 
-      or (state.selected_issue.id not in (Enum.map state.issues, &(&1.id))) do
-
-        List.first state.issues
+    selected_issue = if is_selected_issue_in_issues? state do
+        get_next_issue state, selected_issue_index state
       else
-        {_item, index} = state.issues
-          |> Enum.with_index()
-          |> Enum.find(fn {%{id: id}, _index} -> id == state.selected_issue.id end)
-
-        if index + 1 < length state.issues do
-          Enum.at state.issues, index + 1
-        else
-          state.selected_issue
-        end
+        List.first state.issues
       end
     socket
     |> assign_state(:selected_issue, selected_issue)
