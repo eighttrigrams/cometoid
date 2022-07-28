@@ -61,22 +61,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_info {:select_issue}, socket do
-    if (length socket.assigns.state.issues) != 0 do
-      selected_issue = case (length socket.assigns.state.issues) do
-          0 -> nil
-          1 -> List.first socket.assigns.state.issues
-          _ -> socket.assigns.state.selected_issue
-        end
-
-      socket
-      |> assign_state(:selected_issue, selected_issue)
-      |> push_event(:issue_refocus, %{ id: selected_issue.id })
-    else
-      socket
-    end
-    |> assign_state([:search, :issue_search_active], false)
-    |> assign_state([:search, :q], "")
-    |> refresh_issues
+    handle_confirm_issue_search socket
   end
 
   def handle_info {:q, q}, socket do
@@ -124,12 +109,7 @@ defmodule CometoidWeb.IssueLive.Index do
       state.search.issue_search_active or state.search.context_search_active ->
         case key do
           "Escape" ->
-            socket
-            |> assign_state([:search, :context_search_active], false)
-            |> assign_state([:search, :issue_search_active], false)
-            |> assign_state([:search, :q], "")
-            |> assign_state(:selected_issue, state.search.previously_selected_issue)
-            |> refresh_issues
+            handle_quit_search socket
           "," -> 
             if control_pressed do
               handle_suggestion_back socket
@@ -496,6 +476,35 @@ defmodule CometoidWeb.IssueLive.Index do
       |> refresh_issues
       |> assign_state(:q, "")
     end
+  end
+
+  defp handle_confirm_issue_search %{ assigns: %{ state: state }} = socket do
+    if (length socket.assigns.state.issues) != 0 do
+      selected_issue = case (length socket.assigns.state.issues) do
+          0 -> nil
+          1 -> List.first socket.assigns.state.issues
+          _ -> socket.assigns.state.selected_issue
+        end
+
+      socket
+      |> assign_state(:selected_issue, selected_issue)
+      |> push_event(:issue_refocus, %{ id: selected_issue.id })
+    else
+      socket
+      |> assign_state(:selected_issue, state.search.previously_selected_issue)
+    end
+    |> assign_state([:search, :issue_search_active], false)
+    |> assign_state([:search, :q], "")
+    |> refresh_issues
+  end
+
+  defp handle_quit_search %{ assigns: %{ state: state }} = socket do
+    socket
+    |> assign_state([:search, :context_search_active], false)
+    |> assign_state([:search, :issue_search_active], false)
+    |> assign_state([:search, :q], "")
+    |> assign_state(:selected_issue, state.search.previously_selected_issue)
+    |> refresh_issues
   end
 
   defp handle_suggestion_back %{ assigns: %{ state: state }} = socket do
