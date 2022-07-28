@@ -106,26 +106,20 @@ defmodule CometoidWeb.IssueLive.Index do
     cond do
       key == "Control" && !state.search.context_search_active ->
         assign_state(socket, :control_pressed, true)
+      state.control_pressed ->
+        case key do 
+          "," -> handle_suggestion_back socket
+          "." -> handle_suggestion_forward socket
+          _ -> socket
+        end  
       state.search.issue_search_active or state.search.context_search_active ->
         case key do
           "Escape" ->
             handle_quit_search socket
-          "," -> 
-            if control_pressed do
-              handle_suggestion_back socket
-            else
-              socket
-            end
-          "." -> 
-            if control_pressed do
-              handle_suggestion_forward socket
-            else
-              socket
-            end
           _ -> 
             socket
         end
-      not state.control_pressed ->
+      true ->
         case key do
           "Escape" -> handle_escape socket
           "n" ->
@@ -166,7 +160,6 @@ defmodule CometoidWeb.IssueLive.Index do
           _ ->
             socket
         end
-      true -> socket
     end
   end
 
