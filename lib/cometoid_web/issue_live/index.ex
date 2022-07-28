@@ -108,8 +108,8 @@ defmodule CometoidWeb.IssueLive.Index do
         assign_state(socket, :control_pressed, true)
       state.control_pressed ->
         case key do 
-          "," -> handle_suggestion_back socket
-          "." -> handle_suggestion_forward socket
+          "," -> select_previous_issue socket
+          "." -> select_next_issue socket
           _ -> socket
         end  
       state.search.issue_search_active or state.search.context_search_active ->
@@ -528,7 +528,7 @@ defmodule CometoidWeb.IssueLive.Index do
       or (selected_issue.id not in (Enum.map issues, &(&1.id))))
   end
 
-  defp handle_suggestion_back %{ assigns: %{ state: state }} = socket do
+  defp select_previous_issue %{ assigns: %{ state: state }} = socket do
     selected_issue = if is_selected_issue_in_issues? state do
         get_previous_issue state, selected_issue_index state
       else
@@ -538,7 +538,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(:selected_issue, selected_issue)
   end
 
-  defp handle_suggestion_forward %{ assigns: %{ state: state }} = socket do
+  defp select_next_issue %{ assigns: %{ state: state }} = socket do
     selected_issue = if is_selected_issue_in_issues? state do
         get_next_issue state, selected_issue_index state
       else
