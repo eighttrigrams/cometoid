@@ -1,6 +1,8 @@
 defmodule CometoidWeb.IssueLive.Index do
   use CometoidWeb.IssueLive.WrapHandle
 
+  import CometoidWeb.IssueLive.KeysNav
+
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.People
   alias Cometoid.Model.People.Person
@@ -114,15 +116,15 @@ defmodule CometoidWeb.IssueLive.Index do
       modifiers == MapSet.new([:ctrl]) ->
         case key do 
           "," -> if context_search_active do
-            select_previous_context socket
-          else
-            select_previous_issue socket
-          end
+              select_previous_context socket
+            else
+              select_previous_issue socket
+            end
           "." -> if context_search_active do
-            select_next_context socket
-          else
-            select_next_issue socket
-          end
+              select_next_context socket
+            else
+              select_next_issue socket
+            end
           _ -> socket
         end  
       issue_search_active or context_search_active ->
@@ -513,61 +515,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
-  defp selected_issue_index %{ selected_issue: selected_issue, issues: issues } do
-    {_item, index} = issues
-      |> Enum.with_index()
-      |> Enum.find(fn {%{id: id}, _index} -> id == selected_issue.id end)
-    index
-  end
-
-  # TODO possibly remove duplication with selected_issue_index
-  defp selected_context_index %{ selected_context: selected_context, contexts: contexts } do
-    {_item, index} = contexts
-      |> Enum.with_index()
-      |> Enum.find(fn {%{id: id}, _index} -> id == selected_context.id end)
-    index
-  end
-
-  defp get_previous_issue %{ selected_issue: selected_issue, issues: issues }, index do
-    if index - 1 >= 0 do
-      Enum.at issues, index - 1
-    else
-      selected_issue
-    end
-  end
-
-  defp get_next_issue %{ selected_issue: selected_issue, issues: issues }, index do
-    if index + 1 < length issues do
-      Enum.at issues, index + 1
-    else
-      selected_issue
-    end
-  end
-  
-  # TODO possibly remove duplication with get_next_issue
-
-  defp get_previous_context %{ selected_context: selected_context, contexts: contexts }, index do
-    if index - 1 >= 0 do
-      Enum.at contexts, index - 1
-    else
-      selected_context
-    end
-  end
-
-  defp get_next_context %{ selected_context: selected_context, contexts: contexts }, index do
-    if index + 1 < length contexts do
-      Enum.at contexts, index + 1
-    else
-      selected_context
-    end
-  end
-
-  defp is_selected_issue_in_issues? %{ selected_issue: selected_issue, issues: issues } do
-    not (is_nil(selected_issue) 
-      or (selected_issue.id not in (Enum.map issues, &(&1.id))))
-  end
-
-  defp select_previous_context %{ assigns: %{ state: state }} = socket do
+  def select_previous_context %{ assigns: %{ state: state }} = socket do
     selected_context = if state.selected_context do
         get_previous_context state, selected_context_index state
       else
@@ -580,7 +528,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end  
 
-  defp select_next_context %{ assigns: %{ state: state }} = socket do
+  def select_next_context %{ assigns: %{ state: state }} = socket do
     selected_context = if state.selected_context do
         get_next_context state, selected_context_index state
       else
@@ -592,7 +540,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
-  defp select_previous_issue %{ assigns: %{ state: state }} = socket do
+  def select_previous_issue %{ assigns: %{ state: state }} = socket do
     selected_issue = if is_selected_issue_in_issues? state do
         get_previous_issue state, selected_issue_index state
       else
@@ -602,7 +550,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(:selected_issue, selected_issue)
   end
 
-  defp select_next_issue %{ assigns: %{ state: state }} = socket do
+  def select_next_issue %{ assigns: %{ state: state }} = socket do
     selected_issue = if is_selected_issue_in_issues? state do
         get_next_issue state, selected_issue_index state
       else
