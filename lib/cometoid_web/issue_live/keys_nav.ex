@@ -1,18 +1,48 @@
 defmodule CometoidWeb.IssueLive.KeysNav do
   
+  def get_next_issue %{ selected_issue: selected_issue, issues: issues } = state do
+    if is_selected_issue_in_issues? state do
+      index = selected_index selected_issue, issues
+      get_next index, issues
+    else
+      List.first state.issues
+    end
+  end
+  
+  def get_previous_issue %{ selected_issue: selected_issue, issues: issues } = state do
+    if is_selected_issue_in_issues? state do
+      index = selected_index selected_issue, issues
+      get_previous index, issues
+    else
+      nil
+    end
+  end
+
+  def get_previous_context %{ contexts: contexts, selected_context: selected_context } do
+    index = selected_index selected_context, contexts
+    get_previous index, contexts
+  end
+
+  def get_next_context %{ selected_context: selected_context, contexts: contexts } = state do
+    if state.selected_context do
+      index = selected_index selected_context, contexts
+      get_next index, contexts
+    else
+      # TODO implement case where empty
+      List.first contexts
+    end
+  end
+
+  defp is_selected_issue_in_issues? %{ selected_issue: selected_issue, issues: issues } do
+    not (is_nil(selected_issue) 
+      or (selected_issue.id not in (Enum.map issues, &(&1.id))))
+  end
+
   defp selected_index item, items do
     {_item, index} = items
       |> Enum.with_index()
       |> Enum.find(fn {%{id: id}, _index} -> id == item.id end)
     index
-  end
-
-  def selected_issue_index %{ selected_issue: selected_issue, issues: issues } do
-    selected_index selected_issue, issues
-  end
-
-  def selected_context_index %{ selected_context: selected_context, contexts: contexts } do
-    selected_index selected_context, contexts
   end
 
   defp get_next index, items do
@@ -29,26 +59,5 @@ defmodule CometoidWeb.IssueLive.KeysNav do
     else
       Enum.at items, index
     end
-  end
-
-  def get_next_issue %{ issues: issues }, index do
-    get_next index, issues
-  end
-  
-  def get_previous_issue %{ issues: issues }, index do
-    get_previous index, issues
-  end
-
-  def get_previous_context %{ contexts: contexts }, index do
-    get_previous index, contexts
-  end
-
-  def get_next_context %{ contexts: contexts }, index do
-    get_next index, contexts
-  end
-
-  def is_selected_issue_in_issues? %{ selected_issue: selected_issue, issues: issues } do
-    not (is_nil(selected_issue) 
-      or (selected_issue.id not in (Enum.map issues, &(&1.id))))
   end
 end

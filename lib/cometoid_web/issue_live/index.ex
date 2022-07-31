@@ -517,7 +517,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def select_previous_context %{ assigns: %{ state: state }} = socket do
     selected_context = if state.selected_context do
-        get_previous_context state, selected_context_index state
+        get_previous_context state
       else
         # TODO implement case where empty
         nil
@@ -529,33 +529,20 @@ defmodule CometoidWeb.IssueLive.Index do
   end  
 
   def select_next_context %{ assigns: %{ state: state }} = socket do
-    selected_context = if state.selected_context do
-        get_next_context state, selected_context_index state
-      else
-        # TODO implement case where empty
-        List.first state.contexts
-      end
+    selected_context = get_next_context state
     socket
     |> assign_state(:selected_context, selected_context)
     |> refresh_issues
   end
 
   def select_previous_issue %{ assigns: %{ state: state }} = socket do
-    selected_issue = if is_selected_issue_in_issues? state do
-        get_previous_issue state, selected_issue_index state
-      else
-        nil
-      end
+    selected_issue = get_previous_issue state
     socket
     |> assign_state(:selected_issue, selected_issue)
   end
 
   def select_next_issue %{ assigns: %{ state: state }} = socket do
-    selected_issue = if is_selected_issue_in_issues? state do
-        get_next_issue state, selected_issue_index state
-      else
-        List.first state.issues
-      end
+    selected_issue = get_next_issue state
     socket
     |> assign_state(:selected_issue, selected_issue)
   end
