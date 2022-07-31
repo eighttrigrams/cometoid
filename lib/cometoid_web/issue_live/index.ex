@@ -67,6 +67,10 @@ defmodule CometoidWeb.IssueLive.Index do
     handle_confirm_issue_search socket
   end
 
+  def handle_info {:select_context}, socket do
+    handle_confirm_context_search socket
+  end
+
   def handle_info {:search_issues, :q, q}, socket do
     socket
     |> assign_state([:search, :q], q)
@@ -512,6 +516,28 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state([:search, :issue_search_active], false)
     |> assign_state([:search, :q], "")
     |> refresh_issues
+  end
+
+  # TODO remove duplication with handle_confirm_issue_search
+  defp handle_confirm_context_search %{ assigns: %{ state: state }} = socket do
+    if (length socket.assigns.state.contexts) != 0 do
+      selected_context = case (length socket.assigns.state.contexts) do
+          0 -> nil
+          1 -> List.first socket.assigns.state.contexts
+          _ -> socket.assigns.state.selected_context
+        end
+
+      socket
+      |> assign_state(:selected_context, selected_context)
+      |> push_event(:context_refocus, %{ id: selected_context.id })
+    else
+      socket
+      |> assign_state(:selected_context, state.search.previously_selected_context)
+    end
+    |> assign_state([:search, :context_search_active], false)
+    |> assign_state([:search, :q], "")
+    |> refresh_contexts
+    |> refresh_issues # TODO review
   end
 
   defp handle_quit_search %{ assigns: %{ state: state }} = socket do

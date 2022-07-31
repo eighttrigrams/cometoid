@@ -28,11 +28,10 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
     |> return_noreply
   end
 
-  # TODO review
   def handle_event "select", _, socket do
-    if 1 == length socket.assigns.state.contexts do
-      send self(), {:select_context, (List.first socket.assigns.state.contexts).id}
-    end
+
+    send self(), {:select_context}
+    
     socket
     |> return_noreply
   end
