@@ -34,7 +34,7 @@ defmodule CometoidWeb.IssueLive.Index do
         issue_search_active: false,
         previously_selected_issue: nil
       },
-      control_pressed: false, # TODO pull up to assigns
+      modifiers: MapSet.new(),  # TODO pull up to assigns
       list_issues_done_instead_open: false,
       sort_issues_alphabetically: false,
       selected_secondary_contexts: [],
@@ -98,7 +98,7 @@ defmodule CometoidWeb.IssueLive.Index do
       %{ 
         modal: nil, 
         state: %{
-          control_pressed: control_pressed,
+          modifiers: modifiers,
           search: %{
             context_search_active: context_search_active,
             issue_search_active: issue_search_active
@@ -110,7 +110,8 @@ defmodule CometoidWeb.IssueLive.Index do
     cond do
       key == "Control" ->
         assign_state socket, :control_pressed, true
-      state.control_pressed ->
+        assign_state socket, :modifiers, MapSet.put(modifiers, :ctrl)
+      modifiers == MapSet.new([:ctrl]) ->
         case key do 
           "," -> if context_search_active do
             select_previous_context socket
@@ -183,7 +184,7 @@ defmodule CometoidWeb.IssueLive.Index do
     case key do
       "Control" ->
         socket
-        |> assign_state(:control_pressed, false)
+        |> assign_state(:modifiers, MapSet.new())
       "h" ->
         if state.selected_context && modal == :filter_secondary_contexts do
           socket

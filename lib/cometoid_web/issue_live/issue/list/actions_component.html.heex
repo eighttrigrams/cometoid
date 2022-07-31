@@ -1,4 +1,4 @@
-<td class={"actions #{if not @state.control_pressed, do: 'control-not-pressed'}"} 
+<td class={"actions #{if @state.modifiers == MapSet.new(), do: 'control-not-pressed'}"} 
     phx-hook="IssueActionsHook"
     id={"issue-list-actions-component-el-#{@issue.id}"}>
 

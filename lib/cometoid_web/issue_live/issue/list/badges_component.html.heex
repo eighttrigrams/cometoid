@@ -1,4 +1,4 @@
-<td class={"contexts #{if not @state.control_pressed, do: 'control-not-pressed'}"}>
+<td class={"contexts #{if @state.modifiers == MapSet.new(), do: 'control-not-pressed'}"}>
 
     <%= if @issue.event do %>
     <span class="contexts-background-color regular-color">
