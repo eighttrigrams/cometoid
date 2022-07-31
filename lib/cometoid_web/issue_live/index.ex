@@ -515,6 +515,8 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
+  # TODO refactor; the following four function should be eliminated. refresh_issues should always be called and decide on its own if it is really necessary to refresh. or maybe even that is not necessary.
+
   def select_previous_context %{ assigns: %{ state: state }} = socket do
     selected_context = if state.selected_context do
         get_previous_context state
