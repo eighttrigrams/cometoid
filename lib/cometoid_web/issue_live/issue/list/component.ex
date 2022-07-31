@@ -30,7 +30,7 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
   @impl true
   def handle_event "changes", %{ "issue_search" => %{ "q" => q }}, socket do
 
-    send self(), {:q, q}
+    send self(), {:search_issues, :q, q}
     
     socket
     |> assign(:q, q)

@@ -22,6 +22,15 @@ defmodule Cometoid.Repo.Tracker do
     |> do_context_preload
   end
 
+  def list_contexts view, q do
+    Context
+    |> where([c], c.view == ^view)
+    |> where([c], like(c.title, ^("#{q}%")))
+    |> order_by([c], [{:desc, c.important}, {:desc, c.updated_at}])
+    |> Repo.all
+    |> do_context_preload
+  end
+
   def get_context! id do
     Repo.get!(Context, id)
     |> do_context_preload

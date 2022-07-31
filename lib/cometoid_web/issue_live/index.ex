@@ -34,7 +34,8 @@ defmodule CometoidWeb.IssueLive.Index do
         q: "",
         context_search_active: false,
         issue_search_active: false,
-        previously_selected_issue: nil
+        previously_selected_issue: nil,
+        previously_selected_context: nil
       },
       modifiers: MapSet.new(),  # TODO pull up to assigns
       list_issues_done_instead_open: false,
@@ -66,10 +67,16 @@ defmodule CometoidWeb.IssueLive.Index do
     handle_confirm_issue_search socket
   end
 
-  def handle_info {:q, q}, socket do
+  def handle_info {:search_isses, :q, q}, socket do
     socket
     |> assign_state([:search, :q], q)
     |> refresh_issues
+  end
+
+  def handle_info {:search_contexts, :q, q}, socket do
+    socket
+    |> assign_state([:search, :q], q)
+    |> refresh_contexts # TODO refresh_issues, too
   end
 
   def handle_info {:select_secondary_contexts, selected_secondary_contexts}, socket do
@@ -111,7 +118,6 @@ defmodule CometoidWeb.IssueLive.Index do
 
     cond do
       key == "Control" ->
-        assign_state socket, :control_pressed, true
         assign_state socket, :modifiers, MapSet.put(modifiers, :ctrl)
       modifiers == MapSet.new([:ctrl]) ->
         case key do 
@@ -165,7 +171,9 @@ defmodule CometoidWeb.IssueLive.Index do
               true -> socket
             end
           "c" ->
-            socket |> assign_state([:search, :context_search_active], true)
+            socket 
+            |> assign_state([:search, :context_search_active], true)
+            |> assign_state([:search, :previously_selected_context], state.selected_context)
           "i" ->
             socket
             |> assign_state([:search, :issue_search_active], true)
@@ -512,7 +520,9 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state([:search, :issue_search_active], false)
     |> assign_state([:search, :q], "")
     |> assign_state(:selected_issue, state.search.previously_selected_issue)
+    |> assign_state(:selected_context, state.search.previously_selected_context)
     |> refresh_issues
+    |> refresh_contexts
   end
 
   def select_previous_context %{ assigns: %{ state: state }} = socket do
@@ -555,6 +565,20 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign(:modal, nil)
   end
 
+  defp refresh_contexts %{ assigns: %{ state: state }} = socket do
+    contexts = Tracker.list_contexts state.view, state.search.q
+
+    selected_context = if not is_nil(state.selected_context) 
+      and state.selected_context.id in (Enum.map contexts, &(&1.id)) do
+      
+        state.selected_context
+      end
+
+    socket
+    |> assign_state(:contexts, contexts)
+    |> assign_state(:selected_context, selected_context)
+  end
+
   defp select_context %{ assigns: %{ state: state }} = socket, id do
     socket
     |> assign_state(IssuesMachine.select_context state, id)
@@ -568,6 +592,7 @@ defmodule CometoidWeb.IssueLive.Index do
       socket
     end
     |> assign_state(IssuesMachine.select_context state, id)
+    |> refresh_contexts # TODO REVIEW !
   end
 
   defp reload_changed_context %{ assigns: %{ state: state }} = socket, context_id do
@@ -593,16 +618,6 @@ defmodule CometoidWeb.IssueLive.Index do
     IssuesMachine.delete_issue state, id
     socket
   end
-
-  # defp reprioritize_context socket do
-    # state = to_state socket
-    # unless is_nil state.selected_context do
-      # socket
-      # |> push_event(:context_refocus, %{ id: state.selected_context.id })
-    # else
-      # socket
-    # end
-  # end
 
   ## ECTO
 

@@ -12,6 +12,8 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
     |> return_ok
   end
 
+  # TODO get rid of filtered_contexts
+
   @impl true
   def update assigns, socket do
     socket
@@ -23,9 +25,10 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
 
   @impl true
   def handle_event "changes", %{ "context_search" => %{ "q" => q }}, socket do
+
+    send self(), {:search_contexts, :q, q}
+    
     socket
-    |> assign(:q, q)
-    |> assign(:filtered_contexts, (Enum.filter socket.assigns.state.contexts, &(should_show? &1, q)))
     |> return_noreply
   end
 
@@ -35,33 +38,5 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
     end
     socket
     |> return_noreply
-  end
-
-  defp should_show? context, q do
-    search_matches? context, q
-  end
-
-  defp search_matches? %{title: title, short_title: short_title, tags: tags}, q do
-    short_title = String.downcase(short_title || "")
-    tags = String.downcase(tags)
-
-    tokenized =
-      (
-        title
-        |> Helpers.demarkdownify
-        |> String.downcase
-        |> String.split(" ")
-      ) 
-      ++ String.split(short_title, " ")
-      ++ String.split(tags, " ")
-
-    qs = q
-      |> String.downcase
-      |> String.split(" ")
-      |> Enum.filter(&(&1 != ""))
-
-    Enum.reduce qs, true, fn q, acc ->
-      acc && !is_nil(Enum.find tokenized, &(String.starts_with? &1, q))
-    end
   end
 end

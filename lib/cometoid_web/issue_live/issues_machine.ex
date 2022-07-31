@@ -119,6 +119,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
         context_search_active: false,
         issue_search_active: false,
         previously_selected_issue: nil,
+        previously_selected_context: nil
       },
       selected_secondary_contexts: []
     }}
