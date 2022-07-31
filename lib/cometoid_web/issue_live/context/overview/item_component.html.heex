@@ -1,5 +1,5 @@
 <div id={"context-#{@context.id}"} phx-hook="ContextItemHook" 
-      class={"list-item regular-color #{get_highlight @context, @filtered_contexts, @state}"} 
+      class={"list-item regular-color #{get_highlight @context, @state.contexts, @state}"} 
       phx-click="select_context" 
       phx-value-id={@context.id}>
 

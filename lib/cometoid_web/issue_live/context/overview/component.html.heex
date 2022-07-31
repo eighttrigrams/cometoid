@@ -9,10 +9,9 @@
 
   <div id="contexts-list" 
        class={"list-base #{if @state.search.context_search_active do "searchbar-included" end}"}>
-    <%= for context <- @filtered_contexts do %>
+    <%= for context <- @state.contexts do %>
       <%= live_component ItemComponent, 
         context: context, 
-        filtered_contexts: @filtered_contexts, 
         state: @state %>
     <% end %>
   </div>

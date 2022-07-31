@@ -8,18 +8,14 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
   def mount socket do
     socket
     |> assign(:q, "")
-    |> assign(:filtered_contexts, [])
     |> return_ok
   end
-
-  # TODO get rid of filtered_contexts
 
   @impl true
   def update assigns, socket do
     socket
     |> assign(assigns)
     |> assign(:q, "")
-    |> assign(:filtered_contexts, assigns.state.contexts)
     |> return_ok
   end
 
@@ -32,9 +28,10 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
     |> return_noreply
   end
 
+  # TODO review
   def handle_event "select", _, socket do
-    if 1 == length socket.assigns.filtered_contexts do
-      send self(), {:select_context, (List.first socket.assigns.filtered_contexts).id}
+    if 1 == length socket.assigns.state.contexts do
+      send self(), {:select_context, (List.first socket.assigns.state.contexts).id}
     end
     socket
     |> return_noreply
