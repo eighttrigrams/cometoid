@@ -22,10 +22,29 @@ defmodule Cometoid.Repo.Tracker do
     |> do_context_preload
   end
 
+  # TODO review, deduplicate with
+  def search1 contexts_query, q do
+
+    if q == "" do
+      contexts_query
+    else
+      q = q 
+        |> String.split(" ")
+        |> Enum.filter(&(&1 != ""))
+        |> Enum.map(&("#{&1}:*"))
+        |> Enum.join(" & ")
+      contexts_query
+        |> where(
+          [i,_,_],
+          fragment("? @@ to_tsquery('simple', ?)",
+            i.searchable, ^q))
+    end
+  end
+
   def list_contexts view, q do
     Context
     |> where([c], c.view == ^view)
-    |> where([c], like(c.title, ^("#{q}%")))
+    |> search1(q)
     |> order_by([c], [{:desc, c.important}, {:desc, c.updated_at}])
     |> Repo.all
     |> do_context_preload
