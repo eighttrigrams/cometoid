@@ -67,7 +67,7 @@ defmodule CometoidWeb.IssueLive.Index do
     handle_confirm_issue_search socket
   end
 
-  def handle_info {:search_isses, :q, q}, socket do
+  def handle_info {:search_issues, :q, q}, socket do
     socket
     |> assign_state([:search, :q], q)
     |> refresh_issues
