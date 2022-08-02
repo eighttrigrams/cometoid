@@ -205,6 +205,7 @@ defmodule Cometoid.Repo.Tracker do
     Context.changeset(context, attrs)
   end
 
+  # TODO remove, just pass state around
   defmodule Query do
     defstruct selected_context: nil, # required
       selected_issue: nil,
