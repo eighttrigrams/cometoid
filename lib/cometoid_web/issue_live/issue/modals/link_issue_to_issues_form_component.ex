@@ -9,7 +9,9 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
     state = assigns.state
 
     q = %{
+      search: %{ q: "" },
       selected_context: nil, # required
+      selected_issue: state.selected_issue,
       list_issues_done_instead_open: false,
       selected_view: state.selected_view,
       sort_issues_alphabetically: false
