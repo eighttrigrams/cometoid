@@ -366,6 +366,7 @@ defmodule Cometoid.Repo.Tracker do
   end
 
   def delete_issue(%Issue{} = issue) do
+    link_issues issue, []
     Repo.delete(issue)
   end
 
