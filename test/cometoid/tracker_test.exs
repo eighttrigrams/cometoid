@@ -48,7 +48,10 @@ defmodule Cometoid.TrackerTest do
       list_issues_done_instead_open: false,
       sort_issues_alphabetically: false,
       selected_view: "view1",
-      q: "ab"
+      selected_issue: nil,
+      search: %{
+        q: "ab"
+      }
     }
 
     issues = Tracker.list_issues query
@@ -67,7 +70,10 @@ defmodule Cometoid.TrackerTest do
       list_issues_done_instead_open: false,
       sort_issues_alphabetically: false,
       selected_view: "view1",
-      q: "ab"
+      selected_issue: nil,
+      search: %{
+        q: "ab"
+      }
     }
 
     issues = Tracker.list_issues query
@@ -86,7 +92,10 @@ defmodule Cometoid.TrackerTest do
       list_issues_done_instead_open: false,
       sort_issues_alphabetically: false,
       selected_view: "view1",
-      q: "ab aa"
+      selected_issue: nil,
+      search: %{
+        q: "ab aa"
+      }
     }
 
     issues = Tracker.list_issues query
