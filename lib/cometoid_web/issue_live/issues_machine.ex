@@ -168,10 +168,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   def convert_issue_to_context state, id do
-    context = Tracker.convert_issue_to_context id, state.selected_view
+    _context = Tracker.convert_issue_to_context id, state.selected_view
     contexts = load_contexts_for_view state
     {:refresh_issues, %{
-      # selected_context: context,
+      # selected_context: context, # TODO review
       contexts: contexts
     }}
   end

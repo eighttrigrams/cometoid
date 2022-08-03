@@ -36,7 +36,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: other_context }]
     }
     state = %{
-      q: "",
+      search: %{
+        q: ""
+      },
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false # TODO why do I need this?
@@ -65,7 +67,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: tag_context }]
     }
     state = %{
-      q: "",
+      search: %{
+        q: ""
+      },
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
@@ -88,20 +92,26 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       contexts: [%{ context: tag_context }]
     }
     state = %{
-      q: "",
+      search: %{
+        q: ""
+      },
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
 
     assert 1 = length Tracker.list_issues %Tracker.Query {
-      q: "",
+      search: %{
+        q: ""
+      },
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }
     IssuesMachine.delete_context state, tag_context.id
     assert 0 = length Tracker.list_issues %Tracker.Query {
-      q: "",
+      search: %{
+        q: ""
+      },
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }
@@ -123,7 +133,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: tag_context }]
     }
     state = %{
-      q: "",
+      search: %{
+        q: ""
+      },
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
@@ -151,13 +163,17 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: other_tag_context }]
     }
     state = %{
-      q: "",
+      search: %{
+        q: ""
+      },
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
     assert 1 == length Tracker.list_issues %Tracker.Query {
-      q: "",
+      search: %{
+        q: ""
+      },
       list_issues_done_instead_open: false,
       selected_view: "Software"
     }
@@ -193,7 +209,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                  %{ context: other_tag_context }]
     }
     state = %{
-      q: "",
+      search: %{
+        q: ""
+      },
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
@@ -220,7 +238,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       view: "Software"
     }
     state = %{
-      q: "",
+      qsearch: %{
+        q: ""
+      },
       selected_view: "Software",
       selected_issue: nil,
       sort_issues_alphabetically: 0,
@@ -278,7 +298,9 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       contexts: [%{ context: context }]
     }
     state = %{
-      q: "",
+      search: %{
+        q: ""
+      },
       selected_context: nil,
       selected_view: "Software",
       sort_issues_alphabetically: 0,

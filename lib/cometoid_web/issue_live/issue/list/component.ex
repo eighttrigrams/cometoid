@@ -1,7 +1,6 @@
 defmodule CometoidWeb.IssueLive.Issue.List.Component do
   use CometoidWeb, :live_component
 
-  alias CometoidWeb.Helpers
   alias CometoidWeb.IssueLive.Issue.List.ItemComponent
 
   @impl true
@@ -51,19 +50,6 @@ defmodule CometoidWeb.IssueLive.Issue.List.Component do
       |> push_event(:issue_refocus, %{ id: List.first(socket.assigns.state.issues).id })
     else
       socket
-    end
-  end
-
-  defp should_show? state, issue, q do
-
-    selected_secondary_contexts = state.selected_secondary_contexts
-
-    unless length(selected_secondary_contexts) > 0 do
-      true
-    else
-      issues_contexts = Enum.map issue.contexts, &(&1.context.id)
-      diff = selected_secondary_contexts -- issues_contexts
-      length(diff) == 0
     end
   end
 end
