@@ -116,6 +116,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       selected_issue: nil,
       search: %{
         q: "",
+        show_all_issues: false,
         context_search_active: false,
         issue_search_active: false,
         previously_selected_issue: nil,
@@ -225,9 +226,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   defp do_query_refresh_issues state do
-    query = %Tracker.Query{
+    query = %Tracker.Query{ # TODO pass state instead building a Query
       search: %{
-        q: state.search.q
+        q: state.search.q,
+        show_all_issues: state.search.show_all_issues
       },
       list_issues_done_instead_open: state.list_issues_done_instead_open,
       selected_context: state.selected_context,

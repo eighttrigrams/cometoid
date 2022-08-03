@@ -213,7 +213,8 @@ defmodule Cometoid.Repo.Tracker do
       selected_view: "",
       sort_issues_alphabetically: false,
       search: %{
-        q: ""
+        q: "",
+        show_all_issues: false
       }
   end
 
@@ -440,7 +441,8 @@ defmodule Cometoid.Repo.Tracker do
 
   defp where_type(query, %{
     search: %{
-      q: q
+      q: q,
+      show_all_issues: show_all_issues
     },
     selected_context: nil,
     selected_issue: selected_issue,
@@ -450,7 +452,7 @@ defmodule Cometoid.Repo.Tracker do
  
     selected_issue_id = if selected_issue do selected_issue.id else -1 end
 
-    if q == "" do
+    if q == "" and not show_all_issues do
       query
       |> where([i, _context_relation, context], (context.view == ^selected_view and
         (

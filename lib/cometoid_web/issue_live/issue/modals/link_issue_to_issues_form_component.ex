@@ -9,14 +9,20 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkIssueToIssuesFormComponent do
     state = assigns.state
 
     q = %{
-      search: %{ q: "" },
-      selected_context: nil, # required
-      selected_issue: state.selected_issue,
+      search: %{ 
+        q: "", 
+        show_all_issues: true 
+      },
+      selected_context: nil,
+      selected_issue: nil,
       list_issues_done_instead_open: false,
       selected_view: state.selected_view,
       sort_issues_alphabetically: false
     }
-    available_issues = Tracker.list_issues q
+    available_issues = 
+      q
+      |> Tracker.list_issues
+      |> Enum.filter(fn issue -> issue.id != state.selected_issue.id end)
 
     {:ok,
       socket

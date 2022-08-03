@@ -32,6 +32,7 @@ defmodule CometoidWeb.IssueLive.Index do
     state = %{
       search: %{
         q: "",
+        show_all_issues: false,
         context_search_active: false,
         issue_search_active: false,
         previously_selected_issue: nil,
