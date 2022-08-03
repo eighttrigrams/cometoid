@@ -181,6 +181,7 @@ defmodule CometoidWeb.IssueLive.Index do
           "i" ->
             socket
             |> assign_state([:search, :issue_search_active], true)
+            |> assign_state([:search, :previously_selected_context], state.selected_context)
             |> assign_state([:search, :previously_selected_issue], state.selected_issue)
           "d" ->
             handle_describe socket
@@ -541,6 +542,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp handle_quit_search %{ assigns: %{ state: state }} = socket do
+
     socket
     |> assign_state([:search, :context_search_active], false)
     |> assign_state([:search, :issue_search_active], false)
