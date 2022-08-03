@@ -37,6 +37,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       search: %{
+        show_all_issues: false,
         q: ""
       },
       selected_view: "Software",
@@ -68,7 +69,8 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       search: %{
-        q: ""
+        q: "",
+        show_all_issues: false
       },
       selected_view: "Software",
       sort_issues_alphabetically: 0,
@@ -93,16 +95,19 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       search: %{
-        q: ""
+        q: "",
+        show_all_issues: false
       },
       selected_view: "Software",
+      selected_issue: nil,
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false
     }
 
     assert 1 = length Tracker.list_issues %Tracker.Query {
       search: %{
-        q: ""
+        q: "",
+        show_all_issues: false
       },
       list_issues_done_instead_open: false,
       selected_view: "Software"
@@ -110,6 +115,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     IssuesMachine.delete_context state, tag_context.id
     assert 0 = length Tracker.list_issues %Tracker.Query {
       search: %{
+        show_all_issues: false,
         q: ""
       },
       list_issues_done_instead_open: false,
@@ -134,6 +140,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       search: %{
+        show_all_issues: false,
         q: ""
       },
       selected_view: "Software",
@@ -164,6 +171,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       search: %{
+        show_all_issues: false,
         q: ""
       },
       selected_view: "Software",
@@ -172,6 +180,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     assert 1 == length Tracker.list_issues %Tracker.Query {
       search: %{
+        show_all_issues: false,
         q: ""
       },
       list_issues_done_instead_open: false,
@@ -210,6 +219,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       search: %{
+        show_all_issues: false,
         q: ""
       },
       selected_view: "Software",
@@ -239,6 +249,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       qsearch: %{
+        show_all_issues: false,
         q: ""
       },
       selected_view: "Software",
@@ -299,9 +310,11 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     }
     state = %{
       search: %{
+        show_all_issues: false,
         q: ""
       },
       selected_context: nil,
+      selected_issue: nil,
       selected_view: "Software",
       sort_issues_alphabetically: 0,
       list_issues_done_instead_open: false

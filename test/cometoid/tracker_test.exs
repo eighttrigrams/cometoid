@@ -50,7 +50,8 @@ defmodule Cometoid.TrackerTest do
       selected_view: "view1",
       selected_issue: nil,
       search: %{
-        q: "ab"
+        q: "ab",
+        show_all_issues: false
       }
     }
 
@@ -72,7 +73,8 @@ defmodule Cometoid.TrackerTest do
       selected_view: "view1",
       selected_issue: nil,
       search: %{
-        q: "ab"
+        q: "ab",
+        show_all_issues: false
       }
     }
 
@@ -94,7 +96,8 @@ defmodule Cometoid.TrackerTest do
       selected_view: "view1",
       selected_issue: nil,
       search: %{
-        q: "ab aa"
+        q: "ab aa",
+        show_all_issues: false
       }
     }
 
