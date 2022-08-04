@@ -2,6 +2,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker
+  alias Cometoid.Repo.Tracker.Search
 
   def update assigns, socket do
     state = assigns.state
@@ -52,7 +53,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.LinkFormComponent do
 
   def list_contexts view do
     view
-      |> Tracker.list_contexts
+      |> Search.list_contexts
       |> Enum.map(fn context -> {context.title, Integer.to_string(context.id)} end)
   end
 

@@ -2,6 +2,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker
+  alias Cometoid.Repo.Tracker.Search
   import CometoidWeb.LiveHelpers
   import CometoidWeb.DateHelpers
   import CometoidWeb.DateFormHelpers
@@ -25,7 +26,7 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
     available_issues = 
       q
-      |> Tracker.list_issues
+      |> Search.list_issues
       |> Enum.filter(fn issue -> issue.id != state.selected_issue.id end)
 
     {issue_params, day_options} = init_params issue.event

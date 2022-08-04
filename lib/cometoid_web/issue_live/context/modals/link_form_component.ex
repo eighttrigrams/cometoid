@@ -2,6 +2,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
   use CometoidWeb, :live_component
 
   alias Cometoid.Repo.Tracker
+  alias Cometoid.Repo.Tracker.Search
   alias CometoidWeb.IssueLive.Context.Modals.LinkFormComponent
 
   def update assigns, socket do
@@ -29,7 +30,7 @@ defmodule CometoidWeb.IssueLive.Context.Modals.LinkFormComponent do
     contexts = state.contexts ++ if state.selected_view == "People" do
       []
     else
-      Tracker.list_contexts "People"
+      Search.list_contexts "People"
     end
     contexts
     |> Enum.filter(fn ctx -> ctx.id != state.selected_context.id end)

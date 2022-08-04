@@ -2,6 +2,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
   use Cometoid.RepoCase
 
   alias Cometoid.Repo.Tracker
+  alias Cometoid.Repo.Tracker.Search
   alias Cometoid.Model.Tracker.Context
   alias Cometoid.Model.Tracker.Issue
   alias CometoidWeb.IssueLive.IssuesMachine
@@ -46,11 +47,11 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         sort_issues_alphabetically: 0,
         list_issues_done_instead_open: false # TODO why do I need this?
       }
-      assert 2 == length Tracker.list_contexts "Software"
+      assert 2 == length Search.list_contexts "Software"
       IssuesMachine.delete_context state, context.id
-      assert 1 == length Tracker.list_contexts "Software"
+      assert 1 == length Search.list_contexts "Software"
 
-      issues = (List.first Tracker.list_contexts "Software").issues
+      issues = (List.first Search.list_contexts "Software").issues
       assert 1 == length issues
     end
 
@@ -80,7 +81,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       }
       IssuesMachine.delete_context state, context.id
 
-      issues = (List.first Tracker.list_contexts "Software").issues
+      issues = (List.first Search.list_contexts "Software").issues
       assert 0 == length issues
     end
 
@@ -106,7 +107,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         list_issues_done_instead_open: false
       }
 
-      assert 1 = length Tracker.list_issues %Tracker.Query {
+      assert 1 = length Search.list_issues %Search.Query {
         search: %{
           q: "",
           show_all_issues: false
@@ -115,7 +116,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         selected_view: "Software"
       }
       IssuesMachine.delete_context state, tag_context.id
-      assert 0 = length Tracker.list_issues %Tracker.Query {
+      assert 0 = length Search.list_issues %Search.Query {
         search: %{
           show_all_issues: false,
           q: ""
@@ -150,7 +151,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         list_issues_done_instead_open: false
       }
       IssuesMachine.delete_context state, tag_context.id
-      assert 1 == length (List.first Tracker.list_contexts "Software").issues
+      assert 1 == length (List.first Search.list_contexts "Software").issues
     end
 
     test "delete tag_context and remove issue also from other tag_context" do
@@ -180,7 +181,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         sort_issues_alphabetically: 0,
         list_issues_done_instead_open: false
       }
-      assert 1 == length Tracker.list_issues %Tracker.Query {
+      assert 1 == length Search.list_issues %Search.Query {
         search: %{
           show_all_issues: false,
           q: ""
@@ -189,7 +190,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         selected_view: "Software"
       }
       IssuesMachine.delete_context state, tag_context.id
-      assert 0 == length Tracker.list_issues %Tracker.Query {
+      assert 0 == length Search.list_issues %Search.Query {
         list_issues_done_instead_open: false,
         selected_view: "Software"
       }
@@ -229,12 +230,12 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         list_issues_done_instead_open: false
       }
 
-      assert 3 == length (List.first Tracker.list_issues %Tracker.Query {
+      assert 3 == length (List.first Search.list_issues %Search.Query {
         list_issues_done_instead_open: false,
         selected_view: "Software"
       }).contexts
       IssuesMachine.delete_context state, tag_context.id
-      assert 2 == length (List.first Tracker.list_issues %Tracker.Query {
+      assert 2 == length (List.first Search.list_issues %Search.Query {
           list_issues_done_instead_open: false,
           selected_view: "Software"
         }).contexts
@@ -258,12 +259,12 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         sort_issues_alphabetically: 0,
         list_issues_done_instead_open: false
       }
-      assert 2 == length Tracker.list_issues %Tracker.Query {
+      assert 2 == length Search.list_issues %Search.Query {
         list_issues_done_instead_open: false,
         selected_view: "Software"
       }
       IssuesMachine.delete_context state, context.id
-      assert 0 == length Tracker.list_issues %Tracker.Query {
+      assert 0 == length Search.list_issues %Search.Query {
         list_issues_done_instead_open: false,
         selected_view: "Software"
       }

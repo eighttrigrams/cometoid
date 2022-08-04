@@ -2,6 +2,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   use CometoidWeb.IssueLive.Machine
 
   alias Cometoid.Repo.Tracker
+  alias Cometoid.Repo.Tracker.Search
 
   def set_issue_properties(state, selected_issue \\ nil)
 
@@ -227,7 +228,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   defp do_query_refresh_issues state do
-    query = %Tracker.Query{ # TODO pass state instead building a Query
+    query = %Search.Query{ # TODO pass state instead building a Query
       search: %{
         q: state.search.q,
         show_all_issues: state.search.show_all_issues
@@ -238,7 +239,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
       selected_view: state.selected_view,
       sort_issues_alphabetically: state.sort_issues_alphabetically
     }
-    issues = Tracker.list_issues query
+    issues = Search.list_issues query
     %{ issues: issues }
   end
 
@@ -258,7 +259,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   defp load_contexts_for_view %{ selected_view: selected_view } = _state do
-    Tracker.list_contexts()
+    Search.list_contexts()
     |> Enum.filter(&(&1.view == selected_view))
   end
 end

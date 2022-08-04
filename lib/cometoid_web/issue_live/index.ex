@@ -4,6 +4,7 @@ defmodule CometoidWeb.IssueLive.Index do
   import CometoidWeb.IssueLive.KeysNav
 
   alias Cometoid.Repo.Tracker
+  alias Cometoid.Repo.Tracker.Search
   alias Cometoid.Repo.People
   alias Cometoid.Model.People.Person
   alias Cometoid.Model.Tracker.Issue
@@ -588,7 +589,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp refresh_contexts %{ assigns: %{ state: state }} = socket do
-    contexts = Tracker.list_contexts state.view, state.search.q
+    contexts = Search.list_contexts state.view, state.search.q
 
     selected_context = if not is_nil(state.selected_context) 
       and state.selected_context.id in (Enum.map contexts, &(&1.id)) do
