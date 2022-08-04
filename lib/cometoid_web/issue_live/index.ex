@@ -222,7 +222,6 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "delete_issue", %{ "id" => id }, socket do
     socket
     |> delete_issue(id)
-    |> refresh_issues
   end
 
   def handle_event "deselect_selected_contexts", _params, socket do
@@ -644,8 +643,9 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   defp delete_issue %{ assigns: %{ state: state }} = socket, id do
-    IssuesMachine.delete_issue state, id
+    state = IssuesMachine.delete_issue state, id
     socket
+    |> assign_state(state)
   end
 
   ## ECTO
