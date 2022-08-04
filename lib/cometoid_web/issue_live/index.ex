@@ -243,12 +243,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign(:modal, :link_issue)
   end
 
-  def handle_event "link_issue_to_issues", %{ "target" => id }, socket do
-    socket
-    |> set_selected_issue(id)
-    |> assign(:modal, :link_issue_to_issues)
-  end
-
   def handle_event "convert_issue_to_context", %{ "id" => id }, socket do
 
     id = to_int id

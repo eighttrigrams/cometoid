@@ -133,25 +133,6 @@ hooks.SaveHook = {
     document.removeEventListener("keydown", this.keyDownListener)
   }
 }
-hooks.IssuesToIssuesSaveHook = {
-  targetComponent: undefined,
-  controlPressed: false,
-  mounted() {
-    const ctrl = navigator.appVersion.indexOf("Mac") !== -1 ? "Meta" : "Control"
-    this.targetComponent = this.el.getAttribute("target")
-    const self = this;
-    document.addEventListener("keydown", function(e) {
-      if (e.key === ctrl) self.controlPressed = true
-      if (e.key === "s" && self.controlPressed) {
-        e.preventDefault()
-        self.pushEventTo(self.targetComponent, "save")
-      }
-    })
-    document.addEventListener("keyup", function(e) {
-      if (e.key === ctrl) self.controlPressed = false
-    })
-  }
-}
 hooks.SecondaryContextBadgeHook = {
     context_id: "",
     issue_id: "",
