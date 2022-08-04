@@ -240,7 +240,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         }).contexts
     end
 
-    test "delete context with issues connected to other issues in the same context" do
+    test "delete context with issues connected to other issues" do
       context = Repo.insert! %Context {
         title: "Project",
         view: "Software",
