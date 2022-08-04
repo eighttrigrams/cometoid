@@ -168,6 +168,7 @@ defmodule Cometoid.Repo.Tracker do
         |> Enum.map(&(&1.context.id))
 
       if context_ids == [context.id] do
+        link_issues issue, []
         Repo.delete issue
       end
     end
@@ -296,6 +297,11 @@ defmodule Cometoid.Repo.Tracker do
   def get_issue! id do
     Repo.get!(Issue, id)
     |> do_issues_preload
+  end
+
+  def create_issue! title, short_title, contexts do
+    {:ok, issue} = create_issue title, short_title, contexts
+    issue
   end
 
   def create_issue title, short_title, contexts do

@@ -21,221 +21,253 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
     assert new_state.selected_view == "Software"
   end
 
-  test "delete context and leave issue in other context" do
-    context = Repo.insert! %Context {
-      title: "Project",
-      view: "Software"
-    }
-    other_context = Repo.insert! %Context {
-      title: "Component",
-      view: "Software"
-    }
-    Repo.insert! %Issue {
-      title: "Issue",
-      contexts: [%{ context: context },
-                 %{ context: other_context }]
-    }
-    state = %{
-      search: %{
-        show_all_issues: false,
-        q: ""
-      },
-      selected_view: "Software",
-      sort_issues_alphabetically: 0,
-      list_issues_done_instead_open: false # TODO why do I need this?
-    }
-    assert 2 == length Tracker.list_contexts "Software"
-    IssuesMachine.delete_context state, context.id
-    assert 1 == length Tracker.list_contexts "Software"
+  describe "deletion" do
 
-    issues = (List.first Tracker.list_contexts "Software").issues
-    assert 1 == length issues
-  end
+    test "delete context and leave issue in other context" do
+      context = Repo.insert! %Context {
+        title: "Project",
+        view: "Software"
+      }
+      other_context = Repo.insert! %Context {
+        title: "Component",
+        view: "Software"
+      }
+      Repo.insert! %Issue {
+        title: "Issue",
+        contexts: [%{ context: context },
+                  %{ context: other_context }]
+      }
+      state = %{
+        search: %{
+          show_all_issues: false,
+          q: ""
+        },
+        selected_view: "Software",
+        sort_issues_alphabetically: 0,
+        list_issues_done_instead_open: false # TODO why do I need this?
+      }
+      assert 2 == length Tracker.list_contexts "Software"
+      IssuesMachine.delete_context state, context.id
+      assert 1 == length Tracker.list_contexts "Software"
 
-  test "delete context and remove issue from tag context" do
-    context = Repo.insert! %Context {
-      title: "Project",
-      view: "Software"
-    }
-    tag_context = Repo.insert! %Context {
-      title: "Task",
-      view: "Software",
-      is_tag?: true
-    }
-    Repo.insert! %Issue {
-      title: "Issue",
-      contexts: [%{ context: context },
-                 %{ context: tag_context }]
-    }
-    state = %{
-      search: %{
-        q: "",
-        show_all_issues: false
-      },
-      selected_view: "Software",
-      sort_issues_alphabetically: 0,
-      list_issues_done_instead_open: false
-    }
-    IssuesMachine.delete_context state, context.id
+      issues = (List.first Tracker.list_contexts "Software").issues
+      assert 1 == length issues
+    end
 
-    issues = (List.first Tracker.list_contexts "Software").issues
-    assert 0 == length issues
-  end
+    test "delete context and remove issue from tag context" do
+      context = Repo.insert! %Context {
+        title: "Project",
+        view: "Software"
+      }
+      tag_context = Repo.insert! %Context {
+        title: "Task",
+        view: "Software",
+        is_tag?: true
+      }
+      Repo.insert! %Issue {
+        title: "Issue",
+        contexts: [%{ context: context },
+                  %{ context: tag_context }]
+      }
+      state = %{
+        search: %{
+          q: "",
+          show_all_issues: false
+        },
+        selected_view: "Software",
+        sort_issues_alphabetically: 0,
+        list_issues_done_instead_open: false
+      }
+      IssuesMachine.delete_context state, context.id
 
-  test "delete tag_context" do
-    tag_context = Repo.insert! %Context {
-      title: "Task",
-      view: "Software",
-      is_tag?: true,
-      important: true
-    }
-    Repo.insert! %Issue {
-      title: "Issue",
-      contexts: [%{ context: tag_context }]
-    }
-    state = %{
-      search: %{
-        q: "",
-        show_all_issues: false
-      },
-      selected_view: "Software",
-      selected_issue: nil,
-      sort_issues_alphabetically: 0,
-      list_issues_done_instead_open: false
-    }
+      issues = (List.first Tracker.list_contexts "Software").issues
+      assert 0 == length issues
+    end
 
-    assert 1 = length Tracker.list_issues %Tracker.Query {
-      search: %{
-        q: "",
-        show_all_issues: false
-      },
-      list_issues_done_instead_open: false,
-      selected_view: "Software"
-    }
-    IssuesMachine.delete_context state, tag_context.id
-    assert 0 = length Tracker.list_issues %Tracker.Query {
-      search: %{
-        show_all_issues: false,
-        q: ""
-      },
-      list_issues_done_instead_open: false,
-      selected_view: "Software"
-    }
-  end
+    test "delete tag_context" do
+      tag_context = Repo.insert! %Context {
+        title: "Task",
+        view: "Software",
+        is_tag?: true,
+        important: true
+      }
+      Repo.insert! %Issue {
+        title: "Issue",
+        contexts: [%{ context: tag_context }]
+      }
+      state = %{
+        search: %{
+          q: "",
+          show_all_issues: false
+        },
+        selected_view: "Software",
+        selected_issue: nil,
+        sort_issues_alphabetically: 0,
+        list_issues_done_instead_open: false
+      }
 
-  test "delete tag_context and leave issue in other context" do
-    context = Repo.insert! %Context {
-      title: "Project",
-      view: "Software"
-    }
-    tag_context = Repo.insert! %Context {
-      title: "Task",
-      view: "Software",
-      is_tag?: true
-    }
-    Repo.insert! %Issue {
-      title: "Issue",
-      contexts: [%{ context: context },
-                 %{ context: tag_context }]
-    }
-    state = %{
-      search: %{
-        show_all_issues: false,
-        q: ""
-      },
-      selected_view: "Software",
-      sort_issues_alphabetically: 0,
-      list_issues_done_instead_open: false
-    }
-    IssuesMachine.delete_context state, tag_context.id
-    assert 1 == length (List.first Tracker.list_contexts "Software").issues
-  end
+      assert 1 = length Tracker.list_issues %Tracker.Query {
+        search: %{
+          q: "",
+          show_all_issues: false
+        },
+        list_issues_done_instead_open: false,
+        selected_view: "Software"
+      }
+      IssuesMachine.delete_context state, tag_context.id
+      assert 0 = length Tracker.list_issues %Tracker.Query {
+        search: %{
+          show_all_issues: false,
+          q: ""
+        },
+        list_issues_done_instead_open: false,
+        selected_view: "Software"
+      }
+    end
 
-  test "delete tag_context and remove issue also from other tag_context" do
-    tag_context = Repo.insert! %Context {
-      title: "Task1",
-      view: "Software",
-      is_tag?: true,
-      important: true
-    }
-    other_tag_context = Repo.insert! %Context {
-      title: "Task2",
-      view: "Software",
-      is_tag?: true,
-      important: true
-    }
-    Repo.insert! %Issue {
-      title: "Issue",
-      contexts: [%{ context: tag_context },
-                 %{ context: other_tag_context }]
-    }
-    state = %{
-      search: %{
-        show_all_issues: false,
-        q: ""
-      },
-      selected_view: "Software",
-      sort_issues_alphabetically: 0,
-      list_issues_done_instead_open: false
-    }
-    assert 1 == length Tracker.list_issues %Tracker.Query {
-      search: %{
-        show_all_issues: false,
-        q: ""
-      },
-      list_issues_done_instead_open: false,
-      selected_view: "Software"
-    }
-    IssuesMachine.delete_context state, tag_context.id
-    assert 0 == length Tracker.list_issues %Tracker.Query {
-      list_issues_done_instead_open: false,
-      selected_view: "Software"
-    }
-  end
+    test "delete tag_context and leave issue in other context" do
+      context = Repo.insert! %Context {
+        title: "Project",
+        view: "Software"
+      }
+      tag_context = Repo.insert! %Context {
+        title: "Task",
+        view: "Software",
+        is_tag?: true
+      }
+      Repo.insert! %Issue {
+        title: "Issue",
+        contexts: [%{ context: context },
+                  %{ context: tag_context }]
+      }
+      state = %{
+        search: %{
+          show_all_issues: false,
+          q: ""
+        },
+        selected_view: "Software",
+        sort_issues_alphabetically: 0,
+        list_issues_done_instead_open: false
+      }
+      IssuesMachine.delete_context state, tag_context.id
+      assert 1 == length (List.first Tracker.list_contexts "Software").issues
+    end
 
-  test "delete tag_context when there is also another tag_context, but leave issue in yet another context" do
-    context = Repo.insert! %Context {
-      title: "Project",
-      view: "Software",
-      important: true
-    }
-    tag_context = Repo.insert! %Context {
-      title: "Task1",
-      view: "Software",
-      is_tag?: true,
-      important: true
-    }
-    other_tag_context = Repo.insert! %Context {
-      title: "Task2",
-      view: "Software",
-      is_tag?: true,
-      important: true
-    }
-    Repo.insert! %Issue {
-      title: "Issue",
-      contexts: [%{ context: context },
-                 %{ context: tag_context },
-                 %{ context: other_tag_context }]
-    }
-    state = %{
-      search: %{
-        show_all_issues: false,
-        q: ""
-      },
-      selected_view: "Software",
-      sort_issues_alphabetically: 0,
-      list_issues_done_instead_open: false
-    }
+    test "delete tag_context and remove issue also from other tag_context" do
+      tag_context = Repo.insert! %Context {
+        title: "Task1",
+        view: "Software",
+        is_tag?: true,
+        important: true
+      }
+      other_tag_context = Repo.insert! %Context {
+        title: "Task2",
+        view: "Software",
+        is_tag?: true,
+        important: true
+      }
+      Repo.insert! %Issue {
+        title: "Issue",
+        contexts: [%{ context: tag_context },
+                  %{ context: other_tag_context }]
+      }
+      state = %{
+        search: %{
+          show_all_issues: false,
+          q: ""
+        },
+        selected_view: "Software",
+        sort_issues_alphabetically: 0,
+        list_issues_done_instead_open: false
+      }
+      assert 1 == length Tracker.list_issues %Tracker.Query {
+        search: %{
+          show_all_issues: false,
+          q: ""
+        },
+        list_issues_done_instead_open: false,
+        selected_view: "Software"
+      }
+      IssuesMachine.delete_context state, tag_context.id
+      assert 0 == length Tracker.list_issues %Tracker.Query {
+        list_issues_done_instead_open: false,
+        selected_view: "Software"
+      }
+    end
 
-    assert 3 == length (List.first Tracker.list_issues %Tracker.Query {
-      list_issues_done_instead_open: false,
-      selected_view: "Software"
-    }).contexts
-    IssuesMachine.delete_context state, tag_context.id
-    assert 2 == length (List.first Tracker.list_issues %Tracker.Query {
+    test "delete tag_context when there is also another tag_context, but leave issue in yet another context" do
+      context = Repo.insert! %Context {
+        title: "Project",
+        view: "Software",
+        important: true
+      }
+      tag_context = Repo.insert! %Context {
+        title: "Task1",
+        view: "Software",
+        is_tag?: true,
+        important: true
+      }
+      other_tag_context = Repo.insert! %Context {
+        title: "Task2",
+        view: "Software",
+        is_tag?: true,
+        important: true
+      }
+      Repo.insert! %Issue {
+        title: "Issue",
+        contexts: [%{ context: context },
+                  %{ context: tag_context },
+                  %{ context: other_tag_context }]
+      }
+      state = %{
+        search: %{
+          show_all_issues: false,
+          q: ""
+        },
+        selected_view: "Software",
+        sort_issues_alphabetically: 0,
+        list_issues_done_instead_open: false
+      }
+
+      assert 3 == length (List.first Tracker.list_issues %Tracker.Query {
         list_issues_done_instead_open: false,
         selected_view: "Software"
       }).contexts
+      IssuesMachine.delete_context state, tag_context.id
+      assert 2 == length (List.first Tracker.list_issues %Tracker.Query {
+          list_issues_done_instead_open: false,
+          selected_view: "Software"
+        }).contexts
+    end
+
+    test "delete context with issues connected to other issues in the same context" do
+      context = Repo.insert! %Context {
+        title: "Project",
+        view: "Software",
+        important: true
+      }
+      issue1 = Tracker.create_issue! "Issue1", "", [context]
+      issue2 = Tracker.create_issue! "Issue2", "", [context]
+      Tracker.link_issues issue1, [issue2.id]
+      state = %{
+        search: %{
+          show_all_issues: false,
+          q: ""
+        },
+        selected_view: "Software",
+        sort_issues_alphabetically: 0,
+        list_issues_done_instead_open: false
+      }
+      assert 2 == length Tracker.list_issues %Tracker.Query {
+        list_issues_done_instead_open: false,
+        selected_view: "Software"
+      }
+      IssuesMachine.delete_context state, context.id
+      assert 0 == length Tracker.list_issues %Tracker.Query {
+        list_issues_done_instead_open: false,
+        selected_view: "Software"
+      }
+    end
   end
 
   test "previous context" do
