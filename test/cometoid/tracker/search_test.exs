@@ -30,20 +30,10 @@ defmodule Cometoid.Tracker.SearchTest do
       Tracker.create_issue "abd", "short title 2", [c1]
       Tracker.create_issue "acd", "short title 2", [c1]
 
-      # TODO use IssuesMachine.State
-      query = %{
-        selected_context: nil,
-        list_issues_done_instead_open: false,
-        sort_issues_alphabetically: false,
-        selected_view: "view1",
-        selected_issue: nil,
-        search: %{
-          q: "ab",
-          show_all_issues: false
-        }
-      }
-
-      issues = Search.list_issues query
+      state = (IssuesMachine.State.new "view1")
+        |> put_in([:search, :q], "ab")
+      
+      issues = Search.list_issues state
       assert (MapSet.new ["abc", "abd"]) 
         == MapSet.new Enum.map issues, &(&1.title)
     end 
@@ -54,19 +44,10 @@ defmodule Cometoid.Tracker.SearchTest do
       Tracker.create_issue "aaa", "abd", [c1]
       Tracker.create_issue "acd", "ace", [c1]
 
-      query = %{
-        selected_context: nil,
-        list_issues_done_instead_open: false,
-        sort_issues_alphabetically: false,
-        selected_view: "view1",
-        selected_issue: nil,
-        search: %{
-          q: "ab",
-          show_all_issues: false
-        }
-      }
+      state = (IssuesMachine.State.new "view1")
+        |> put_in([:search, :q], "ab")
 
-      issues = Search.list_issues query
+      issues = Search.list_issues state
       assert (MapSet.new ["abc", "aaa"]) 
         == MapSet.new Enum.map issues, &(&1.title)
     end 
@@ -77,19 +58,10 @@ defmodule Cometoid.Tracker.SearchTest do
       Tracker.create_issue "aaa", "", [c1]
       Tracker.create_issue "ccc", "", [c1]
 
-      query = %{
-        selected_context: nil,
-        list_issues_done_instead_open: false,
-        sort_issues_alphabetically: false,
-        selected_view: "view1",
-        selected_issue: nil,
-        search: %{
-          q: "ab aa",
-          show_all_issues: false
-        }
-      }
+      state = (IssuesMachine.State.new "view1")
+        |> put_in([:search, :q], "ab aa")
 
-      issues = Search.list_issues query
+      issues = Search.list_issues state
       assert (MapSet.new ["abc aaa"]) 
         == MapSet.new Enum.map issues, &(&1.title)
     end

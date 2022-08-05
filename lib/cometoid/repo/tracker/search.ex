@@ -19,21 +19,21 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> do_context_preload
   end
 
-  def list_issues query do
+  def list_issues state do
 
-    issues = load_issues query
+    issues = load_issues state
 
-    issues = if is_nil(query.selected_context) 
-      or is_nil(query.selected_context.search_mode) 
-      or query.selected_context.search_mode == 0 do
+    issues = if is_nil(state.selected_context) 
+      or is_nil(state.selected_context.search_mode) 
+      or state.selected_context.search_mode == 0 do
 
       issues
     else
-      sort_issues issues, query
+      sort_issues issues, state
     end
 
-    if query.selected_context do # TODO review decision logic of this function
-      filter_for_secondary_contexts issues, query
+    if state.selected_context do
+      filter_for_secondary_contexts issues, state
     else
       issues
     end
@@ -69,8 +69,8 @@ defmodule Cometoid.Repo.Tracker.Search do
     end
   end
 
-  defp filter_for_secondary_contexts issues, query do
-    Enum.filter issues, fn issue -> should_show? query, issue end
+  defp filter_for_secondary_contexts issues, state do
+    Enum.filter issues, fn issue -> should_show? state, issue end
   end
 
   defp load_issues query do

@@ -307,8 +307,8 @@ defmodule CometoidWeb.IssueLive.Index do
     |> push_event(:context_refocus, %{ id: state.selected_context.id })
   end
 
-  def handle_event "create_new_context", %{ "view" => view }, socket do # TODO why is view passed?
-
+  def handle_event "create_new_context", %{ "view" => view }, socket do
+    
     entity = case view do
       "People" -> %Person{}
       _ -> %Context{}
@@ -616,7 +616,7 @@ defmodule CometoidWeb.IssueLive.Index do
       socket
     end
     |> assign_state(IssuesMachine.select_context state, id)
-    |> refresh_contexts # TODO REVIEW !
+    |> refresh_contexts
   end
 
   defp reload_changed_context %{ assigns: %{ state: state }} = socket, context_id do

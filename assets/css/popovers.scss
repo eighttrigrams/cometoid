@@ -5,9 +5,6 @@
     input:focus {
         outline: none;
     }
-    // button {
-        // background-color: $bg-color; TODO
-    // }
 }
 
 #issue-description-modal-content {
@@ -34,7 +31,6 @@
             width: 600px;
             height: 100%;
                 
-            // TODO deduplicate, see #quote-form
             textarea::-webkit-scrollbar {
                 display: none;
             }

@@ -36,7 +36,7 @@ defmodule Cometoid.Model.People.Person do
     |> validate_required([:name])
   end
 
-  def delete_birthday_changeset person, attrs do # TODO review
+  def delete_birthday_changeset person, attrs do
     person
     |> cast(attrs, [:name, :description, :original_birthday, :use_birthday])
     |> cast_assoc(:context, with: &Tracker.Context.changeset/2)
