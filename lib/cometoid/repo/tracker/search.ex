@@ -1,6 +1,7 @@
 defmodule Cometoid.Repo.Tracker.Search do
 
   import Ecto.Query, warn: false
+  import Cometoid.Repo.Shared
   alias Cometoid.Repo
   alias Cometoid.Model.Tracker.Context
   alias Cometoid.Model.Tracker.Issue
@@ -46,14 +47,6 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> order_by([c], [{:desc, c.important}, {:desc, c.updated_at}])
     |> Repo.all
     |> do_context_preload
-  end
-
-  defp do_context_preload context do # TODO review; duplicate with &Tracker.do_context_preload/1
-    context
-    |> Repo.preload(person: :birthday)
-    |> Repo.preload(:text)
-    |> Repo.preload(issues: :issue)
-    |> Repo.preload(:secondary_contexts)
   end
 
   defp should_show? state, issue do
@@ -180,12 +173,5 @@ defmodule Cometoid.Repo.Tracker.Search do
     query
     |> where([i, _context_relation, context], context.id == ^selected_context.id
       and i.done == ^list_issues_done_instead_open)
-  end
-
-  defp do_issues_preload issue do
-    issue
-    |> Repo.preload(contexts: :context)
-    |> Repo.preload(:event)
-    |> Repo.preload(:issues)
   end
 end

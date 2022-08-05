@@ -4,6 +4,7 @@ defmodule Cometoid.Repo.Tracker do
   """
 
   import Ecto.Query, warn: false
+  import Cometoid.Repo.Shared
   alias Cometoid.Repo
   alias Cometoid.Repo.Tracker.Search
   alias Cometoid.Model.Tracker.Context
@@ -12,14 +13,6 @@ defmodule Cometoid.Repo.Tracker do
   def get_context! id do
     Repo.get!(Context, id)
     |> do_context_preload
-  end
-
-  def do_context_preload context do
-    context
-    |> Repo.preload(person: :birthday)
-    |> Repo.preload(:text)
-    |> Repo.preload(issues: :issue)
-    |> Repo.preload(:secondary_contexts)
   end
 
   def convert_issue_to_context id, view do
@@ -317,12 +310,5 @@ defmodule Cometoid.Repo.Tracker do
     Issue
     |> where([c], c.id in ^ids)
     |> Repo.all
-  end
-
-  defp do_issues_preload issue do
-    issue
-    |> Repo.preload(contexts: :context)
-    |> Repo.preload(:event)
-    |> Repo.preload(:issues)
   end
 end
