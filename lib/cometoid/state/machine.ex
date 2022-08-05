@@ -1,7 +1,7 @@
-defmodule CometoidWeb.IssueLive.Machine do
+defmodule Cometoid.State.Machine do
   defmacro __using__([]) do
     quote do
-      import CometoidWeb.IssueLive.Machine
+      import Cometoid.State.Machine
       import Kernel, except: [def: 2]
     end
   end

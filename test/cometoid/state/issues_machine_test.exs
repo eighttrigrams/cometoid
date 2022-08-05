@@ -5,7 +5,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
   alias Cometoid.Repo.Tracker.Search
   alias Cometoid.Model.Tracker.Context
   alias Cometoid.Model.Tracker.Issue
-  alias CometoidWeb.IssueLive.IssuesMachine
+  alias Cometoid.State.IssuesMachine
 
   test "reload contexts for view" do
     context = Repo.insert! %Context {

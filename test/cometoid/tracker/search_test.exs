@@ -3,7 +3,7 @@ defmodule Cometoid.Tracker.SearchTest do
 
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.Tracker.Search
-  alias CometoidWeb.IssueLive.IssuesMachine # TODO <- should be in Cometoid, not CometoidWeb
+  alias Cometoid.State.IssuesMachine
 
   def titles_set_from issues do # TODO use throughout tests
     MapSet.new Enum.map issues, &(&1.title)

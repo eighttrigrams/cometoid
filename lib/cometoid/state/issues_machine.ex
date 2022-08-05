@@ -1,4 +1,4 @@
-defmodule CometoidWeb.IssueLive.IssuesMachine do
+defmodule Cometoid.State.IssuesMachine do
 
   defmodule State do
     def new view do
@@ -16,11 +16,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
     end
   end
 
-  use CometoidWeb.IssueLive.Machine
+  use Cometoid.State.Machine
 
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.Tracker.Search
-  alias CometoidWeb.IssueLive.IssuesMachine.Stat
 
   def set_issue_properties(state, selected_issue \\ nil)
 

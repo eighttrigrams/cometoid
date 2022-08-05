@@ -9,9 +9,9 @@ defmodule CometoidWeb.IssueLive.Index do
   alias Cometoid.Model.People.Person
   alias Cometoid.Model.Tracker.Issue
   alias Cometoid.Model.Tracker.Context
+  alias Cometoid.State.IssuesMachine
   alias CometoidWeb.Theme
   alias CometoidWeb.IssueLive
-  alias CometoidWeb.IssueLive.IssuesMachine
 
   @impl true
   def mount _params, _session, socket do
