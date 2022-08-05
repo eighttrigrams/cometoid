@@ -89,6 +89,7 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(:selected_secondary_contexts, selected_secondary_contexts)
     |> assign(:modal, :keep)
+    |> refresh_issues
   end
 
   def handle_info {:after_edit_form_save, %{ context_id: context_id }}, socket do

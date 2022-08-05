@@ -23,13 +23,19 @@ defmodule Cometoid.Repo.Tracker.Search do
 
     issues = load_issues query
 
-    if is_nil(query.selected_context) 
+    issues = if is_nil(query.selected_context) 
       or is_nil(query.selected_context.search_mode) 
       or query.selected_context.search_mode == 0 do
 
       issues
     else
       sort_issues issues, query
+    end
+
+    if query.selected_context do # TODO review decision logic of this function
+      filter_for_secondary_contexts issues, query
+    else
+      issues
     end
   end
 
@@ -42,12 +48,29 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> do_context_preload
   end
 
-  def do_context_preload context do # TODO review; duplicate with &Tracker.do_context_preload/1
+  defp do_context_preload context do # TODO review; duplicate with &Tracker.do_context_preload/1
     context
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
     |> Repo.preload(issues: :issue)
     |> Repo.preload(:secondary_contexts)
+  end
+
+  defp should_show? state, issue do
+
+    selected_secondary_contexts = state.selected_secondary_contexts
+
+    unless length(selected_secondary_contexts) > 0 do
+      true
+    else
+      issues_contexts = Enum.map issue.contexts, &(&1.context.id)
+      diff = selected_secondary_contexts -- issues_contexts
+      length(diff) == 0
+    end
+  end
+
+  defp filter_for_secondary_contexts issues, query do
+    Enum.filter issues, fn issue -> should_show? query, issue end
   end
 
   defp load_issues query do
