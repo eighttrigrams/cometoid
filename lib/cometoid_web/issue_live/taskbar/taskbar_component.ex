@@ -6,7 +6,6 @@ defmodule CometoidWeb.IssueLive.Taskbar.TaskbarComponent do
   def get_contexts state do
     if state.selected_context do # TODO review
 
-      # TODO review possible duplication with taskbarcomponent
       state.selected_context.secondary_contexts
       |> Enum.map(fn ctx -> {ctx.id, ctx.title, ctx.short_title} end)
       |> Enum.filter(fn {id, _title, _short_title} -> id in state.selected_secondary_contexts end)
