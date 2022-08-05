@@ -8,9 +8,15 @@ defmodule Cometoid.State.IssuesMachine do
         selected_view: view,
         selected_issue: nil,
         selected_context: nil,
+        selected_contexts: [],
+        selected_secondary_contexts: [],
         search: %{
           q: "",
-          show_all_issues: false
+          show_all_issues: false,
+          context_search_active: false,
+          issue_search_active: false,
+          previously_selected_issue: nil,
+          previously_selected_context: nil
         }
       }
     end
@@ -128,31 +134,18 @@ defmodule Cometoid.State.IssuesMachine do
       end
       [] -> [selected_context.id]
     end
-    {:refresh_issues, %{
-      selected_context: selected_context,
-      selected_contexts: selected_contexts,
-      selected_issue: nil,
-      search: %{
-        q: "",
-        show_all_issues: false,
-        context_search_active: false,
-        issue_search_active: false,
-        previously_selected_issue: nil,
-        previously_selected_context: nil
-      },
-      selected_secondary_contexts: []
-    }}
+
+    state = (State.new state.selected_view)
+      |> put_in([:selected_context], selected_context)
+      |> put_in([:selected_contexts], selected_contexts)
+
+    {:refresh_issues, state}
   end
 
-  @doc """
-  TODO rename: it is used for jumping to context with (!) an issue
-
-  Call refresh_issues after this, to reload all issues for the current context                TODO
-  """
   def jump_to_context state, target_context_id, target_issue_id do
     target_issue = Tracker.get_issue! target_issue_id
     target_context = Tracker.get_context! target_context_id
-    selected_contexts = [target_context.id|state.selected_contexts] # TODO only do if we are in some context
+    selected_contexts = [target_context.id|state.selected_contexts]
     contexts = if target_context.view != state.selected_view do
       load_contexts_for_view Map.merge state, %{ selected_view: target_context.view }
     else
@@ -164,7 +157,6 @@ defmodule Cometoid.State.IssuesMachine do
         selected_contexts: selected_contexts,
         selected_issue: target_issue,
         control_pressed: false,
-        view: target_context.view, # TODO fix duplication with next line
         selected_view: target_context.view
     }}
   end
@@ -190,7 +182,6 @@ defmodule Cometoid.State.IssuesMachine do
     _context = Tracker.convert_issue_to_context id, state.selected_view
     contexts = load_contexts_for_view state
     {:refresh_issues, %{
-      # selected_context: context, # TODO review
       contexts: contexts
     }}
   end

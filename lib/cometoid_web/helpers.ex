@@ -3,7 +3,7 @@ defmodule CometoidWeb.Helpers do
   def markdownify nil do
     ""
   end
-  def markdownify raw do # TODO put this somewhere else
+  def markdownify raw do
     case Earmark.as_html raw do
       {:ok, html, _} -> html
       _ -> raw

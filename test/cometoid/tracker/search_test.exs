@@ -5,7 +5,7 @@ defmodule Cometoid.Tracker.SearchTest do
   alias Cometoid.Repo.Tracker.Search
   alias Cometoid.State.IssuesMachine
 
-  def titles_set_from issues do # TODO use throughout tests
+  def titles_set_from issues do
     MapSet.new Enum.map issues, &(&1.title)
   end
 
@@ -33,9 +33,8 @@ defmodule Cometoid.Tracker.SearchTest do
       state = (IssuesMachine.State.new "view1")
         |> put_in([:search, :q], "ab")
       
-      issues = Search.list_issues state
-      assert (MapSet.new ["abc", "abd"]) 
-        == MapSet.new Enum.map issues, &(&1.title)
+      issues = titles_set_from Search.list_issues state
+      assert (MapSet.new ["abc", "abd"]) == issues
     end 
 
     test "prefix search issues on short_title, too" do
@@ -47,9 +46,8 @@ defmodule Cometoid.Tracker.SearchTest do
       state = (IssuesMachine.State.new "view1")
         |> put_in([:search, :q], "ab")
 
-      issues = Search.list_issues state
-      assert (MapSet.new ["abc", "aaa"]) 
-        == MapSet.new Enum.map issues, &(&1.title)
+      issues = titles_set_from Search.list_issues state
+      assert (MapSet.new ["abc", "aaa"]) == issues
     end 
 
     test "multiple search terms (AND search)" do
@@ -61,9 +59,8 @@ defmodule Cometoid.Tracker.SearchTest do
       state = (IssuesMachine.State.new "view1")
         |> put_in([:search, :q], "ab aa")
 
-      issues = Search.list_issues state
-      assert (MapSet.new ["abc aaa"]) 
-        == MapSet.new Enum.map issues, &(&1.title)
+      issues = titles_set_from Search.list_issues state
+      assert (MapSet.new ["abc aaa"]) == issues
     end
   end
 end

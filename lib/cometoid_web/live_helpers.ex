@@ -6,7 +6,7 @@ defmodule CometoidWeb.LiveHelpers do
     live_component CometoidWeb.ModalComponent, modal_opts
   end
 
-  def return_noreply(socket), do: {:noreply, socket |> Map.delete(:flash) } # TODO review flash
+  def return_noreply(socket), do: {:noreply, socket |> Map.delete(:flash) }
 
   def return_ok(socket), do: {:ok, socket}
 

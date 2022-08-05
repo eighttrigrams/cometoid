@@ -28,25 +28,12 @@ defmodule CometoidWeb.IssueLive.Index do
   @impl true
   def handle_params params, _url, socket do
 
-    selected_view = get_selected_view params
-
-    state = %{
-      search: %{
-        q: "",
-        show_all_issues: false,
-        context_search_active: false,
-        issue_search_active: false,
-        previously_selected_issue: nil,
-        previously_selected_context: nil
-      },
-      modifiers: MapSet.new(),  # TODO pull up to assigns
-      list_issues_done_instead_open: false,
-      sort_issues_alphabetically: false,
-      selected_secondary_contexts: [],
-      selected_view: selected_view
-    }
-    state = IssuesMachine.init_context_properties state
-    state = IssuesMachine.set_issue_properties state 
+    state = params
+      |> get_selected_view
+      |> IssuesMachine.State.new
+      |> put_in([:modifiers], MapSet.new()) # TODO pull up to assigns
+      |> IssuesMachine.init_context_properties
+      |> IssuesMachine.set_issue_properties
 
     socket
     |> assign_state(state)
@@ -82,7 +69,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_info {:search_contexts, :q, q}, socket do
     socket
     |> assign_state([:search, :q], q)
-    |> refresh_contexts # TODO refresh_issues, too
+    |> refresh_contexts
   end
 
   def handle_info {:select_secondary_contexts, selected_secondary_contexts}, socket do
@@ -308,7 +295,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "create_new_context", %{ "view" => view }, socket do
-    
+
     entity = case view do
       "People" -> %Person{}
       _ -> %Context{}
@@ -534,7 +521,7 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state([:search, :context_search_active], false)
     |> assign_state([:search, :q], "")
     |> refresh_contexts
-    |> refresh_issues # TODO review
+    |> refresh_issues
   end
 
   defp handle_quit_search %{ assigns: %{ state: state }} = socket do
