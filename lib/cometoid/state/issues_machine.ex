@@ -4,7 +4,7 @@ defmodule Cometoid.State.IssuesMachine do
     def new view do
       %{
         list_issues_done_instead_open: false,
-        sort_issues_alphabetically: 0,
+        sort_issues_alphabetically: nil,
         selected_view: view,
         selected_issue: nil,
         selected_context: nil,

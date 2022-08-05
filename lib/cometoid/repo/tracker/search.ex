@@ -42,7 +42,7 @@ defmodule Cometoid.Repo.Tracker.Search do
   def list_contexts view, q do
     Context
     |> where([c], c.view == ^view)
-    |> search1(q)
+    |> search(q)
     |> order_by([c], [{:desc, c.important}, {:desc, c.updated_at}])
     |> Repo.all
     |> do_context_preload
@@ -79,7 +79,7 @@ defmodule Cometoid.Repo.Tracker.Search do
       |> join(:left, [i], context_relation in assoc(i, :contexts))
       |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
       |> where_type(query)
-      |> search(query)
+      |> search(query.search.q)
       |> order_issues(query)
 
     Repo.all(issues_query)
@@ -87,36 +87,17 @@ defmodule Cometoid.Repo.Tracker.Search do
       |> do_issues_preload
   end
 
-  defp search issues_query, query do
-
-    if query.search.q == "" do
-      issues_query
-    else
-      q = query.search.q 
-        |> String.split(" ")
-        |> Enum.filter(&(&1 != ""))
-        |> Enum.map(&("#{&1}:*"))
-        |> Enum.join(" & ")
-      issues_query
-        |> where(
-          [i,_,_],
-          fragment("? @@ to_tsquery('simple', ?)",
-            i.searchable, ^q))
-    end
-  end
-
-  # TODO review, deduplicate with search
-  defp search1 contexts_query, q do
+  defp search query, q do
 
     if q == "" do
-      contexts_query
+      query
     else
       q = q 
         |> String.split(" ")
         |> Enum.filter(&(&1 != ""))
         |> Enum.map(&("#{&1}:*"))
         |> Enum.join(" & ")
-      contexts_query
+      query
         |> where(
           [i,_,_],
           fragment("? @@ to_tsquery('simple', ?)",
@@ -199,18 +180,6 @@ defmodule Cometoid.Repo.Tracker.Search do
     query
     |> where([i, _context_relation, context], context.id == ^selected_context.id
       and i.done == ^list_issues_done_instead_open)
-  end
-
-  defp get_contexts_by_ids ids do
-    Context
-    |> where([c], c.id in ^ids)
-    |> Repo.all
-  end
-
-  defp get_issues_by_ids ids do
-    Issue
-    |> where([c], c.id in ^ids)
-    |> Repo.all
   end
 
   defp do_issues_preload issue do
