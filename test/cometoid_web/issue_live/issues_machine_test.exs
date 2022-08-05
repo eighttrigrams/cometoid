@@ -96,34 +96,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         title: "Issue",
         contexts: [%{ context: tag_context }]
       }
-      state = %{
-        search: %{
-          q: "",
-          show_all_issues: false
-        },
-        selected_view: "Software",
-        selected_issue: nil,
-        sort_issues_alphabetically: 0,
-        list_issues_done_instead_open: false
-      }
-
-      assert 1 = length Search.list_issues %Search.Query {
-        search: %{
-          q: "",
-          show_all_issues: false
-        },
-        list_issues_done_instead_open: false,
-        selected_view: "Software"
-      }
+      state = IssuesMachine.State.new "Software"
+      assert 1 = length Search.list_issues state
       IssuesMachine.delete_context state, tag_context.id
-      assert 0 = length Search.list_issues %Search.Query {
-        search: %{
-          show_all_issues: false,
-          q: ""
-        },
-        list_issues_done_instead_open: false,
-        selected_view: "Software"
-      }
+      assert 0 = length Search.list_issues state
     end
 
     test "delete tag_context and leave issue in other context" do
@@ -172,28 +148,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         contexts: [%{ context: tag_context },
                   %{ context: other_tag_context }]
       }
-      state = %{
-        search: %{
-          show_all_issues: false,
-          q: ""
-        },
-        selected_view: "Software",
-        sort_issues_alphabetically: 0,
-        list_issues_done_instead_open: false
-      }
-      assert 1 == length Search.list_issues %Search.Query {
-        search: %{
-          show_all_issues: false,
-          q: ""
-        },
-        list_issues_done_instead_open: false,
-        selected_view: "Software"
-      }
+      state = IssuesMachine.State.new "Software"
+      assert 1 == length Search.list_issues state
       IssuesMachine.delete_context state, tag_context.id
-      assert 0 == length Search.list_issues %Search.Query {
-        list_issues_done_instead_open: false,
-        selected_view: "Software"
-      }
+      assert 0 == length Search.list_issues state
     end
 
     test "delete tag_context when there is also another tag_context, but leave issue in yet another context" do
@@ -220,25 +178,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
                   %{ context: tag_context },
                   %{ context: other_tag_context }]
       }
-      state = %{
-        search: %{
-          show_all_issues: false,
-          q: ""
-        },
-        selected_view: "Software",
-        sort_issues_alphabetically: 0,
-        list_issues_done_instead_open: false
-      }
-
-      assert 3 == length (List.first Search.list_issues %Search.Query {
-        list_issues_done_instead_open: false,
-        selected_view: "Software"
-      }).contexts
+      state = IssuesMachine.State.new "Software"
+      assert 3 == length (List.first Search.list_issues state).contexts
       IssuesMachine.delete_context state, tag_context.id
-      assert 2 == length (List.first Search.list_issues %Search.Query {
-          list_issues_done_instead_open: false,
-          selected_view: "Software"
-        }).contexts
+      assert 2 == length (List.first Search.list_issues state).contexts
     end
 
     test "delete context with issues connected to other issues" do
@@ -250,24 +193,10 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
       issue1 = Tracker.create_issue! "Issue1", "", [context]
       issue2 = Tracker.create_issue! "Issue2", "", [context]
       Tracker.link_issues issue1, [issue2.id]
-      state = %{
-        search: %{
-          show_all_issues: false,
-          q: ""
-        },
-        selected_view: "Software",
-        sort_issues_alphabetically: 0,
-        list_issues_done_instead_open: false
-      }
-      assert 2 == length Search.list_issues %Search.Query {
-        list_issues_done_instead_open: false,
-        selected_view: "Software"
-      }
+      state = IssuesMachine.State.new "Software"
+      assert 2 == length Search.list_issues state
       IssuesMachine.delete_context state, context.id
-      assert 0 == length Search.list_issues %Search.Query {
-        list_issues_done_instead_open: false,
-        selected_view: "Software"
-      }
+      assert 0 == length Search.list_issues state
     end
   end
 

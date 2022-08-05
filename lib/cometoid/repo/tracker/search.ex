@@ -60,19 +60,6 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> Repo.preload(:secondary_contexts)
   end
 
-  # TODO remove, just pass state around
-  defmodule Query do
-    defstruct selected_context: nil, # required
-      selected_issue: nil,
-      list_issues_done_instead_open: false,
-      selected_view: "",
-      sort_issues_alphabetically: false,
-      search: %{
-        q: "",
-        show_all_issues: false
-      }
-  end
-
   def search issues_query, query do
 
     if query.search.q == "" do

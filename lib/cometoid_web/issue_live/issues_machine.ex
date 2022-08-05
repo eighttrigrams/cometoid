@@ -1,8 +1,26 @@
 defmodule CometoidWeb.IssueLive.IssuesMachine do
+
+  defmodule State do
+    def new view do
+      %{
+        list_issues_done_instead_open: false,
+        sort_issues_alphabetically: 0,
+        selected_view: view,
+        selected_issue: nil,
+        selected_context: nil,
+        search: %{
+          q: "",
+          show_all_issues: false
+        }
+      }
+    end
+  end
+
   use CometoidWeb.IssueLive.Machine
 
   alias Cometoid.Repo.Tracker
   alias Cometoid.Repo.Tracker.Search
+  alias CometoidWeb.IssueLive.IssuesMachine.Stat
 
   def set_issue_properties(state, selected_issue \\ nil)
 
@@ -228,18 +246,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachine do
   end
 
   defp do_query_refresh_issues state do
-    query = %Search.Query{ # TODO pass state instead building a Query
-      search: %{
-        q: state.search.q,
-        show_all_issues: state.search.show_all_issues
-      },
-      list_issues_done_instead_open: state.list_issues_done_instead_open,
-      selected_context: state.selected_context,
-      selected_issue: state.selected_issue,
-      selected_view: state.selected_view,
-      sort_issues_alphabetically: state.sort_issues_alphabetically
-    }
-    issues = Search.list_issues query
+    issues = Search.list_issues state
     %{ issues: issues }
   end
 
