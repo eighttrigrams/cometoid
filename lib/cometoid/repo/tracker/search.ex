@@ -19,22 +19,17 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> do_context_preload
   end
 
-  # TODO review, deduplicate with
-  def search1 contexts_query, q do
+  def list_issues query do
 
-    if q == "" do
-      contexts_query
+    issues = load_issues query
+
+    if is_nil(query.selected_context) 
+      or is_nil(query.selected_context.search_mode) 
+      or query.selected_context.search_mode == 0 do
+
+      issues
     else
-      q = q 
-        |> String.split(" ")
-        |> Enum.filter(&(&1 != ""))
-        |> Enum.map(&("#{&1}:*"))
-        |> Enum.join(" & ")
-      contexts_query
-        |> where(
-          [i,_,_],
-          fragment("? @@ to_tsquery('simple', ?)",
-            i.searchable, ^q))
+      sort_issues issues, query
     end
   end
 
@@ -47,12 +42,7 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> do_context_preload
   end
 
-  def get_context! id do
-    Repo.get!(Context, id)
-    |> do_context_preload
-  end
-
-  def do_context_preload context do
+  def do_context_preload context do # TODO review; duplicate with &Tracker.do_context_preload/1
     context
     |> Repo.preload(person: :birthday)
     |> Repo.preload(:text)
@@ -60,7 +50,21 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> Repo.preload(:secondary_contexts)
   end
 
-  def search issues_query, query do
+  defp load_issues query do
+    issues_query =
+      Issue
+      |> join(:left, [i], context_relation in assoc(i, :contexts))
+      |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
+      |> where_type(query)
+      |> search(query)
+      |> order_issues(query)
+
+    Repo.all(issues_query)
+      |> Enum.uniq #?
+      |> do_issues_preload
+  end
+
+  defp search issues_query, query do
 
     if query.search.q == "" do
       issues_query
@@ -78,21 +82,26 @@ defmodule Cometoid.Repo.Tracker.Search do
     end
   end
 
-  def load_issues query do
-    issues_query =
-      Issue
-      |> join(:left, [i], context_relation in assoc(i, :contexts))
-      |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
-      |> where_type(query)
-      |> search(query)
-      |> order_issues(query)
+  # TODO review, deduplicate with search
+  defp search1 contexts_query, q do
 
-    Repo.all(issues_query)
-      |> Enum.uniq #?
-      |> do_issues_preload
+    if q == "" do
+      contexts_query
+    else
+      q = q 
+        |> String.split(" ")
+        |> Enum.filter(&(&1 != ""))
+        |> Enum.map(&("#{&1}:*"))
+        |> Enum.join(" & ")
+      contexts_query
+        |> where(
+          [i,_,_],
+          fragment("? @@ to_tsquery('simple', ?)",
+            i.searchable, ^q))
+    end
   end
 
-  def sort_issues issues, query do
+  defp sort_issues issues, query do
     issues = issues
         |> Enum.filter(fn i -> not is_nil(i.short_title) end)
         |> Enum.map(fn i ->
@@ -118,20 +127,6 @@ defmodule Cometoid.Repo.Tracker.Search do
       non_numeric ++ numeric
     else
       numeric ++ non_numeric
-    end
-  end
-
-  def list_issues query do
-
-    issues = load_issues query
-
-    if is_nil(query.selected_context) 
-      or is_nil(query.selected_context.search_mode) 
-      or query.selected_context.search_mode == 0 do
-
-      issues
-    else
-      sort_issues issues, query
     end
   end
 
