@@ -31,7 +31,7 @@ defmodule CometoidWeb.IssueLive.Index do
     state = params
       |> get_selected_view
       |> IssuesMachine.State.new
-      |> put_in([:modifiers], MapSet.new()) # TODO pull up to assigns
+      |> put_in([:modifiers], MapSet.new())
       |> IssuesMachine.init_context_properties
       |> IssuesMachine.set_issue_properties
 
