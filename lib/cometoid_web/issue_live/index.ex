@@ -502,7 +502,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
-  # TODO remove duplication with handle_confirm_issue_search
   defp handle_confirm_context_search %{ assigns: %{ state: state }} = socket do
     if (length socket.assigns.state.contexts) != 0 do
       selected_context = case (length socket.assigns.state.contexts) do
@@ -537,12 +536,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def select_previous_context %{ assigns: %{ state: state }} = socket do
-    selected_context = if state.selected_context do
-        get_previous_context state
-      else
-        # TODO implement case where empty
-        nil
-      end
+    selected_context = get_previous_context state
     # TODO maybe reuse select_context_and_refocus
     socket
     |> assign_state(:selected_context, selected_context)

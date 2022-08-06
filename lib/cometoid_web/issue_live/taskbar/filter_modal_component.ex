@@ -25,8 +25,7 @@ defmodule CometoidWeb.IssueLive.Taskbar.FilterModalComponent do
 
       all_secondary_contexts
       |> Enum.map(fn ctx -> {ctx.id, ctx.title, ctx.short_title} end)
-      # TODO don't match by title
-      |> Enum.filter(fn {_id, title, _short_title} -> title != state.selected_context.title end)
+      |> Enum.filter(fn {id, _title, _short_title} -> id != state.selected_context.id end)
       |> Enum.sort_by(fn {id, _, _} -> id end)
     else
       []

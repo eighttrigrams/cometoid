@@ -20,7 +20,14 @@ defmodule CometoidWeb.IssueLive.KeysNav do
 
   def get_previous_context %{ contexts: contexts, selected_context: selected_context } do
     index = selected_index selected_context, contexts
-    get_previous index, contexts
+    previous_context = get_previous index, contexts
+
+    if selected_context do
+      previous_context
+    else
+      # TODO implement case where empty
+      nil
+    end
   end
 
   def get_next_context %{ selected_context: selected_context, contexts: contexts } = state do

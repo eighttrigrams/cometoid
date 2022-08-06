@@ -38,15 +38,7 @@ defmodule CometoidWeb.IssueLive.IssuesMachineTest do
         contexts: [%{ context: context },
                   %{ context: other_context }]
       }
-      state = %{
-        search: %{
-          show_all_issues: false,
-          q: ""
-        },
-        selected_view: "Software",
-        sort_issues_alphabetically: 0,
-        list_issues_done_instead_open: false # TODO why do I need this?
-      }
+      state = IssuesMachine.State.new "Software"
       assert 2 == length Search.list_contexts "Software"
       IssuesMachine.delete_context state, context.id
       assert 1 == length Search.list_contexts "Software"
