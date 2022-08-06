@@ -15,7 +15,7 @@ defmodule CometoidWeb.EventLive.Index do
     |> assign(:modal, nil)
     |> assign(Theme.get)
     |> assign_state(:show_archived, false)
-    |> assign_state(:view, "Events")
+    |> assign_state(:selected_view, "Events")
     |> refresh_issues
     |> return_ok
   end

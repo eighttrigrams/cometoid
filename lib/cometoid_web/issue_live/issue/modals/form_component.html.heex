@@ -63,41 +63,43 @@
     </div>
   </.form>
 
-  <b>Links:</b>
-  <br>
-  <br>
-
-  <%= if length(@issues) > 0 do %>
-    <div>
-      <ul>
-        <%= for issue <- @issues do %>
-          <li class="contexts-background-color" style="padding: 5px; height: 20px">
-            <%= issue.title %>
-            <span class="btn">
-              <a phx-click="unlink_issue" phx-target={@myself} phx-value-target={issue.id}>
-                <i class="bi bi-x-lg"></i>
-              </a>
-            </span>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <.form
-    for={:links}
-    let={f}
-    id="link-issues-to-issues-form"
-    phx-target={@myself}
-    phx-change="change"
-    phx-submit="add">
-
-    <%= text_input f, :filter, autocomplete: "off" %>
+  <%= if @view == :normal do %>
+    <b>Links:</b>
     <br>
-    <%= if length(@issues_to_display) > 0 do %>
-      <%= select f, :issue, convert_for_select(@issues_to_display, @issues) %>
-      <%= submit "Add", phx_disable_with: "Saving..." %>
+    <br>
+
+    <%= if length(@issues) > 0 do %>
+      <div>
+        <ul>
+          <%= for issue <- @issues do %>
+            <li class="contexts-background-color" style="padding: 5px; height: 20px">
+              <%= issue.title %>
+              <span class="btn">
+                <a phx-click="unlink_issue" phx-target={@myself} phx-value-target={issue.id}>
+                  <i class="bi bi-x-lg"></i>
+                </a>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     <% end %>
 
-  </.form>
+    <.form
+      for={:links}
+      let={f}
+      id="link-issues-to-issues-form"
+      phx-target={@myself}
+      phx-change="change"
+      phx-submit="add">
+
+      <%= text_input f, :filter, autocomplete: "off" %>
+      <br>
+      <%= if length(@issues_to_display) > 0 do %>
+        <%= select f, :issue, convert_for_select(@issues_to_display, @issues) %>
+        <%= submit "Add", phx_disable_with: "Saving..." %>
+      <% end %>
+
+    </.form>
+  <% end %>
 </div>

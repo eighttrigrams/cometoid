@@ -12,11 +12,11 @@
     <div id="navbar-content" class="border-color">
       <a><%= live_patch "Events",
           to: Routes.event_index_path(@socket, :index),
-          class: "#{if @state.view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end}",
+          class: "#{if @state.selected_view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end}",
           tabindex: -1 %></a>
       <a><%= live_patch "People",
           to: Routes.issue_index_path(@socket, :index, view: "People"),
-          class: "#{if @state.view == "People" do 'selected-issue-color' else 'deselected-issue-color' end}",
+          class: "#{if @state.selected_view == "People" do 'selected-issue-color' else 'deselected-issue-color' end}",
           tabindex: -1 %></a>
       <span class="color-border-color">
         &nbsp;|&nbsp;
@@ -24,7 +24,7 @@
       <%= for name <- Application.fetch_env!(:cometoid, :views) do %>
         <a><%= live_patch name,
             to: Routes.issue_index_path(@socket, :index, view: name),
-            class: "#{if @state.view == name do 'selected-issue-color' else 'deselected-issue-color' end}",
+            class: "#{if @state.selected_view == name do 'selected-issue-color' else 'deselected-issue-color' end}",
             tabindex: -1 %>
         </a>
       <% end %>

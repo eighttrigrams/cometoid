@@ -31,19 +31,33 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
     {issue_params, day_options} = init_params issue.event
 
-    {
-      :ok,
+    socket =
       socket
       |> assign(assigns)
       |> assign(:year_options, 1900..2050)
       |> assign(:day_options, day_options)
       |> assign(:issue_params, issue_params)
       |> assign(:changeset, Tracker.change_issue(issue))
-      |> assign(:issues, state.selected_issue.issues)
-      |> assign(:available_issues, available_issues)
-      |> assign(:issues_to_display, available_issues)
       |> assign(:state, state)
-    }
+
+    if state.selected_view != "Events" do
+      {
+        :ok,
+        socket
+        |> assign(:issues, state.selected_issue.issues)
+        |> assign(:available_issues, available_issues)
+        |> assign(:issues_to_display, available_issues)
+        |> assign(:state, state)
+        |> assign(:view, :normal)
+      }
+    else
+      {
+        :ok,
+        socket
+        |> assign(assigns)
+        |> assign(:view, :events)
+      }
+    end
   end
 
   @impl true
@@ -80,10 +94,15 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
 
     case Tracker.update_issue(socket.assigns.issue, issue_params, []) do
       {:ok, issue} -> 
-        send self(), {:after_edit_form_save, issue}
-        issue_ids = Enum.map socket.assigns.issues, &(&1.id)
-        {:ok, issue} = Tracker.link_issues socket.assigns.state.selected_issue, issue_ids
-        send self(), {:after_edit_form_save, issue}
+
+        if socket.assigns.view == :events do
+          send self(), {:after_edit_form_save, issue}
+        else
+          issue_ids = Enum.map socket.assigns.issues, &(&1.id)
+          {:ok, issue} = Tracker.link_issues socket.assigns.state.selected_issue, issue_ids
+          send self(), {:after_edit_form_save, issue}
+        end
+
       _ -> IO.puts "error"
     end
     
