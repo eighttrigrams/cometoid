@@ -10,7 +10,14 @@ const editorHook = {
         editor.editor.new$(this.el)
     }
 }
-hooks.TextAreaHook = editorHook;
+hooks.TextAreaHook = editorHook
+
+const inputFieldHook = {
+  mounted() {
+      editor.editor.new$(this.el, true)
+  }
+}
+hooks.InputFieldHook = inputFieldHook
 
 hooks.ContentsHook = {
     mounted() {
