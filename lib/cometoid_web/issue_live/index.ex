@@ -537,7 +537,6 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def select_previous_context %{ assigns: %{ state: state }} = socket do
     selected_context = get_previous_context state
-    # TODO maybe reuse select_context_and_refocus
     socket
     |> assign_state(:selected_context, selected_context)
     |> refresh_issues
