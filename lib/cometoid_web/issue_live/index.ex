@@ -152,6 +152,12 @@ defmodule CometoidWeb.IssueLive.Index do
             else
               socket
             end
+          "l" ->
+            if state.selected_context && state.selected_issue do
+              link_issue socket, state.selected_issue
+            else
+              socket
+            end
           "e" ->
             cond do
               not is_nil(state.selected_issue) ->
@@ -228,8 +234,7 @@ defmodule CometoidWeb.IssueLive.Index do
 
   def handle_event "link_issue", %{ "target" => id }, socket do
     socket
-    |> set_selected_issue(id)
-    |> assign(:modal, :link_issue)
+    |> link_issue(Tracker.get_issue!(id))
   end
 
   def handle_event "convert_issue_to_context", %{ "id" => id }, socket do
@@ -613,9 +618,10 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(state)
   end
 
-  defp set_selected_issue socket, id do
+  defp link_issue socket, issue do
     socket
-    |> assign_state(:selected_issue, Tracker.get_issue!(id))
+    |> assign_state(:selected_issue, issue)
+    |> assign(:modal, :link_issue)
   end
 
   defp delete_issue %{ assigns: %{ state: state }} = socket, id do
