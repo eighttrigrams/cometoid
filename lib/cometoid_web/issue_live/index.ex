@@ -153,8 +153,12 @@ defmodule CometoidWeb.IssueLive.Index do
               socket
             end
           "l" ->
-            if state.selected_context && state.selected_issue do
-              link_issue socket, state.selected_issue
+            if state.selected_context do
+              if state.selected_issue do
+                link_issue socket, state.selected_issue
+              else
+                link_context socket, state.selected_context.id
+              end
             else
               socket
             end
@@ -348,10 +352,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "link_context", %{ "id" => id }, socket do
-    
     socket
-    |> select_context(to_int id)
-    |> assign(:modal, :link_context)
+    |> link_context(to_int id)
   end
 
   def handle_event "reprioritize_context", %{ "id" => id }, socket do
@@ -588,11 +590,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> assign_state(:selected_context, selected_context)
   end
 
-  defp select_context %{ assigns: %{ state: state }} = socket, id do
-    socket
-    |> assign_state(IssuesMachine.select_context state, id)
-  end
-
   defp select_context_and_refocus %{ assigns: %{ state: state }} = socket, id do
     if state.search.context_search_active do
       socket
@@ -622,6 +619,12 @@ defmodule CometoidWeb.IssueLive.Index do
     socket
     |> assign_state(:selected_issue, issue)
     |> assign(:modal, :link_issue)
+  end
+
+  defp link_context %{ assigns: %{ state: state }} = socket, id do
+    socket
+    |> assign_state(IssuesMachine.select_context state, id)
+    |> assign(:modal, :link_context)
   end
 
   defp delete_issue %{ assigns: %{ state: state }} = socket, id do
