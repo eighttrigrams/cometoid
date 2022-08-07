@@ -24,7 +24,7 @@ defmodule Cometoid.Repo.Tracker.Search do
 
     issues = load_issues state
 
-    issues = if is_nil(state.selected_context) 
+    if is_nil(state.selected_context) 
       or is_nil(state.selected_context.search_mode) 
       or state.selected_context.search_mode == 0 do
 
@@ -52,8 +52,6 @@ defmodule Cometoid.Repo.Tracker.Search do
       |> search(query.search.q)
       |> order_issues(query)
   
-    IO.inspect (Repo.to_sql :all, issues_query)
-
     Repo.all(issues_query)
       |> Enum.uniq #?
       |> do_issues_preload
@@ -163,7 +161,7 @@ defmodule Cometoid.Repo.Tracker.Search do
 
   def f q, arg do
     q
-    |> where([i, _context_relation, context],
+    |> where([i, _context_relation, _context],
       fragment("EXISTS (
       SELECT *
       FROM contexts, issues, context_issue
@@ -175,20 +173,18 @@ defmodule Cometoid.Repo.Tracker.Search do
   end
 
   def frags query, {arg, index}, l do
-
-    query = if index == 0 and l > 1 do
-      query
-      |> where([i, _context_relation, context], fragment("(TRUE"))
-      |> f(arg)
-    else
-      if index == l - 1 and l > 1 do
+    cond do
+      index == 0 and l > 1 -> 
+        query
+        |> where([i, _context_relation, _context], fragment("(TRUE"))
+        |> f(arg)
+      index == l - 1 and l > 1 ->
         query
         |> f(arg)
-        |> where([i, _context_relation, context], fragment("TRUE)"))
-      else
+        |> where([i, _context_relation, _context], fragment("TRUE)"))
+      true -> 
         query
         |> f(arg)
-      end  
     end
   end
 end
