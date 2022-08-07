@@ -32,12 +32,6 @@ defmodule Cometoid.Repo.Tracker.Search do
     else
       sort_issues issues, state
     end
-
-    if state.selected_context do
-      filter_for_secondary_contexts issues, state
-    else
-      issues
-    end
   end
 
   def list_contexts view, q do
@@ -49,23 +43,6 @@ defmodule Cometoid.Repo.Tracker.Search do
     |> do_context_preload
   end
 
-  defp should_show? state, issue do
-
-    selected_secondary_contexts = state.selected_secondary_contexts
-
-    unless length(selected_secondary_contexts) > 0 do
-      true
-    else
-      issues_contexts = Enum.map issue.contexts, &(&1.context.id)
-      diff = selected_secondary_contexts -- issues_contexts
-      length(diff) == 0
-    end
-  end
-
-  defp filter_for_secondary_contexts issues, state do
-    Enum.filter issues, fn issue -> should_show? state, issue end
-  end
-
   defp load_issues query do
     issues_query =
       Issue
@@ -74,6 +51,8 @@ defmodule Cometoid.Repo.Tracker.Search do
       |> where_type(query)
       |> search(query.search.q)
       |> order_issues(query)
+  
+    IO.inspect (Repo.to_sql :all, issues_query)
 
     Repo.all(issues_query)
       |> Enum.uniq #?
@@ -167,11 +146,49 @@ defmodule Cometoid.Repo.Tracker.Search do
 
   defp where_type(query, %{
       selected_context: selected_context,
+      selected_secondary_contexts: selected_secondary_contexts,
       list_issues_done_instead_open: list_issues_done_instead_open
     }) do
 
     query
     |> where([i, _context_relation, context], context.id == ^selected_context.id
       and i.done == ^list_issues_done_instead_open)
+    
+    selected_secondary_contexts
+    |> Enum.with_index
+    |> Enum.reduce(query, 
+      fn arg, query -> frags query, arg, (length selected_secondary_contexts) end
+    )
+  end
+
+  def f q, arg do
+    q
+    |> where([i, _context_relation, context],
+      fragment("EXISTS (
+      SELECT *
+      FROM contexts, issues, context_issue
+      WHERE issues.id = ?
+      AND context_issue.context_id = contexts.id 
+      AND context_issue.issue_id = issues.id
+      AND contexts.id = ?
+      )", i.id, ^arg))  
+  end
+
+  def frags query, {arg, index}, l do
+
+    query = if index == 0 and l > 1 do
+      query
+      |> where([i, _context_relation, context], fragment("(TRUE"))
+      |> f(arg)
+    else
+      if index == l - 1 and l > 1 do
+        query
+        |> f(arg)
+        |> where([i, _context_relation, context], fragment("TRUE)"))
+      else
+        query
+        |> f(arg)
+      end  
+    end
   end
 end
