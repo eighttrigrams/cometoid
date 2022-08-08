@@ -159,7 +159,7 @@ defmodule Cometoid.Repo.Tracker.Search do
     )
   end
 
-  def f q, arg do
+  def frag q, arg do
     q
     |> where([i, _context_relation, _context],
       fragment("EXISTS (
@@ -177,14 +177,14 @@ defmodule Cometoid.Repo.Tracker.Search do
       index == 0 and l > 1 -> 
         query
         |> where([i, _context_relation, _context], fragment("(TRUE"))
-        |> f(arg)
+        |> frag(arg)
       index == l - 1 and l > 1 ->
         query
-        |> f(arg)
+        |> frag(arg)
         |> where([i, _context_relation, _context], fragment("TRUE)"))
       true -> 
         query
-        |> f(arg)
+        |> frag(arg)
     end
   end
 end
