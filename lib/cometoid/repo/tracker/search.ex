@@ -154,9 +154,9 @@ defmodule Cometoid.Repo.Tracker.Search do
     
     selected_secondary_contexts
     |> Enum.with_index
-    |> Enum.reduce(query, 
-      fn arg, query -> frags query, arg, (length selected_secondary_contexts) end
-    )
+    |> Enum.reduce(query, fn arg, query -> 
+      frags query, arg, (length selected_secondary_contexts) 
+    end)
   end
 
   defp frag q, arg do
