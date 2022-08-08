@@ -145,6 +145,7 @@ defmodule Cometoid.Repo.Tracker.Search do
   defp where_type(query, %{
       selected_context: selected_context,
       selected_secondary_contexts: selected_secondary_contexts,
+      secondary_contexts_mode: secondary_contexts_mode,
       list_issues_done_instead_open: list_issues_done_instead_open
     }) do
 
@@ -155,7 +156,7 @@ defmodule Cometoid.Repo.Tracker.Search do
     selected_secondary_contexts
     |> Enum.with_index
     |> Enum.reduce(query, fn arg, query -> 
-      frags query, arg, (length selected_secondary_contexts) 
+      frags query, arg, (length selected_secondary_contexts), secondary_contexts_mode 
     end)
   end
 
@@ -172,16 +173,27 @@ defmodule Cometoid.Repo.Tracker.Search do
       )", i.id, ^arg))  
   end
 
-  defp frags query, {arg, index}, l do
+  defp frags query, {arg, index}, l, secondary_contexts_mode do
+
     cond do
       index == 0 and l > 1 -> 
         query
-        |> where([i, _context_relation, _context], fragment("(TRUE"))
+        |> (fn query -> if secondary_contexts_mode == :or do
+            or_where query, [i, _context_relation, _context], fragment("(TRUE")
+          else
+            where query, [i, _context_relation, _context], fragment("(TRUE")
+          end 
+        end).()
         |> frag(arg)
       index == l - 1 and l > 1 ->
         query
         |> frag(arg)
-        |> where([i, _context_relation, _context], fragment("TRUE)"))
+        |> (fn query -> if secondary_contexts_mode == :or do
+              or_where query, [i, _context_relation, _context], fragment("TRUE)")
+            else
+              where query, [i, _context_relation, _context], fragment("TRUE)")
+            end
+          end).()
       true -> 
         query
         |> frag(arg)

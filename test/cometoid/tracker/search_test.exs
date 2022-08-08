@@ -38,6 +38,36 @@ defmodule Cometoid.Tracker.SearchTest do
       issues = titles_set_from Search.list_issues state
       assert (MapSet.new ["2"]) == issues
     end
+
+    test "or filter for one context" do
+      {:ok, c1} = Tracker.create_context %{ "title" => "context1", "view" => "view1" }    
+      {:ok, c2} = Tracker.create_context %{ "title" => "context2", "view" => "view1" }    
+      Tracker.create_issue "1", "short title 1", [c1]
+      Tracker.create_issue "2", "short title 2", [c1, c2]
+      Tracker.create_issue "3", "short title 3", [c2]
+
+      state = (IssuesMachine.State.new "view1")
+        |> put_in([:selected_context], c1)
+        |> put_in([:selected_secondary_contexts], [c1.id])
+        |> put_in([:secondary_contexts_mode], :or)
+      issues = titles_set_from Search.list_issues state
+      assert (MapSet.new ["1", "2"]) == issues
+    end
+
+    test "or filter for two contexts" do
+      {:ok, c1} = Tracker.create_context %{ "title" => "context1", "view" => "view1" }    
+      {:ok, c2} = Tracker.create_context %{ "title" => "context2", "view" => "view1" }    
+      Tracker.create_issue "1", "short title 1", [c1]
+      Tracker.create_issue "2", "short title 2", [c1, c2]
+      Tracker.create_issue "3", "short title 3", [c2]
+
+      state = (IssuesMachine.State.new "view1")
+        |> put_in([:selected_context], c1)
+        |> put_in([:selected_secondary_contexts], [c1.id, c2.id])
+        |> put_in([:secondary_contexts_mode], :or)
+      issues = titles_set_from Search.list_issues state
+      assert (MapSet.new ["1", "2", "3"]) == issues
+    end
   end
 
   describe "fulltext" do

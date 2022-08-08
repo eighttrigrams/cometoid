@@ -10,6 +10,7 @@ defmodule Cometoid.State.IssuesMachine do
         selected_context: nil,
         selected_contexts: [],
         selected_secondary_contexts: [],
+        secondary_contexts_mode: :and, # | :or
         search: %{
           q: "",
           show_all_issues: false,
