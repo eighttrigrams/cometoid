@@ -383,6 +383,13 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
+  def handle_event "toggle_secondary_contexts_mode", _params, socket do
+    socket
+    |> assign_state(:secondary_contexts_mode, 
+      if socket.assigns.state.secondary_contexts_mode == :and do :or else :and end)
+    |> refresh_issues
+  end
+
   def handle_event "toggle_sort", _params, socket do
     selected_context =
       socket.assigns.state.selected_context

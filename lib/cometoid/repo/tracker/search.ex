@@ -160,17 +160,30 @@ defmodule Cometoid.Repo.Tracker.Search do
     end)
   end
 
-  defp frag q, arg do
-    q
-    |> where([i, _context_relation, _context],
-      fragment("EXISTS (
-      SELECT *
-      FROM contexts, issues, context_issue
-      WHERE issues.id = ?
-      AND context_issue.context_id = contexts.id 
-      AND context_issue.issue_id = issues.id
-      AND contexts.id = ?
-      )", i.id, ^arg))  
+  defp frag query, arg, secondary_contexts_mode do
+    if secondary_contexts_mode == :or do
+      query
+      |> or_where([i, _context_relation, _context],
+        fragment("EXISTS (
+        SELECT *
+        FROM contexts, issues, context_issue
+        WHERE issues.id = ?
+        AND context_issue.context_id = contexts.id 
+        AND context_issue.issue_id = issues.id
+        AND contexts.id = ?
+        )", i.id, ^arg))  
+    else
+      query
+      |> where([i, _context_relation, _context],
+        fragment("EXISTS (
+        SELECT *
+        FROM contexts, issues, context_issue
+        WHERE issues.id = ?
+        AND context_issue.context_id = contexts.id 
+        AND context_issue.issue_id = issues.id
+        AND contexts.id = ?
+        )", i.id, ^arg))  
+    end
   end
 
   defp frags query, {arg, index}, l, secondary_contexts_mode do
@@ -179,24 +192,24 @@ defmodule Cometoid.Repo.Tracker.Search do
       index == 0 and l > 1 -> 
         query
         |> (fn query -> if secondary_contexts_mode == :or do
-            or_where query, [i, _context_relation, _context], fragment("(TRUE")
+            or_where query, [i, _context_relation, _context], fragment("(FALSE")
           else
             where query, [i, _context_relation, _context], fragment("(TRUE")
           end 
         end).()
-        |> frag(arg)
+        |> frag(arg, secondary_contexts_mode)
       index == l - 1 and l > 1 ->
         query
-        |> frag(arg)
+        |> frag(arg, secondary_contexts_mode)
         |> (fn query -> if secondary_contexts_mode == :or do
-              or_where query, [i, _context_relation, _context], fragment("TRUE)")
-            else
-              where query, [i, _context_relation, _context], fragment("TRUE)")
-            end
-          end).()
+            or_where query, [i, _context_relation, _context], fragment("FALSE)")
+          else
+            where query, [i, _context_relation, _context], fragment("TRUE)")
+          end
+        end).()
       true -> 
         query
-        |> frag(arg)
+        |> frag(arg, secondary_contexts_mode)
     end
   end
 end

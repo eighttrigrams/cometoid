@@ -88,6 +88,20 @@
     </div>
   <% end %>
 
+  <%= if @state.secondary_contexts_mode == :and do %>
+    <div class={"form-block button right " <> if @state.selected_context do "enabled-button-color" else "disabled-button-color" end}>
+      <a phx-click="toggle_secondary_contexts_mode">
+        <i>AND</i>
+      </a>
+    </div>
+  <% else %>
+    <div class={"form-block button right " <> if @state.selected_context do "enabled-button-color" else "disabled-button-color" end}>
+      <a phx-click="toggle_secondary_contexts_mode">
+        <i>OR</i>
+      </a>
+    </div>
+  <% end %>
+
   <%= if @state.selected_context && length(@state.selected_secondary_contexts) > 0 do %>
     <div class={"form-block button right enabled-button-color"}>
       <a phx-click="deselect_selected_contexts">
