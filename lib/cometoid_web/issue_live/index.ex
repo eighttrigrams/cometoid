@@ -643,7 +643,6 @@ defmodule CometoidWeb.IssueLive.Index do
     state = to_state socket
     Tracker.update_issue_updated_at state.selected_issue
 
-    IO.puts "yes"
     selected_issue = get_next_issue state
     socket
     |> assign_state(:selected_issue, selected_issue)
