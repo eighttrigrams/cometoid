@@ -131,6 +131,7 @@ defmodule CometoidWeb.IssueLive.Index do
             else
               socket
             end
+          "i" -> handle_reprioritize socket
           _ -> socket
         end  
       issue_search_active or context_search_active ->
@@ -189,10 +190,8 @@ defmodule CometoidWeb.IssueLive.Index do
             |> assign_state([:search, :issue_search_active], true)
             |> assign_state([:search, :previously_selected_context], state.selected_context)
             |> assign_state([:search, :previously_selected_issue], state.selected_issue)
-          "d" ->
-            handle_describe socket
-          _ ->
-            socket
+          "d" -> handle_describe socket
+          _ -> socket
         end
     end
   end
@@ -363,17 +362,8 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "reprioritize_context", %{ "id" => id }, socket do
-
     id = to_int id
-    state =
-      socket.assigns.state
-      |> IssuesMachine.select_context!(id)
-
-    socket
-    |> assign_state(state)
-    |> assign_state([:search, :context_search_active], false)
-    |> push_event(:context_refocus, %{ id: state.selected_context.id })
-    |> refresh_issues
+    reprioritize_context socket, id
   end
 
   def handle_event "toggle_context_important", %{ "target" => id }, socket do
@@ -421,13 +411,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "reprioritize_issue", %{ "id" => id }, socket do
-    Tracker.get_issue!(id)
-    |> Tracker.update_issue_updated_at
-    selected_issue = Tracker.get_issue! id
-    socket
-    |> assign_state([:search, :issue_search_active], false)
-    |> assign_state(:selected_issue, selected_issue)
-    |> refresh_issues
+    reprioritize_issue socket, id
   end
 
   def handle_event "toggle_issue_important", %{ "target" => id }, socket do
@@ -461,6 +445,19 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   ## KEY_HANDLERS
+  
+  defp handle_reprioritize socket do
+    state = to_state socket
+    if state.selected_issue do
+      reprioritize_issue socket, state.selected_issue.id
+    else
+      if state.selected_context do
+        reprioritize_context socket, state.selected_context.id
+      else
+        socket
+      end
+    end
+  end
 
   defp handle_describe socket do
     state = to_state socket
@@ -574,6 +571,28 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   ## ISSUES_MACHINE - wraps and decorates calls to IssuesMachine
+
+  defp reprioritize_issue socket, id do
+    Tracker.get_issue!(id)
+    |> Tracker.update_issue_updated_at
+    selected_issue = Tracker.get_issue! id
+    socket
+    |> assign_state([:search, :issue_search_active], false)
+    |> assign_state(:selected_issue, selected_issue)
+    |> refresh_issues
+  end
+  
+  defp reprioritize_context socket, id do
+    state =
+      socket.assigns.state
+      |> IssuesMachine.select_context!(id)
+
+    socket
+    |> assign_state(state)
+    |> assign_state([:search, :context_search_active], false)
+    |> push_event(:context_refocus, %{ id: state.selected_context.id })
+    |> refresh_issues
+  end
 
   defp refresh_issues %{ assigns: %{ state: state }} = socket do
     socket
