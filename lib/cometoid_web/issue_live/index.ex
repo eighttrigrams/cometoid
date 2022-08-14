@@ -114,6 +114,13 @@ defmodule CometoidWeb.IssueLive.Index do
     cond do
       key == "Control" ->
         assign_state socket, :modifiers, MapSet.put(modifiers, :ctrl)
+      key == "Meta" ->
+        assign_state socket, :modifiers, MapSet.put(modifiers, :meta)
+      modifiers == MapSet.new([:ctrl, :meta]) -> 
+        case key do
+          "," -> handle_reprioritize socket
+          "." -> handle_important socket
+        end
       modifiers == MapSet.new([:ctrl]) ->
         case key do 
           "," -> if context_search_active or ((is_nil selected_issue) and not issue_search_active) do
@@ -131,7 +138,6 @@ defmodule CometoidWeb.IssueLive.Index do
             else
               socket
             end
-          "i" -> handle_reprioritize socket
           _ -> socket
         end  
       issue_search_active or context_search_active ->
@@ -199,12 +205,20 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event("keydown", _params, socket), do: socket
 
   def handle_event "keyup", %{ "key" => key }, 
-    %{ assigns: %{ modal: modal, state: state }} = socket do
+    %{ 
+      assigns: %{ 
+        modal: modal, 
+        state: %{ modifiers: modifiers } = state
+      }
+    } = socket do
 
     case key do
       "Control" ->
         socket
-        |> assign_state(:modifiers, MapSet.new())
+        |> assign_state(:modifiers, MapSet.delete(modifiers, :ctrl))
+      "Meta" ->
+        socket
+        |> assign_state(:modifiers, MapSet.delete(modifiers, :meta))
       "h" ->
         if state.selected_context && modal == :filter_secondary_contexts do
           socket
@@ -367,16 +381,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "toggle_context_important", %{ "target" => id }, socket do
-
-    context = Tracker.get_context! id
-    socket = socket |> assign_state(:selected_context, context)
-    Tracker.update_context(context, %{ "important" => !context.important })
-
-    socket
-    |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
-    |> assign_state([:search, :context_search_active], false)
-    |> push_event(:context_refocus, %{ id: id })
-    |> refresh_issues
+    toggle_context_important socket, id
   end
 
   def handle_event "toggle_sort", _params, socket do
@@ -415,16 +420,7 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   def handle_event "toggle_issue_important", %{ "target" => id }, socket do
-
-    selected_issue = Tracker.get_issue! id
-    Tracker.update_issue2(selected_issue, %{ "important" => !selected_issue.important })
-
-    socket
-    |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
-    |> assign_state(:selected_issue, selected_issue)
-    |> assign_state([:search, :issue_search_active], false)
-    |> push_event(:issue_refocus, %{ id: id })
-    |> refresh_issues
+    toggle_issue_important socket, id
   end
 
   def handle_event "unarchive", %{ "target" => id }, socket do
@@ -445,7 +441,20 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   ## KEY_HANDLERS
-  
+
+  defp handle_important socket do
+    state = to_state socket
+    if state.selected_issue do
+      toggle_issue_important socket, state.selected_issue.id
+    else
+      if state.selected_context do
+        toggle_context_important socket, state.selected_context.id
+      else
+        socket
+      end
+    end
+  end
+
   defp handle_reprioritize socket do
     state = to_state socket
     if state.selected_issue do
@@ -571,6 +580,30 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   ## ISSUES_MACHINE - wraps and decorates calls to IssuesMachine
+
+  defp toggle_issue_important socket, id do
+    selected_issue = Tracker.get_issue! id
+    Tracker.update_issue2(selected_issue, %{ "important" => !selected_issue.important })
+
+    socket
+    |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
+    |> assign_state(:selected_issue, selected_issue)
+    |> assign_state([:search, :issue_search_active], false)
+    |> push_event(:issue_refocus, %{ id: id })
+    |> refresh_issues
+  end
+  
+  defp toggle_context_important socket, id do
+    context = Tracker.get_context! id
+    socket = socket |> assign_state(:selected_context, context)
+    Tracker.update_context(context, %{ "important" => !context.important })
+
+    socket
+    |> assign_state(IssuesMachine.set_context_properties_and_keep_selected_context(to_state socket))
+    |> assign_state([:search, :context_search_active], false)
+    |> push_event(:context_refocus, %{ id: id })
+    |> refresh_issues
+  end
 
   defp reprioritize_issue socket, id do
     Tracker.get_issue!(id)
