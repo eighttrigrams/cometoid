@@ -581,6 +581,7 @@ defmodule CometoidWeb.IssueLive.Index do
     selected_context = get_previous_context state
     socket
     |> assign_state(:selected_context, selected_context)
+    |> push_event(:context_refocus, %{ id: selected_context.id })
     |> refresh_issues
   end  
 
@@ -588,6 +589,7 @@ defmodule CometoidWeb.IssueLive.Index do
     selected_context = get_next_context state
     socket
     |> assign_state(:selected_context, selected_context)
+    |> push_event(:context_refocus, %{ id: selected_context.id })
     |> refresh_issues
   end
 
@@ -595,12 +597,14 @@ defmodule CometoidWeb.IssueLive.Index do
     selected_issue = get_previous_issue state
     socket
     |> assign_state(:selected_issue, selected_issue)
+    |> push_event(:issue_refocus, %{ id: selected_issue.id })
   end
 
   def select_next_issue %{ assigns: %{ state: state }} = socket do
     selected_issue = get_next_issue state
     socket
     |> assign_state(:selected_issue, selected_issue)
+    |> push_event(:issue_refocus, %{ id: selected_issue.id })
   end
 
   ## ISSUES_MACHINE - wraps and decorates calls to IssuesMachine
