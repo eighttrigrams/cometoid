@@ -150,52 +150,12 @@ defmodule CometoidWeb.IssueLive.Index do
       true ->
         case key do
           "Escape" -> handle_escape socket
-          "n" ->
-            if state.selected_context do
-              socket
-              |> assign(:modal, :new)
-              |> assign_state(:issue, %Issue{})
-            else
-              socket
-            end
-          "h" ->
-            if state.selected_context do
-              socket
-              |> assign(:modal, :filter_secondary_contexts)
-            else
-              socket
-            end
-          "l" ->
-            if state.selected_context do
-              if state.selected_issue do
-                link_issue socket, state.selected_issue
-              else
-                link_context socket, state.selected_context.id
-              end
-            else
-              socket
-            end
-          "e" ->
-            cond do
-              not is_nil(state.selected_issue) ->
-                id = state.selected_issue.id
-                socket
-                |> assign_state(:issue, (Tracker.get_issue! id))
-                |> assign(:modal, :edit_issue)
-              not is_nil(state.selected_context) ->
-                id = state.selected_context.id
-                edit_context socket, id
-              true -> socket
-            end
-          "c" ->
-            socket 
-            |> assign_state([:search, :context_search_active], true)
-            |> assign_state([:search, :previously_selected_context], state.selected_context)
-          "i" ->
-            socket
-            |> assign_state([:search, :issue_search_active], true)
-            |> assign_state([:search, :previously_selected_context], state.selected_context)
-            |> assign_state([:search, :previously_selected_issue], state.selected_issue)
+          "n" -> handle_new_issue socket
+          "h" -> handle_show_secondary_contexts socket
+          "l" -> handle_link socket
+          "e" -> handle_edit socket
+          "c" -> handle_context_search socket
+          "i" -> handle_issue_search socket
           "d" -> handle_describe socket
           _ -> socket
         end
@@ -441,6 +401,70 @@ defmodule CometoidWeb.IssueLive.Index do
   end
 
   ## KEY_HANDLERS
+
+  defp handle_new_issue socket do
+    state = to_state socket
+    if state.selected_context do
+      socket
+      |> assign(:modal, :new)
+      |> assign_state(:issue, %Issue{})
+    else
+      socket
+    end
+  end
+
+  defp handle_show_secondary_contexts socket do
+    state = to_state socket
+    if state.selected_context do
+      socket
+      |> assign(:modal, :filter_secondary_contexts)
+    else
+      socket
+    end
+  end
+
+  defp handle_link socket do
+    state = to_state socket
+    if state.selected_context do
+      if state.selected_issue do
+        link_issue socket, state.selected_issue
+      else
+        link_context socket, state.selected_context.id
+      end
+    else
+      socket
+    end
+  end
+  
+  defp handle_context_search socket do
+    state = to_state socket
+    socket 
+    |> assign_state([:search, :context_search_active], true)
+    |> assign_state([:search, :previously_selected_context], state.selected_context)
+  end
+  
+  defp handle_issue_search socket do
+    state = to_state socket
+    socket
+    |> assign_state([:search, :issue_search_active], true)
+    |> assign_state([:search, :previously_selected_context], state.selected_context)
+    |> assign_state([:search, :previously_selected_issue], state.selected_issue)
+  end
+
+  defp handle_edit socket do
+    state = to_state socket
+    cond do
+      not is_nil(state.selected_issue) ->
+        id = state.selected_issue.id
+        socket
+        |> assign_state(:issue, (Tracker.get_issue! id))
+        |> assign(:modal, :edit_issue)
+      not is_nil(state.selected_context) ->
+        id = state.selected_context.id
+        edit_context socket, id
+      true -> socket
+    end
+  end
 
   defp handle_important socket do
     state = to_state socket
