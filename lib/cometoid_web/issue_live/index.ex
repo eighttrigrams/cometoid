@@ -112,14 +112,19 @@ defmodule CometoidWeb.IssueLive.Index do
     } = socket do
 
     cond do
-      key == "Control" ->
-        assign_state socket, :modifiers, MapSet.put(modifiers, :ctrl)
-      key == "Meta" ->
-        assign_state socket, :modifiers, MapSet.put(modifiers, :meta)
+      key == "Control" -> assign_state socket, :modifiers, MapSet.put(modifiers, :ctrl)
+      key == "Meta" -> assign_state socket, :modifiers, MapSet.put(modifiers, :meta)
+      key == "Alt" -> assign_state socket, :modifiers, MapSet.put(modifiers, :alt)
+      modifiers == MapSet.new([:ctrl, :meta, :alt]) ->
+        case key do
+          "," -> handle_reprioritize_issue_and_select_next socket
+          _ -> socket
+        end
       modifiers == MapSet.new([:ctrl, :meta]) -> 
         case key do
           "," -> handle_reprioritize socket
           "." -> handle_important socket
+          _ -> socket
         end
       modifiers == MapSet.new([:ctrl]) ->
         case key do 
@@ -173,12 +178,9 @@ defmodule CometoidWeb.IssueLive.Index do
     } = socket do
 
     case key do
-      "Control" ->
-        socket
-        |> assign_state(:modifiers, MapSet.delete(modifiers, :ctrl))
-      "Meta" ->
-        socket
-        |> assign_state(:modifiers, MapSet.delete(modifiers, :meta))
+      "Control" -> assign_state socket, :modifiers, MapSet.delete(modifiers, :ctrl)
+      "Meta" -> assign_state socket, :modifiers, MapSet.delete(modifiers, :meta)
+      "Alt" -> assign_state socket, :modifiers, MapSet.delete(modifiers, :alt)
       "h" ->
         if state.selected_context && modal == :filter_secondary_contexts do
           socket
@@ -479,6 +481,10 @@ defmodule CometoidWeb.IssueLive.Index do
     end
   end
 
+  defp handle_reprioritize_issue_and_select_next socket do
+    reprioritize_issue_and_select_next socket
+  end
+
   defp handle_reprioritize socket do
     state = to_state socket
     if state.selected_issue do
@@ -633,6 +639,18 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
+  defp reprioritize_issue_and_select_next socket do
+    state = to_state socket
+    Tracker.update_issue_updated_at state.selected_issue
+
+    IO.puts "yes"
+    selected_issue = get_next_issue state
+    socket
+    |> assign_state(:selected_issue, selected_issue)
+    |> push_event(:issue_refocus, %{ id: selected_issue.id })
+    |> refresh_issues
+  end
+  
   defp reprioritize_issue socket, id do
     Tracker.get_issue!(id)
     |> Tracker.update_issue_updated_at
