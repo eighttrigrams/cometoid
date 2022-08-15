@@ -16,15 +16,6 @@ defmodule CometoidWeb.IssueLive.Taskbar.TaskbarComponent do
     end
   end
 
-  def done_button_disabled? state do
-    state.contexts == []
-      or length(Enum.flat_map(state.contexts,
-        &(&1.issues)) |> Enum.filter(&(&1.issue.done))) == 0
-      or
-        not is_nil(state.selected_context)
-        and length(Enum.filter(state.selected_context.issues, &(&1.issue.done))) == 0
-  end
-
   def get_sort_symbol state do
     cond do
       is_nil(state.selected_context.search_mode) or state.selected_context.search_mode == 0 -> "down-alt"

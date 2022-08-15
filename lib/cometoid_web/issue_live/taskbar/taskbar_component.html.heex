@@ -52,25 +52,15 @@
     </i></a>
   </div>
 
-  <%= unless done_button_disabled? @state do %>
-
-    <div class="form-block button right enabled-button-color">
-      <%= if @state[:list_issues_done_instead_open] do %>
-        <a phx-click="show_open_issues"><i class="bi bi-check-circle">
-        </i></a>
-      <% else %>
-        <a phx-click="show_closed_issues"><i class="bi bi-circle">
-        </i></a>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="form-block button right disabled-button-color">
-      <a>
-        <i class="bi bi-circle">
-        </i>
-      </a>
-    </div>
-  <% end %>
+  <div class="form-block button right enabled-button-color">
+    <%= if @state[:list_issues_done_instead_open] do %>
+      <a phx-click="show_open_issues"><i class="bi bi-check-circle">
+      </i></a>
+    <% else %>
+      <a phx-click="show_closed_issues"><i class="bi bi-circle">
+      </i></a>
+    <% end %>
+  </div>
 
   <%= if @state.selected_context do %>
     <div class={"form-block button right enabled-button-color"}>

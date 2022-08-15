@@ -71,6 +71,7 @@ defmodule Cometoid.Repo.Tracker.Search do
       Issue
       |> join(:left, [i], context_relation in assoc(i, :contexts))
       |> join(:left, [i, context_relation], context in assoc(context_relation, :context))
+      |> where_basic_properties(query)
       |> where_type(query)
       |> search(query.search.q)
       |> order_issues(query)
@@ -136,42 +137,44 @@ defmodule Cometoid.Repo.Tracker.Search do
     end
   end
 
+  defp where_basic_properties query, %{
+      selected_view: selected_view,
+      list_issues_done_instead_open: list_issues_done_instead_open
+    } do
+    query
+    |> where([i, _context_relation, context], (context.view == ^selected_view
+      and i.done == ^list_issues_done_instead_open))    
+  end
+
   defp where_type(query, %{
-    search: %{
-      q: q,
-      show_all_issues: show_all_issues
-    },
-    selected_context: nil,
-    selected_issue: selected_issue,
-    selected_view: selected_view,
-    list_issues_done_instead_open: list_issues_done_instead_open
+      search: %{
+        q: q,
+        show_all_issues: show_all_issues
+      },
+      selected_context: nil,
+      selected_issue: selected_issue
     }) do
  
     selected_issue_id = if selected_issue do selected_issue.id else -1 end
 
     if q == "" and not show_all_issues do
       query
-      |> where([i, _context_relation, context], (context.view == ^selected_view and
-        (
-          (context.important == true and i.done == ^list_issues_done_instead_open)
+      |> where([i, _context_relation, context], (
+          context.important == true
           or i.important == true
           or ^selected_issue_id == i.id
         )
-      ))
+      )
     else
       query
-      |> where([i, _context_relation, context], (context.view == ^selected_view
-        and i.done == ^list_issues_done_instead_open))
     end
   end
 
   defp where_type(query, %{
-      selected_context: selected_context,
-      list_issues_done_instead_open: list_issues_done_instead_open
+      selected_context: selected_context
     }) do
 
     query
-    |> where([i, _context_relation, context], context.id == ^selected_context.id
-      and i.done == ^list_issues_done_instead_open)
+    |> where([i, _context_relation, context], context.id == ^selected_context.id)
   end
 end

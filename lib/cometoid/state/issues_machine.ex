@@ -2,8 +2,12 @@ defmodule Cometoid.State.IssuesMachine do
 
   defmodule State do
     def new view do
+      new view, false  
+    end
+
+    def new view, list_issues_done_instead_open do
       %{
-        list_issues_done_instead_open: false,
+        list_issues_done_instead_open: list_issues_done_instead_open,
         sort_issues_alphabetically: nil,
         selected_view: view,
         selected_issue: nil,
@@ -135,7 +139,7 @@ defmodule Cometoid.State.IssuesMachine do
       [] -> [selected_context.id]
     end
 
-    state = (State.new state.selected_view)
+    state = (State.new state.selected_view, state.list_issues_done_instead_open)
       |> put_in([:selected_context], selected_context)
       |> put_in([:selected_contexts], selected_contexts)
 
