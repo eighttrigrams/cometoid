@@ -3,7 +3,7 @@
 
  :dependencies
  [[binaryage/devtools                 "0.9.10"]
-  [net.eighttrigrams/cljs-text-editor "0.0.12"]]
+  [net.eighttrigrams/cljs-text-editor "0.0.13"]]
 
  :builds {:app {:output-dir "../priv/static/assets/"
                 :asset-path "/assets"
