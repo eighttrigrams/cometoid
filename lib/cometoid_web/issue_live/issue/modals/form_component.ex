@@ -19,7 +19,6 @@ defmodule CometoidWeb.IssueLive.Issue.Modals.FormComponent do
       },
       selected_context: nil,
       selected_issue: nil,
-      list_issues_done_instead_open: false,
       selected_view: state.selected_view,
       sort_issues_alphabetically: false
     }

@@ -138,12 +138,10 @@ defmodule Cometoid.Repo.Tracker.Search do
   end
 
   defp where_basic_properties query, %{
-      selected_view: selected_view,
-      list_issues_done_instead_open: list_issues_done_instead_open
+      selected_view: selected_view
     } do
     query
-    |> where([i, _context_relation, context], (context.view == ^selected_view
-      and i.done == ^list_issues_done_instead_open))    
+    |> where([i, _context_relation, context], (context.view == ^selected_view))    
   end
 
   defp where_type(query, %{

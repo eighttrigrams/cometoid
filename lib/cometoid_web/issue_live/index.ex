@@ -99,7 +99,7 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "keydown", %{ "key" => key }, 
     %{ assigns: 
       %{ 
-        modal: nil, 
+        modal: nil,
         state: %{
           modifiers: modifiers,
           selected_issue: selected_issue,
@@ -358,18 +358,6 @@ defmodule CometoidWeb.IssueLive.Index do
     {:ok, selected_context} = Tracker.update_context selected_context, %{ "search_mode" => new_search_mode }
     socket
     |> assign_state(:selected_context, selected_context)
-    |> refresh_issues
-  end
-
-  def handle_event "show_open_issues", _params, socket do
-    socket
-    |> assign_state(:list_issues_done_instead_open, false)
-    |> refresh_issues
-  end
-
-  def handle_event "show_closed_issues", _params, socket do
-    socket
-    |> assign_state(:list_issues_done_instead_open, true)
     |> refresh_issues
   end
 

@@ -2,13 +2,11 @@
     phx-hook="IssueActionsHook"
     id={"issue-list-actions-component-el-#{@issue.id}"}>
 
-    <%= unless @state.list_issues_done_instead_open do %>
-        <span class="btn">
-        <a phx-click="toggle_issue_important" phx-value-target={@issue.id}>
-            <i class="bi bi-exclamation-circle"></i>
-        </a>
-        </span>
-    <% end %>
+    <span class="btn">
+    <a phx-click="toggle_issue_important" phx-value-target={@issue.id}>
+        <i class="bi bi-exclamation-circle"></i>
+    </a>
+    </span>
 
     <%= if (is_nil(@state.selected_context) 
           or is_nil(@state.selected_context.search_mode)
@@ -21,20 +19,6 @@
     <% end %>
 
     <%= unless @state.search.issue_search_active do %>
-        <%= if @state.list_issues_done_instead_open do %>
-          <span class="btn">
-            <a phx-click="unarchive" phx-value-target={@issue.id}>
-              <i class="bi bi-envelope-open"></i>
-            </a>
-          </span>
-        <% else %>
-      <span class="btn">
-        <a phx-click="archive" phx-value-target={@issue.id}>
-          <i class="bi bi-archive"></i>
-        </a>
-      </span>
-    <% end %>
-
 
     <span class="btn">
       <%= link to: "#",
