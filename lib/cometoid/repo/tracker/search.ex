@@ -158,8 +158,7 @@ defmodule Cometoid.Repo.Tracker.Search do
     if q == "" and not show_all_issues do
       query
       |> where([i, _context_relation, context], (
-          context.important == true
-          or i.important == true
+          i.important == true
           or ^selected_issue_id == i.id
         )
       )
