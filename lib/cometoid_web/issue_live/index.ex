@@ -275,15 +275,6 @@ defmodule CometoidWeb.IssueLive.Index do
     |> refresh_issues
   end
 
-  def handle_event "select_previous_context", _, socket do
-
-    state = IssuesMachine.select_previous_context (to_state socket)
-
-    socket
-    |> assign_state(state)
-    |> push_event(:context_refocus, %{ id: state.selected_context.id })
-  end
-
   def handle_event "create_new_context", %{ "view" => view }, socket do
 
     entity = case view do

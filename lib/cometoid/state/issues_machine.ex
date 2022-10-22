@@ -7,7 +7,6 @@ defmodule Cometoid.State.IssuesMachine do
         selected_view: view,
         selected_issue: nil,
         selected_context: nil,
-        selected_contexts: [],
         selected_secondary_contexts: [],
         search: %{
           q: "",
@@ -144,7 +143,6 @@ defmodule Cometoid.State.IssuesMachine do
   def jump_to_context state, target_context_id, target_issue_id do
     target_issue = Tracker.get_issue! target_issue_id
     target_context = Tracker.get_context! target_context_id
-    selected_contexts = [target_context.id|state.selected_contexts]
     contexts = if target_context.view != state.selected_view do
       load_contexts_for_view Map.merge state, %{ selected_view: target_context.view }
     else
@@ -153,28 +151,10 @@ defmodule Cometoid.State.IssuesMachine do
     {:refresh_issues, %{
         contexts: contexts,
         selected_context: target_context,
-        selected_contexts: selected_contexts,
         selected_issue: target_issue,
         control_pressed: false,
         selected_view: target_context.view
     }}
-  end
-
-  def select_previous_context state do
-   result = with [_selected_context_id, previous_context_id|rest]
-                                    <- state.selected_contexts,
-         selected_context           <- (Tracker.get_context! previous_context_id),
-         selected_issue             <- (keep_issue state, selected_context) do
-      %{
-        selected_context: selected_context,
-        selected_contexts: [previous_context_id|rest],
-        selected_issue: selected_issue,
-      }
-    else
-      [] -> %{}
-      [_|_] -> %{}
-    end
-    {:refresh_issues, result}
   end
 
   def convert_issue_to_context state, id do
