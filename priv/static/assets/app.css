@@ -188,6 +188,9 @@
   width: calc(33% + 9px);
   float: left;
 }
+#page-content #left-column #contexts-and-issues-row #overview-component .secondary-contexts-selection-box li {
+  padding: 5px;
+}
 #page-content #left-column #contexts-and-issues-row .list-component {
   float: left;
   width: calc(67% - 10px);

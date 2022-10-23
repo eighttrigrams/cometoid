@@ -22,6 +22,12 @@ $description-width: 44%;
                 height: 100%;
                 width: calc(33% + 9px);
                 float: left;
+
+                .secondary-contexts-selection-box {
+                    li {
+                        padding: 5px;
+                    }
+                }
             }
             
             .list-component {
