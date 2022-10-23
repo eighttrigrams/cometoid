@@ -134,7 +134,6 @@ defmodule CometoidWeb.IssueLive.Index do
               select_previous_issue socket
             end
           "." -> if context_search_active  do
-              IO.puts "next context"
               select_next_context socket
             else
               select_next_issue socket
