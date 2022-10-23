@@ -26,7 +26,12 @@
               phx-click="toggle_context"
               phx-value-id={secondary_context.id}
               phx-target={@myself}>
-            <%= secondary_context.title %>
+            <%= secondary_context.title %> (<%= 
+              length Enum.filter @state.issues, 
+                fn issue -> 
+                  secondary_context.id in (Enum.map issue.contexts, fn relation -> relation.context.id end) 
+                end
+              %>)
           </li>
         <% end %>
       </ul>
