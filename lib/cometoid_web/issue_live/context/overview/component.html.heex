@@ -19,7 +19,7 @@
           state: @state %>
         <% end %>
     <% end %>
-    <%= if @state.selected_context do %>
+    <%= if not (is_nil @state.selected_context) and not @state.search.context_search_active do %>
       <ul class="secondary-contexts-selection-box">
         <%= for secondary_context <- @state.selected_context.secondary_contexts do %>
           <li class={"#{if is_selected?(@state, secondary_context.id) do 'selected-issue-color' else 'deselected-issue-color' end}"}
