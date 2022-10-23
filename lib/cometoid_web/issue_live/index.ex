@@ -128,20 +128,16 @@ defmodule CometoidWeb.IssueLive.Index do
         end
       modifiers == MapSet.new([:ctrl]) ->
         case key do 
-          "," -> if context_search_active or ((is_nil selected_issue) and not issue_search_active) do
+          "," -> if context_search_active do
               select_previous_context socket
             else
               select_previous_issue socket
             end
-          "." -> if context_search_active or ((is_nil selected_issue) and not issue_search_active) do
+          "." -> if context_search_active  do
+              IO.puts "next context"
               select_next_context socket
             else
               select_next_issue socket
-            end
-          "m" -> if not context_search_active and is_nil selected_issue do
-              select_next_issue socket
-            else
-              socket
             end
           _ -> socket
         end  
@@ -408,7 +404,9 @@ defmodule CometoidWeb.IssueLive.Index do
     state = to_state socket
     socket 
     |> assign_state([:search, :context_search_active], true)
+    |> assign_state(:selected_issue, nil)
     |> assign_state([:search, :previously_selected_context], state.selected_context)
+    |> assign_state([:search, :previously_selected_issue], state.selected_issue)
   end
   
   defp handle_issue_search socket do
