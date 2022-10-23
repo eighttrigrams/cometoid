@@ -6,14 +6,6 @@ defmodule Cometoid.Model.Tracker.Context do
   alias Cometoid.Model.People
   alias Cometoid.Model.Writing
 
-  def calc_open_issues context do
-    length(Enum.filter(context.issues, fn issue -> issue.issue.done != true end))
-  end
-
-  def calc_issues_done context do
-    length(Enum.filter(context.issues, fn issue -> issue.issue.done == true end))
-  end
-
   schema "contexts" do
     field :title, :string
     field :short_title, :string

@@ -25,12 +25,7 @@
 
       <br>
       <%= if show_issues_badge @context do %>
-          <i class="bi bi-envelope-open"></i>
-          <%= Context.calc_open_issues @context %>
-      <% end %>
-      <%= if show_archived_issues_badge @context do %>
-          <i class="bi bi-archive"></i>
-          <%= Context.calc_issues_done @context %>
+          (<%= length @context.issues %>)
       <% end %>
     </div>
     <div class="right">
