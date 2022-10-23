@@ -34,4 +34,22 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
     socket
     |> return_noreply
   end
+
+  def handle_event "toggle_context", %{ "id" => id }, socket do
+
+    id = to_int id
+    selected_secondary_contexts = socket.assigns.state.selected_secondary_contexts
+
+    selected_secondary_contexts = if Enum.member?(selected_secondary_contexts, id) do
+      selected_secondary_contexts -- [id]
+    else
+      selected_secondary_contexts ++ [id]
+    end
+    send self(), {:select_secondary_contexts, selected_secondary_contexts}
+    {:noreply, socket}
+  end
+
+  def is_selected? state, id do
+    Enum.member? state.selected_secondary_contexts, id
+  end
 end

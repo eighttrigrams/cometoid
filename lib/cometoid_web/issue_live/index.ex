@@ -181,13 +181,6 @@ defmodule CometoidWeb.IssueLive.Index do
       "Control" -> assign_state socket, :modifiers, MapSet.delete(modifiers, :ctrl)
       "Meta" -> assign_state socket, :modifiers, MapSet.delete(modifiers, :meta)
       "Alt" -> assign_state socket, :modifiers, MapSet.delete(modifiers, :alt)
-      "h" ->
-        if state.selected_context && modal == :filter_secondary_contexts do
-          socket
-          |> assign(:modal, nil)
-        else
-          socket
-        end
       _ ->
         socket
     end
@@ -202,12 +195,6 @@ defmodule CometoidWeb.IssueLive.Index do
   def handle_event "delete_issue", %{ "id" => id }, socket do
     socket
     |> delete_issue(id)
-  end
-
-  def handle_event "deselect_selected_contexts", _params, socket do
-    socket
-    |> assign_state(:selected_secondary_contexts, [])
-    |> refresh_issues
   end
 
   def handle_event "edit_issue", id, socket do
