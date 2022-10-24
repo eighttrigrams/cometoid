@@ -14,10 +14,6 @@
           to: Routes.event_index_path(@socket, :index),
           class: "#{if @state.selected_view == "Events" do 'selected-issue-color' else 'deselected-issue-color' end}",
           tabindex: -1 %></a>
-      <a><%= live_patch "People",
-          to: Routes.issue_index_path(@socket, :index, view: "People"),
-          class: "#{if @state.selected_view == "People" do 'selected-issue-color' else 'deselected-issue-color' end}",
-          tabindex: -1 %></a>
       <span class="color-border-color">
         &nbsp;|&nbsp;
       </span>
