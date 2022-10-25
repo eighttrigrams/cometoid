@@ -49,6 +49,13 @@ defmodule CometoidWeb.IssueLive.Context.Overview.Component do
     {:noreply, socket}
   end
 
+  def num_related_issues state, secondary_context do
+    length Enum.filter state.issues, 
+      fn issue -> 
+        secondary_context.id in (Enum.map issue.contexts, fn relation -> relation.context.id end) 
+      end
+  end
+
   def is_selected? state, id do
     Enum.member? state.selected_secondary_contexts, id
   end
