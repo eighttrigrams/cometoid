@@ -1,13 +1,3 @@
-<div class="upper border-color" style="padding-top: 0px;">
-  <div>
-    <h1 style="font-family: serif">
-      <span style="float: left;">
-        <%= demarkdownify(@issue.title) %>
-      </span>
-    </h1>
-  </div>
-</div>
-
 <%= if length(@issue.issues) > 0 do %>
   <div>
     <ul>
@@ -23,9 +13,9 @@
 
 <div class="inner" id="issue-description">
   <div>
-    <%= unless is_nil(@issue.description) or @issue.description == "" do %>
+    <%= unless (is_nil(@issue.description) or @issue.description == "") and (is_nil(@issue.title) or @issue.title == "") do %>
       <div id="desc" phx-hook="DescHook">
-        <%= Phoenix.HTML.raw(markdownify(@issue.description)) %>
+        <%= Phoenix.HTML.raw(markdownify("# " <> demarkdownify(@issue.title) <> "\n" <>  (@issue.description || ""))) %>
       </div>
     <% end %>
   </div>

@@ -1,20 +1,8 @@
-<div class="upper border-color" style="padding-top: 0px;">
-  <div>
-    <h1 style="font-family: serif">
-      <span style="float: left;">
-        <%= if @context.short_title do %>
-          <%= @context.short_title %> |
-        <% end %>
-        <%= @context.title %>
-      </span>
-    </h1>
-  </div>
-</div>
 <div class="inner" id="context-description">
   <div>
-    <%= unless is_nil(@context.description) or @context.description == "" do %>
+    <%= unless (is_nil(@context.description) or @context.description == "") and (is_nil(@context.title) or @context.title == "") do %>
       <div id="desc" phx-hook="DescHook">
-        <%= Phoenix.HTML.raw(markdownify(@context.description)) %>
+        <%= Phoenix.HTML.raw(markdownify("# " <> demarkdownify(@context.title) <> "\n" <>  (@context.description || ""))) %>
       </div>
     <% end %>
   </div>
