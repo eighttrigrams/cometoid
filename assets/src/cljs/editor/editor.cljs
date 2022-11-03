@@ -3,4 +3,5 @@
 
 (defn ^:export new 
   [el input-field-mode?]
-  (editor/create el input-field-mode?))
+  (editor/create el {:input-field-mode? input-field-mode?
+                     :debug? true}))
