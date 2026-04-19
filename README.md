@@ -1,3 +1,5 @@
+This is Rhizome now.
+
 # Cometoid
       
 An issue management system, written in **Elixir**, based on a very simple data model which makes it very versatile. 
